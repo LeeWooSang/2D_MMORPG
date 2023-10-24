@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Code">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Code\Core">
+      <UniqueIdentifier>{46ab9467-535c-4028-b19f-6e3e1ca06b41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Default">
+      <UniqueIdentifier>{9fddd2af-f195-4032-96fe-6ae19bc5784e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Character">
+      <UniqueIdentifier>{0d4e7071-fae6-4be2-b79b-baf0257c8a44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Common">
+      <UniqueIdentifier>{68188a88-1be6-4413-8704-9aa95d29f80f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Database">
+      <UniqueIdentifier>{cf97d854-2c07-4920-b125-eb55a98ab4fc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameServer.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\GameServer.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\GameServer.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Code\GameServer.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameServerDlg.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\pch.cpp">
+      <Filter>Code\Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Core\Core.cpp">
+      <Filter>Code\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Character\Character.cpp">
+      <Filter>Code\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Database\Database.cpp">
+      <Filter>Code\Database</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Code\GameServer.h">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameServerDlg.h">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\framework.h">
+      <Filter>Code\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\pch.h">
+      <Filter>Code\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Resource.h">
+      <Filter>Code\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\targetver.h">
+      <Filter>Code\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Core\Core.h">
+      <Filter>Code\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Character\Character.h">
+      <Filter>Code\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Common\Macro.h">
+      <Filter>Code\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Common\Protocol.h">
+      <Filter>Code\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Database\Database.h">
+      <Filter>Code\Database</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
