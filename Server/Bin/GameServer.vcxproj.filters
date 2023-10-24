@@ -24,6 +24,9 @@
     <Filter Include="Code\Database">
       <UniqueIdentifier>{cf97d854-2c07-4920-b125-eb55a98ab4fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Main">
+      <UniqueIdentifier>{24b9615d-ebfd-4a50-ac25-01231b878445}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameServer.rc">
@@ -42,15 +45,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Code\GameServer.cpp">
-      <Filter>Code</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\GameServerDlg.cpp">
-      <Filter>Code</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\pch.cpp">
-      <Filter>Code\Default</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\Core\Core.cpp">
       <Filter>Code\Core</Filter>
     </ClCompile>
@@ -60,26 +54,14 @@
     <ClCompile Include="..\Code\Database\Database.cpp">
       <Filter>Code\Database</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\GameServer.cpp">
+      <Filter>Code\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameServerDlg.cpp">
+      <Filter>Code\Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Code\GameServer.h">
-      <Filter>Code</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\GameServerDlg.h">
-      <Filter>Code</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\framework.h">
-      <Filter>Code\Default</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\pch.h">
-      <Filter>Code\Default</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\Resource.h">
-      <Filter>Code\Default</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\targetver.h">
-      <Filter>Code\Default</Filter>
-    </ClInclude>
     <ClInclude Include="..\Code\Core\Core.h">
       <Filter>Code\Core</Filter>
     </ClInclude>
@@ -94,6 +76,24 @@
     </ClInclude>
     <ClInclude Include="..\Code\Database\Database.h">
       <Filter>Code\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Common\Defines.h">
+      <Filter>Code\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Default\framework.h">
+      <Filter>Code\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Default\Resource.h">
+      <Filter>Code\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Default\targetver.h">
+      <Filter>Code\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameServer.h">
+      <Filter>Code\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameServerDlg.h">
+      <Filter>Code\Main</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

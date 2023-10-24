@@ -1,5 +1,14 @@
 #pragma once
-#include "../Common/Protocol.h"
+#include "../Common/Defines.h"
+
+struct OverEx
+{
+	WSAOVERLAPPED	overlapped;
+	WSABUF					dataBuffer;
+	char							messageBuffer[MAX_BUFFER];
+	SERVER_EVENT			eventType;
+	int								myId;
+};
 
 class Character
 {

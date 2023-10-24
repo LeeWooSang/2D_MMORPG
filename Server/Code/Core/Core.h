@@ -1,13 +1,8 @@
 #pragma once
 #include "../Common/Macro.h"
-#include <array>
-#include <vector>
-#include <thread>
-#include <winsock2.h>
-#pragma comment(lib, "Ws2_32.lib")
+#include "../Common/Defines.h"
 
-#include "../Character/Character.h"
-
+class Player;
 class Core
 {
 	SINGLE_TONE(Core)

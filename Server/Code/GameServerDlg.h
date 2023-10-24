@@ -1,9 +1,5 @@
-﻿
-// GameServerDlg.h: 헤더 파일
-//
-
+﻿// GameServerDlg.h: 헤더 파일
 #pragma once
-
 
 // CGameServerDlg 대화 상자
 class CGameServerDlg : public CDialogEx
@@ -20,7 +16,6 @@ public:
 
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
-
 
 // 구현입니다.
 protected:

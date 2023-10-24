@@ -1,7 +1,6 @@
-#include "../Code/pch.h"
-#include "../Common/Protocol.h"
 #include "Core.h"
 #include "../Database/Database.h"
+#include "../Character/Character.h"
 
 INIT_INSTACNE(Core)
 Core::Core()

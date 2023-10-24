@@ -1,12 +1,10 @@
-﻿
-// GameServerDlg.cpp: 구현 파일
-
-#include "../Code/pch.h"
-#include "framework.h"
+﻿// GameServerDlg.cpp: 구현 파일
+#include "Default/framework.h"
 #include "GameServer.h"
 #include "GameServerDlg.h"
 #include "afxdialogex.h"
 
+#include "Common/Defines.h"
 #include "Core/Core.h"
 
 #ifdef _DEBUG

@@ -1,6 +1,6 @@
 #pragma once
 #include "../Common/Macro.h"
-#include <thread>
+#include "../Common/Defines.h"
 
 class Database
 {

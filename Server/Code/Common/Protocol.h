@@ -9,12 +9,3 @@ enum class SERVER_EVENT
 	RECV = 0,
 	SEND = 1,
 };
-
-struct OverEx
-{
-	WSAOVERLAPPED	overlapped;
-	WSABUF					dataBuffer;
-	char							messageBuffer[MAX_BUFFER];
-	SERVER_EVENT			eventType;
-	int								myId;
-};
