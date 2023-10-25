@@ -15,6 +15,8 @@ public:
 	volatile bool GetIsRun()	const { return mIsRun; }
 	void PushLeafWork(OverEx* overEx) { mLeafWorks.push(overEx); }
 	
+	void SendPositionPacket(int id);
+
 private:
 	void errorDisplay(const char* msg, int error);
 

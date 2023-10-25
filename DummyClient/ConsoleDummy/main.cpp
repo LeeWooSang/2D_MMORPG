@@ -3,13 +3,18 @@
 #include <iostream>
 #include <vector>
 #include <thread>
+#include <mutex>
+#include <random>
 #include "../../Server/Code/Common/Protocol.h"
+
+using namespace std;
 
 struct Client
 {
 	Client()
 	{
-		memset(&overEx, 0, sizeof(overEx));
+		overEx = nullptr;
+		//memset(&overEx, 0, sizeof(overEx));
 		isConnect = false;
 		x = 0;
 		y = 0;
@@ -18,9 +23,20 @@ struct Client
 		memset(packetBuf, 0, sizeof(packetBuf));
 		prevSize = 0;
 		sendBytes = 0;
+
+		Initialize();
+	}
+	~Client()
+	{
+		delete overEx;
+		closesocket(socket);
+	}
+	void Initialize()
+	{
+		overEx = new OverEx;
 	}
 
-	OverEx overEx;
+	OverEx* overEx;
 	bool isConnect;
 	int x;
 	int y;
@@ -30,26 +46,39 @@ struct Client
 	char packetBuf[MAX_BUFFER];
 	int prevSize;
 	int sendBytes;
+	std::mutex clientMtx;
 };
 
 HANDLE gIOCP;
 std::vector<std::thread> gWorkerThreads;
-std::thread gAIthread;
+std::thread gConnectThread;
+std::thread gAIThread;
 SOCKET gListenSocket;
 
+int gClientCounts;
 Client gClients[MAX_USER];
 
 bool Initialize();
 void ThreadPool();
+void DoConnect();
 void DoAI();
 void Release();
 
 void ErrorDisplay(const char* msg, int error);
 bool ConnectServer(int id);
 void RecvPacket(int id);
+void SendPacket(int id, char* packet);
+void ProcessPacket(int id, char* buf);
+void Disconnect(int id);
+
+void SendMovePacket(int id, char dir);
 
 int main()
 {
+	_wsetlocale(LC_ALL, L"korean");
+	// 에러발생시 한글로 출력되도록 명령
+	std::wcout.imbue(std::locale("korean"));
+
 	if (Initialize() == false)
 	{
 		return -1;
@@ -60,6 +89,8 @@ int main()
 
 bool Initialize()
 {
+	gClientCounts = 0;
+
 	gIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
 	if (gIOCP == nullptr)
 	{
@@ -76,36 +107,135 @@ bool Initialize()
 		gWorkerThreads.emplace_back(std::thread{ ThreadPool });
 	}
 
-	gAIthread = std::thread{ DoAI };
+	gConnectThread = std::thread{ DoConnect };
+	gAIThread = std::thread{ DoAI };
 
 	return true;
 }
 
 void ThreadPool()
 {
+	while (true)
+	{
+		DWORD ioByte;
+		unsigned long long id;
+		OverEx* overEx;
+		// lpover에 recv인지 send인지 정보를 넣어야 됨.
+		BOOL result = GetQueuedCompletionStatus(gIOCP, &ioByte, &id, reinterpret_cast<LPWSAOVERLAPPED*>(&overEx), INFINITE);
+
+		//  GetQueuedCompletionStatus( )가 에러인지 아닌지 확인한다
+		if (result == false)
+		{
+			int errorNum = WSAGetLastError();
+			if (errorNum == 64)
+			{
+				Disconnect(static_cast<int>(id));
+				continue;
+			}
+
+			else if (errorNum == 735)
+			{
+				break;
+			}
+
+			else
+			{
+				ErrorDisplay(" GetQueuedCompletionStatus()", errorNum);
+			}
+		}
+
+		// 클라와 끊어졌다면 (클라가 나갔을 때)
+		if (ioByte == 0)
+		{
+			Disconnect(static_cast<int>(id));
+			continue;
+		}
+
+		switch (overEx->eventType)
+		{
+			case SERVER_EVENT::RECV:
+			{
+				// 남은 패킷 크기(들어온 패킷 크기)
+				int restSize = ioByte;
+				char* p = overEx->messageBuffer;
+				char packetSize = 0;
+
+				if (gClients[id].prevSize > 0)
+				{
+					packetSize = gClients[id].packetBuf[0];
+				}
+
+				while (restSize > 0)
+				{
+					// 전에 남아있던 패킷이 없었다면, 현재 들어온 패킷을 저장
+					if (packetSize == 0)
+						packetSize = p[0];
+
+					// 패킷을 만들기 위한 크기?
+					int required = packetSize - gClients[id].prevSize;
+					// 패킷을 만들 수 있다면, (현재 들어온 패킷의 크기가 required 보다 크면)
+					if (restSize >= required)
+					{
+						memcpy(gClients[id].packetBuf + gClients[id].prevSize, p, required);
+						// 패킷 처리
+						ProcessPacket(static_cast<int>(id), gClients[id].packetBuf);
+
+						restSize -= required;
+						p += required;
+						packetSize = 0;
+					}
+					// 패킷을 만들 수 없다면,
+					else
+					{
+						// 현재 들어온 패킷의 크기만큼, 현재 들어온 패킷을 저장시킨다.						
+						memcpy(gClients[id].packetBuf + gClients[id].prevSize, p, restSize);
+						restSize = 0;
+					}
+				}
+				RecvPacket(static_cast<int>(id));
+				break;
+			}
+
+			case SERVER_EVENT::SEND:
+			{
+				delete overEx;
+				break;
+			}
+
+			default:
+			{
+				break;
+			}
+		}
+	}
+}
+
+void DoConnect()
+{
+	while (gClientCounts < 100)
+	{
+		// 서버 접속
+		if (ConnectServer(gClientCounts) == false)
+		{
+			std::cout << gClientCounts << "번 클라이언트 - 서버 연결 실패" << std::endl;
+			return;
+		}
+
+		++gClientCounts;
+	}
 }
 
 void DoAI()
 {
-	static int clientId = 0;
-
-	while (clientId < 5)
-	{
-		// 서버 접속
-		if (ConnectServer(clientId) == false)
-		{
-			std::cout << clientId << "번 클라이언트 - 서버 연결 실패" << std::endl;
-			return;
-		}
-
-		RecvPacket(clientId);
-		++clientId;
-	}
+	std::random_device rd;
+	std::default_random_engine dre(rd());
+	std::uniform_int_distribution<int> uid(0, 3);
 
 	while (true)
 	{
+		std::this_thread::sleep_for(100ms);
 		// move ai
-		for (int i = 0; i < clientId; ++i)
+		for (int i = 0; i < gClientCounts; ++i)
 		{
 			if (gClients[i].isConnect == false)
 			{
@@ -113,15 +243,23 @@ void DoAI()
 			}
 
 			// 패킷전송
+			char dir = uid(dre);
+			SendMovePacket(i, dir);
 		}
 	}
 }
 void Release()
 {
-	if (gAIthread.joinable() == true)
+	if (gConnectThread.joinable() == true)
 	{
-		gAIthread.join();
+		gConnectThread.join();
 	}
+
+	if (gAIThread.joinable() == true)
+	{
+		gAIThread.join();
+	}
+
 	for (auto& th : gWorkerThreads)
 	{
 		if (th.joinable() == true)
@@ -131,6 +269,7 @@ void Release()
 	}
 
 	CloseHandle(gIOCP);
+	WSACleanup();
 }
 
 void ErrorDisplay(const char* msg, int error)
@@ -154,6 +293,8 @@ void ErrorDisplay(const char* msg, int error)
 
 bool ConnectServer(int id)
 {
+	std::this_thread::sleep_for(100ms);
+
 	gClients[id].socket = WSASocketW(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 
 	SOCKADDR_IN serverAddr;
@@ -169,30 +310,87 @@ bool ConnectServer(int id)
 		return false;
 	}
 
-	gClients[id].isConnect = true;
+	CreateIoCompletionPort(reinterpret_cast<HANDLE>(gClients[id].socket), gIOCP, id, 0);
+	RecvPacket(id);
 
+	gClients[id].isConnect = true;
+	
 	return true;
 }
 
 void RecvPacket(int id)
 {
-	memset(&gClients[id].overEx, 0, sizeof(gClients[id].overEx));
-	gClients[id].overEx.dataBuffer.buf = gClients[id].overEx.messageBuffer;
-	gClients[id].overEx.dataBuffer.len = MAX_BUFFER;
-	gClients[id].overEx.eventType = SERVER_EVENT::RECV;
-	gClients[id].prevSize = 0;
-	gClients[id].sendBytes = 0;
+	DWORD flag = 0;
 
-	DWORD recv_flag = 0;
-	CreateIoCompletionPort(reinterpret_cast<HANDLE>(gClients[id].socket), gIOCP, id, 0);
+	memset(&gClients[id].overEx->overlapped, 0, sizeof(WSAOVERLAPPED));
+	gClients[id].overEx->dataBuffer.buf = gClients[id].overEx->messageBuffer;
+	gClients[id].overEx->dataBuffer.len = MAX_BUFFER;
+	gClients[id].overEx->eventType = SERVER_EVENT::RECV;
 
-	int result = WSARecv(gClients[id].socket, &gClients[id].overEx.dataBuffer, 1, NULL, &recv_flag, &(gClients[id].overEx.overlapped), NULL);
-	if (result == SOCKET_ERROR)
+	if (WSARecv(gClients[id].socket, &gClients[id].overEx->dataBuffer, 1, nullptr, &flag, &(gClients[id].overEx->overlapped), nullptr) == SOCKET_ERROR)
 	{
-		int err_no = WSAGetLastError();
-		if (err_no != WSA_IO_PENDING)
+		int error = WSAGetLastError();
+		if (error != WSA_IO_PENDING)
 		{
-			ErrorDisplay("RECV ERROR", err_no);
+			ErrorDisplay("WSARecv() Error - ", error);
 		}
 	}
+}
+
+void SendPacket(int id, char* packet)
+{
+	SOCKET socket = gClients[id].socket;
+	OverEx* over = new OverEx;
+
+	over->dataBuffer.len = packet[0];
+	over->dataBuffer.buf = over->messageBuffer;
+	// 패킷의 내용을 버퍼에 복사
+	memcpy(over->messageBuffer, packet, packet[0]);
+	ZeroMemory(&(over->overlapped), sizeof(WSAOVERLAPPED));
+	over->eventType = SERVER_EVENT::SEND;
+
+	if (WSASend(socket, &over->dataBuffer, 1, nullptr, 0, &(over->overlapped), nullptr) == SOCKET_ERROR)
+	{
+		if (WSAGetLastError() != WSA_IO_PENDING)
+		{
+			std::cout << "Error - Fail WSARecv(error_code : " << WSAGetLastError() << std::endl;
+		}
+	}
+}
+
+void ProcessPacket(int id, char* buf)
+{
+	switch (buf[1])
+	{
+		case SC_PACKET_TYPE::SC_POSITION:
+		{
+			SCPositionPacket* packet = reinterpret_cast<SCPositionPacket*>(buf);
+			gClients[id].clientMtx.lock();
+			gClients[id].x = packet->x;
+			gClients[id].y = packet->y;
+			std::cout << id << "번 클라이언트 위치 : " << gClients[id].x << ", " << gClients[id].y << std::endl;
+			gClients[id].clientMtx.unlock();
+		
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
+}
+
+void Disconnect(int id)
+{
+	gClients[id].isConnect = false;
+	std::cout << id << "번 클라이언트 연결 끊어짐" << std::endl;
+}
+
+void SendMovePacket(int id, char dir)
+{
+	CSMovePacket packet;
+	packet.size = sizeof(CSMovePacket);
+	packet.type = CS_PACKET_TYPE::CS_MOVE;
+	packet.direction = dir;
+	SendPacket(id, reinterpret_cast<char*>(&packet));
 }

@@ -40,6 +40,8 @@ Core::~Core()
 	while (popLeafWork() == true);
 
 	delete[] mUsers;
+
+	WSACleanup();
 }
 
 bool Core::Initialize()
@@ -56,6 +58,13 @@ bool Core::Initialize()
 	}
 
 	mUsers = new Player[MAX_USER];
+	for (int i = 0; i < MAX_USER; ++i)
+	{
+		if (mUsers[i].Inititalize() == false)
+		{
+			return false;
+		}
+	}
 
 	int workerThreadCount = 4;
 	// 워커 스레드 생성
@@ -95,6 +104,18 @@ void Core::ServerQuit()
 	closesocket(mListenSocket);
 
 	Release();
+}
+
+void Core::SendPositionPacket(int id)
+{
+	SCPositionPacket packet;
+	packet.size = sizeof(SCPositionPacket);
+	packet.type = SC_PACKET_TYPE::SC_POSITION;
+	packet.id = id;
+	packet.x = mUsers[id].GetX();
+	packet.y = mUsers[id].GetY();
+
+	sendPacket(id, reinterpret_cast<char*>(&packet));
 }
 
 void Core::errorDisplay(const char* msg, int error)
@@ -201,9 +222,9 @@ void Core::threadPool()
 	{
 		DWORD ioByte;
 		unsigned long long id;
-		OverEx* overEx;
+		Over* over;
 		// lpover에 recv인지 send인지 정보를 넣어야 됨.
-		BOOL result = GetQueuedCompletionStatus(mIOCP, &ioByte, &id, reinterpret_cast<LPWSAOVERLAPPED*>(&overEx), INFINITE);
+		BOOL result = GetQueuedCompletionStatus(mIOCP, &ioByte, &id, reinterpret_cast<LPWSAOVERLAPPED*>(&over), INFINITE);
 
 		//  GetQueuedCompletionStatus( )가 에러인지 아닌지 확인한다
 		if (result == false)
@@ -233,10 +254,11 @@ void Core::threadPool()
 			continue;
 		}
 
-		switch (overEx->eventType)
+		switch (over->eventType)
 		{
 			case SERVER_EVENT::RECV:
 			{
+				OverEx* overEx = static_cast<OverEx*>(over);
 				// 남은 패킷 크기(들어온 패킷 크기)
 				int restSize = ioByte;
 				char* p = overEx->messageBuffer;
@@ -280,13 +302,13 @@ void Core::threadPool()
 
 			case SERVER_EVENT::SEND:
 			{
-				delete overEx;
+				delete over;
 				break;
 			}
 
 			default:
 			{
-				processEvent(overEx->eventType, static_cast<int>(id));
+				processEvent(over->eventType, static_cast<int>(id));
 				popLeafWork();
 				break;
 			}
@@ -302,17 +324,17 @@ void Core::disconnect(int id)
 
 void Core::recvPacket(int id)
 {
-	DWORD flags = 0;
+	DWORD flag = 0;
 	SOCKET socket = mUsers[id].GetSocket();
 
-	OverEx* over = mUsers[id].GetOverEx();	
+	OverEx* over = static_cast<OverEx*>(mUsers[id].GetOver());	
 	// WSASend(응답에 대한)의 콜백일 경우
 	over->dataBuffer.len = MAX_BUFFER;
 	over->dataBuffer.buf = over->messageBuffer;
 	memset(&(over->overlapped), 0, sizeof(WSAOVERLAPPED));
 	over->eventType = SERVER_EVENT::RECV;
 
-	if (WSARecv(socket, &over->dataBuffer, 1, nullptr, &flags, &(over->overlapped), nullptr) == SOCKET_ERROR)
+	if (WSARecv(socket, &over->dataBuffer, 1, nullptr, &flag, &(over->overlapped), nullptr) == SOCKET_ERROR)
 	{
 		int error = WSAGetLastError();
 
@@ -346,7 +368,21 @@ void Core::sendPacket(int id, char* packet)
 
 void Core::processPacket(int id, char* buf)
 {
+	switch (buf[1])
+	{
+		case CS_PACKET_TYPE::CS_MOVE:
+		{
+			CSMovePacket* packet = reinterpret_cast<CSMovePacket*>(buf);
+			mUsers[id].ProcessMove(packet->direction);
+			SendPositionPacket(id);
+			break;
+		}
 
+		default:
+		{
+			break;
+		}
+	}
 }
 
 void Core::processEvent(SERVER_EVENT eventType, int id)

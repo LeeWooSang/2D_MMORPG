@@ -15,20 +15,71 @@ enum class SERVER_EVENT
 #include <winsock2.h>
 #pragma comment(lib, "Ws2_32.lib")
 
-struct OverEx
+struct Over
 {
-	OverEx()
+	Over()
 	{
 		memset(&overlapped, 0, sizeof(WSAOVERLAPPED));
-		memset(messageBuffer, 0, sizeof(messageBuffer));
-		dataBuffer.buf = messageBuffer;
-		dataBuffer.len = MAX_BUFFER;
 		eventType = SERVER_EVENT::DEFAULT;
 		myId = 0;
 	}
+
 	WSAOVERLAPPED	overlapped;
-	WSABUF					dataBuffer;
-	char							messageBuffer[MAX_BUFFER];
 	SERVER_EVENT			eventType;
 	int								myId;
+};
+
+struct OverEx : public Over
+{
+	OverEx()
+		: Over()
+	{
+		memset(messageBuffer, 0, sizeof(messageBuffer));
+		dataBuffer.buf = messageBuffer;
+		dataBuffer.len = MAX_BUFFER;
+
+	}
+
+	WSABUF	dataBuffer;
+	char			messageBuffer[MAX_BUFFER];
+};
+
+enum DIRECTION_TYPE
+{
+	UP = 0,
+	DOWN,
+	LEFT,
+	RIGHT
+};
+
+enum CS_PACKET_TYPE
+{
+	CS_LOGIN = 0,
+	CS_MOVE
+};
+
+enum SC_PACKET_TYPE
+{
+	SC_LOGIN_OK = 0,
+	SC_LOGIN_FAIL,
+	SC_POSITION,
+};
+
+#pragma pack(push, 1)
+// size : 패킷 사이즈
+// type : 어떤 패킷인지
+struct CSMovePacket
+{
+	char	size;
+	char	type;
+	char	direction;
+};
+
+struct SCPositionPacket
+{
+	char size;
+	char type;
+	int id;
+	int x;
+	int y;
 };

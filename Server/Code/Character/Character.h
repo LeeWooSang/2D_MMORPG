@@ -1,17 +1,25 @@
 #pragma once
 #include "../Common/Defines.h"
 #include "../Common/Protocol.h"
+#include <mutex>
 
 class Character
 {
 public:
 	Character();
 	virtual ~Character();
+	virtual void Reset();
+	virtual bool Inititalize();
 
-	OverEx* GetOverEx() { return mOverEx; }
+	Over* GetOver() { return mOver; }
+	int	 GetX()	const { return mX; }
+	int	 GetY()	const { return mY; }
 
 protected:
-	OverEx* mOverEx;
+	Over* mOver;
+	int mX;
+	int mY;
+	std::mutex mCharacterMtx;
 };
 
 class Player : public Character
@@ -19,6 +27,8 @@ class Player : public Character
 public:
 	Player();
 	~Player();
+	virtual void Reset();
+	virtual bool Inititalize();
 
 	SOCKET GetSocket()	const { return mSocket; }
 	void SetSocket(const SOCKET& socket) { mSocket = socket; }
@@ -32,6 +42,8 @@ public:
 	void PlayerConnect() { mConnect = true; }
 	void PlayerDisconnect() { mConnect = false; }
 	bool GetIsConnect()	const { return mConnect; }
+
+	void ProcessMove(char dir);
 
 private:
 	SOCKET mSocket;
