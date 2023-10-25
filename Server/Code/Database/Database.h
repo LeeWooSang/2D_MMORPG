@@ -8,7 +8,9 @@ class Database
 
 public:
 	bool Initialize();
-	void Run();
+
+private:
+	void run();
 
 private:
 	std::thread mDbThread;

@@ -1,6 +1,8 @@
 #include "Core.h"
+#include "../GameTimer/GameTimer.h"
 #include "../Database/Database.h"
 #include "../Character/Character.h"
+
 
 INIT_INSTACNE(Core)
 Core::Core()
@@ -9,6 +11,8 @@ Core::Core()
 	_wsetlocale(LC_ALL, L"korean");
 	// 에러발생시 한글로 출력되도록 명령
 	std::wcout.imbue(std::locale("korean"));
+
+	//_CrtSetBreakAlloc(727);
 }
 
 Core::~Core()
@@ -16,16 +20,12 @@ Core::~Core()
 	std::cout << "Core 소멸자" << std::endl;
 	mIOCP = nullptr;
 
+	GET_INSTANCE(GameTimer)->Release();
 	GET_INSTANCE(Database)->Release();
 
 	if (mAcceptThread.joinable() == true)
 	{
 		mAcceptThread.join();
-	}
-
-	if (mTimerThread.joinable() == true)
-	{
-		mTimerThread.join();
 	}
 
 	for (auto& th : mWorkerThreads)
@@ -35,6 +35,11 @@ Core::~Core()
 			th.join();
 		}
 	}
+
+	// 못한 작업의 자원을 해제
+	while (popLeafWork() == true);
+
+	delete[] mUsers;
 }
 
 bool Core::Initialize()
@@ -50,7 +55,7 @@ bool Core::Initialize()
 		return false;
 	}
 
-	bool check = true;
+	mUsers = new Player[MAX_USER];
 
 	int workerThreadCount = 4;
 	// 워커 스레드 생성
@@ -62,11 +67,15 @@ bool Core::Initialize()
 	// accept 스레드 생성
 	mAcceptThread = std::thread{ &Core::acceptClient, this };
 
-	mTimerThread = std::thread{ &Core::timer, this };
+	if (GET_INSTANCE(GameTimer)->Initialize() == false)
+	{
+		std::cout << "GameTimer Initialize Fail!!" << std::endl;
+		return false;
+	}
 
 	if (GET_INSTANCE(Database)->Initialize() == false)
 	{
-		std::cout << "DB Initialize Fail!!" << std::endl;
+		std::cout << "Database Initialize Fail!!" << std::endl;
 		return false;
 	}
 
@@ -80,6 +89,7 @@ void Core::ServerQuit()
 	mIsRun = false;
 
 	CloseHandle(mIOCP);
+
 	PostQueuedCompletionStatus(mIOCP, 1, NULL, nullptr);
 
 	closesocket(mListenSocket);
@@ -112,8 +122,8 @@ void Core::errorDisplay(const char* msg, int error)
 void Core::acceptClient()
 {
 	// Winsock Start - windock.dll 로드
-	WSADATA WSAData;
-	if (WSAStartup(MAKEWORD(2, 2), &WSAData) != 0)
+	WSADATA wsaData;
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 	{
 		std::cout << "Error - Can not load 'winsock.dll' file" << std::endl;
 		return;
@@ -129,7 +139,7 @@ void Core::acceptClient()
 
 	SOCKADDR_IN serverAddr;
 	memset(&serverAddr, 0, sizeof(SOCKADDR_IN));
-	serverAddr.sin_family = PF_INET;
+	serverAddr.sin_family = AF_INET;
 	serverAddr.sin_port = htons(SERVER_PORT);
 	serverAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
 
@@ -175,12 +185,13 @@ void Core::acceptClient()
 		// 빈 아이디를 생성해줌
 		int id = createPlayerId();
 
-		Player* player = mUsers[id];
-		player->SetSocket(clientSocket);
-		player->PlayerConnect();
+		mUsers[id].SetSocket(clientSocket);
+		mUsers[id].PlayerConnect();
 
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(clientSocket), mIOCP, id, 0);
 		recvPacket(id);
+
+		std::cout << id << "번 클라이언트 접속" << std::endl;
 	}
 }
 
@@ -226,15 +237,14 @@ void Core::threadPool()
 		{
 			case SERVER_EVENT::RECV:
 			{
-				Player* player = mUsers[id];
 				// 남은 패킷 크기(들어온 패킷 크기)
 				int restSize = ioByte;
 				char* p = overEx->messageBuffer;
 				char packetSize = 0;
 
-				if (player->GetPrevSize() > 0)
+				if (mUsers[id].GetPrevSize() > 0)
 				{
-					packetSize = player->GetPacketBuf()[0];
+					packetSize = mUsers[id].GetPacketBuf()[0];
 				}
 
 				while (restSize > 0)
@@ -244,13 +254,13 @@ void Core::threadPool()
 						packetSize = p[0];
 
 					// 패킷을 만들기 위한 크기?
-					int required = packetSize - player->GetPrevSize();
+					int required = packetSize - mUsers[id].GetPrevSize();
 					// 패킷을 만들 수 있다면, (현재 들어온 패킷의 크기가 required 보다 크면)
 					if (restSize >= required)
 					{
-						player->SetPacketBuf(p, required);
+						mUsers[id].SetPacketBuf(p, required);
 						// 패킷 처리
-						processPacket(static_cast<int>(id), player->GetPacketBuf());
+						processPacket(static_cast<int>(id), mUsers[id].GetPacketBuf());
 
 						restSize -= required;
 						p += required;
@@ -260,7 +270,7 @@ void Core::threadPool()
 					else
 					{
 						// 현재 들어온 패킷의 크기만큼, 현재 들어온 패킷을 저장시킨다.
-						player->SetPacketBuf(p, restSize);
+						mUsers[id].SetPacketBuf(p, restSize);
 						restSize = 0;
 					}
 				}
@@ -277,38 +287,30 @@ void Core::threadPool()
 			default:
 			{
 				processEvent(overEx->eventType, static_cast<int>(id));
-				delete overEx;
+				popLeafWork();
 				break;
 			}
 		}
 	}
 }
 
-void Core::timer()
-{
-	while (mIsRun == true)
-	{
-
-	}
-
-	std::cout << "타이머 종료" << std::endl;
-}
-
 void Core::disconnect(int id)
 {
+	mUsers[id].PlayerDisconnect();
 	std::cout << id << "번 클라이언트 연결 끊어짐" << std::endl;
 }
 
 void Core::recvPacket(int id)
 {
 	DWORD flags = 0;
-	SOCKET socket = mUsers[id]->GetSocket();
-	OverEx* over = mUsers[id]->GetOverEx();
+	SOCKET socket = mUsers[id].GetSocket();
 
+	OverEx* over = mUsers[id].GetOverEx();	
 	// WSASend(응답에 대한)의 콜백일 경우
 	over->dataBuffer.len = MAX_BUFFER;
 	over->dataBuffer.buf = over->messageBuffer;
 	memset(&(over->overlapped), 0, sizeof(WSAOVERLAPPED));
+	over->eventType = SERVER_EVENT::RECV;
 
 	if (WSARecv(socket, &over->dataBuffer, 1, nullptr, &flags, &(over->overlapped), nullptr) == SOCKET_ERROR)
 	{
@@ -323,7 +325,7 @@ void Core::recvPacket(int id)
 
 void Core::sendPacket(int id, char* packet)
 {
-	SOCKET socket = mUsers[id]->GetSocket();
+	SOCKET socket = mUsers[id].GetSocket();
 	OverEx* over = new OverEx;
 
 	over->dataBuffer.len = packet[0];
@@ -349,6 +351,7 @@ void Core::processPacket(int id, char* buf)
 
 void Core::processEvent(SERVER_EVENT eventType, int id)
 {
+	std::cout << "오브젝트 id : " << id << " 이벤트 발생" << std::endl;
 }
 
 int Core::createPlayerId() const
@@ -358,13 +361,25 @@ int Core::createPlayerId() const
 	{
 		for (int i = 0; i < MAX_USER; ++i)
 		{
-			if (mUsers[i]->GetIsConnect() == false)
+			if (mUsers[i].GetIsConnect() == false)
 			{
-				mUsers[i]->PlayerConnect();
+				mUsers[i].PlayerConnect();
 				return i;
 			}
 		}
 	}
 
 	return -1;
+}
+
+bool Core::popLeafWork()
+{
+	OverEx* overEx;
+	if (mLeafWorks.try_pop(overEx) == false)
+	{
+		return false;
+	}
+
+	delete overEx;
+	return true;
 }

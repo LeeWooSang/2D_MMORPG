@@ -3,10 +3,13 @@
 Character::Character()
 	: mOverEx(nullptr)
 {
+	mOverEx = new OverEx;
+	mOverEx->eventType = SERVER_EVENT::RECV;
 }
 
 Character::~Character()
 {
+	delete mOverEx;
 	mOverEx = nullptr;
 }
 

@@ -1,14 +1,6 @@
 #pragma once
 #include "../Common/Defines.h"
-
-struct OverEx
-{
-	WSAOVERLAPPED	overlapped;
-	WSABUF					dataBuffer;
-	char							messageBuffer[MAX_BUFFER];
-	SERVER_EVENT			eventType;
-	int								myId;
-};
+#include "../Common/Protocol.h"
 
 class Character
 {
@@ -38,6 +30,7 @@ public:
 	void SetPrevSize(int size) { mPrevSize = size; }
 
 	void PlayerConnect() { mConnect = true; }
+	void PlayerDisconnect() { mConnect = false; }
 	bool GetIsConnect()	const { return mConnect; }
 
 private:

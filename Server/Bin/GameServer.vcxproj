@@ -205,6 +205,7 @@
     <ClCompile Include="..\Code\Database\Database.cpp" />
     <ClCompile Include="..\Code\GameServer.cpp" />
     <ClCompile Include="..\Code\GameServerDlg.cpp" />
+    <ClCompile Include="..\Code\GameTimer\GameTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Code\Character\Character.h" />
@@ -218,6 +219,7 @@
     <ClInclude Include="..\Code\Default\targetver.h" />
     <ClInclude Include="..\Code\GameServer.h" />
     <ClInclude Include="..\Code\GameServerDlg.h" />
+    <ClInclude Include="..\Code\GameTimer\GameTimer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

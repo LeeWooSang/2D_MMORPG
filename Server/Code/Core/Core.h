@@ -1,6 +1,7 @@
 #pragma once
 #include "../Common/Macro.h"
 #include "../Common/Defines.h"
+#include "../Common/Protocol.h"
 
 class Player;
 class Core
@@ -10,14 +11,15 @@ class Core
 public:
 	bool Initialize();
 	void ServerQuit();
-	bool GetIsRun()	const { return mIsRun; }
-
+	void* GetIOCP()	const { return mIOCP; }
+	volatile bool GetIsRun()	const { return mIsRun; }
+	void PushLeafWork(OverEx* overEx) { mLeafWorks.push(overEx); }
+	
 private:
 	void errorDisplay(const char* msg, int error);
 
 	void acceptClient();
 	void threadPool();
-	void timer();
 	void disconnect(int id);
 
 	void recvPacket(int id);
@@ -28,6 +30,7 @@ private:
 
 	int createPlayerId()	const;
 
+	bool popLeafWork();
 private:
 	HANDLE mIOCP;
 	SOCKET mListenSocket;
@@ -38,6 +41,8 @@ private:
 
 	volatile bool mIsRun;
 	
-	Player* mUsers[MAX_USER];
+	Player* mUsers;
+
+	tbb::concurrent_queue<OverEx*> mLeafWorks;
 };
 
