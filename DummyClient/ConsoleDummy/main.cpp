@@ -14,11 +14,9 @@ struct Client
 	Client()
 	{
 		overEx = nullptr;
-		//memset(&overEx, 0, sizeof(overEx));
 		isConnect = false;
 		x = 0;
 		y = 0;
-		eventType = SERVER_EVENT::DEFAULT;
 		socket = 0;
 		memset(packetBuf, 0, sizeof(packetBuf));
 		prevSize = 0;
@@ -34,13 +32,16 @@ struct Client
 	void Initialize()
 	{
 		overEx = new OverEx;
+		memset(&overEx->overlapped, 0, sizeof(WSAOVERLAPPED));
+		memset(overEx->messageBuffer, 0, sizeof(MAX_BUFFER));
+		overEx->dataBuffer.buf = overEx->messageBuffer;
+		overEx->dataBuffer.len = MAX_BUFFER;
 	}
 
 	OverEx* overEx;
 	bool isConnect;
 	int x;
 	int y;
-	SERVER_EVENT eventType;
 	SOCKET socket;
 
 	char packetBuf[MAX_BUFFER];
@@ -55,8 +56,7 @@ std::thread gConnectThread;
 std::thread gAIThread;
 SOCKET gListenSocket;
 
-int gClientCounts;
-Client gClients[MAX_USER];
+Client gClients[MAX_OBJECT];
 
 bool Initialize();
 void ThreadPool();
@@ -89,8 +89,6 @@ int main()
 
 bool Initialize()
 {
-	gClientCounts = 0;
-
 	gIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
 	if (gIOCP == nullptr)
 	{
@@ -100,7 +98,7 @@ bool Initialize()
 	WSADATA wsadata;
 	WSAStartup(MAKEWORD(2, 2), &wsadata);
 
-	int workerThreadCount = 2;
+	int workerThreadCount = 4;
 	// 워커 스레드 생성
 	for (int i = 0; i < workerThreadCount; ++i)
 	{
@@ -183,13 +181,17 @@ void ThreadPool()
 						restSize -= required;
 						p += required;
 						packetSize = 0;
+
+						gClients[id].prevSize = 0;
 					}
 					// 패킷을 만들 수 없다면,
 					else
 					{
-						// 현재 들어온 패킷의 크기만큼, 현재 들어온 패킷을 저장시킨다.						
+						// 현재 들어온 패킷의 크기만큼, 현재 들어온 패킷을 저장시킨다.
 						memcpy(gClients[id].packetBuf + gClients[id].prevSize, p, restSize);
+						gClients[id].prevSize = restSize;
 						restSize = 0;
+						
 					}
 				}
 				RecvPacket(static_cast<int>(id));
@@ -212,16 +214,17 @@ void ThreadPool()
 
 void DoConnect()
 {
-	while (gClientCounts < 100)
+	int clientsCount = 0;
+	while (clientsCount < MAX_USER)
 	{
 		// 서버 접속
-		if (ConnectServer(gClientCounts) == false)
+		if (ConnectServer(clientsCount) == false)
 		{
-			std::cout << gClientCounts << "번 클라이언트 - 서버 연결 실패" << std::endl;
+			std::cout << clientsCount << "번 클라이언트 - 서버 연결 실패" << std::endl;
 			return;
 		}
 
-		++gClientCounts;
+		++clientsCount;
 	}
 }
 
@@ -235,7 +238,7 @@ void DoAI()
 	{
 		std::this_thread::sleep_for(100ms);
 		// move ai
-		for (int i = 0; i < gClientCounts; ++i)
+		for (int i = 0; i < MAX_USER; ++i)
 		{
 			if (gClients[i].isConnect == false)
 			{
@@ -353,7 +356,7 @@ void SendPacket(int id, char* packet)
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
-			std::cout << "Error - Fail WSARecv(error_code : " << WSAGetLastError() << std::endl;
+			std::cout << "Error - Fail WSASend(error_code : " << WSAGetLastError() << std::endl;
 		}
 	}
 }
@@ -365,14 +368,28 @@ void ProcessPacket(int id, char* buf)
 		case SC_PACKET_TYPE::SC_POSITION:
 		{
 			SCPositionPacket* packet = reinterpret_cast<SCPositionPacket*>(buf);
-			gClients[id].clientMtx.lock();
 			gClients[id].x = packet->x;
 			gClients[id].y = packet->y;
-			std::cout << id << "번 클라이언트 위치 : " << gClients[id].x << ", " << gClients[id].y << std::endl;
-			gClients[id].clientMtx.unlock();
-		
+			//std::cout << id << "번 클라이언트 위치 : " << gClients[id].x << ", " << gClients[id].y << std::endl;
 			break;
 		}
+
+		case SC_PACKET_TYPE::SC_ADD_OBJECT:
+		{
+			SCAddObjectPacket* packet = reinterpret_cast<SCAddObjectPacket*>(buf);
+			gClients[packet->id].x = packet->x;
+			gClients[packet->id].y = packet->y;
+			std::cout << id << "번 클라이언트에서 " << packet->id << "번 클라이언트 추가" << std::endl;
+			break;
+		}
+
+		case SC_PACKET_TYPE::SC_REMOVE_OBJECT:
+		{
+			SCRemoveObjectPacket* packet = reinterpret_cast<SCRemoveObjectPacket*>(buf);
+			std::cout << id << "번 클라이언트에서 " << packet->id << "번 클라이언트 삭제" << std::endl;
+			break;
+		}
+
 		default:
 		{
 			break;

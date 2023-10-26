@@ -2,8 +2,10 @@
 #include "../Common/Macro.h"
 #include "../Common/Defines.h"
 #include "../Common/Protocol.h"
+#include "../Character/Character.h"
 
-class Player;
+//class Player;
+//class Monster;
 class Core
 {
 	SINGLE_TONE(Core)
@@ -15,7 +17,24 @@ public:
 	volatile bool GetIsRun()	const { return mIsRun; }
 	void PushLeafWork(OverEx* overEx) { mLeafWorks.push(overEx); }
 	
-	void SendPositionPacket(int id);
+	int GetObjectIndex(int id) const
+	{ 
+		tbb::concurrent_hash_map<int, int>::const_accessor acc;
+		if (mObjectIds.find(acc, id))
+		{
+			return acc->second;
+		}
+		return -1;
+	}
+
+	Player* GetUsers() { return mUsers; }
+	Player& GetUser(int index) { return mUsers[index]; }
+	Monster* GetMonsters() { return mMonsters; }
+	Monster& GetMonster(int index) { return mMonsters[index]; }
+
+	void SendPositionPacket(int to, int obj);
+	void SendAddObjectPacket(int to, int obj);
+	void SendRemoveObjectPacket(int to, int obj);
 
 private:
 	void errorDisplay(const char* msg, int error);
@@ -33,6 +52,7 @@ private:
 	int createPlayerId()	const;
 
 	bool popLeafWork();
+
 private:
 	HANDLE mIOCP;
 	SOCKET mListenSocket;
@@ -43,7 +63,11 @@ private:
 
 	volatile bool mIsRun;
 	
+	// id, ¿Œµ¶Ω∫
+	tbb::concurrent_hash_map<int, int> mObjectIds;
+
 	Player* mUsers;
+	Monster* mMonsters;
 
 	tbb::concurrent_queue<OverEx*> mLeafWorks;
 };

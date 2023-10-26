@@ -1,7 +1,7 @@
 #include "Core.h"
 #include "../GameTimer/GameTimer.h"
 #include "../Database/Database.h"
-#include "../Character/Character.h"
+//#include "../Character/Character.h"
 
 
 INIT_INSTACNE(Core)
@@ -40,6 +40,8 @@ Core::~Core()
 	while (popLeafWork() == true);
 
 	delete[] mUsers;
+	delete[] mMonsters;
+	mObjectIds.clear();
 
 	WSACleanup();
 }
@@ -57,16 +59,34 @@ bool Core::Initialize()
 		return false;
 	}
 
+	int objectId = 0;
 	mUsers = new Player[MAX_USER];
 	for (int i = 0; i < MAX_USER; ++i)
 	{
-		if (mUsers[i].Inititalize() == false)
+		if (mUsers[i].Inititalize(objectId) == false)
 		{
 			return false;
 		}
+
+		tbb::concurrent_hash_map<int, int>::accessor acc;
+		mObjectIds.insert(acc, objectId++);
+		acc->second = i;
 	}
 
-	int workerThreadCount = 4;
+	mMonsters = new Monster[MAX_MONSTER];
+	for (int i = 0; i < MAX_MONSTER; ++i)
+	{
+		if (mMonsters[i].Inititalize(objectId) == false)
+		{
+			return false;
+		}
+
+		tbb::concurrent_hash_map<int, int>::accessor acc;
+		mObjectIds.insert(acc, objectId++);
+		acc->second = i;
+	}
+
+	int workerThreadCount = 6;
 	// 워커 스레드 생성
 	for (int i = 0; i < workerThreadCount; ++i)
 	{
@@ -106,16 +126,76 @@ void Core::ServerQuit()
 	Release();
 }
 
-void Core::SendPositionPacket(int id)
+void Core::SendPositionPacket(int to, int obj)
 {
+	int index = GetObjectIndex(obj);
+	if (index == -1)
+	{
+		return;
+	}
+	int x = 0;
+	int y = 0;
+
+	if (obj < MONSTER_START_ID)
+	{
+		x = mUsers[index].GetX();
+		y = mUsers[index].GetY();
+	}
+	else
+	{
+		x = mMonsters[index].GetX();
+		y = mMonsters[index].GetY();
+	}
+
 	SCPositionPacket packet;
 	packet.size = sizeof(SCPositionPacket);
 	packet.type = SC_PACKET_TYPE::SC_POSITION;
-	packet.id = id;
-	packet.x = mUsers[id].GetX();
-	packet.y = mUsers[id].GetY();
+	packet.id = obj;
+	packet.x = x;
+	packet.y = y;
 
-	sendPacket(id, reinterpret_cast<char*>(&packet));
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendAddObjectPacket(int to, int obj)
+{
+	int index = GetObjectIndex(obj);
+	if (index == -1)
+	{
+		return;
+	}
+	int x = 0;
+	int y = 0;
+
+	if (obj < MONSTER_START_ID)
+	{
+		x = mUsers[index].GetX();
+		y = mUsers[index].GetY();
+	}
+	else
+	{
+		x = mMonsters[index].GetX();
+		y = mMonsters[index].GetY();
+	}
+
+	SCAddObjectPacket packet;
+	packet.size = sizeof(SCAddObjectPacket);
+	packet.type = SC_PACKET_TYPE::SC_ADD_OBJECT;
+	packet.id = obj;
+	packet.x = x;
+	packet.y = y;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendRemoveObjectPacket(int to, int obj)
+{
+	SCRemoveObjectPacket packet;
+	packet.size = sizeof(SCRemoveObjectPacket);
+	packet.type = SC_PACKET_TYPE::SC_REMOVE_OBJECT;
+	packet.id = obj;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
 void Core::errorDisplay(const char* msg, int error)
@@ -271,9 +351,11 @@ void Core::threadPool()
 
 				while (restSize > 0)
 				{
-					// 전에 남아있던 패킷이 없었다면, 현재 들어온 패킷을 저장
+					// 전에 남아있던 패킷이 없었다면, 현재 들어온 패킷 크기를 저장
 					if (packetSize == 0)
+					{
 						packetSize = p[0];
+					}
 
 					// 패킷을 만들기 위한 크기?
 					int required = packetSize - mUsers[id].GetPrevSize();
@@ -287,12 +369,15 @@ void Core::threadPool()
 						restSize -= required;
 						p += required;
 						packetSize = 0;
+
+						mUsers[id].SetPrevSize(0);
 					}
 					// 패킷을 만들 수 없다면,
 					else
 					{
 						// 현재 들어온 패킷의 크기만큼, 현재 들어온 패킷을 저장시킨다.
 						mUsers[id].SetPacketBuf(p, restSize);
+						mUsers[id].SetPrevSize(restSize);
 						restSize = 0;
 					}
 				}
@@ -302,7 +387,7 @@ void Core::threadPool()
 
 			case SERVER_EVENT::SEND:
 			{
-				delete over;
+				//delete over;
 				break;
 			}
 
@@ -350,8 +435,9 @@ void Core::sendPacket(int id, char* packet)
 	SOCKET socket = mUsers[id].GetSocket();
 	OverEx* over = new OverEx;
 
-	over->dataBuffer.len = packet[0];
 	over->dataBuffer.buf = over->messageBuffer;
+	over->dataBuffer.len = packet[0];
+
 	// 패킷의 내용을 버퍼에 복사
 	memcpy(over->messageBuffer, packet, packet[0]);
 	ZeroMemory(&(over->overlapped), sizeof(WSAOVERLAPPED));
@@ -361,7 +447,7 @@ void Core::sendPacket(int id, char* packet)
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
-			std::cout << "Error - Fail WSARecv(error_code : " << WSAGetLastError() << std::endl;
+			std::cout << "Error - Fail WSASend(error_code : " << WSAGetLastError() << std::endl;
 		}
 	}
 }
@@ -374,7 +460,7 @@ void Core::processPacket(int id, char* buf)
 		{
 			CSMovePacket* packet = reinterpret_cast<CSMovePacket*>(buf);
 			mUsers[id].ProcessMove(packet->direction);
-			SendPositionPacket(id);
+			SendPositionPacket(id, id);
 			break;
 		}
 

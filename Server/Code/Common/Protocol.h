@@ -2,8 +2,19 @@
 
 #define SERVER_IP "127.0.0.1"
 constexpr int SERVER_PORT = 9000;
-constexpr int MAX_USER = 3000;
 constexpr int MAX_BUFFER = 1024;
+
+constexpr int WIDTH = 1000;
+constexpr int HEIGHT = 1000;
+
+constexpr int MAX_MONSTER = 10000;
+constexpr int MAX_USER = 2000;
+constexpr int MAX_OBJECT = MAX_MONSTER + MAX_USER;
+
+constexpr int USER_START_ID = 0;
+constexpr int MONSTER_START_ID = MAX_USER;
+
+constexpr int VIEW_DISTANCE = 7;
 
 enum class SERVER_EVENT
 {
@@ -63,6 +74,8 @@ enum SC_PACKET_TYPE
 	SC_LOGIN_OK = 0,
 	SC_LOGIN_FAIL,
 	SC_POSITION,
+	SC_ADD_OBJECT,
+	SC_REMOVE_OBJECT
 };
 
 #pragma pack(push, 1)
@@ -82,4 +95,20 @@ struct SCPositionPacket
 	int id;
 	int x;
 	int y;
+};
+
+struct SCAddObjectPacket
+{
+	char size;
+	char type;
+	int id;
+	int x;
+	int y;
+};
+
+struct SCRemoveObjectPacket
+{
+	char size;
+	char type;
+	int id;
 };

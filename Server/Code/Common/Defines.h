@@ -2,8 +2,11 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_set>
+#include <unordered_map>
 #include <thread>
 #include <memory>
+#include <random>
 
 #include <winsock2.h>
 //#pragma comment(lib, "Ws2_32.lib")
@@ -23,5 +26,3 @@
 
 // 디버그 모드면 콘솔창 띄우기
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
-
-//#include "Protocol.h"
