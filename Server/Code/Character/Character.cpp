@@ -121,15 +121,13 @@ void Character::CheckViewList()
 {
 	int myId = mOver->myId;
 	int myIndex = GET_INSTANCE(Core)->GetObjectIndex(myId);
-	std::unordered_map<int, int> oldViewList;
-	//mViewListMtx.lock_shared();
-	mViewListMtx.lock();
-	for (auto obj : mViewList)
-	{
-		oldViewList.emplace(obj.first, obj.second);
-	}
-	//mViewListMtx.unlock_shared();
-	mViewListMtx.unlock();
+	//std::unordered_map<int, int> oldViewList;
+	//mViewListMtx.lock();
+	//for (auto obj : mViewList)
+	//{
+	//	oldViewList.emplace(obj.first, obj.second);
+	//}
+	//mViewListMtx.unlock();
 
 	std::unordered_set<int> newViewList;
 
@@ -144,20 +142,47 @@ void Character::CheckViewList()
 			continue;
 		}
 
+		int index = GET_INSTANCE(Core)->GetObjectIndex(i);
 		if (i < MONSTER_START_ID)
 		{
-			int index = GET_INSTANCE(Core)->GetObjectIndex(i);
 			if (users[index].GetIsConnect() == false)
 			{
+				// 만약 전에 접속했었는데, 지금은 접속종료했던애가 남아있다면? 내꺼에서만 지운다.
+				if (mViewList.count(i) == true)
+				{
+					mViewList.erase(i);
+					GET_INSTANCE(Core)->SendRemoveObjectPacket(myId, i);
+				}
 				continue;
 			}
 		}
 
 		if (CheckDistance(i) == false)
 		{
+			// 만약 전에 시야에 있었는데, 지금은 없다면? 나한테도 지우고, 걔한테도 지워야댐
+			if (mViewList.count(i) == true)
+			{
+				mViewList.erase(i);
+				GET_INSTANCE(Core)->SendRemoveObjectPacket(myId, i);
+			}
+
+			if (i < MONSTER_START_ID)
+			{
+				if (users[i].GetViewList().count(myId) == true)
+				{
+					users[i].GetViewList().erase(myId);
+					GET_INSTANCE(Core)->SendRemoveObjectPacket(i, myId);
+				}
+			}
+			else
+			{
+				if (monsters[index].GetViewList().count(myId) == true)
+				{
+					monsters[index].GetViewList().erase(myId);
+				}
+			}			
 			continue;
 		}
-
 		newViewList.emplace(i);
 	}
 
@@ -221,31 +246,31 @@ void Character::CheckViewList()
 	}
 
 	// 시야에서 사라짐
-	for (auto obj : oldViewList)
-	{
-		int id = obj.first;
-		int index = obj.second;
-		if (newViewList.count(id) == true)
-		{
-			continue;
-		}
+	//for (auto obj : oldViewList)
+	//{
+	//	int id = obj.first;
+	//	int index = obj.second;
+	//	if (newViewList.count(id) == true)
+	//	{
+	//		continue;
+	//	}
 
-		// 내 뷰리스트에서 상대방 제거
-		mViewList.erase(id);
-		GET_INSTANCE(Core)->SendRemoveObjectPacket(myId, id);
+	//	// 내 뷰리스트에서 상대방 제거
+	//	mViewList.erase(id);
+	//	GET_INSTANCE(Core)->SendRemoveObjectPacket(myId, id);
 
-		if (id >= MONSTER_START_ID)
-		{
-			continue;
-		}
+	//	if (id >= MONSTER_START_ID)
+	//	{
+	//		continue;
+	//	}
 
-		// 상대방 뷰리스트에도 나를 지운다.
-		if (users[index].GetViewList().count(myId) == true)
-		{
-			users[index].GetViewList().erase(myId);
-			GET_INSTANCE(Core)->SendRemoveObjectPacket(id, myId);
-		}
-	}
+	//	// 상대방 뷰리스트에도 나를 지운다.
+	//	if (users[index].GetViewList().count(myId) == true)
+	//	{
+	//		users[index].GetViewList().erase(myId);
+	//		GET_INSTANCE(Core)->SendRemoveObjectPacket(id, myId);
+	//	}
+	//}
 }
 
 Player::Player()

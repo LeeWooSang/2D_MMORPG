@@ -7,7 +7,7 @@ constexpr int MAX_BUFFER = 1024;
 constexpr int WIDTH = 1000;
 constexpr int HEIGHT = 1000;
 
-constexpr int MAX_MONSTER = 10000;
+constexpr int MAX_MONSTER = 5000;
 constexpr int MAX_USER = 2000;
 constexpr int MAX_OBJECT = MAX_MONSTER + MAX_USER;
 
