@@ -98,7 +98,7 @@ bool Initialize()
 	WSADATA wsadata;
 	WSAStartup(MAKEWORD(2, 2), &wsadata);
 
-	int workerThreadCount = 4;
+	int workerThreadCount = 2;
 	// 况目 胶饭靛 积己
 	for (int i = 0; i < workerThreadCount; ++i)
 	{
@@ -236,7 +236,7 @@ void DoAI()
 
 	while (true)
 	{
-		std::this_thread::sleep_for(100ms);
+		std::this_thread::sleep_for(500ms);
 		// move ai
 		for (int i = 0; i < MAX_USER; ++i)
 		{

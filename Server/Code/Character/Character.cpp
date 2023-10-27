@@ -71,7 +71,8 @@ void Character::ProcessMove(char dir)
 	mX = x;
 	mY = y;
 
-	CheckViewList();
+	//CheckViewList();
+	CheckOldViewList();
 }
 
 bool Character::CheckRange(int x, int y)
@@ -168,9 +169,9 @@ void Character::CheckViewList()
 
 			if (i < MONSTER_START_ID)
 			{
-				if (users[i].GetViewList().count(myId) == true)
+				if (users[index].GetViewList().count(myId) == true)
 				{
-					users[i].GetViewList().erase(myId);
+					users[index].GetViewList().erase(myId);
 					GET_INSTANCE(Core)->SendRemoveObjectPacket(i, myId);
 				}
 			}
@@ -271,6 +272,134 @@ void Character::CheckViewList()
 	//		GET_INSTANCE(Core)->SendRemoveObjectPacket(id, myId);
 	//	}
 	//}
+}
+
+void Character::CheckOldViewList()
+{
+	int myId = mOver->myId;
+	int myIndex = GET_INSTANCE(Core)->GetObjectIndex(myId);
+	std::unordered_map<int, int> oldViewList;
+	mViewListMtx.lock();
+	for (auto obj : mViewList)
+	{
+		oldViewList.emplace(obj.first, obj.second);
+	}
+	mViewListMtx.unlock();
+
+	std::unordered_set<int> newViewList;
+
+	Player* users = GET_INSTANCE(Core)->GetUsers();
+	Monster* monsters = GET_INSTANCE(Core)->GetMonsters();
+
+	// 나와 근처에 있는 오브젝트 아이디를 새로운 뷰리스트에 넣음
+	for (int i = 0; i < MAX_OBJECT; ++i)
+	{
+		if (myId == i)
+		{
+			continue;
+		}
+
+		if (i < MONSTER_START_ID)
+		{
+			if (users[i].GetIsConnect() == false)
+			{
+				continue;
+			}
+		}
+
+		if (CheckDistance(i) == false)
+		{
+			continue;
+		}
+
+		newViewList.emplace(i);
+	}
+
+	// 나와 이전에 근처에 있던 오브젝트들에 대해
+	for (auto id : newViewList)
+	{
+		int index = GET_INSTANCE(Core)->GetObjectIndex(id);
+		// 이전에 없던 오브젝트라면
+		if (mViewList.count(id) == false)
+		{
+			{
+				tbb::concurrent_hash_map<int, int>::accessor acc;
+				mViewList.insert(acc, id);
+				acc->second = index;
+				GET_INSTANCE(Core)->SendAddObjectPacket(myId, id);
+			}
+
+			// 오브젝트가 몬스터라면 깨운다
+			if (id >= MONSTER_START_ID)
+			{
+				//WakeUp(index);
+				continue;
+			}
+
+			// 상대방 유저의 뷰리스트 검사
+			if (users[index].GetViewList().count(myId) == false)
+			{
+				tbb::concurrent_hash_map<int, int>::accessor acc;
+				users[index].GetViewList().insert(acc, myId);
+				acc->second = myIndex;
+				GET_INSTANCE(Core)->SendAddObjectPacket(id, myId);
+			}
+			else
+			{
+				GET_INSTANCE(Core)->SendPositionPacket(index, myIndex);
+			}
+		}
+
+		// 이전에도 있고, 지금도 존재함
+		else
+		{
+			if (id >= MONSTER_START_ID)
+			{
+				//WakeUp(index);
+				continue;
+			}
+
+			// 상대방 유저의 뷰리스트 검사
+			if (users[index].GetViewList().count(myId) == false)
+			{
+				tbb::concurrent_hash_map<int, int>::accessor acc;
+				users[index].GetViewList().insert(acc, myId);
+				acc->second = myIndex;
+				GET_INSTANCE(Core)->SendAddObjectPacket(id, myId);
+			}
+			else
+			{
+				GET_INSTANCE(Core)->SendPositionPacket(index, myIndex);
+			}
+		}
+	}
+
+	// 시야에서 사라짐
+	for (auto obj : oldViewList)
+	{
+		int id = obj.first;
+		int index = obj.second;
+		if (newViewList.count(id) == true)
+		{
+			continue;
+		}
+
+		// 내 뷰리스트에서 상대방 제거
+		mViewList.erase(id);
+		GET_INSTANCE(Core)->SendRemoveObjectPacket(myId, id);
+
+		if (id >= MONSTER_START_ID)
+		{
+			continue;
+		}
+
+		// 상대방 뷰리스트에도 나를 지운다.
+		if (users[index].GetViewList().count(myId) == true)
+		{
+			users[index].GetViewList().erase(myId);
+			GET_INSTANCE(Core)->SendRemoveObjectPacket(id, myId);
+		}
+	}
 }
 
 Player::Player()

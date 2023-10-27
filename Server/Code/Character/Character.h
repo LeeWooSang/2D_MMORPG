@@ -21,6 +21,7 @@ public:
 	bool CheckRange(int x, int y);
 	bool CheckDistance(int id);
 	void CheckViewList();
+	void CheckOldViewList();
 
 	tbb::concurrent_hash_map<int, int>& GetViewList() { return mViewList; }
 

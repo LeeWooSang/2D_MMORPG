@@ -454,6 +454,7 @@ void Core::sendPacket(int id, char* packet)
 
 void Core::processPacket(int id, char* buf)
 {
+	auto start = std::chrono::high_resolution_clock::now();
 	switch (buf[1])
 	{
 		case CS_PACKET_TYPE::CS_MOVE:
@@ -469,6 +470,9 @@ void Core::processPacket(int id, char* buf)
 			break;
 		}
 	}
+	auto end = std::chrono::high_resolution_clock::now() - start;
+	auto time = std::chrono::duration<double>(end).count();
+	std::cout << "패킷 처리 시간 : " << time << "초" << std::endl;
 }
 
 void Core::processEvent(SERVER_EVENT eventType, int id)
