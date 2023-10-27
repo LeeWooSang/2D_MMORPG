@@ -42,7 +42,7 @@ void GameTimer::run()
 			// 타이머 큐에서 해당 이벤트를 얻어옴
 			if (ev.startTime > chrono::high_resolution_clock::now())
 			{
-				AddTimer(ev.startTime, ev.eventType, ev.myId);
+				mTimerQueue.push(TimerEvent(ev.startTime, ev.eventType, ev.myId));
 				break;
 			}
 
@@ -52,13 +52,16 @@ void GameTimer::run()
 			//	break;
 			//}
 
-			OverEx* overEx = new OverEx;
-			overEx->eventType = ev.eventType;
-			overEx->myId = ev.myId;
+			if (ev.eventType == SERVER_EVENT::MONSTER_MOVE)
+			{
+				OverEx* overEx = new OverEx;
+				overEx->eventType = ev.eventType;
+				overEx->myId = ev.myId;
 
-			GET_INSTANCE(Core)->PushLeafWork(overEx);
-			// 워커스레드에게 ProcessEvent를 넘겨야 됨
-			PostQueuedCompletionStatus(GET_INSTANCE(Core)->GetIOCP(), 1, ev.myId, &overEx->overlapped);
+				GET_INSTANCE(Core)->PushLeafWork(overEx);
+				// 워커스레드에게 ProcessEvent를 넘겨야 됨
+				PostQueuedCompletionStatus(GET_INSTANCE(Core)->GetIOCP(), 1, ev.myId, &overEx->overlapped);
+			}
 		}		
 	}
 }

@@ -292,7 +292,10 @@ void Core::acceptClient()
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(clientSocket), mIOCP, id, 0);
 		recvPacket(id);
 
-		std::cout << id << "번 클라이언트 접속" << std::endl;
+		// 워커스레드에게 넘겨야됨
+		mUsers[id].ProcessLoginViewList();
+
+		std::cout << id << "번 클라이언트 접속" << std::endl;		
 	}
 }
 
@@ -387,14 +390,13 @@ void Core::threadPool()
 
 			case SERVER_EVENT::SEND:
 			{
-				//delete over;
+				delete over;
 				break;
 			}
 
 			default:
 			{
 				processEvent(over->eventType, static_cast<int>(id));
-				popLeafWork();
 				break;
 			}
 		}
@@ -461,6 +463,7 @@ void Core::processPacket(int id, char* buf)
 		{
 			CSMovePacket* packet = reinterpret_cast<CSMovePacket*>(buf);
 			mUsers[id].ProcessMove(packet->direction);
+			mUsers[id].CheckViewList();
 			SendPositionPacket(id, id);
 			break;
 		}
@@ -472,12 +475,29 @@ void Core::processPacket(int id, char* buf)
 	}
 	auto end = std::chrono::high_resolution_clock::now() - start;
 	auto time = std::chrono::duration<double>(end).count();
-	std::cout << "패킷 처리 시간 : " << time << "초" << std::endl;
+	//std::cout << "패킷 처리 시간 : " << time << "초" << std::endl;
 }
 
 void Core::processEvent(SERVER_EVENT eventType, int id)
 {
-	std::cout << "오브젝트 id : " << id << " 이벤트 발생" << std::endl;
+	//std::cout << "오브젝트 id : " << id << " 이벤트 발생" << std::endl;
+	popLeafWork();
+	switch (eventType)
+	{
+		case SERVER_EVENT::MONSTER_MOVE:
+		{
+			int index = GetObjectIndex(id);
+			char dir = mMonsters[index].RandomDirection();
+			mMonsters[index].ProcessMove(dir);
+			mMonsters[index].ProcessMoveViewList();
+			break;
+		}
+
+		default:
+		{
+			break;
+		}
+	}
 }
 
 int Core::createPlayerId() const

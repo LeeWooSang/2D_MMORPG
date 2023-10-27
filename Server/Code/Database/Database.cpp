@@ -35,7 +35,7 @@ void Database::run()
 	{
 		std::this_thread::sleep_for(10ms);
 
-		//GET_INSTANCE(GameTimer)->AddTimer(std::chrono::high_resolution_clock::now() + 1s, SERVER_EVENT::DEFAULT, uid(dre));
+		GET_INSTANCE(GameTimer)->AddTimer(std::chrono::high_resolution_clock::now() + 1s, SERVER_EVENT::DEFAULT, uid(dre));
 		while (mDbQueue.empty() == false)
 		{
 			//mDbQueue.try_pop()

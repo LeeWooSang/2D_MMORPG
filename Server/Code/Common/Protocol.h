@@ -20,6 +20,7 @@ enum class SERVER_EVENT
 {
 	RECV = 0,
 	SEND = 1,
+	MONSTER_MOVE = 2,
 	DEFAULT = 999
 };
 

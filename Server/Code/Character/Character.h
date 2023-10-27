@@ -16,15 +16,14 @@ public:
 	int	 GetX()	const { return mX; }
 	int	 GetY()	const { return mY; }
 	std::mutex& GetPosMtx() { return mPosMtx; }
+	std::mutex& GetViewListMtx() { return mViewListMtx; }
 
 	virtual void ProcessMove(char dir);
 	bool CheckRange(int x, int y);
 	bool CheckDistance(int id);
-	void CheckViewList();
-	void CheckOldViewList();
 
 	tbb::concurrent_hash_map<int, int>& GetViewList() { return mViewList; }
-
+	std::unordered_set<int>& GetSTLViewList() { return mSTLViewList; }
 protected:
 	Over* mOver;
 	int mX;
@@ -32,6 +31,7 @@ protected:
 	std::mutex mPosMtx;
 
 	tbb::concurrent_hash_map<int, int> mViewList;
+	std::unordered_set<int> mSTLViewList;
 	std::mutex mViewListMtx;
 	//std::shared_mutex mViewListMtx;
 };
@@ -54,8 +54,13 @@ public:
 	void SetPrevSize(int size) { mPrevSize = size; }
 
 	void PlayerConnect() { mConnect = true; }
-	void PlayerDisconnect() { Reset(); }
+	void PlayerDisconnect();
 	bool GetIsConnect()	const { return mConnect; }
+
+	void ProcessLoginViewList();
+	void CheckViewList();
+	void CheckOldViewList();
+	void CheckSTLViewList();
 
 private:
 	SOCKET mSocket;
@@ -72,6 +77,11 @@ public:
 	~Monster();
 	virtual void Reset();
 	virtual bool Inititalize(int id);
+	virtual void WakeUp();
+	virtual void Sleep();
+
+	char RandomDirection()	const;
+	void ProcessMoveViewList();
 
 private:
 	bool mSleep;

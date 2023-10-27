@@ -57,6 +57,7 @@ std::thread gAIThread;
 SOCKET gListenSocket;
 
 Client gClients[MAX_OBJECT];
+int gConnectNum = 50;
 
 bool Initialize();
 void ThreadPool();
@@ -215,7 +216,7 @@ void ThreadPool()
 void DoConnect()
 {
 	int clientsCount = 0;
-	while (clientsCount < MAX_USER)
+	while (clientsCount < gConnectNum)
 	{
 		// 서버 접속
 		if (ConnectServer(clientsCount) == false)
@@ -236,9 +237,9 @@ void DoAI()
 
 	while (true)
 	{
-		std::this_thread::sleep_for(500ms);
+		std::this_thread::sleep_for(100ms);
 		// move ai
-		for (int i = 0; i < MAX_USER; ++i)
+		for (int i = 0; i < gConnectNum; ++i)
 		{
 			if (gClients[i].isConnect == false)
 			{
