@@ -24,8 +24,7 @@ public:
 	int GetId()	const { return mId; }
 	void SetId(int id) { mId = id; }
 	void SetAnimationInfo(int frameSize);
-	void Move(char dir);
-
+	
 protected:
 	int mId;
 
@@ -41,4 +40,16 @@ protected:
 
 	wchar_t mMessage[256];
 	unsigned long mMessageTime;
+};
+
+class Player : public Character
+{
+public:
+	Player();
+	virtual ~Player();
+
+	virtual bool Initialize(int x, int y);
+	virtual void Update();
+	virtual void Render();
+	void Move(char dir);
 };

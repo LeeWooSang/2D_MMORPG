@@ -47,7 +47,7 @@ class Camera
 public:
 
     const std::pair<int, int>& GetPosition()    const { return mPos; }
-    void SetPosition(int x, int y) { mPos = std::make_pair(x, y); }
+    void SetPosition(int x, int y) { mPos = std::make_pair(x - 4, y - 4); }
 
 private:
     std::pair<int, int> mPos;

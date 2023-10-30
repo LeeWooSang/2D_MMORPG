@@ -1,6 +1,7 @@
 #pragma once
 
-#define SERVER_IP "127.0.0.1"
+//#define SERVER_IP "127.0.0.1"
+#define SERVER_IP "192.168.219.103"
 constexpr int SERVER_PORT = 9000;
 constexpr int MAX_BUFFER = 1024;
 

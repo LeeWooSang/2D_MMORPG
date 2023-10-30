@@ -85,17 +85,16 @@ void Map::Render()
 	src.bottom = mTexture->GetPos().second + mTexture->GetSize().second;
 
 	//D3DXVECTOR3 pos = D3DXVECTOR3(static_cast<float>(mPos.first), static_cast<float>(mPos.second), 0.0);
-	D3DXVECTOR3 pos = D3DXVECTOR3(mPos.first * mTexture->GetSize().first + 7, mPos.second * mTexture->GetSize().second + 7, 0.0);
+	//D3DXVECTOR3 pos = D3DXVECTOR3(mPos.first * mTexture->GetSize().first + 7, mPos.second * mTexture->GetSize().second + 7, 0.0);
+	//GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
+	//D3DXVECTOR3 pos = D3DXVECTOR3((mPos.first - cameraPos.first) * 65.0f + 10, (mPos.second - cameraPos.second) * 65.0f + 10, 0.0);
+	D3DXVECTOR3 pos = D3DXVECTOR3
+	(
+		(mPos.first - cameraPos.first) * mTexture->GetSize().first + 8.0,
+		(mPos.second - cameraPos.second) * mTexture->GetSize().second + 8.0,
+		0.0
+	);
 	GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
-
-	// 간격 표시자 그리기	 
-	//for (int i = 0; i < MAX_MARK; ++i)
-	//{
-	//	// 간격 표시자 위치
-	//	mMarks[i].x = 8 * i;
-	//	mMarks[i].y = 8 * i;
-	//	mMarks[i].attr |= BOB_ATTR_VISIBLE;
-	//	Draw_BOB32(&mMarks[i]);
-	//}
-
 }

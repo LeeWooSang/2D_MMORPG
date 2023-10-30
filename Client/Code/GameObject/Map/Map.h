@@ -1,7 +1,6 @@
 #pragma once
 #include "../GameObject.h"
 #include <memory>
-#include "../../GraphicEngine/GraphicEngine.h"
 
 // 간격 표시자
 constexpr int MAX_MARK = 12;

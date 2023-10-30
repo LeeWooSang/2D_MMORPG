@@ -712,10 +712,6 @@ void Monster::WakeUp()
 	GET_INSTANCE(GameTimer)->AddTimer(std::chrono::high_resolution_clock::now() + 1s, SERVER_EVENT::MONSTER_MOVE, myId);
 }
 
-void Monster::Sleep()
-{
-}
-
 char Monster::RandomDirection() const
 {
 	std::random_device rd;
@@ -810,8 +806,8 @@ void Monster::ProcessMoveViewList()
 		}
 	}
 
-	if (newViewList.size() > 0)
-	{
-		WakeUp();
-	}
+	//if (newViewList.size() > 0)
+	//{
+	//	WakeUp();
+	//}
 }

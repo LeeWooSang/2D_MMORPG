@@ -80,10 +80,11 @@ public:
 	virtual void Reset();
 	virtual bool Inititalize(int id);
 	virtual void WakeUp();
-	virtual void Sleep();
 
 	char RandomDirection()	const;
 	void ProcessMoveViewList();
+
+	void SetSleep(bool sleep) { mSleep = sleep; }
 
 private:
 	bool mSleep;

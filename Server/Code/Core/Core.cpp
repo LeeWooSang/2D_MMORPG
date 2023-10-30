@@ -491,6 +491,7 @@ void Core::processEvent(SERVER_EVENT eventType, int id)
 		case SERVER_EVENT::MONSTER_MOVE:
 		{
 			int index = GetObjectIndex(id);
+
 			char dir = mMonsters[index].RandomDirection();
 			mMonsters[index].ProcessMove(dir);
 			mMonsters[index].ProcessMoveViewList();

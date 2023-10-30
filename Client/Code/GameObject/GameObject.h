@@ -41,7 +41,7 @@ public:
 	Texture* GetTexture()	const { return mTexture; }
 	bool SetTexture(const std::string& name);
 
-	bool CheckDistance(int x, int y);
+	virtual bool CheckDistance(int x, int y);
 	void Visible() { mAttr |= ATTR_STATE_TYPE::VISIBLE; }
 	void NotVisible() { mAttr &= ~ATTR_STATE_TYPE::VISIBLE; }
 

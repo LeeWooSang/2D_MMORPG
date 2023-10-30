@@ -2,6 +2,7 @@
 #include <iostream>
 #include "../Core/Core.h"
 #include "../GameObject/Character/Character.h"
+#include "../GraphicEngine/GraphicEngine.h"
 
 #define	WM_SOCKET	WM_USER + 1
 
@@ -108,6 +109,7 @@ void Network::processPacket()
 			int y = packet->y;
 			if (GET_INSTANCE(Core)->GetPlayer()->GetId() == id)
 			{
+				GET_INSTANCE(Camera)->SetPosition(x, y);
 				GET_INSTANCE(Core)->GetPlayer()->SetPosition(x, y);
 			}
 			else

@@ -117,7 +117,7 @@ void GraphicEngine::RenderText(const wchar_t* text, int x, int y, D3DCOLOR color
 
 INIT_INSTACNE(Camera)
 Camera::Camera()
-	: mPos(std::make_pair(0, 0)) 
+	: mPos(std::make_pair(-4, -4)) 
 {
 }
 

@@ -93,6 +93,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline
 
 	if (GET_INSTANCE(Core)->Initialize(main_window_handle, WINDOW_WIDTH, WINDOW_HEIGHT) == false)
 	{
+		GET_INSTANCE(Core)->Release();
 		return false;
 	}
 

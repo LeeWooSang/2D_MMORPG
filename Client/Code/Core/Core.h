@@ -6,6 +6,7 @@
 #include "../Common/Defines.h"
 
 class Map;
+class Player;
 class Character;
 class Core
 {
@@ -17,13 +18,13 @@ public:
 
 	void WindowProc(unsigned int msg, unsigned long long wparam, long long lparam);
 
-	Character* GetPlayer() { return mPlayer.get(); }
+	Player* GetPlayer() { return mPlayer.get(); }
 	Character* GetOtherPlayer(int id) { return mOtherPlayers[id].get(); }
 	Character* GetMonster(int id) { return mMonsters[id].get(); }
 
 private:
 	std::vector<Map*> mMaps;
-	std::shared_ptr<Character> mPlayer;
+	std::shared_ptr<Player> mPlayer;
 	std::unordered_map<int, std::shared_ptr<Character>> mOtherPlayers;
 	std::unordered_map<int, std::shared_ptr<Character>> mMonsters;
 

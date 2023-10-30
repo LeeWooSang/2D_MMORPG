@@ -27,6 +27,7 @@ Core::~Core()
 	mOtherPlayers.clear();
 	mMonsters.clear();
 
+	GET_INSTANCE(Camera)->Release();
 	GET_INSTANCE(Network)->Release();
 	GET_INSTANCE(Input)->Release();
 	GET_INSTANCE(ResourceManager)->Release();
@@ -57,7 +58,6 @@ bool Core::Initialize(HWND handle, int width, int height)
 		for (int j = 0; j < HEIGHT; ++j)
 		{
 			Map* map = new Map;
-			//if (map->Initialize(i * TILE_SIZE + 7, j * TILE_SIZE + 7) == false)
 			if (map->Initialize(i, j) == false)
 			{
 				return false;
@@ -67,12 +67,11 @@ bool Core::Initialize(HWND handle, int width, int height)
 			{
 				return false;
 			}
-			//map->Visible();
 			mMaps.emplace_back(map);
 		}
 	}
 	
-	mPlayer = std::make_shared<Character>();
+	mPlayer = std::make_shared<Player>();
 	if (mPlayer.get()->Initialize(0, 0) == false)
 	{
 		return false;
@@ -135,6 +134,7 @@ void Core::Run()
 
 	// update
 	mPlayer.get()->Update();
+
 	for (auto& tile : mMaps)
 	{
 		if (tile->CheckDistance(mPlayer.get()->GetPosition().first, mPlayer.get()->GetPosition().second) == true)
