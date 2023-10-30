@@ -38,12 +38,12 @@ void Character::ProcessMove(char dir)
 	{
 		case DIRECTION_TYPE::UP:
 		{
-			++y;
+			--y;
 			break;
 		}
 		case DIRECTION_TYPE::DOWN:
 		{
-			--y;
+			++y;
 			break;
 		}
 		case DIRECTION_TYPE::LEFT:
@@ -703,12 +703,13 @@ bool Monster::Inititalize(int id)
 	return true;
 }
 
+using namespace std;
 void Monster::WakeUp()
 {
 	int myId = mOver->myId;
 	// 타이머에 1초뒤에 move 전달
 	std::chrono::seconds sec{ 1 };
-	GET_INSTANCE(GameTimer)->AddTimer(std::chrono::high_resolution_clock::now() + sec, SERVER_EVENT::MONSTER_MOVE, myId);
+	GET_INSTANCE(GameTimer)->AddTimer(std::chrono::high_resolution_clock::now() + 1s, SERVER_EVENT::MONSTER_MOVE, myId);
 }
 
 void Monster::Sleep()
@@ -807,5 +808,10 @@ void Monster::ProcessMoveViewList()
 				GET_INSTANCE(Core)->SendPositionPacket(id, myId);
 			}
 		}
+	}
+
+	if (newViewList.size() > 0)
+	{
+		WakeUp();
 	}
 }

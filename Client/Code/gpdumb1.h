@@ -1,3 +1,6 @@
+#include <d3d9.h>
+#include <d3dx9tex.h>
+
 // GPDUMB1.H - Header file for GPDUMB1.CPP game engine library
 
 // watch for multiple inclusions

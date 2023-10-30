@@ -15,6 +15,8 @@ public:
 	Over* GetOver() { return mOver; }
 	int	 GetX()	const { return mX; }
 	int	 GetY()	const { return mY; }
+	void SetPosition(int x, int y) { mX = x; mY = y; }
+
 	std::mutex& GetPosMtx() { return mPosMtx; }
 	std::mutex& GetViewListMtx() { return mViewListMtx; }
 

@@ -4,8 +4,8 @@
 constexpr int SERVER_PORT = 9000;
 constexpr int MAX_BUFFER = 1024;
 
-constexpr int WIDTH = 1000;
-constexpr int HEIGHT = 1000;
+constexpr int WIDTH = 500;
+constexpr int HEIGHT = 500;
 
 constexpr int MAX_MONSTER = 2000;
 constexpr int MAX_USER = 2000;

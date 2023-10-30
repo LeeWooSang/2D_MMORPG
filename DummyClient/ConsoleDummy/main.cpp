@@ -57,7 +57,7 @@ std::thread gAIThread;
 SOCKET gListenSocket;
 
 Client gClients[MAX_OBJECT];
-int gConnectNum = 50;
+int gConnectNum = 1000;
 
 bool Initialize();
 void ThreadPool();
@@ -215,7 +215,7 @@ void ThreadPool()
 
 void DoConnect()
 {
-	int clientsCount = 0;
+	int clientsCount = 1;
 	while (clientsCount < gConnectNum)
 	{
 		// 서버 접속
@@ -239,7 +239,7 @@ void DoAI()
 	{
 		std::this_thread::sleep_for(100ms);
 		// move ai
-		for (int i = 0; i < gConnectNum; ++i)
+		for (int i = 1; i < gConnectNum; ++i)
 		{
 			if (gClients[i].isConnect == false)
 			{
@@ -380,14 +380,14 @@ void ProcessPacket(int id, char* buf)
 			SCAddObjectPacket* packet = reinterpret_cast<SCAddObjectPacket*>(buf);
 			gClients[packet->id].x = packet->x;
 			gClients[packet->id].y = packet->y;
-			std::cout << id << "번 클라이언트에서 " << packet->id << "번 클라이언트 추가" << std::endl;
+			//std::cout << id << "번 클라이언트에서 " << packet->id << "번 클라이언트 추가" << std::endl;
 			break;
 		}
 
 		case SC_PACKET_TYPE::SC_REMOVE_OBJECT:
 		{
 			SCRemoveObjectPacket* packet = reinterpret_cast<SCRemoveObjectPacket*>(buf);
-			std::cout << id << "번 클라이언트에서 " << packet->id << "번 클라이언트 삭제" << std::endl;
+			//std::cout << id << "번 클라이언트에서 " << packet->id << "번 클라이언트 삭제" << std::endl;
 			break;
 		}
 

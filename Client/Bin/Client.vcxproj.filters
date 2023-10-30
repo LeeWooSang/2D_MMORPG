@@ -1,33 +1,113 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Code">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Code\Resource">
+      <UniqueIdentifier>{71416a36-c598-4d90-8ee1-6c505bf3d29d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GameObject">
+      <UniqueIdentifier>{2169ed50-1cf6-4926-b6af-a4f648e5b1c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Core">
+      <UniqueIdentifier>{599aac6e-521d-453a-b2be-568dabced1bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Common">
+      <UniqueIdentifier>{62a55156-d607-4613-a118-528e2264e08b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Network">
+      <UniqueIdentifier>{f1740930-feb8-47d0-94e1-217303b2c7da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GameObject\Character">
+      <UniqueIdentifier>{13ef0bbc-3636-45c6-9df4-30b55a0e9f2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GameObject\Map">
+      <UniqueIdentifier>{90e7a386-fe98-4b1d-a30c-714c06aed3c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Resource\Texture">
+      <UniqueIdentifier>{81b08dbc-f1ef-47fa-b9ec-a83fa2265c88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GraphicEngine">
+      <UniqueIdentifier>{681ec392-881a-46e5-9f1c-5286740a985e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Input">
+      <UniqueIdentifier>{f6599b5c-4967-4c10-9bde-3d7c958242f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Code\2DClient.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="..\Code\GameObject\GameObject.cpp">
+      <Filter>Code\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\gpdumb1.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="..\Code\Core\Core.cpp">
+      <Filter>Code\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Network\Network.cpp">
+      <Filter>Code\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\Character\Character.cpp">
+      <Filter>Code\GameObject\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\Map\Map.cpp">
+      <Filter>Code\GameObject\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GraphicEngine\GraphicEngine.cpp">
+      <Filter>Code\GraphicEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Resource\Texture\Texture.cpp">
+      <Filter>Code\Resource\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Resource\ResourceManager.cpp">
+      <Filter>Code\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Main.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Input\Input.cpp">
+      <Filter>Code\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Code\gpdumb1.h">
-      <Filter>소스 파일</Filter>
+    <ClInclude Include="..\Code\GameObject\GameObject.h">
+      <Filter>Code\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Protocol.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="..\Code\Core\Core.h">
+      <Filter>Code\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Common\Macro.h">
+      <Filter>Code\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Network\Network.h">
+      <Filter>Code\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Common\Defines.h">
+      <Filter>Code\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\Character\Character.h">
+      <Filter>Code\GameObject\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\Map\Map.h">
+      <Filter>Code\GameObject\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GraphicEngine\GraphicEngine.h">
+      <Filter>Code\GraphicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Resource\Texture\Texture.h">
+      <Filter>Code\Resource\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Resource\ResourceManager.h">
+      <Filter>Code\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Input\Input.h">
+      <Filter>Code\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Server\Code\Common\Protocol.h">
+      <Filter>Code\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -137,12 +137,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Code\2DClient.cpp" />
-    <ClCompile Include="..\Code\gpdumb1.cpp" />
+    <ClCompile Include="..\Code\Core\Core.cpp" />
+    <ClCompile Include="..\Code\GameObject\Character\Character.cpp" />
+    <ClCompile Include="..\Code\GameObject\GameObject.cpp" />
+    <ClCompile Include="..\Code\GameObject\Map\Map.cpp" />
+    <ClCompile Include="..\Code\GraphicEngine\GraphicEngine.cpp" />
+    <ClCompile Include="..\Code\Input\Input.cpp" />
+    <ClCompile Include="..\Code\Main.cpp" />
+    <ClCompile Include="..\Code\Network\Network.cpp" />
+    <ClCompile Include="..\Code\Resource\ResourceManager.cpp" />
+    <ClCompile Include="..\Code\Resource\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Code\gpdumb1.h" />
-    <ClInclude Include="..\Code\Protocol.h" />
+    <ClInclude Include="..\..\Server\Code\Common\Protocol.h" />
+    <ClInclude Include="..\Code\Common\Defines.h" />
+    <ClInclude Include="..\Code\Common\Macro.h" />
+    <ClInclude Include="..\Code\Core\Core.h" />
+    <ClInclude Include="..\Code\GameObject\Character\Character.h" />
+    <ClInclude Include="..\Code\GameObject\GameObject.h" />
+    <ClInclude Include="..\Code\GameObject\Map\Map.h" />
+    <ClInclude Include="..\Code\GraphicEngine\GraphicEngine.h" />
+    <ClInclude Include="..\Code\Input\Input.h" />
+    <ClInclude Include="..\Code\Network\Network.h" />
+    <ClInclude Include="..\Code\Resource\ResourceManager.h" />
+    <ClInclude Include="..\Code\Resource\Texture\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

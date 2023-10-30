@@ -288,6 +288,10 @@ void Core::acceptClient()
 
 		mUsers[id].SetSocket(clientSocket);
 		mUsers[id].PlayerConnect();
+		if (id == 0)
+		{
+			mUsers[id].SetPosition(0, 0);
+		}
 
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(clientSocket), mIOCP, id, 0);
 		recvPacket(id);
