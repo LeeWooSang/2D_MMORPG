@@ -3,9 +3,8 @@
 #include "../Common/Defines.h"
 #include "../Common/Protocol.h"
 #include "../Character/Character.h"
+#include "../Channel/Channel.h"
 
-//class Player;
-//class Monster;
 class Core
 {
 	SINGLE_TONE(Core)
@@ -24,6 +23,7 @@ public:
 		{
 			return acc->second;
 		}
+		acc.release();
 		return -1;
 	}
 
@@ -35,7 +35,7 @@ public:
 	void SendPositionPacket(int to, int obj);
 	void SendAddObjectPacket(int to, int obj);
 	void SendRemoveObjectPacket(int to, int obj);
-
+	void SendChangeChannelPacket(int to, bool result);
 private:
 	void errorDisplay(const char* msg, int error);
 
@@ -70,5 +70,7 @@ private:
 	Monster* mMonsters;
 
 	tbb::concurrent_queue<OverEx*> mLeafWorks;
+
+	std::array<Channel, MAX_CHANNEL> mChannels;
 };
 

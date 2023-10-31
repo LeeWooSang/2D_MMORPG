@@ -26,6 +26,10 @@ public:
 
 	tbb::concurrent_hash_map<int, int>& GetViewList() { return mViewList; }
 	std::unordered_set<int>& GetSTLViewList() { return mSTLViewList; }
+	
+	int GetChannel()	const { return mChannel; }
+	void SetChannel(int channel) { mChannel = channel; }
+
 protected:
 	Over* mOver;
 	int mX;
@@ -36,6 +40,7 @@ protected:
 	std::unordered_set<int> mSTLViewList;
 	std::mutex mViewListMtx;
 	//std::shared_mutex mViewListMtx;
+	int mChannel;
 };
 
 class Player : public Character

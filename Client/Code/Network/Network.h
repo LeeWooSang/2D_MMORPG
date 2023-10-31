@@ -35,6 +35,7 @@ public:
 
 	void PreocessNetwork(unsigned long long wparam, long long lparam);
 	void SendMovePacket(char dir);
+	void SendChangeChannel(char channel);
 
 private:
 	void processPacket();

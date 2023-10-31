@@ -16,38 +16,32 @@ constexpr int MAX_LEN = 256;
 //	wstring m_Text;
 //};
 
-constexpr int MAX_KEY_TYPE = 11;
 enum KEY_TYPE
 {
 	NONE = 0,
 
-	KEYBOARD_UP,
-	KEYBOARD_DOWN,
-	KEYBOARD_LEFT,
-	KEYBOARD_RIGHT,
+	UP_KEY, DOWN_KEY, LEFT_KEY, RIGHT_KEY,
+	TAB_KEY, ENTER_KEY, CONTROL_KEY, ALT_KEY,
 
-	KEYBOARD_TAB,
-	KEYBOARD_ENTER,
+	F1_KEY, F2_KEY, F3_KEY, F4_KEY, F5_KEY, F6_KEY, F7_KEY, F8_KEY, F9_KEY, F10_KEY, F11_KEY, F12_KEY,
 
-	KEYBOARD_CONTROL,
-	KEYBOARD_ALT,
-
-	MOUSE_LBUTTON,
-	MOUSE_RBUTTON
+	MOUSE_LBUTTON, MOUSE_RBUTTON
 };
+
+constexpr int MAX_KEY_TYPE = MOUSE_RBUTTON + 1;
 
 struct KeyState
 {
 	KeyState()
-		: m_keyType(NONE), m_pushed(false), m_pushing(false), m_pop(false) {}
+		: keyType(NONE), pushed(false), pushing(false), pop(false) {}
 
-	int m_keyType;
+	int keyType;
 	// 키를 누를 순간
-	bool m_pushed;
+	bool pushed;
 	// 키를 계속 누르고 있을 때
-	bool m_pushing;
+	bool pushing;
 	// 키를 떼는 순간
-	bool m_pop;
+	bool pop;
 };
 
 class Input
@@ -62,17 +56,16 @@ public:
 	LRESULT ProcessKeyboardMessage(HWND, UINT, WPARAM, LPARAM);
 	void ProcessMouseMessage(HWND, UINT, LPARAM);
 
-	const POINT& GetMousePos() const { return m_mousePos; }
+	const POINT& GetMousePos() const { return mMousePos; }
 
 	bool KeyOnceCheck(KEY_TYPE);
-	bool GetIsPushed(KEY_TYPE key)	const { return m_keyStateList[key].m_pushed; }
-	bool GetIsPushing(KEY_TYPE key)	const { return m_keyStateList[key].m_pushing; }
-	bool GetIsPop(KEY_TYPE key)	const { return m_keyStateList[key].m_pop; }
+	bool GetIsPushed(KEY_TYPE key)	const { return mKeyStateList[key].pushed; }
+	bool GetIsPushing(KEY_TYPE key)	const { return mKeyStateList[key].pushing; }
+	bool GetIsPop(KEY_TYPE key)	const { return mKeyStateList[key].pop; }
 	void ProcessKeyEvent();
 
 private:
-
-	POINT m_mousePos;
-	std::array<KeyState, MAX_KEY_TYPE> m_keyStateList;
-	bool m_flag;
+	std::array<KeyState, MAX_KEY_TYPE> mKeyStateList;
+	POINT mMousePos;
+	bool mFlag;
 };

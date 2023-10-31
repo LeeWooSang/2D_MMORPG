@@ -200,6 +200,7 @@
     <Image Include="res\GameServer.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Code\Channel\Channel.cpp" />
     <ClCompile Include="..\Code\Character\Character.cpp" />
     <ClCompile Include="..\Code\Core\Core.cpp" />
     <ClCompile Include="..\Code\Database\Database.cpp" />
@@ -208,6 +209,7 @@
     <ClCompile Include="..\Code\GameTimer\GameTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Code\Channel\Channel.h" />
     <ClInclude Include="..\Code\Character\Character.h" />
     <ClInclude Include="..\Code\Common\Defines.h" />
     <ClInclude Include="..\Code\Common\Macro.h" />

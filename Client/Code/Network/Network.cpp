@@ -86,6 +86,16 @@ void Network::SendMovePacket(char dir)
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 
+void Network::SendChangeChannel(char channel)
+{
+	CSChangeChannelPacket packet;
+	packet.size = sizeof(CSChangeChannelPacket);
+	packet.type = CS_PACKET_TYPE::CS_CHANGE_CHANNEL;
+	packet.channel = channel;
+
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
 void Network::processPacket()
 {
 	switch (mPacketBuffer[1])
@@ -165,6 +175,20 @@ void Network::processPacket()
 			else
 			{
 				GET_INSTANCE(Core)->GetMonster(id)->NotVisible();
+			}
+			break;
+		}
+
+		case SC_PACKET_TYPE::SC_CHANGE_CHANNEL:
+		{
+			SCChangeChannelPacket* packet = reinterpret_cast<SCChangeChannelPacket*>(mPacketBuffer);
+			if (packet->result == true)
+			{
+				std::cout << "채널 변경 성공" << std::endl;
+			}
+			else
+			{
+				std::cout << "채널 변경 실패" << std::endl;
 			}
 			break;
 		}

@@ -3,7 +3,7 @@
 #include "../GameTimer/GameTimer.h"
 
 Character::Character()
-	: mOver(nullptr), mX(0), mY(0)
+	: mOver(nullptr), mX(0), mY(0), mChannel(0)
 {
 }
 
@@ -17,6 +17,7 @@ void Character::Reset()
 {
 	memset(&mOver->overlapped, 0, sizeof(WSAOVERLAPPED));
 	mOver->eventType = SERVER_EVENT::DEFAULT;
+	mChannel = 0;
 	// 아이디는 리셋x
 }
 
@@ -149,6 +150,7 @@ void Player::Reset()
 	std::uniform_int_distribution<int> uidY(0, HEIGHT - 1);
 	mX = uidX(dre);
 	mY = uidY(dre);
+	mChannel = 0;
 
 	closesocket(mSocket);
 }
@@ -179,6 +181,7 @@ bool Player::Inititalize(int id)
 
 	mX = uidX(dre);
 	mY = uidY(dre);
+	mChannel = 0;
 
 	return true;
 }
@@ -697,6 +700,7 @@ bool Monster::Inititalize(int id)
 
 	mX = uidX(dre);
 	mY = uidY(dre);
+	mChannel = 0;
 
 	mSleep = true;
 

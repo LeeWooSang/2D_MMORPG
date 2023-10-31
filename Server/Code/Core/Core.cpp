@@ -13,6 +13,7 @@ Core::Core()
 	std::wcout.imbue(std::locale("korean"));
 
 	//_CrtSetBreakAlloc(727);
+
 }
 
 Core::~Core()
@@ -68,9 +69,12 @@ bool Core::Initialize()
 			return false;
 		}
 
-		tbb::concurrent_hash_map<int, int>::accessor acc;
-		mObjectIds.insert(acc, objectId++);
-		acc->second = i;
+		{
+			tbb::concurrent_hash_map<int, int>::accessor acc;
+			mObjectIds.insert(acc, objectId++);
+			acc->second = i;
+			acc.release();
+		}
 	}
 
 	mMonsters = new Monster[MAX_MONSTER];
@@ -81,9 +85,12 @@ bool Core::Initialize()
 			return false;
 		}
 
-		tbb::concurrent_hash_map<int, int>::accessor acc;
-		mObjectIds.insert(acc, objectId++);
-		acc->second = i;
+		{
+			tbb::concurrent_hash_map<int, int>::accessor acc;
+			mObjectIds.insert(acc, objectId++);
+			acc->second = i;
+			acc.release();
+		}
 	}
 
 	int workerThreadCount = 6;
@@ -198,6 +205,16 @@ void Core::SendRemoveObjectPacket(int to, int obj)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
+void Core::SendChangeChannelPacket(int to, bool result)
+{
+	SCChangeChannelPacket packet;
+	packet.size = sizeof(SCChangeChannelPacket);
+	packet.type = SC_PACKET_TYPE::SC_CHANGE_CHANNEL;
+	packet.result = result;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
 void Core::errorDisplay(const char* msg, int error)
 {
 	WCHAR* lpMsgBuf;
@@ -288,6 +305,7 @@ void Core::acceptClient()
 
 		mUsers[id].SetSocket(clientSocket);
 		mUsers[id].PlayerConnect();
+		mUsers[id].SetChannel(1);
 		if (id == 0)
 		{
 			mUsers[id].SetPosition(0, 0);
@@ -469,6 +487,27 @@ void Core::processPacket(int id, char* buf)
 			mUsers[id].ProcessMove(packet->direction);
 			mUsers[id].CheckViewList();
 			SendPositionPacket(id, id);
+			break;
+		}
+
+		case CS_PACKET_TYPE::CS_CHANGE_CHANNEL:
+		{
+			CSChangeChannelPacket* packet = reinterpret_cast<CSChangeChannelPacket*>(buf);
+			bool result = false;
+			int oldChannel = mUsers[id].GetChannel();
+			int newChannel = packet->channel;
+			if (oldChannel != newChannel && mChannels[newChannel].IsFull() == false)
+			{				
+				// 기존 채널에서 pop
+				mChannels[oldChannel].PopUser(id);
+				// 새로운 채널로 insert
+				mChannels[newChannel].PushUser(id);
+				mUsers[id].SetChannel(newChannel);
+				result = true;
+				std::cout << id << " 클라이언트 채널변경 : " << oldChannel << " --> " << newChannel << std::endl;
+			}
+			SendChangeChannelPacket(id, result);
+
 			break;
 		}
 

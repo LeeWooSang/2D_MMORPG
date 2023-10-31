@@ -134,21 +134,30 @@ bool Player::Initialize(int x, int y)
 
 void Player::Update()
 {
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::KEYBOARD_LEFT) == true)
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::LEFT_KEY) == true)
 	{
 		GET_INSTANCE(Network)->SendMovePacket(DIRECTION_TYPE::LEFT);
 	}
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::KEYBOARD_RIGHT) == true)
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::RIGHT_KEY) == true)
 	{
 		GET_INSTANCE(Network)->SendMovePacket(DIRECTION_TYPE::RIGHT);
 	}
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::KEYBOARD_UP) == true)
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::UP_KEY) == true)
 	{
 		GET_INSTANCE(Network)->SendMovePacket(DIRECTION_TYPE::UP);
 	}
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::KEYBOARD_DOWN) == true)
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::DOWN_KEY) == true)
 	{
 		GET_INSTANCE(Network)->SendMovePacket(DIRECTION_TYPE::DOWN);
+	}
+
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::F1_KEY) == true)
+	{
+		GET_INSTANCE(Network)->SendChangeChannel(1);
+	}
+	else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::F2_KEY) == true)
+	{
+		GET_INSTANCE(Network)->SendChangeChannel(2);
 	}
 }
 
@@ -187,23 +196,23 @@ void Player::Move(char dir)
 	int y = mPos.second;
 	switch (dir)
 	{
-	case KEY_TYPE::KEYBOARD_UP:
-	{
-		++y;
-		break;
-	}
-	case KEY_TYPE::KEYBOARD_DOWN:
+	case KEY_TYPE::UP_KEY:
 	{
 		--y;
 		break;
 	}
+	case KEY_TYPE::DOWN_KEY:
+	{
+		++y;
+		break;
+	}
 
-	case KEY_TYPE::KEYBOARD_LEFT:
+	case KEY_TYPE::LEFT_KEY:
 	{
 		--x;
 		break;
 	}
-	case KEY_TYPE::KEYBOARD_RIGHT:
+	case KEY_TYPE::RIGHT_KEY:
 	{
 		++x;
 		break;

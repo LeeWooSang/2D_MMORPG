@@ -107,7 +107,7 @@
       <Filter>Code\Input</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Server\Code\Common\Protocol.h">
-      <Filter>Code\Common</Filter>
+      <Filter>Code\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

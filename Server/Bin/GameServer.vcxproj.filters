@@ -30,6 +30,9 @@
     <Filter Include="Code\GameTimer">
       <UniqueIdentifier>{ecc6b87d-d818-48a8-8fa3-90700d94d9e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Channel">
+      <UniqueIdentifier>{fe119296-ff2f-49e8-a799-02ea838e94e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameServer.rc">
@@ -65,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\GameTimer\GameTimer.cpp">
       <Filter>Code\GameTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Channel\Channel.cpp">
+      <Filter>Code\Channel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameTimer\GameTimer.h">
       <Filter>Code\GameTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Channel\Channel.h">
+      <Filter>Code\Channel</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

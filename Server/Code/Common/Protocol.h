@@ -1,7 +1,12 @@
 #pragma once
+#define LOCAL_MODE
 
-//#define SERVER_IP "127.0.0.1"
+#ifdef LOCAL_MODE
+#define SERVER_IP "127.0.0.1"
+#else
 #define SERVER_IP "192.168.219.103"
+#endif 
+
 constexpr int SERVER_PORT = 9000;
 constexpr int MAX_BUFFER = 1024;
 
@@ -68,7 +73,8 @@ enum DIRECTION_TYPE
 enum CS_PACKET_TYPE
 {
 	CS_LOGIN = 0,
-	CS_MOVE
+	CS_MOVE,
+	CS_CHANGE_CHANNEL
 };
 
 enum SC_PACKET_TYPE
@@ -77,7 +83,8 @@ enum SC_PACKET_TYPE
 	SC_LOGIN_FAIL,
 	SC_POSITION,
 	SC_ADD_OBJECT,
-	SC_REMOVE_OBJECT
+	SC_REMOVE_OBJECT,
+	SC_CHANGE_CHANNEL,
 };
 
 #pragma pack(push, 1)
@@ -88,6 +95,12 @@ struct CSMovePacket
 	char	size;
 	char	type;
 	char	direction;
+};
+struct CSChangeChannelPacket
+{
+	char	size;
+	char	type;
+	char channel;
 };
 
 struct SCPositionPacket
@@ -114,3 +127,12 @@ struct SCRemoveObjectPacket
 	char type;
 	int id;
 };
+
+struct SCChangeChannelPacket
+{
+	char size;
+	char type;
+	bool result;
+};
+
+constexpr int MAX_CHANNEL = 12;
