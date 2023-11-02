@@ -14,25 +14,14 @@ public:
 	void ServerQuit();
 	void* GetIOCP()	const { return mIOCP; }
 	volatile bool GetIsRun()	const { return mIsRun; }
-	void PushLeafWork(OverEx* overEx) { mLeafWorks.push(overEx); }
+	void PushLeafWork(Over* over) { mLeafWorks.push(over); }
 	
-	int GetObjectIndex(int id) const
-	{ 
-		tbb::concurrent_hash_map<int, int>::const_accessor acc;
-		if (mObjectIds.find(acc, id))
-		{
-			return acc->second;
-		}
-		acc.release();
-		return -1;
-	}
-
 	Player* GetUsers() { return mUsers; }
 	Player& GetUser(int index) { return mUsers[index]; }
 	Channel& GetChannel(int channel) { return mChannels[channel]; }
 
 	void SendPositionPacket(int to, int obj);
-	void SendAddObjectPacket(int to, int obj);
+	void SendAddObjectPacket(int to, int channel, int obj);
 	void SendRemoveObjectPacket(int to, int obj);
 	void SendChangeChannelPacket(int to, bool result);
 
@@ -47,7 +36,7 @@ private:
 	void sendPacket(int id, char* packet);
 
 	void processPacket(int id, char* buf);
-	void processEvent(SERVER_EVENT eventType, int id);
+	void processEvent(SERVER_EVENT eventType, int id, int channel);
 
 	int FindChannel();
 	int createPlayerId()	const;
@@ -68,9 +57,8 @@ private:
 	tbb::concurrent_hash_map<int, int> mObjectIds;
 
 	Player* mUsers;
-	//Monster* mMonsters;
 
-	tbb::concurrent_queue<OverEx*> mLeafWorks;
+	tbb::concurrent_queue<Over*> mLeafWorks;
 
 	std::array<Channel, MAX_CHANNEL> mChannels;
 };

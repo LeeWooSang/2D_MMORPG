@@ -44,7 +44,7 @@ protected:
 	//std::shared_mutex mViewListMtx;
 
 	int mChannelIndex;
-	int mChannel;
+	volatile int mChannel;
 };
 
 class Player : public Character
@@ -70,8 +70,6 @@ public:
 
 	void ProcessLoginViewList();
 	void CheckViewList();
-	void CheckOldViewList();
-	void CheckSTLViewList();
 
 	void ProcessChangeChannelViewList(int oldChannel, int newChannel);
 

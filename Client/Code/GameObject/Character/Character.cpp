@@ -84,6 +84,11 @@ void Character::Render()
 	std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
 	D3DXVECTOR3 pos = D3DXVECTOR3((mPos.first - cameraPos.first) * 65.0f + 8, (mPos.second - cameraPos.second) * 65.0f + 8, 0.0);
 	GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	{
+		int windowHeight = 800;
+		std::wstring text = L"My Id (" + std::to_wstring(mId) + L")";
+		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.x), static_cast<int>(pos.y), D3DCOLOR_ARGB(255, 255, 0, 0));
+	}
 
 	if (mMessageTime > GetTickCount() - 2000)
 	{
@@ -153,11 +158,19 @@ void Player::Update()
 
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::F1_KEY) == true)
 	{
-		GET_INSTANCE(Network)->SendChangeChannel(1);
+		GET_INSTANCE(Network)->SendChangeChannel(0);
 	}
 	else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::F2_KEY) == true)
 	{
+		GET_INSTANCE(Network)->SendChangeChannel(1);
+	}
+	else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::F3_KEY) == true)
+	{
 		GET_INSTANCE(Network)->SendChangeChannel(2);
+	}
+	else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::F4_KEY) == true)
+	{
+		GET_INSTANCE(Network)->SendChangeChannel(3);
 	}
 }
 
@@ -179,6 +192,11 @@ void Player::Render()
 
 	D3DXVECTOR3 pos = D3DXVECTOR3((mPos.first - cameraPos.first) * 65.0f + 8, (mPos.second - cameraPos.second) * 65.0f + 8, 0.0);
 	GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	{
+		int windowHeight = 800;
+		std::wstring text = L"My Id (" + std::to_wstring(mId) + L")";
+		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.x), static_cast<int>(pos.y), D3DCOLOR_ARGB(255, 255, 0, 0));
+	}
 
 	if (mMessageTime > GetTickCount() - 2000)
 	{

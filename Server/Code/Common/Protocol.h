@@ -40,11 +40,13 @@ struct Over
 		memset(&overlapped, 0, sizeof(WSAOVERLAPPED));
 		eventType = SERVER_EVENT::DEFAULT;
 		myId = 0;
+		channel = 0;
 	}
 
 	WSAOVERLAPPED	overlapped;
 	SERVER_EVENT			eventType;
 	int								myId;
+	int								channel;
 };
 
 struct OverEx : public Over

@@ -38,16 +38,21 @@ bool Channel::Initialize(int channel)
 
 bool Channel::IsFull()
 {
+	volatile bool result = false;
+
 	mChannelMtx.lock_shared();
+	//mChannelMtx.lock();
 	int size = mUserIdList.size();
 	mChannelMtx.unlock_shared();
+	//mChannelMtx.unlock();
 
 	if (size >= MAX_CHANNEL_USER)
 	{
-		return true;
+		result = true;
 	}
 
-	return false;
+	std::cout << "channel result : " << result << std::endl;
+	return result;
 }
 
 int Channel::PushUser(int id)
@@ -96,6 +101,11 @@ std::vector<int> Channel::GetUserIds()
 	for (int i = 0; i < MAX_CHANNEL_USER; ++i)
 	{
 		int userId = FindUser(i);
+		if (userId == -1)
+		{
+			continue;
+		}
+
 		userIds.emplace_back(userId);
 	}
 

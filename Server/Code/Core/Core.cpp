@@ -59,6 +59,14 @@ bool Core::Initialize()
 		return false;
 	}
 
+	for (int i = 0; i < mChannels.size(); ++i)
+	{
+		if (mChannels[i].Initialize(i) == false)
+		{
+			return false;
+		}
+	}
+
 	int objectId = 0;
 	mUsers = new Player[MAX_USER];
 	for (int i = 0; i < MAX_USER; ++i)
@@ -118,20 +126,17 @@ void Core::ServerQuit()
 
 void Core::SendPositionPacket(int to, int obj)
 {
-	int channel = mUsers[obj].GetChannel();
-
 	int x = 0;
 	int y = 0;
 
 	if (obj < MONSTER_START_ID)
 	{
-		int index = mUsers[obj].GetChannelIndex();
-		int id = mChannels[channel].FindUser(index);
-		x = mUsers[id].GetX();
-		y = mUsers[id].GetY();
+		x = mUsers[obj].GetX();
+		y = mUsers[obj].GetY();
 	}
 	else
 	{
+		int channel = mUsers[to].GetChannel();
 		int index = mChannels[channel].GetObjectIndex(obj);
 		x = mChannels[channel].GetMonster(index).GetX();
 		y = mChannels[channel].GetMonster(index).GetY();
@@ -147,24 +152,15 @@ void Core::SendPositionPacket(int to, int obj)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
-void Core::SendAddObjectPacket(int to, int obj)
+void Core::SendAddObjectPacket(int to, int channel, int obj)
 {
-	int channel = mUsers[obj].GetChannel();
-
-	int index = GetObjectIndex(obj);
-	if (index == -1)
-	{
-		return;
-	}
 	int x = 0;
 	int y = 0;
 
 	if (obj < MONSTER_START_ID)
 	{
-		int index = mUsers[obj].GetChannelIndex();
-		int id = mChannels[channel].FindUser(index);
-		x = mUsers[id].GetX();
-		y = mUsers[id].GetY();
+		x = mUsers[obj].GetX();
+		y = mUsers[obj].GetY();
 	}
 	else
 	{
@@ -288,13 +284,14 @@ void Core::acceptClient()
 			break;
 		}
 
+		// 채널 먼저 접속
+		int channel = FindChannel();
+
 		// 빈 아이디를 생성해줌
 		int id = createPlayerId();
 		mUsers[id].SetSocket(clientSocket);
 		mUsers[id].PlayerConnect();
 
-		// 채널 먼저 접속
-		int channel = FindChannel();
 		int channelIndex = mChannels[channel].PushUser(id);
 		mUsers[id].SetChannelIndex(channelIndex);
 		mUsers[id].SetChannel(channel);
@@ -312,7 +309,7 @@ void Core::acceptClient()
 		// 워커스레드에게 넘겨야됨
 		mUsers[id].ProcessLoginViewList();
 
-		std::cout << id << "번 클라이언트 접속" << std::endl;		
+		std::cout << id << "번 클라이언트 접속 - 채널 : " << channel << std::endl;		
 	}
 }
 
@@ -413,7 +410,7 @@ void Core::threadPool()
 
 			default:
 			{
-				processEvent(over->eventType, static_cast<int>(id));
+				processEvent(over->eventType, static_cast<int>(id), over->channel);
 				break;
 			}
 		}
@@ -490,9 +487,16 @@ void Core::processPacket(int id, char* buf)
 			CSChangeChannelPacket* packet = reinterpret_cast<CSChangeChannelPacket*>(buf);
 			bool result = false;
 
-			int oldChannel = mUsers[id].GetChannel();
+			volatile int oldChannel = mUsers[id].GetChannel();
 			int newChannel = packet->channel;
-			if (oldChannel != newChannel && mChannels[newChannel].IsFull() == false)
+			std::cout << "oldChannel : " << oldChannel << ", newChannel : " << newChannel << std::endl;
+			if (oldChannel == newChannel)
+			{
+				SendChangeChannelPacket(id, result);
+				break;
+			}
+
+			if (mChannels[newChannel].IsFull() == false)
 			{
 				int oldChannelIndex = mUsers[id].GetChannelIndex();
 				// 기존 채널에서 pop
@@ -523,19 +527,18 @@ void Core::processPacket(int id, char* buf)
 	//std::cout << "패킷 처리 시간 : " << time << "초" << std::endl;
 }
 
-void Core::processEvent(SERVER_EVENT eventType, int id)
+void Core::processEvent(SERVER_EVENT eventType, int id, int channel)
 {
 	//std::cout << "오브젝트 id : " << id << " 이벤트 발생" << std::endl;
 	popLeafWork();
 	switch (eventType)
 	{
 		case SERVER_EVENT::MONSTER_MOVE:
-		{
-			int index = GetObjectIndex(id);
-
-			char dir = mMonsters[index].RandomDirection();
-			mMonsters[index].ProcessMove(dir);
-			mMonsters[index].ProcessMoveViewList();
+		{			
+			int index = mChannels[channel].GetObjectIndex(id);			
+			char dir = mChannels[channel].GetMonster(index).RandomDirection();
+			mChannels[channel].GetMonster(index).ProcessMove(dir);
+			mChannels[channel].GetMonster(index).ProcessMoveViewList();
 			break;
 		}
 
@@ -582,12 +585,12 @@ int Core::createPlayerId() const
 
 bool Core::popLeafWork()
 {
-	OverEx* overEx;
-	if (mLeafWorks.try_pop(overEx) == false)
+	Over* over;
+	if (mLeafWorks.try_pop(over) == false)
 	{
 		return false;
 	}
 
-	delete overEx;
+	delete over;
 	return true;
 }
