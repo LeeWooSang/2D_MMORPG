@@ -41,7 +41,6 @@ Core::~Core()
 	while (popLeafWork() == true);
 
 	delete[] mUsers;
-	delete[] mMonsters;
 	mObjectIds.clear();
 
 	WSACleanup();
@@ -65,22 +64,6 @@ bool Core::Initialize()
 	for (int i = 0; i < MAX_USER; ++i)
 	{
 		if (mUsers[i].Inititalize(objectId) == false)
-		{
-			return false;
-		}
-
-		{
-			tbb::concurrent_hash_map<int, int>::accessor acc;
-			mObjectIds.insert(acc, objectId++);
-			acc->second = i;
-			acc.release();
-		}
-	}
-
-	mMonsters = new Monster[MAX_MONSTER];
-	for (int i = 0; i < MAX_MONSTER; ++i)
-	{
-		if (mMonsters[i].Inititalize(objectId) == false)
 		{
 			return false;
 		}
@@ -135,23 +118,23 @@ void Core::ServerQuit()
 
 void Core::SendPositionPacket(int to, int obj)
 {
-	int index = GetObjectIndex(obj);
-	if (index == -1)
-	{
-		return;
-	}
+	int channel = mUsers[obj].GetChannel();
+
 	int x = 0;
 	int y = 0;
 
 	if (obj < MONSTER_START_ID)
 	{
-		x = mUsers[index].GetX();
-		y = mUsers[index].GetY();
+		int index = mUsers[obj].GetChannelIndex();
+		int id = mChannels[channel].FindUser(index);
+		x = mUsers[id].GetX();
+		y = mUsers[id].GetY();
 	}
 	else
 	{
-		x = mMonsters[index].GetX();
-		y = mMonsters[index].GetY();
+		int index = mChannels[channel].GetObjectIndex(obj);
+		x = mChannels[channel].GetMonster(index).GetX();
+		y = mChannels[channel].GetMonster(index).GetY();
 	}
 
 	SCPositionPacket packet;
@@ -166,6 +149,8 @@ void Core::SendPositionPacket(int to, int obj)
 
 void Core::SendAddObjectPacket(int to, int obj)
 {
+	int channel = mUsers[obj].GetChannel();
+
 	int index = GetObjectIndex(obj);
 	if (index == -1)
 	{
@@ -176,13 +161,16 @@ void Core::SendAddObjectPacket(int to, int obj)
 
 	if (obj < MONSTER_START_ID)
 	{
-		x = mUsers[index].GetX();
-		y = mUsers[index].GetY();
+		int index = mUsers[obj].GetChannelIndex();
+		int id = mChannels[channel].FindUser(index);
+		x = mUsers[id].GetX();
+		y = mUsers[id].GetY();
 	}
 	else
 	{
-		x = mMonsters[index].GetX();
-		y = mMonsters[index].GetY();
+		int index = mChannels[channel].GetObjectIndex(obj);
+		x = mChannels[channel].GetMonster(index).GetX();
+		y = mChannels[channel].GetMonster(index).GetY();
 	}
 
 	SCAddObjectPacket packet;
@@ -302,10 +290,17 @@ void Core::acceptClient()
 
 		// 빈 아이디를 생성해줌
 		int id = createPlayerId();
-
 		mUsers[id].SetSocket(clientSocket);
 		mUsers[id].PlayerConnect();
-		mUsers[id].SetChannel(1);
+
+		// 채널 먼저 접속
+		int channel = FindChannel();
+		int channelIndex = mChannels[channel].PushUser(id);
+		mUsers[id].SetChannelIndex(channelIndex);
+		mUsers[id].SetChannel(channel);
+
+		SendChangeChannelPacket(id, true);
+
 		if (id == 0)
 		{
 			mUsers[id].SetPosition(0, 0);
@@ -494,15 +489,22 @@ void Core::processPacket(int id, char* buf)
 		{
 			CSChangeChannelPacket* packet = reinterpret_cast<CSChangeChannelPacket*>(buf);
 			bool result = false;
+
 			int oldChannel = mUsers[id].GetChannel();
 			int newChannel = packet->channel;
 			if (oldChannel != newChannel && mChannels[newChannel].IsFull() == false)
-			{				
+			{
+				int oldChannelIndex = mUsers[id].GetChannelIndex();
 				// 기존 채널에서 pop
-				mChannels[oldChannel].PopUser(id);
+				mChannels[oldChannel].PopUser(oldChannelIndex);
 				// 새로운 채널로 insert
-				mChannels[newChannel].PushUser(id);
+				int newChannelIndex = mChannels[newChannel].PushUser(id);
+
+				mUsers[id].SetChannelIndex(newChannelIndex);
 				mUsers[id].SetChannel(newChannel);
+				
+				mUsers[id].ProcessChangeChannelViewList(oldChannel, newChannel);
+
 				result = true;
 				std::cout << id << " 클라이언트 채널변경 : " << oldChannel << " --> " << newChannel << std::endl;
 			}
@@ -542,6 +544,22 @@ void Core::processEvent(SERVER_EVENT eventType, int id)
 			break;
 		}
 	}
+}
+
+int Core::FindChannel()
+{
+	while (true)
+	{
+		for (int i = 0; i < mChannels.size(); ++i)
+		{
+			if (mChannels[i].IsFull() == false)
+			{
+				return i;
+			}
+		}
+	}
+
+	return -1;
 }
 
 int Core::createPlayerId() const

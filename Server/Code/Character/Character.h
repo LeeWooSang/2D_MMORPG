@@ -27,6 +27,8 @@ public:
 	tbb::concurrent_hash_map<int, int>& GetViewList() { return mViewList; }
 	std::unordered_set<int>& GetSTLViewList() { return mSTLViewList; }
 	
+	int GetChannelIndex()	const { return mChannelIndex; }
+	void SetChannelIndex(int index) { mChannelIndex = index; }
 	int GetChannel()	const { return mChannel; }
 	void SetChannel(int channel) { mChannel = channel; }
 
@@ -40,6 +42,8 @@ protected:
 	std::unordered_set<int> mSTLViewList;
 	std::mutex mViewListMtx;
 	//std::shared_mutex mViewListMtx;
+
+	int mChannelIndex;
 	int mChannel;
 };
 
@@ -68,6 +72,8 @@ public:
 	void CheckViewList();
 	void CheckOldViewList();
 	void CheckSTLViewList();
+
+	void ProcessChangeChannelViewList(int oldChannel, int newChannel);
 
 private:
 	SOCKET mSocket;

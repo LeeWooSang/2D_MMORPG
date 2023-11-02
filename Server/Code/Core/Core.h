@@ -29,13 +29,13 @@ public:
 
 	Player* GetUsers() { return mUsers; }
 	Player& GetUser(int index) { return mUsers[index]; }
-	Monster* GetMonsters() { return mMonsters; }
-	Monster& GetMonster(int index) { return mMonsters[index]; }
+	Channel& GetChannel(int channel) { return mChannels[channel]; }
 
 	void SendPositionPacket(int to, int obj);
 	void SendAddObjectPacket(int to, int obj);
 	void SendRemoveObjectPacket(int to, int obj);
 	void SendChangeChannelPacket(int to, bool result);
+
 private:
 	void errorDisplay(const char* msg, int error);
 
@@ -49,6 +49,7 @@ private:
 	void processPacket(int id, char* buf);
 	void processEvent(SERVER_EVENT eventType, int id);
 
+	int FindChannel();
 	int createPlayerId()	const;
 
 	bool popLeafWork();
@@ -67,7 +68,7 @@ private:
 	tbb::concurrent_hash_map<int, int> mObjectIds;
 
 	Player* mUsers;
-	Monster* mMonsters;
+	//Monster* mMonsters;
 
 	tbb::concurrent_queue<OverEx*> mLeafWorks;
 
