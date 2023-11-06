@@ -2,6 +2,7 @@
 #include "../Core/Core.h"
 #include "../GameTimer/GameTimer.h"
 #include "../Channel/Channel.h"
+#include "../Sector/Sector.h"
 #include <vector>
 
 Character::Character()
@@ -92,32 +93,20 @@ bool Character::CheckRange(int x, int y)
 	return true;
 }
 
-bool Character::CheckDistance(int id)
+bool Character::CheckDistance(int x, int y)
 {
 	int myX = mX;
 	int myY = mY;
 
-	int otherX = 0;
-	int otherY = 0;
-	if (id < MONSTER_START_ID)
+	if (VIEW_DISTANCE < std::abs(myX - x))
 	{
-		Player* users = GET_INSTANCE(Core)->GetUsers();
-		otherX = users[id].GetX();
-		otherY = users[id].GetY();
+		return false;
 	}
-	else
+		
+	if (VIEW_DISTANCE < std::abs(myY - y))
 	{
-		int index = GET_INSTANCE(Core)->GetChannel(mChannel).GetObjectIndex(id);
-		otherX = GET_INSTANCE(Core)->GetChannel(mChannel).GetMonster(index).GetX();
-		otherY = GET_INSTANCE(Core)->GetChannel(mChannel).GetMonster(index).GetY();
-
+		return false;
 	}
-
-	if (VIEW_DISTANCE < std::abs(myX - otherX))
-		return false;
-
-	if (VIEW_DISTANCE < std::abs(myY - otherY))
-		return false;
 
 	return true;
 }
@@ -190,6 +179,8 @@ bool Player::Inititalize(int id)
 
 	mX = uidX(dre);
 	mY = uidY(dre);
+	//mX = 0;
+	//mY = 0;
 
 	mChannelIndex = -1;
 	mChannel = -1;
@@ -199,9 +190,10 @@ bool Player::Inititalize(int id)
 
 void Player::PlayerDisconnect()
 {
+	Sector& sector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(mX, mY);
+
 	int myId = mOver->myId;
 	Player* users = GET_INSTANCE(Core)->GetUsers();
-	Monster* monsters = GET_INSTANCE(Core)->GetChannel(mChannel).GetMonsters();
 
 	std::vector<int> channelUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetUserIds();	
 	// 뷰리스트 정리
@@ -221,9 +213,12 @@ void Player::PlayerDisconnect()
 		}
 	}
 
-	for (int i = MONSTER_START_ID; i < MAX_OBJECT; ++i)
+	Monster* monsters = sector.GetMonsters();
+	int index = 0;
+	for (int i = sector.GetStartId(); i < sector.GetEndId(); ++i, ++index)
 	{
-		int index = GET_INSTANCE(Core)->GetChannel(mChannel).GetObjectIndex(i);
+		//int index = sector.GetObjectIndex(i);
+		//int index = GET_INSTANCE(Core)->GetChannel(mChannel).FindSectorObjectIndex(mX, mY, i);
 		// 상대방의 뷰리스트에서 나를 제거
 		if (monsters[index].GetViewList().count(myId) == true)
 		{
@@ -236,18 +231,18 @@ void Player::PlayerDisconnect()
 
 void Player::ProcessLoginViewList()
 {
+	// 나의 섹터를 찾자
+	Sector& sector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(mX, mY);
+	
 	int myId = mOver->myId;
-
 	// 내가 누구인지 보내주어야함
-	GET_INSTANCE(Core)->SendAddObjectPacket(myId, mChannel, myId);
+	GET_INSTANCE(Core)->SendAddObjectPacket(myId, myId);
 
 	Player* users = GET_INSTANCE(Core)->GetUsers();
-	Monster* monsters = GET_INSTANCE(Core)->GetChannel(mChannel).GetMonsters();
-
 	std::vector<int> channelUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetUserIds();
 	
 	// 같은 채널 오브젝트만 검색
-	// 접속된 다른 유저에게도 내 정보를 보냄		
+	// 접속된 다른 유저에게도 내 정보를 보냄
 	for (int i = 0; i < channelUserIds.size(); ++i)
 	{
 		int id = channelUserIds[i];
@@ -264,7 +259,9 @@ void Player::ProcessLoginViewList()
 		// 내가 들어왔을 때, 보이는 애들에게만 보냄(내 뷰리스트에 나를 넣음안됨)
 		// lock, unlock을 너무 자주하면 안됨
 		// 그러나 루프 밖으로 lock, unlock을  빼면 너무 길기 때문에, lock, unlock을 처리해하는 부분만 따로 처리
-		if (CheckDistance(id) == false)
+		int x = users[id].GetX();
+		int y = users[id].GetY();
+		if (CheckDistance(x, y) == false)
 		{
 			continue;
 		}
@@ -274,44 +271,53 @@ void Player::ProcessLoginViewList()
 			tbb::concurrent_hash_map<int, int>::accessor acc;
 			mViewList.insert(acc, id);
 			acc->second = id;
-			GET_INSTANCE(Core)->SendAddObjectPacket(myId, mChannel, id);
+			acc.release();
+			GET_INSTANCE(Core)->SendAddObjectPacket(myId, id);
 		}
 		// 다른애들에게 나의 정보를 보냄
 		{
 			tbb::concurrent_hash_map<int, int>::accessor acc;
 			users[id].GetViewList().insert(acc, myId);
 			acc->second = myId;
-			GET_INSTANCE(Core)->SendAddObjectPacket(id, mChannel, myId);
+			acc.release();
+			GET_INSTANCE(Core)->SendAddObjectPacket(id, myId);
 		}
 	}
 
+	Monster* monsters = sector.GetMonsters();
+	int index = 0;
 	// 나에게 보이는 몬스터 정보를 보냄
-	for (int i = MONSTER_START_ID; i < MAX_OBJECT; ++i)
+	for (int i = sector.GetStartId(); i < sector.GetEndId(); ++i, ++index)
 	{
-		if (CheckDistance(i) == false)
+		//int index = sector.GetObjectIndex(i);
+		//int index = GET_INSTANCE(Core)->GetChannel(mChannel).FindSectorObjectIndex(mX, mY, i);
+		if (CheckDistance(monsters[index].GetX(), monsters[index].GetY()) == false)
 		{
 			continue;
 		}
 
-		int index = GET_INSTANCE(Core)->GetChannel(mChannel).GetObjectIndex(i);
 		// 보이는 NPC를 깨운다.
 		monsters[index].WakeUp();
 
 		tbb::concurrent_hash_map<int, int>::accessor acc;
 		mViewList.insert(acc, i);
 		acc->second = index;
-		GET_INSTANCE(Core)->SendAddObjectPacket(myId, mChannel, i);
+		acc.release();
+		GET_INSTANCE(Core)->SendAddMonsterPacket(myId, i, monsters[index].GetX(), monsters[index].GetY());
 	}
 }
 
 void Player::CheckViewList()
 {
+	Sector& sector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(mX, mY);
+	// 움직이고나서 섹터 정리?
+
 	int myId = mOver->myId;
-	std::unordered_set<int> newViewList;
+	//std::unordered_set<int> newViewList;
+	std::unordered_map<int, int> newViewList;
 
 	Player* users = GET_INSTANCE(Core)->GetUsers();
-	Monster* monsters = GET_INSTANCE(Core)->GetChannel(mChannel).GetMonsters();
-
+	
 	// 나와 근처에 있는 오브젝트 아이디를 새로운 뷰리스트에 넣음
 	std::vector<int> channelUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetUserIds();
 	for (int i = 0; i < channelUserIds.size(); ++i)
@@ -333,7 +339,9 @@ void Player::CheckViewList()
 			continue;
 		}
 
-		if (CheckDistance(id) == false)
+		int x = users[id].GetX();
+		int y = users[id].GetY();
+		if (CheckDistance(x, y) == false)
 		{
 			// 만약 전에 시야에 있었는데, 지금은 없다면? 나한테도 지우고, 걔한테도 지워야댐
 			if (mViewList.count(id) == true)
@@ -349,12 +357,15 @@ void Player::CheckViewList()
 			}			
 			continue;
 		}
-		newViewList.emplace(id);
+		newViewList.emplace(id, id);
 	}
 	
-	for (int i = MONSTER_START_ID; i < MAX_OBJECT; ++i)
+	// 같은 섹터의 몬스터만 검색
+	Monster* monsters = sector.GetMonsters();
+	int index = 0;
+	for (int i = sector.GetStartId(); i < sector.GetEndId(); ++i, ++index)
 	{
-		if (CheckDistance(i) == false)
+		if (CheckDistance(monsters[index].GetX(), monsters[index].GetY()) == false)
 		{
 			// 만약 전에 시야에 있었는데, 지금은 없다면? 나한테도 지우고, 걔한테도 지워야댐
 			if (mViewList.count(i) == true)
@@ -363,7 +374,6 @@ void Player::CheckViewList()
 				GET_INSTANCE(Core)->SendRemoveObjectPacket(myId, i);
 			}
 
-			int index = GET_INSTANCE(Core)->GetChannel(mChannel).GetObjectIndex(i);
 			if (monsters[index].GetViewList().count(myId) == true)
 			{
 				monsters[index].GetViewList().erase(myId);
@@ -371,95 +381,50 @@ void Player::CheckViewList()
 
 			continue;
 		}
-		newViewList.emplace(i);
+		newViewList.emplace(i, index);
 	}
 
-	//////////////////////////////////////////////////////////
-	//for (int i = 0; i < MAX_OBJECT; ++i)
-	//{
-	//	if (myId == i)
-	//	{
-	//		continue;
-	//	}
-
-	//	int index = GET_INSTANCE(Core)->GetObjectIndex(i);
-	//	if (i < MONSTER_START_ID)
-	//	{
-	//		if (users[index].GetIsConnect() == false)
-	//		{
-	//			// 만약 전에 접속했었는데, 지금은 접속종료했던애가 남아있다면? 내꺼에서만 지운다.
-	//			if (mViewList.count(i) == true)
-	//			{
-	//				mViewList.erase(i);
-	//				GET_INSTANCE(Core)->SendRemoveObjectPacket(myId, i);
-	//			}
-	//			continue;
-	//		}
-	//	}
-
-	//	if (CheckDistance(i) == false)
-	//	{
-	//		// 만약 전에 시야에 있었는데, 지금은 없다면? 나한테도 지우고, 걔한테도 지워야댐
-	//		if (mViewList.count(i) == true)
-	//		{
-	//			mViewList.erase(i);
-	//			GET_INSTANCE(Core)->SendRemoveObjectPacket(myId, i);
-	//		}
-
-	//		if (i < MONSTER_START_ID)
-	//		{
-	//			if (users[index].GetViewList().count(myId) == true)
-	//			{
-	//				users[index].GetViewList().erase(myId);
-	//				GET_INSTANCE(Core)->SendRemoveObjectPacket(i, myId);
-	//			}
-	//		}
-	//		else
-	//		{
-	//			if (monsters[index].GetViewList().count(myId) == true)
-	//			{
-	//				monsters[index].GetViewList().erase(myId);
-	//			}
-	//		}
-	//		continue;
-	//	}
-	//	newViewList.emplace(i);
-	//}
-
 	// 나와 이전에 근처에 있던 오브젝트들에 대해
-	for (auto id : newViewList)
+	for (auto obj : newViewList)
 	{
+		int id = obj.first;
+		//int index = sector.GetObjectIndex(id);
+		int index = obj.second;
+		//if (id >= MONSTER_START_ID)
+		//{
+		//	index = GET_INSTANCE(Core)->GetChannel(mChannel).FindSectorObjectIndex(mX, mY, id);
+		//}
+
 		// 이전에 없던 오브젝트라면
 		if (mViewList.count(id) == false)
 		{			
-			tbb::concurrent_hash_map<int, int>::accessor acc;
-			mViewList.insert(acc, id);
+			{
+				tbb::concurrent_hash_map<int, int>::accessor acc;
+				mViewList.insert(acc, id);
+				acc->second = index;
+				acc.release();
+			}
+
 			// 몬스터라면
 			if (id >= MONSTER_START_ID)
 			{
-				int index = GET_INSTANCE(Core)->GetChannel(mChannel).GetObjectIndex(id);
-				acc->second = index;
-				acc.release();
-
 				// 몬스터라면 깨운다.
 				monsters[index].WakeUp();
-				GET_INSTANCE(Core)->SendAddObjectPacket(myId, mChannel, id);
+				GET_INSTANCE(Core)->SendAddMonsterPacket(myId, id, monsters[index].GetX(), monsters[index].GetY());
 				continue;
 			}
 			else
 			{
-				acc->second = id;
-				acc.release();
-				GET_INSTANCE(Core)->SendAddObjectPacket(myId, mChannel, id);
+				GET_INSTANCE(Core)->SendAddObjectPacket(myId, id);
 
 				// 상대방 유저의 뷰리스트 검사
 				if (users[id].GetViewList().count(myId) == false)
 				{
-					tbb::concurrent_hash_map<int, int>::accessor acc2;
-					users[id].GetViewList().insert(acc2, myId);
-					acc2->second = myId;
-					acc2.release();
-					GET_INSTANCE(Core)->SendAddObjectPacket(id, mChannel, myId);
+					tbb::concurrent_hash_map<int, int>::accessor acc;
+					users[id].GetViewList().insert(acc, myId);
+					acc->second = myId;
+					acc.release();
+					GET_INSTANCE(Core)->SendAddObjectPacket(id, myId);
 				}
 				else
 				{
@@ -472,7 +437,6 @@ void Player::CheckViewList()
 		{
 			if (id >= MONSTER_START_ID)
 			{
-				int index = GET_INSTANCE(Core)->GetChannel(mChannel).GetObjectIndex(id);
 				monsters[index].WakeUp();
 				continue;
 			}
@@ -483,7 +447,7 @@ void Player::CheckViewList()
 				tbb::concurrent_hash_map<int, int>::accessor acc;
 				users[id].GetViewList().insert(acc, myId);
 				acc->second = myId;
-				GET_INSTANCE(Core)->SendAddObjectPacket(id, mChannel, myId);
+				GET_INSTANCE(Core)->SendAddObjectPacket(id, myId);
 			}
 			else
 			{
@@ -491,64 +455,6 @@ void Player::CheckViewList()
 			}
 		}
 	}
-
-	//for (auto id : newViewList)
-	//{
-	//	int index = GET_INSTANCE(Core)->GetObjectIndex(id);
-	//	// 이전에 없던 오브젝트라면
-	//	if (mViewList.count(id) == false)
-	//	{
-	//		{
-	//			tbb::concurrent_hash_map<int, int>::accessor acc;
-	//			mViewList.insert(acc, id);
-	//			acc->second = index;
-	//			GET_INSTANCE(Core)->SendAddObjectPacket(myId, id);
-	//		}
-
-	//		// 오브젝트가 몬스터라면 깨운다
-	//		if (id >= MONSTER_START_ID)
-	//		{
-	//			monsters[index].WakeUp();
-	//			continue;
-	//		}
-
-	//		// 상대방 유저의 뷰리스트 검사
-	//		if (users[index].GetViewList().count(myId) == false)
-	//		{
-	//			tbb::concurrent_hash_map<int, int>::accessor acc;
-	//			users[index].GetViewList().insert(acc, myId);
-	//			acc->second = myIndex;
-	//			GET_INSTANCE(Core)->SendAddObjectPacket(id, myId);
-	//		}
-	//		else
-	//		{
-	//			GET_INSTANCE(Core)->SendPositionPacket(id, myId);
-	//		}
-	//	}
-
-	//	// 이전에도 있고, 지금도 존재함
-	//	else
-	//	{
-	//		if (id >= MONSTER_START_ID)
-	//		{
-	//			monsters[index].WakeUp();
-	//			continue;
-	//		}
-
-	//		// 상대방 유저의 뷰리스트 검사
-	//		if (users[index].GetViewList().count(myId) == false)
-	//		{
-	//			tbb::concurrent_hash_map<int, int>::accessor acc;
-	//			users[index].GetViewList().insert(acc, myId);
-	//			acc->second = myIndex;
-	//			GET_INSTANCE(Core)->SendAddObjectPacket(id, myId);
-	//		}
-	//		else
-	//		{
-	//			GET_INSTANCE(Core)->SendPositionPacket(id, myId);
-	//		}
-	//	}
-	//}
 }
 
 void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
@@ -592,10 +498,13 @@ void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 		}
 	}
 
-	Monster* oldMonsters = GET_INSTANCE(Core)->GetChannel(oldChannel).GetMonsters();
-	for (int i = MONSTER_START_ID; i < MAX_OBJECT; ++i)
+	Sector& oldSector = GET_INSTANCE(Core)->GetChannel(oldChannel).FindSector(mX, mY);
+	Monster* oldMonsters = oldSector.GetMonsters();
+	for (int i = oldSector.GetStartId(); i < oldSector.GetEndId(); ++i)
 	{
-		int index = GET_INSTANCE(Core)->GetChannel(mChannel).GetObjectIndex(i);
+		//int index = oldSector.GetObjectIndex(i);
+		int index = GET_INSTANCE(Core)->GetChannel(oldChannel).FindSectorObjectIndex(mX, mY, i);
+
 		// 상대방에게 내가 있었다면
 		if (oldMonsters[index].GetViewList().count(myId) == true)
 		{
@@ -609,6 +518,7 @@ void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 		}
 	}
 
+	Sector& newSector = GET_INSTANCE(Core)->GetChannel(newChannel).FindSector(mX, mY);
 	// 새로운 채널 오브젝트들의 뷰리스트 추가
 	std::vector<int> newChannelUserIds = GET_INSTANCE(Core)->GetChannel(newChannel).GetUserIds();
 	for (int i = 0; i < newChannelUserIds.size(); ++i)
@@ -624,7 +534,9 @@ void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 			continue;
 		}
 
-		if (CheckDistance(id) == false)
+		int x = users[id].GetX();
+		int y = users[id].GetY();
+		if (CheckDistance(x, y) == false)
 		{
 			continue;
 		}
@@ -634,40 +546,49 @@ void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 			tbb::concurrent_hash_map<int, int>::accessor acc;
 			mViewList.insert(acc, id);
 			acc->second = id;
-			GET_INSTANCE(Core)->SendAddObjectPacket(myId, mChannel, id);
+			acc.release();
+			GET_INSTANCE(Core)->SendAddObjectPacket(myId, id);
 		}
 		// 다른애들에게 나의 정보를 보냄
 		{
 			tbb::concurrent_hash_map<int, int>::accessor acc;
 			users[id].GetViewList().insert(acc, myId);
 			acc->second = myId;
-			GET_INSTANCE(Core)->SendAddObjectPacket(id, mChannel, myId);
+			acc.release();
+			GET_INSTANCE(Core)->SendAddObjectPacket(id, myId);
 		}
 	}
 
-	Monster* newMonsters = GET_INSTANCE(Core)->GetChannel(newChannel).GetMonsters();
+	Monster* newMonsters = newSector.GetMonsters();
 	// 나에게 보이는 몬스터 정보를 보냄
-	for (int i = MONSTER_START_ID; i < MAX_OBJECT; ++i)
+	for (int i = newSector.GetStartId(); i < newSector.GetEndId(); ++i)
 	{
-		if (CheckDistance(i) == false)
+		//int index = oldSector.GetObjectIndex(i);
+		int index = GET_INSTANCE(Core)->GetChannel(newChannel).FindSectorObjectIndex(mX, mY, i);
+		if (CheckDistance(newMonsters[index].GetX(), newMonsters[index].GetY()) == false)
 		{
 			continue;
 		}
 
-		int index = GET_INSTANCE(Core)->GetChannel(mChannel).GetObjectIndex(i);
 		// 보이는 NPC를 깨운다.
 		newMonsters[index].WakeUp();
 
 		tbb::concurrent_hash_map<int, int>::accessor acc;
 		mViewList.insert(acc, i);
 		acc->second = index;
-		GET_INSTANCE(Core)->SendAddObjectPacket(myId, mChannel, i);
+		acc.release();
+		GET_INSTANCE(Core)->SendAddMonsterPacket(myId, i, newMonsters[index].GetX(), newMonsters[index].GetY());
 	}
 }
 
 Monster::Monster()
 	: Character(), mSleep(true)
 {
+	mRangeMin = std::make_pair(0, 0);
+	mRangeMax = std::make_pair(0, 0);
+
+	mSectorXId = 0;
+	mSectorYId = 0;
 }
 
 Monster::~Monster()
@@ -679,6 +600,9 @@ void Monster::Reset()
 {
 	Character::Reset();
 	mSleep = true;
+	//mSectorId = std::make_pair(0, 0);
+	mSectorXId = 0;
+	mSectorYId = 0;
 }
 
 bool Monster::Inititalize(int id)
@@ -700,6 +624,64 @@ bool Monster::Inititalize(int id)
 
 	mSleep = true;
 
+	mRangeMin = std::make_pair(0, 0);
+	mRangeMax = std::make_pair(0, 0);
+
+	mSectorXId = 0;
+	mSectorYId = 0;
+
+	return true;
+}
+
+void Monster::ProcessMove(char dir)
+{
+	int x = mX;
+	int y = mY;
+
+	switch (dir)
+	{
+		case DIRECTION_TYPE::UP:
+		{
+			--y;
+			break;
+		}
+		case DIRECTION_TYPE::DOWN:
+		{
+			++y;
+			break;
+		}
+		case DIRECTION_TYPE::LEFT:
+		{
+			--x;
+			break;
+		}
+		case DIRECTION_TYPE::RIGHT:
+		{
+			++x;
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
+
+	if (CheckRange(x, y) == false)
+	{
+		return;
+	}
+
+	mX = x;
+	mY = y;
+}
+
+bool Monster::CheckRange(int x, int y)
+{
+	if (x < mRangeMin.first || x > mRangeMax.first || y < mRangeMin.second || y > mRangeMax.second)
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -709,7 +691,11 @@ void Monster::WakeUp()
 	int myId = mOver->myId;
 	// 타이머에 1초뒤에 move 전달
 	std::chrono::seconds sec{ 1 };
-	GET_INSTANCE(GameTimer)->AddTimer(std::chrono::high_resolution_clock::now() + 1s, SERVER_EVENT::MONSTER_MOVE, myId, mChannel);
+
+	int sectorX = mSectorXId;
+	int sectorY = mSectorYId;
+
+	GET_INSTANCE(GameTimer)->AddTimer(std::chrono::high_resolution_clock::now() + 1s, SERVER_EVENT::MONSTER_MOVE, myId, mChannel, sectorX, sectorY);
 }
 
 char Monster::RandomDirection() const
@@ -723,10 +709,12 @@ char Monster::RandomDirection() const
 
 void Monster::ProcessMoveViewList()
 {
-	int myId = mOver->myId;
-	int myIndex = GET_INSTANCE(Core)->GetChannel(mChannel).GetObjectIndex(myId);
-	std::unordered_set<int> newViewList;
+	Sector& sector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(mX, mY);
 
+	int myId = mOver->myId;
+	int myIndex = GET_INSTANCE(Core)->GetChannel(mChannel).FindSectorObjectIndex(mX, mY, myId);
+
+	std::unordered_set<int> newViewList;
 	Player* users = GET_INSTANCE(Core)->GetUsers();
 
 	std::vector<int> channelUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetUserIds();
@@ -744,7 +732,9 @@ void Monster::ProcessMoveViewList()
 			continue;
 		}
 
-		if (CheckDistance(id) == false)
+		int x = users[id].GetX();
+		int y = users[id].GetY();
+		if (CheckDistance(x, y) == false)
 		{
 			// 만약 전에 시야에 있었는데, 지금은 없다면? 나한테도 지우고, 걔한테도 지워야댐
 			if (mViewList.count(id) == true)
@@ -773,6 +763,7 @@ void Monster::ProcessMoveViewList()
 				tbb::concurrent_hash_map<int, int>::accessor acc;
 				mViewList.insert(acc, id);
 				acc->second = id;
+				acc.release();
 			}
 
 			// 상대방 유저의 뷰리스트 검사
@@ -781,11 +772,12 @@ void Monster::ProcessMoveViewList()
 				tbb::concurrent_hash_map<int, int>::accessor acc;
 				users[id].GetViewList().insert(acc, myId);
 				acc->second = myIndex;
-				GET_INSTANCE(Core)->SendAddObjectPacket(id, mChannel, myId);
+				acc.release();
+				GET_INSTANCE(Core)->SendAddMonsterPacket(id, myId, mX, mY);
 			}
 			else
 			{
-				GET_INSTANCE(Core)->SendPositionPacket(id, myId);
+				GET_INSTANCE(Core)->SendMonsterPositionPacket(id, myId, mX, mY);
 			}
 		}
 
@@ -798,11 +790,12 @@ void Monster::ProcessMoveViewList()
 				tbb::concurrent_hash_map<int, int>::accessor acc;
 				users[id].GetViewList().insert(acc, myId);
 				acc->second = myIndex;
-				GET_INSTANCE(Core)->SendAddObjectPacket(id, mChannel, myId);
+				acc.release();
+				GET_INSTANCE(Core)->SendAddMonsterPacket(id, myId, mX, mY);
 			}
 			else
 			{
-				GET_INSTANCE(Core)->SendPositionPacket(id, myId);
+				GET_INSTANCE(Core)->SendMonsterPositionPacket(id, myId, mX, mY);
 			}
 		}
 	}

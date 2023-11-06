@@ -4,6 +4,7 @@
 #include "../Common/Protocol.h"
 #include "../Character/Character.h"
 #include "../Channel/Channel.h"
+#include "../Sector/Sector.h"
 
 class Core
 {
@@ -21,7 +22,10 @@ public:
 	Channel& GetChannel(int channel) { return mChannels[channel]; }
 
 	void SendPositionPacket(int to, int obj);
-	void SendAddObjectPacket(int to, int channel, int obj);
+	void SendAddObjectPacket(int to, int obj);
+	void SendAddMonsterPacket(int to, int obj, int x, int y);
+	void SendMonsterPositionPacket(int to, int obj, int x, int y);
+
 	void SendRemoveObjectPacket(int to, int obj);
 	void SendChangeChannelPacket(int to, bool result);
 
@@ -36,7 +40,7 @@ private:
 	void sendPacket(int id, char* packet);
 
 	void processPacket(int id, char* buf);
-	void processEvent(SERVER_EVENT eventType, int id, int channel);
+	void processEvent(Over* over);
 
 	int FindChannel();
 	int createPlayerId()	const;
@@ -54,7 +58,7 @@ private:
 	volatile bool mIsRun;
 	
 	// id, ¿Œµ¶Ω∫
-	tbb::concurrent_hash_map<int, int> mObjectIds;
+	//tbb::concurrent_hash_map<int, int> mObjectIds;
 
 	Player* mUsers;
 

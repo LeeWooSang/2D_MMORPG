@@ -33,6 +33,9 @@
     <Filter Include="Code\Channel">
       <UniqueIdentifier>{fe119296-ff2f-49e8-a799-02ea838e94e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Sector">
+      <UniqueIdentifier>{e38a1d97-6818-42c9-b443-815e7eb5dd20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameServer.rc">
@@ -71,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Channel\Channel.cpp">
       <Filter>Code\Channel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Sector\Sector.cpp">
+      <Filter>Code\Sector</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\Channel\Channel.h">
       <Filter>Code\Channel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Sector\Sector.h">
+      <Filter>Code\Sector</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

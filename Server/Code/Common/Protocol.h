@@ -20,6 +20,9 @@ constexpr int MAX_OBJECT = MAX_MONSTER + MAX_USER;
 constexpr int USER_START_ID = 0;
 constexpr int MONSTER_START_ID = MAX_USER;
 
+constexpr int SECTOR_MAX_MONSTER = 20;
+constexpr int SECTOR_END_ID = MONSTER_START_ID + SECTOR_MAX_MONSTER;
+
 constexpr int VIEW_DISTANCE = 7;
 
 enum class SERVER_EVENT
@@ -40,13 +43,19 @@ struct Over
 		memset(&overlapped, 0, sizeof(WSAOVERLAPPED));
 		eventType = SERVER_EVENT::DEFAULT;
 		myId = 0;
+
 		channel = 0;
+		sectorXId = 0;
+		sectorYId = 0;
 	}
 
 	WSAOVERLAPPED	overlapped;
 	SERVER_EVENT			eventType;
-	int								myId;
-	int								channel;
+	int					myId;
+
+	int					channel;
+	int					sectorXId;
+	int					sectorYId;
 };
 
 struct OverEx : public Over
@@ -137,4 +146,4 @@ struct SCChangeChannelPacket
 	bool result;
 };
 
-constexpr int MAX_CHANNEL = 12;
+constexpr int MAX_CHANNEL = 1;

@@ -41,7 +41,6 @@ Core::~Core()
 	while (popLeafWork() == true);
 
 	delete[] mUsers;
-	mObjectIds.clear();
 
 	WSACleanup();
 }
@@ -67,20 +66,13 @@ bool Core::Initialize()
 		}
 	}
 
-	int objectId = 0;
+	//int objectId = 0;
 	mUsers = new Player[MAX_USER];
 	for (int i = 0; i < MAX_USER; ++i)
 	{
-		if (mUsers[i].Inititalize(objectId) == false)
+		if (mUsers[i].Inititalize(i) == false)
 		{
 			return false;
-		}
-
-		{
-			tbb::concurrent_hash_map<int, int>::accessor acc;
-			mObjectIds.insert(acc, objectId++);
-			acc->second = i;
-			acc.release();
 		}
 	}
 
@@ -126,21 +118,8 @@ void Core::ServerQuit()
 
 void Core::SendPositionPacket(int to, int obj)
 {
-	int x = 0;
-	int y = 0;
-
-	if (obj < MONSTER_START_ID)
-	{
-		x = mUsers[obj].GetX();
-		y = mUsers[obj].GetY();
-	}
-	else
-	{
-		int channel = mUsers[to].GetChannel();
-		int index = mChannels[channel].GetObjectIndex(obj);
-		x = mChannels[channel].GetMonster(index).GetX();
-		y = mChannels[channel].GetMonster(index).GetY();
-	}
+	int x = mUsers[obj].GetX();
+	int y = mUsers[obj].GetY();
 
 	SCPositionPacket packet;
 	packet.size = sizeof(SCPositionPacket);
@@ -152,26 +131,38 @@ void Core::SendPositionPacket(int to, int obj)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
-void Core::SendAddObjectPacket(int to, int channel, int obj)
+void Core::SendAddObjectPacket(int to, int obj)
 {
-	int x = 0;
-	int y = 0;
-
-	if (obj < MONSTER_START_ID)
-	{
-		x = mUsers[obj].GetX();
-		y = mUsers[obj].GetY();
-	}
-	else
-	{
-		int index = mChannels[channel].GetObjectIndex(obj);
-		x = mChannels[channel].GetMonster(index).GetX();
-		y = mChannels[channel].GetMonster(index).GetY();
-	}
+	int x = mUsers[obj].GetX();
+	int y = mUsers[obj].GetY();
 
 	SCAddObjectPacket packet;
 	packet.size = sizeof(SCAddObjectPacket);
 	packet.type = SC_PACKET_TYPE::SC_ADD_OBJECT;
+	packet.id = obj;
+	packet.x = x;
+	packet.y = y;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendAddMonsterPacket(int to, int obj, int x, int y)
+{
+	SCAddObjectPacket packet;
+	packet.size = sizeof(SCAddObjectPacket);
+	packet.type = SC_PACKET_TYPE::SC_ADD_OBJECT;
+	packet.id = obj;
+	packet.x = x;
+	packet.y = y;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendMonsterPositionPacket(int to, int obj, int x, int y)
+{
+	SCPositionPacket packet;
+	packet.size = sizeof(SCPositionPacket);
+	packet.type = SC_PACKET_TYPE::SC_POSITION;
 	packet.id = obj;
 	packet.x = x;
 	packet.y = y;
@@ -289,19 +280,27 @@ void Core::acceptClient()
 
 		// 빈 아이디를 생성해줌
 		int id = createPlayerId();
+
 		mUsers[id].SetSocket(clientSocket);
 		mUsers[id].PlayerConnect();
 
 		int channelIndex = mChannels[channel].PushUser(id);
 		mUsers[id].SetChannelIndex(channelIndex);
 		mUsers[id].SetChannel(channel);
-
 		SendChangeChannelPacket(id, true);
 
 		if (id == 0)
 		{
 			mUsers[id].SetPosition(0, 0);
 		}
+
+		int x = mUsers[id].GetX();
+		int y = mUsers[id].GetY();
+
+		// 섹터 찾아서 넣기
+		//Sector& sector = mChannels[channel].FindSector(x, y);
+		//sector.PushObject(id);
+		mChannels[channel].PushSectorObject(x, y, id);
 
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(clientSocket), mIOCP, id, 0);
 		recvPacket(id);
@@ -410,7 +409,7 @@ void Core::threadPool()
 
 			default:
 			{
-				processEvent(over->eventType, static_cast<int>(id), over->channel);
+				processEvent(over);
 				break;
 			}
 		}
@@ -478,6 +477,11 @@ void Core::processPacket(int id, char* buf)
 			CSMovePacket* packet = reinterpret_cast<CSMovePacket*>(buf);
 			mUsers[id].ProcessMove(packet->direction);
 			mUsers[id].CheckViewList();
+
+			int channel = mUsers[id].GetChannel();
+			int x = mUsers[id].GetX();
+			int y = mUsers[id].GetY();
+			Sector& sector = mChannels[channel].FindSector(x, y);
 			SendPositionPacket(id, id);
 			break;
 		}
@@ -527,18 +531,19 @@ void Core::processPacket(int id, char* buf)
 	//std::cout << "패킷 처리 시간 : " << time << "초" << std::endl;
 }
 
-void Core::processEvent(SERVER_EVENT eventType, int id, int channel)
+void Core::processEvent(Over* over)
 {
 	//std::cout << "오브젝트 id : " << id << " 이벤트 발생" << std::endl;
-	popLeafWork();
-	switch (eventType)
+	switch (over->eventType)
 	{
 		case SERVER_EVENT::MONSTER_MOVE:
-		{			
-			int index = mChannels[channel].GetObjectIndex(id);			
-			char dir = mChannels[channel].GetMonster(index).RandomDirection();
-			mChannels[channel].GetMonster(index).ProcessMove(dir);
-			mChannels[channel].GetMonster(index).ProcessMoveViewList();
+		{
+			int index = mChannels[over->channel].FindSectorObjectIndexById(over->sectorXId, over->sectorYId, over->myId);
+			Monster& monster = mChannels[over->channel].FindSectorById(over->sectorXId, over->sectorYId).GetMonster(index);
+			char dir = monster.RandomDirection();
+			monster.ProcessMove(dir);
+			monster.ProcessMoveViewList();
+			delete over;
 			break;
 		}
 
@@ -547,6 +552,7 @@ void Core::processEvent(SERVER_EVENT eventType, int id, int channel)
 			break;
 		}
 	}
+	//popLeafWork();
 }
 
 int Core::FindChannel()

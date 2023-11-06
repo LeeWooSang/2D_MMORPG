@@ -21,8 +21,9 @@ public:
 	std::mutex& GetViewListMtx() { return mViewListMtx; }
 
 	virtual void ProcessMove(char dir);
-	bool CheckRange(int x, int y);
-	bool CheckDistance(int id);
+	virtual bool CheckRange(int x, int y);
+
+	bool CheckDistance(int x, int y);
 
 	tbb::concurrent_hash_map<int, int>& GetViewList() { return mViewList; }
 	std::unordered_set<int>& GetSTLViewList() { return mSTLViewList; }
@@ -88,13 +89,25 @@ public:
 	~Monster();
 	virtual void Reset();
 	virtual bool Inititalize(int id);
+
+	virtual void ProcessMove(char dir);
+	virtual bool CheckRange(int x, int y);
+
 	virtual void WakeUp();
 
 	char RandomDirection()	const;
 	void ProcessMoveViewList();
 
+	void SetRange(std::pair<int, int> min, std::pair<int, int> max) { mRangeMin = min; mRangeMax = max; }
 	void SetSleep(bool sleep) { mSleep = sleep; }
+	void SetSectorId(std::pair<int, int> sectorId) { mSectorXId = sectorId.first, mSectorYId = sectorId.second; }
 
 private:
+	std::pair<int, int> mRangeMin;
+	std::pair<int, int> mRangeMax;
+
 	bool mSleep;
+
+	int mSectorXId;
+	int mSectorYId;
 };

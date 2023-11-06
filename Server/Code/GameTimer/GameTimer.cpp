@@ -42,7 +42,7 @@ void GameTimer::run()
 			// 타이머 큐에서 해당 이벤트를 얻어옴
 			if (ev.startTime > chrono::high_resolution_clock::now())
 			{
-				mTimerQueue.push(TimerEvent(ev.startTime, ev.eventType, ev.myId, ev.channel));
+				mTimerQueue.push(TimerEvent(ev.startTime, ev.eventType, ev.myId, ev.channel, ev.sectorXId, ev.sectorYId));
 				break;
 			}
 
@@ -58,7 +58,10 @@ void GameTimer::run()
 				over->eventType = ev.eventType;
 				over->myId = ev.myId;
 				over->channel = ev.channel;
+				over->sectorXId = ev.sectorXId;
+				over->sectorYId = ev.sectorYId;
 
+				//std::cout << over->myId << ", " << over->sectorXId << ", " << over->sectorYId << std::endl;
 				GET_INSTANCE(Core)->PushLeafWork(over);
 				// 워커스레드에게 ProcessEvent를 넘겨야 됨
 				PostQueuedCompletionStatus(GET_INSTANCE(Core)->GetIOCP(), 1, ev.myId, &over->overlapped);

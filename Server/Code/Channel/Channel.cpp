@@ -3,34 +3,52 @@
 
 Channel::Channel()
 {
-	mMonsters = nullptr;
+	//for (int i = 0; i < mMaps.size(); ++i)
+	//{
+	//	for (int j = 0; j < mMaps[i].size(); ++j)
+	//	{
+	//		mMaps[i][j] = 0;
+	//	}
+	//}
 }
 
 Channel::~Channel()
 {
-	delete[] mMonsters;
+	for (int i = 0; i < SECTOR_WIDTH_SIZE; ++i)
+	{
+		delete[] mSectors[i];
+	}
+
+	delete[] mSectors;
 }
 
 bool Channel::Initialize(int channel)
 {
-	int objectId = MONSTER_START_ID;
-	// 몬스터는 미리 넣어놓는다.
-	mMonsters = new Monster[MAX_MONSTER];
-	for (int i = 0; i < MAX_MONSTER; ++i)
-	{
-		if (mMonsters[i].Inititalize(objectId) == false)
-		{
-			return false;
-		}
-		
-		mMonsters[i].SetChannel(channel);
+	mSectors = new Sector*[SECTOR_WIDTH_SIZE];
 
+	int objectId = MONSTER_START_ID;
+	int x = 0;
+	int y = 0;
+
+	int start = MONSTER_START_ID;
+	int end = MONSTER_START_ID + SECTOR_MAX_MONSTER;
+
+	for (int i = 0; i < SECTOR_WIDTH_SIZE; ++i)
+	{
+		mSectors[i] = new Sector[SECTOR_HEIGHT_SIZE];
+		for (int j = 0; j < SECTOR_HEIGHT_SIZE; ++j)
 		{
-			tbb::concurrent_hash_map<int, int>::accessor acc;
-			mObjectIds.insert(acc, objectId++);
-			acc->second = i;
-			acc.release();
+			mSectors[i][j].Initialize(channel, start, std::make_pair(i, j), x, y);
+			mSectors[i][j].SetObjectStartEndId(start, end);
+
+			y += SECTOR_HEIGHT;
+
+			start = end;
+			end += SECTOR_MAX_MONSTER;
 		}
+
+		x += SECTOR_WIDTH;
+		y = 0;
 	}
 
 	return true;
@@ -41,10 +59,8 @@ bool Channel::IsFull()
 	volatile bool result = false;
 
 	mChannelMtx.lock_shared();
-	//mChannelMtx.lock();
 	int size = mUserIdList.size();
 	mChannelMtx.unlock_shared();
-	//mChannelMtx.unlock();
 
 	if (size >= MAX_CHANNEL_USER)
 	{
@@ -85,13 +101,38 @@ int Channel::FindUser(int index)	const
 	return -1;
 }
 
-int Channel::GetObjectIndex(int id) const
+void Channel::PushSectorObject(int x, int y, int id)
 {
+	int xNum = x / SECTOR_WIDTH;
+	int yNum = y / SECTOR_HEIGHT;
+
+	tbb::concurrent_hash_map<int, int>::accessor acc;
+	mSectors[xNum][yNum].GetObjectIds().insert(acc, id);
+	acc->second = id;
+	acc.release();
+}
+
+int Channel::FindSectorObjectIndex(int x, int y, int id)
+{
+	int xNum = x / SECTOR_WIDTH;
+	int yNum = y / SECTOR_HEIGHT;
+
 	tbb::concurrent_hash_map<int, int>::const_accessor acc;
-	if (mObjectIds.find(acc, id))
+	if (mSectors[xNum][yNum].GetObjectIds().find(acc, id))
 	{
 		return acc->second;
 	}
+	return -1;
+}
+
+int Channel::FindSectorObjectIndexById(int sectorXId, int sectorYId, int id)
+{
+	tbb::concurrent_hash_map<int, int>::const_accessor acc;
+	if (mSectors[sectorXId][sectorYId].GetObjectIds().find(acc, id))
+	{
+		return acc->second;
+	}
+
 	return -1;
 }
 
@@ -111,3 +152,12 @@ std::vector<int> Channel::GetUserIds()
 
 	return userIds;
 }
+
+Sector& Channel::FindSector(int x, int y)
+{
+	int xNum = x / SECTOR_WIDTH;
+	int yNum = y / SECTOR_HEIGHT;
+
+	return mSectors[xNum][yNum];
+}
+

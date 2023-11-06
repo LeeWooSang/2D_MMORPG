@@ -102,6 +102,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>../Lib/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <StackReserveSize>
+      </StackReserveSize>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -207,6 +209,7 @@
     <ClCompile Include="..\Code\GameServer.cpp" />
     <ClCompile Include="..\Code\GameServerDlg.cpp" />
     <ClCompile Include="..\Code\GameTimer\GameTimer.cpp" />
+    <ClCompile Include="..\Code\Sector\Sector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Code\Channel\Channel.h" />
@@ -222,6 +225,7 @@
     <ClInclude Include="..\Code\GameServer.h" />
     <ClInclude Include="..\Code\GameServerDlg.h" />
     <ClInclude Include="..\Code\GameTimer\GameTimer.h" />
+    <ClInclude Include="..\Code\Sector\Sector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
