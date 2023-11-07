@@ -1,4 +1,7 @@
+#ifdef _DEBUG
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif // DEBUG
+
 
 #define WIN32_LEAN_AND_MEAN  
 #define INITGUID

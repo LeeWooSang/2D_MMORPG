@@ -120,6 +120,13 @@ bool Input::KeyOnceCheck(KEY_TYPE key)
 
 void Input::ProcessKeyEvent()
 {
+	// 포커스 있을때만 입력처리
+	HWND handle = GetFocus();
+	if (handle == nullptr)
+	{
+		return;
+	}
+
 	mFlag = false;
 
 	for (auto& key : mKeyStateList)

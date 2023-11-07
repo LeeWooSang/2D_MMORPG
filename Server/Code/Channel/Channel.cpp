@@ -70,19 +70,16 @@ bool Channel::Initialize(int channel)
 
 bool Channel::IsFull()
 {
-	volatile bool result = false;
-
 	mChannelMtx.lock_shared();
 	int size = mUserIdList.size();
 	mChannelMtx.unlock_shared();
 
 	if (size >= MAX_CHANNEL_USER)
 	{
-		result = true;
+		return true;
 	}
 
-	std::cout << "channel result : " << result << std::endl;
-	return result;
+	return false;
 }
 
 int Channel::PushUser(int id)
@@ -124,6 +121,13 @@ void Channel::PushSectorObject(int x, int y, int id)
 	mSectors[xNum][yNum].GetObjectIds().insert(acc, id);
 	acc->second = id;
 	acc.release();
+}
+
+void Channel::PopSectorObject(int x, int y, int id)
+{
+	int xNum = x / SECTOR_WIDTH;
+	int yNum = y / SECTOR_HEIGHT;
+	mSectors[xNum][yNum].GetObjectIds().erase(id);
 }
 
 int Channel::FindSectorObjectIndex(int x, int y, int id)
@@ -175,9 +179,12 @@ Sector& Channel::FindSector(int x, int y)
 	return mSectors[xNum][yNum];
 }
 
-bool Channel::CheckSectorRange(int xNum, int yNum)
+bool Channel::CheckSectorRange(int x, int y)
 {
-	if (xNum < 0 || xNum - 1 > SECTOR_WIDTH || yNum < 0 || yNum - 1 > SECTOR_HEIGHT)
+	int xNum = x / SECTOR_WIDTH;
+	int yNum = y / SECTOR_HEIGHT;
+
+	if (xNum < 0 || xNum >= SECTOR_WIDTH_SIZE || yNum < 0 || yNum>= SECTOR_HEIGHT_SIZE)
 	{
 		return false;
 	}
@@ -185,12 +192,24 @@ bool Channel::CheckSectorRange(int xNum, int yNum)
 	return true;
 }
 
-std::vector<int> Channel::GetSectorUserIds(int x, int y)
+std::vector<int> Channel::GetSectorUserIds(int x, int y, bool isPlayer)
 {
 	std::vector<int> sectorUserIds;
 	sectorUserIds.reserve(MAX_CHANNEL_USER);
+	
+	std::vector<std::pair<int, int>> dirs;
+	dirs.reserve(mSectorDir.size());
 
-	for (int i = 0; i < mSectorDir.size(); ++i)
+	if (isPlayer == true)
+	{
+		dirs = mSectorDir;
+	}
+	else
+	{
+		dirs.emplace_back(mSectorDir.front());
+	}
+
+	for (int i = 0; i < dirs.size(); ++i)
 	{
 		int newX = x + mSectorDir[i].first;
 		int newY = y + mSectorDir[i].second;
@@ -201,7 +220,6 @@ std::vector<int> Channel::GetSectorUserIds(int x, int y)
 		}
 
 		Sector& sector = FindSector(newX, newY);
-
 		std::vector<int> channelUserIds = GetUserIds();
 		for (auto& id : channelUserIds)
 		{

@@ -13,15 +13,25 @@ constexpr int MAX_BUFFER = 1024;
 constexpr int WIDTH = 500;
 constexpr int HEIGHT = 500;
 
-constexpr int MAX_MONSTER = 2000;
-constexpr int MAX_USER = 2000;
-constexpr int MAX_OBJECT = MAX_MONSTER + MAX_USER;
+// 채널 개수
+constexpr int MAX_CHANNEL = 1;
+constexpr int MAX_CHANNEL_USER = 400;
+
+// 섹터 크기
+constexpr int SECTOR_WIDTH = WIDTH / 10;
+constexpr int SECTOR_HEIGHT = HEIGHT / 10;
+
+// 섹터 개수
+constexpr int SECTOR_WIDTH_SIZE = WIDTH / SECTOR_WIDTH;
+constexpr int SECTOR_HEIGHT_SIZE = HEIGHT / SECTOR_HEIGHT;
 
 constexpr int USER_START_ID = 0;
-constexpr int MONSTER_START_ID = MAX_USER;
+constexpr int MAX_USER = 2000;
 
-constexpr int SECTOR_MAX_MONSTER = 20;
-constexpr int SECTOR_END_ID = MONSTER_START_ID + SECTOR_MAX_MONSTER;
+constexpr int MONSTER_START_ID = MAX_USER;
+constexpr int SECTOR_MAX_MONSTER = 40;
+
+constexpr int MAX_OBJECT = MAX_USER + (SECTOR_WIDTH_SIZE * SECTOR_HEIGHT_SIZE * SECTOR_MAX_MONSTER);
 
 constexpr int VIEW_DISTANCE = 7;
 
@@ -145,5 +155,3 @@ struct SCChangeChannelPacket
 	char type;
 	bool result;
 };
-
-constexpr int MAX_CHANNEL = 1;

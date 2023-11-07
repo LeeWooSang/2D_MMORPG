@@ -4,14 +4,6 @@
 #include <tbb/tbb.h>
 #include "../Character/Character.h"
 
-// 섹터 크기
-constexpr int SECTOR_WIDTH = WIDTH / 10;
-constexpr int SECTOR_HEIGHT = HEIGHT / 10;
-
-// 섹터 개수
-constexpr int SECTOR_WIDTH_SIZE = WIDTH / SECTOR_WIDTH;
-constexpr int SECTOR_HEIGHT_SIZE = HEIGHT / SECTOR_HEIGHT;
-
 class Monster;
 class Sector
 {

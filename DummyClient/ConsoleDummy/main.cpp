@@ -57,7 +57,7 @@ std::thread gAIThread;
 SOCKET gListenSocket;
 
 Client gClients[MAX_OBJECT];
-int gConnectNum = 199;
+int gConnectNum = MAX_CHANNEL_USER;
 
 bool Initialize();
 void ThreadPool();

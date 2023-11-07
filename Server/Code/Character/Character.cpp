@@ -129,8 +129,7 @@ void Character::ProcessChangeSector(int oldX, int oldY, int newX, int newY)
 	std::unordered_map<int, int> newViewList;
 
 	// 이전 섹터 정리
-	Sector& oldSector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(oldX, oldY);
-	oldSector.GetObjectIds().erase(myId);
+	GET_INSTANCE(Core)->GetChannel(mChannel).PopSectorObject(oldX, oldY, myId);
 
 	// 이전 섹터의 유저 뷰리스트 정리
 	std::vector<int> oldSectorUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetSectorUserIds(oldX, oldY);
@@ -168,6 +167,7 @@ void Character::ProcessChangeSector(int oldX, int oldY, int newX, int newY)
 	}
 
 	// 이전 섹터의 몬스터 뷰리스트 정리
+	Sector& oldSector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(oldX, oldY);
 	Monster* oldMonsters = oldSector.GetMonsters();
 	int index = 0;
 	// 나에게 보이는 몬스터 정보를 보냄
@@ -204,13 +204,7 @@ void Character::ProcessChangeSector(int oldX, int oldY, int newX, int newY)
 	}
 
 	// 새로운 섹터에 삽입	
-	Sector& newSector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(newX, newY);
-	{
-		tbb::concurrent_hash_map<int, int>::accessor acc;
-		newSector.GetObjectIds().insert(acc, myId);
-		acc->second = myId;
-		acc.release();
-	}
+	GET_INSTANCE(Core)->GetChannel(mChannel).PushSectorObject(newX, newY, myId);
 }
 
 Player::Player()
@@ -814,7 +808,7 @@ void Monster::ProcessMoveViewList()
 	std::unordered_set<int> newViewList;
 	Player* users = GET_INSTANCE(Core)->GetUsers();
 
-	std::vector<int> sectorUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetSectorUserIds(mX, mY);
+	std::vector<int> sectorUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetSectorUserIds(mX, mY, false);
 	// 나와 근처에 있는 오브젝트 아이디를 새로운 뷰리스트에 넣음
 	for (int i = 0; i < sectorUserIds.size(); ++i)
 	{

@@ -8,12 +8,12 @@ INIT_INSTACNE(Core)
 Core::Core()
 	: mIOCP(nullptr), mIsRun(false)
 {
+	mListenSocket = 0;
 	_wsetlocale(LC_ALL, L"korean");
 	// 에러발생시 한글로 출력되도록 명령
 	std::wcout.imbue(std::locale("korean"));
 
 	//_CrtSetBreakAlloc(727);
-
 }
 
 Core::~Core()
@@ -298,8 +298,6 @@ void Core::acceptClient()
 		int y = mUsers[id].GetY();
 
 		// 섹터 찾아서 넣기
-		//Sector& sector = mChannels[channel].FindSector(x, y);
-		//sector.PushObject(id);
 		mChannels[channel].PushSectorObject(x, y, id);
 
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(clientSocket), mIOCP, id, 0);
@@ -308,7 +306,7 @@ void Core::acceptClient()
 		// 워커스레드에게 넘겨야됨
 		mUsers[id].ProcessLoginViewList();
 
-		std::cout << id << "번 클라이언트 접속 - 채널 : " << channel << std::endl;		
+		std::cout << id << "번 클라이언트 접속 - 채널 : " << channel << ", 좌표 : " << x << ", " << y << std::endl;
 	}
 }
 
