@@ -43,29 +43,31 @@ bool Character::Inititalize(int id)
 
 void Character::ProcessMove(char dir)
 {
-	int x = mX;
-	int y = mY;
+	int oldX = mX;
+	int oldY = mY;
+	int newX = mX;
+	int newY = mY;
 
 	switch (dir)
 	{
 		case DIRECTION_TYPE::UP:
 		{
-			--y;
+			--newY;
 			break;
 		}
 		case DIRECTION_TYPE::DOWN:
 		{
-			++y;
+			++newY;
 			break;
 		}
 		case DIRECTION_TYPE::LEFT:
 		{
-			--x;
+			--newX;
 			break;
 		}
 		case DIRECTION_TYPE::RIGHT:
 		{
-			++x;
+			++newX;
 			break;
 		}
 		default:
@@ -74,13 +76,15 @@ void Character::ProcessMove(char dir)
 		}
 	}
 
-	if (CheckRange(x, y) == false)
+	if (CheckRange(newX, newY) == false)
 	{
 		return;
 	}
 
-	mX = x;
-	mY = y;
+	ProcessChangeSector(oldX, oldY, newX, newY);
+
+	mX = newX;
+	mY = newY;
 }
 
 bool Character::CheckRange(int x, int y)
@@ -109,6 +113,104 @@ bool Character::CheckDistance(int x, int y)
 	}
 
 	return true;
+}
+
+void Character::ProcessChangeSector(int oldX, int oldY, int newX, int newY)
+{
+	// 섹터가 바뀌지 않았으면 리턴
+	if (GET_INSTANCE(Core)->GetChannel(mChannel).CompareSector(oldX, oldY, newX, newY) == true)
+	{
+		return;
+	}
+
+	int myId = mOver->myId;
+	Player* users = GET_INSTANCE(Core)->GetUsers();
+
+	std::unordered_map<int, int> newViewList;
+
+	// 이전 섹터 정리
+	Sector& oldSector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(oldX, oldY);
+	oldSector.GetObjectIds().erase(myId);
+
+	// 이전 섹터의 유저 뷰리스트 정리
+	std::vector<int> oldSectorUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetSectorUserIds(oldX, oldY);
+	for (auto& id : oldSectorUserIds)
+	{
+		if (users[id].GetIsConnect() == false)
+		{
+			// 만약 전에 접속했었는데, 지금은 접속종료했던애가 남아있다면? 내꺼에서만 지운다.
+			if (mViewList.count(id) == true)
+			{
+				mViewList.erase(id);
+				GET_INSTANCE(Core)->SendRemoveObjectPacket(myId, id);
+			}
+			continue;
+		}
+
+		int x = users[id].GetX();
+		int y = users[id].GetY();
+		if (CheckDistance(x, y) == false)
+		{
+			// 만약 전에 시야에 있었는데, 지금은 없다면? 나한테도 지우고, 걔한테도 지워야댐
+			if (mViewList.count(id) == true)
+			{
+				mViewList.erase(id);
+				GET_INSTANCE(Core)->SendRemoveObjectPacket(myId, id);
+			}
+
+			if (users[id].GetViewList().count(myId) == true)
+			{
+				users[id].GetViewList().erase(myId);
+				GET_INSTANCE(Core)->SendRemoveObjectPacket(id, myId);
+			}
+			continue;
+		}
+	}
+
+	// 이전 섹터의 몬스터 뷰리스트 정리
+	Monster* oldMonsters = oldSector.GetMonsters();
+	int index = 0;
+	// 나에게 보이는 몬스터 정보를 보냄
+	for (int i = oldSector.GetStartId(); i < oldSector.GetEndId(); ++i, ++index)
+	{
+		if (CheckDistance(oldMonsters[index].GetX(), oldMonsters[index].GetY()) == false)
+		{
+			// 만약 전에 시야에 있었는데, 지금은 없다면? 나한테도 지우고, 걔한테도 지워야댐
+			if (mViewList.count(i) == true)
+			{
+				mViewList.erase(i);
+				GET_INSTANCE(Core)->SendRemoveObjectPacket(myId, i);
+			}
+
+			if (oldMonsters[index].GetViewList().count(myId) == true)
+			{
+				oldMonsters[index].GetViewList().erase(myId);
+			}
+		}
+		else
+		{
+			// 만약 전에 시야에 있었는데, 지금은 없다면? 나한테도 지우고, 걔한테도 지워야댐
+			if (mViewList.count(i) == true)
+			{
+				mViewList.erase(i);
+				GET_INSTANCE(Core)->SendRemoveObjectPacket(myId, i);
+			}
+
+			if (oldMonsters[index].GetViewList().count(myId) == true)
+			{
+				oldMonsters[index].GetViewList().erase(myId);
+			}
+		}
+	}
+
+	// 새로운 섹터에 삽입	
+	Sector& newSector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(newX, newY);
+	{
+		tbb::concurrent_hash_map<int, int>::accessor acc;
+		newSector.GetObjectIds().insert(acc, myId);
+		acc->second = myId;
+		acc.release();
+	}
 }
 
 Player::Player()
@@ -231,21 +333,20 @@ void Player::PlayerDisconnect()
 
 void Player::ProcessLoginViewList()
 {
-	// 나의 섹터를 찾자
-	Sector& sector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(mX, mY);
-	
 	int myId = mOver->myId;
 	// 내가 누구인지 보내주어야함
 	GET_INSTANCE(Core)->SendAddObjectPacket(myId, myId);
 
 	Player* users = GET_INSTANCE(Core)->GetUsers();
-	std::vector<int> channelUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetUserIds();
-	
-	// 같은 채널 오브젝트만 검색
+
+	// 검색해야할 유저 아이디 목록
+	std::vector<int> sectorUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetSectorUserIds(mX, mY);
+
+	// 같은 채널의 섹터 범위 오브젝트만 검색
 	// 접속된 다른 유저에게도 내 정보를 보냄
-	for (int i = 0; i < channelUserIds.size(); ++i)
+	for (int i = 0; i < sectorUserIds.size(); ++i)
 	{
-		int id = channelUserIds[i];
+		int id = sectorUserIds[i];
 		if (id == myId)
 		{
 			continue;
@@ -284,13 +385,14 @@ void Player::ProcessLoginViewList()
 		}
 	}
 
+	// 나의 섹터를 찾자
+	Sector& sector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(mX, mY);
+
 	Monster* monsters = sector.GetMonsters();
 	int index = 0;
 	// 나에게 보이는 몬스터 정보를 보냄
 	for (int i = sector.GetStartId(); i < sector.GetEndId(); ++i, ++index)
 	{
-		//int index = sector.GetObjectIndex(i);
-		//int index = GET_INSTANCE(Core)->GetChannel(mChannel).FindSectorObjectIndex(mX, mY, i);
 		if (CheckDistance(monsters[index].GetX(), monsters[index].GetY()) == false)
 		{
 			continue;
@@ -309,20 +411,17 @@ void Player::ProcessLoginViewList()
 
 void Player::CheckViewList()
 {
-	Sector& sector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(mX, mY);
-	// 움직이고나서 섹터 정리?
-
 	int myId = mOver->myId;
-	//std::unordered_set<int> newViewList;
 	std::unordered_map<int, int> newViewList;
 
 	Player* users = GET_INSTANCE(Core)->GetUsers();
 	
+	// 검색해야할 유저 아이디 목록
+	std::vector<int> sectorUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetSectorUserIds(mX, mY);
 	// 나와 근처에 있는 오브젝트 아이디를 새로운 뷰리스트에 넣음
-	std::vector<int> channelUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetUserIds();
-	for (int i = 0; i < channelUserIds.size(); ++i)
+	for (int i = 0; i < sectorUserIds.size(); ++i)
 	{
-		int id = channelUserIds[i];
+		int id = sectorUserIds[i];
 		if (id == myId)
 		{
 			continue;
@@ -360,6 +459,8 @@ void Player::CheckViewList()
 		newViewList.emplace(id, id);
 	}
 	
+	Sector& sector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(mX, mY);
+
 	// 같은 섹터의 몬스터만 검색
 	Monster* monsters = sector.GetMonsters();
 	int index = 0;
@@ -390,10 +491,6 @@ void Player::CheckViewList()
 		int id = obj.first;
 		//int index = sector.GetObjectIndex(id);
 		int index = obj.second;
-		//if (id >= MONSTER_START_ID)
-		//{
-		//	index = GET_INSTANCE(Core)->GetChannel(mChannel).FindSectorObjectIndex(mX, mY, id);
-		//}
 
 		// 이전에 없던 오브젝트라면
 		if (mViewList.count(id) == false)
@@ -717,11 +814,11 @@ void Monster::ProcessMoveViewList()
 	std::unordered_set<int> newViewList;
 	Player* users = GET_INSTANCE(Core)->GetUsers();
 
-	std::vector<int> channelUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetUserIds();
+	std::vector<int> sectorUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetSectorUserIds(mX, mY);
 	// 나와 근처에 있는 오브젝트 아이디를 새로운 뷰리스트에 넣음
-	for (int i = 0; i < channelUserIds.size(); ++i)
+	for (int i = 0; i < sectorUserIds.size(); ++i)
 	{
-		int id = channelUserIds[i];
+		int id = sectorUserIds[i];
 		if (users[id].GetIsConnect() == false)
 		{
 			// 만약 전에 접속했었는데, 지금은 접속종료했던애가 남아있다면? 내꺼에서만 지운다.

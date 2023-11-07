@@ -33,6 +33,8 @@ public:
 	int GetChannel()	const { return mChannel; }
 	void SetChannel(int channel) { mChannel = channel; }
 
+	void ProcessChangeSector(int oldX, int oldY, int newX, int newY);
+
 protected:
 	Over* mOver;
 	int mX;

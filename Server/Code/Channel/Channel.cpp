@@ -10,6 +10,20 @@ Channel::Channel()
 	//		mMaps[i][j] = 0;
 	//	}
 	//}
+	// 
+	// 가운데, 상, 하, 좌, 우, 좌상 대각선, 우상 대각선, 좌하 대각선, 우하 대각선
+	mSectorDir =
+	{
+		{0, 0},
+		{ 0, SECTOR_HEIGHT },
+		{ 0,  -SECTOR_HEIGHT },
+		{ -SECTOR_WIDTH, 0 },
+		{ SECTOR_WIDTH, 0 },
+		{ -SECTOR_WIDTH, SECTOR_HEIGHT },
+		{ SECTOR_WIDTH, SECTOR_HEIGHT },
+		{ -SECTOR_WIDTH, -SECTOR_HEIGHT },
+		{ SECTOR_WIDTH, -SECTOR_HEIGHT }
+	};
 }
 
 Channel::~Channel()
@@ -161,3 +175,61 @@ Sector& Channel::FindSector(int x, int y)
 	return mSectors[xNum][yNum];
 }
 
+bool Channel::CheckSectorRange(int xNum, int yNum)
+{
+	if (xNum < 0 || xNum - 1 > SECTOR_WIDTH || yNum < 0 || yNum - 1 > SECTOR_HEIGHT)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+std::vector<int> Channel::GetSectorUserIds(int x, int y)
+{
+	std::vector<int> sectorUserIds;
+	sectorUserIds.reserve(MAX_CHANNEL_USER);
+
+	for (int i = 0; i < mSectorDir.size(); ++i)
+	{
+		int newX = x + mSectorDir[i].first;
+		int newY = y + mSectorDir[i].second;
+
+		if (CheckSectorRange(newX, newY) == false)
+		{
+			continue;
+		}
+
+		Sector& sector = FindSector(newX, newY);
+
+		std::vector<int> channelUserIds = GetUserIds();
+		for (auto& id : channelUserIds)
+		{
+			// 범위 섹터 내의 유저만 검색
+			if (sector.GetObjectIds().count(id) == false)
+			{
+				continue;
+			}
+			
+			sectorUserIds.emplace_back(id);
+		}
+	}
+
+	return sectorUserIds;
+}
+
+bool Channel::CompareSector(int x1, int y1, int x2, int y2)
+{
+	int xNum1 = x1 / SECTOR_WIDTH;
+	int xNum2 = x2 / SECTOR_WIDTH;
+
+	int yNum1 = y1 / SECTOR_HEIGHT;
+	int yNum2 = y2 / SECTOR_HEIGHT;
+
+	if (xNum1 != xNum2 || yNum1 != yNum2)
+	{
+		return false;
+	}
+
+	return true;
+}

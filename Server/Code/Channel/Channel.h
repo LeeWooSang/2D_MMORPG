@@ -7,10 +7,6 @@
 
 constexpr int MAX_CHANNEL_USER = 200;
 
-// 섹터 개수
-constexpr int SECTOR_WIDTH_SIZE = WIDTH / SECTOR_WIDTH;
-constexpr int SECTOR_HEIGHT_SIZE = HEIGHT / SECTOR_HEIGHT;
-
 class Channel
 {
 public:
@@ -31,17 +27,25 @@ public:
 
 	Sector** GetSectors() { return mSectors; }
 	Sector& FindSector(int x, int y);
+
 	//Sector** FindSector(int x, int y);
 	Sector& FindSectorById(int sectorXId, int sectorYId) { return mSectors[sectorXId][sectorYId]; }
 
-private:
+	bool CheckSectorRange(int x, int y);
+	const std::vector<std::pair<int, int>>& GetSectorDirection()		const { return mSectorDir;}
+	std::vector<int> GetSectorUserIds(int x, int y);
 
+	bool CompareSector(int x1, int y1, int x2, int y2);
+
+private:
 	std::shared_mutex mChannelMtx;
 
 	// 인덱스, 유저 id
 	tbb::concurrent_hash_map<int, int> mUserIdList;
 
 	Sector** mSectors;
+
+	std::vector<std::pair<int, int>> mSectorDir;
 
 	//std::array<std::array<int, HEIGHT>, WIDTH> mMaps;
 	

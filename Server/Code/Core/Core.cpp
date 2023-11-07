@@ -476,12 +476,8 @@ void Core::processPacket(int id, char* buf)
 		{
 			CSMovePacket* packet = reinterpret_cast<CSMovePacket*>(buf);
 			mUsers[id].ProcessMove(packet->direction);
+		
 			mUsers[id].CheckViewList();
-
-			int channel = mUsers[id].GetChannel();
-			int x = mUsers[id].GetX();
-			int y = mUsers[id].GetY();
-			Sector& sector = mChannels[channel].FindSector(x, y);
 			SendPositionPacket(id, id);
 			break;
 		}

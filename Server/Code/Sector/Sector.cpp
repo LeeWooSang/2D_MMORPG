@@ -1,5 +1,7 @@
 #include "Sector.h"
 #include <iostream>
+#include "../Core/Core.h"
+#include "../Channel/Channel.h"
 
 Sector::Sector()
 {
