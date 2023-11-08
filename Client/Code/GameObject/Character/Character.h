@@ -1,8 +1,6 @@
 #pragma once
 #include "../GameObject.h"
 
-constexpr int MAX_ANIMATIONS = 16;   // maximum number of animation sequeces
-
 enum class CHARACTER_STATE_TYPE
 {
 	DEFAULT = 0x0000,	//	0000 0000
@@ -29,14 +27,6 @@ protected:
 	int mId;
 
 	CHARACTER_STATE_TYPE mState;          // the state of the object (general)
-	int mAnimationState;     // an animation state variable, up to you
-	int mCurrFrame;     // current animation frame
-	int mFrameSize;     // total number of animation frames
-	int mCurrAnimation; // index of current animation
-	int mAnimationCounter;   // used to time animation transitions
-	int mAnimationIndex;     // animation element index
-	int mAnimationCountMax; // number of cycles before animation
-	int* mAnimations[MAX_ANIMATIONS]; // animation sequences
 
 	wchar_t mMessage[256];
 	unsigned long mMessageTime;

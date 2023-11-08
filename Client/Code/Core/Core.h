@@ -1,5 +1,6 @@
 #pragma once
 #include "../Common/Macro.h"
+#include <string>
 #include <vector>
 #include <unordered_map>
 #include <memory>
@@ -8,6 +9,7 @@
 class Map;
 class Player;
 class Character;
+class UI;
 class Core
 {
 	SINGLE_TONE(Core)
@@ -23,12 +25,12 @@ public:
 	Character* GetMonster(int id) { return mMonsters[id].get(); }
 
 private:
+	HWND mHandle;
+
 	std::vector<Map*> mMaps;
 	std::shared_ptr<Player> mPlayer;
 	std::unordered_map<int, std::shared_ptr<Character>> mOtherPlayers;
 	std::unordered_map<int, std::shared_ptr<Character>> mMonsters;
-
-private:
-	HWND mHandle;
+	std::unordered_map<std::string, UI*> mUIs;
 };
 

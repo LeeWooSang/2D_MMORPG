@@ -1,5 +1,6 @@
 #pragma once
 #include "../GameObject.h"
+#include <vector>
 
 class UI : public GameObject
 {
@@ -10,5 +11,14 @@ public:
 	virtual void Update();
 	virtual void Render();
 
-private:
+	virtual void SetPosition(int x, int y);
+
+	bool Collision(int x, int y);
+
+	UI* GetParentUI() { return mParentUI; }
+	void AddChildUI(UI* ui);
+
+protected:
+	UI* mParentUI;
+	std::vector<UI*> mChildUIs;
 };

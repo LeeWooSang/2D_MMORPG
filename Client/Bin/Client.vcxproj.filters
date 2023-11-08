@@ -42,6 +42,9 @@
     <Filter Include="Code\GameObject\UI">
       <UniqueIdentifier>{2c3f651e-deb9-4912-9820-e50a9cabf399}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\GameObject\UI\Inventory">
+      <UniqueIdentifier>{35b2c8e4-af15-46c4-a865-e12a7201a0d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -76,6 +79,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\GameObject\UI\UI.cpp">
       <Filter>Code\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\UI\Inventory\Inventory.cpp">
+      <Filter>Code\GameObject\UI\Inventory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +123,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameObject\UI\UI.h">
       <Filter>Code\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\UI\Inventory\Inventory.h">
+      <Filter>Code\GameObject\UI\Inventory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

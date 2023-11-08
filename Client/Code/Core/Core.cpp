@@ -4,6 +4,9 @@
 #include "../Input/Input.h"
 #include "../GameObject/Map/Map.h"
 #include "../GameObject/Character/Character.h"
+#include "../GameObject/UI/UI.h"
+#include "../GameObject/UI/Inventory/Inventory.h"
+
 #include "../Network/Network.h"
 #define	 WM_SOCKET WM_USER + 1
 
@@ -22,8 +25,12 @@ Core::~Core()
 		delete tile;
 	}
 
-	mPlayer.reset();
+	for (auto& ui : mUIs)
+	{
+		delete ui.second;
+	}
 
+	mPlayer.reset();
 	mOtherPlayers.clear();
 	mMonsters.clear();
 
@@ -72,7 +79,7 @@ bool Core::Initialize(HWND handle, int width, int height)
 	}
 	
 	mPlayer = std::make_shared<Player>();
-	if (mPlayer.get()->Initialize(0, 0) == false)
+	if (mPlayer->Initialize(0, 0) == false)
 	{
 		return false;
 	}
@@ -92,7 +99,7 @@ bool Core::Initialize(HWND handle, int width, int height)
 		}
 
 		std::shared_ptr<Character> player = std::make_shared<Character>();
-		if (player.get()->Initialize(0, 0) == false)
+		if (player->Initialize(0, 0) == false)
 		{
 			return false;
 		}
@@ -108,7 +115,7 @@ bool Core::Initialize(HWND handle, int width, int height)
 	for (int i = MONSTER_START_ID; i < MAX_OBJECT; ++i)
 	{
 		std::shared_ptr<Character> monster = std::make_shared<Character>();
-		if (monster.get()->Initialize(0, 0) == false)
+		if (monster->Initialize(0, 0) == false)
 		{
 			return false;
 		}
@@ -119,6 +126,19 @@ bool Core::Initialize(HWND handle, int width, int height)
 		monster->SetId(i);
 		mMonsters.emplace(i, monster);
 	}
+
+	// ºÎ¸ð ui
+	UI* parentUI = new Inventory;
+	if (parentUI->Initialize(0, 0) == false)
+	{
+		return false;
+	}
+	if (parentUI->SetTexture("Inventory") == false)
+	{
+		return false;
+	}
+	parentUI->Visible();
+	mUIs.emplace("Inventory", parentUI);
 
 #ifdef SERVER_CONNECT
 	if (GET_INSTANCE(Network)->Initialize(handle) == false)
@@ -149,6 +169,12 @@ void Core::Run()
 		}
 	}
 
+	for (auto& ui : mUIs)
+	{
+		ui.second->Update();
+	}
+
+
 	// render
 	GET_INSTANCE(GraphicEngine)->RenderStart();
 	for (auto& tile : mMaps)
@@ -166,6 +192,11 @@ void Core::Run()
 	for (auto& monster : mMonsters)
 	{
 		monster.second->Render();
+	}
+
+	for (auto& ui : mUIs)
+	{
+		ui.second->Render();
 	}
 
 	GET_INSTANCE(GraphicEngine)->RenderEnd();

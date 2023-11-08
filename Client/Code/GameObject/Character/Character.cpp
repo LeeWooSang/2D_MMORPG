@@ -10,17 +10,6 @@ Character::Character()
 {
 	mId = -1;
 	mState = CHARACTER_STATE_TYPE::DEFAULT;
-	mAnimationState = 0;
-	mCurrFrame = 0;
-	mFrameSize = 0;
-	mCurrAnimation = 0;
-	mAnimationCounter = 0;
-	mAnimationIndex = 0;
-	mAnimationCountMax = 0;
-	for (int i = 0; i < MAX_ANIMATIONS; ++i)
-	{
-		mAnimations[i] = nullptr;
-	}
 
 	memset(mMessage, 0, sizeof(mMessage));
 	mMessageTime = 0;
@@ -28,33 +17,12 @@ Character::Character()
 
 Character::~Character()
 {
-	for (int i = 0; i < MAX_ANIMATIONS; ++i)
-	{
-		if (mAnimations[i] != nullptr)
-		{
-			delete mAnimations[i];
-			mAnimations[i] = nullptr;
-		}
-	}
 }
 
 bool Character::Initialize(int x, int y)
 {
 	GameObject::Initialize(x, y);
 	mState = CHARACTER_STATE_TYPE::LIVE;
-
-	mAnimationState = 0;
-	mCurrFrame = 0;
-	mFrameSize = 0;
-	mCurrAnimation = 0;
-	mAnimationCounter = 0;
-	mAnimationIndex = 0;
-	mAnimationCountMax = 0;
-	for (int i = 0; i < MAX_ANIMATIONS; ++i)
-	{
-		mAnimations[i] = nullptr;
-	}
-
 	memset(mMessage, 0, sizeof(mMessage));
 	mMessageTime = 0;
 
@@ -194,11 +162,9 @@ void Player::Update()
 
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_LBUTTON) == true)
 	{
-		std::cout << "마우스 좌 클릭" << std::endl;
 	}
 	else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_RBUTTON) == true)
 	{
-		std::cout << "마우스 우 클릭" << std::endl;
 	}
 #endif 
 }

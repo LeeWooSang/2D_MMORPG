@@ -18,10 +18,31 @@ GameObject::GameObject()
 {
     mAttr = ATTR_STATE_TYPE::DEFAULT;
     mTexture = nullptr;
+
+    mAnimationState = 0;
+    mCurrFrame = 0;
+    mFrameSize = 0;
+    mCurrAnimation = 0;
+    mAnimationCounter = 0;
+    mAnimationIndex = 0;
+    mAnimationCountMax = 0;
+    for (int i = 0; i < MAX_ANIMATIONS; ++i)
+    {
+        mAnimations[i] = nullptr;
+    }
 }
 
 GameObject::~GameObject()
 {
+    for (int i = 0; i < MAX_ANIMATIONS; ++i)
+    {
+        if (mAnimations[i] != nullptr)
+        {
+            delete mAnimations[i];
+            mAnimations[i] = nullptr;
+        }
+    }
+
     Reset();
 }
 
@@ -32,6 +53,18 @@ bool GameObject::Initialize(int x, int y)
     mPos.second = y;
     mDir = 0;
     mTexture = nullptr;
+
+    mAnimationState = 0;
+    mCurrFrame = 0;
+    mFrameSize = 0;
+    mCurrAnimation = 0;
+    mAnimationCounter = 0;
+    mAnimationIndex = 0;
+    mAnimationCountMax = 0;
+    for (int i = 0; i < MAX_ANIMATIONS; ++i)
+    {
+        mAnimations[i] = nullptr;
+    }
 
     return true;
 }
@@ -50,6 +83,18 @@ void GameObject::Reset()
     mPos = std::make_pair(0, 0);
     mDir = 0;
     mTexture = nullptr;
+
+    mAnimationState = 0;
+    mCurrFrame = 0;
+    mFrameSize = 0;
+    mCurrAnimation = 0;
+    mAnimationCounter = 0;
+    mAnimationIndex = 0;
+    mAnimationCountMax = 0;
+    for (int i = 0; i < MAX_ANIMATIONS; ++i)
+    {
+        mAnimations[i] = nullptr;
+    }
 }
 
 bool GameObject::SetTexture(const std::string& name)

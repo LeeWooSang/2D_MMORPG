@@ -15,10 +15,6 @@ Map::Map()
 
 Map::~Map()
 {
-	//for (int i = 0; i < MAX_MARK; ++i)
-	//{
-	//	Destroy_BOB32(&mMarks[i]);
-	//}
 }
 
 bool Map::Initialize(int x, int y)
