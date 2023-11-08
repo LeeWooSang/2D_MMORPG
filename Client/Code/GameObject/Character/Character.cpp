@@ -178,15 +178,11 @@ void Player::Update()
 	GET_INSTANCE(Camera)->SetPosition(mPos.first, mPos.second);
 
 	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_LBUTTON) == true)
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_RBUTTON) == true)
 	{
 		mInventory->SetPosition(mousePos.first, mousePos.second);
 	}
-	else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_RBUTTON) == true)
-	{
-	}
 #endif 
-
 	mInventory->Update();
 }
 

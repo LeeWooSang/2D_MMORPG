@@ -49,6 +49,12 @@ bool Input::Initialize()
 
 LRESULT Input::ProcessWindowMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	HWND handle = GetFocus();
+	if (handle == nullptr)
+	{
+		return 0;
+	}
+
 	switch (message)
 	{
 		case WM_IME_COMPOSITION:
@@ -87,9 +93,6 @@ LRESULT Input::ProcessKeyboardMessage(HWND hWnd, UINT message, WPARAM wParam, LP
 
 void Input::ProcessMouseMessage(HWND hWnd, UINT message, LPARAM lParam)
 {
-	mMousePos.first = LOWORD(lParam);
-	mMousePos.second = HIWORD(lParam);
-
 	switch (message)
 	{
 		case WM_LBUTTONDOWN:
@@ -98,7 +101,10 @@ void Input::ProcessMouseMessage(HWND hWnd, UINT message, LPARAM lParam)
 		case WM_RBUTTONUP:
 		case WM_MOUSEMOVE:
 		{
-			std::cout << "X : " << mMousePos.first << ", Y : " << mMousePos.second << std::endl;
+			mMousePos.first = LOWORD(lParam);
+			mMousePos.second = HIWORD(lParam);
+
+			//std::cout << "X : " << mMousePos.first << ", Y : " << mMousePos.second << std::endl;
 			//cout << "mX : " << mouse.x << ", mY : " << mouse.y << endl;
 			break;
 		}

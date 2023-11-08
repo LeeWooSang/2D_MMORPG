@@ -4,6 +4,7 @@
 InventorySlot::InventorySlot()
 	: UI()
 {
+	mSlotNum = 0;
 }
 
 InventorySlot::~InventorySlot()
@@ -19,7 +20,19 @@ bool InventorySlot::Initialize(int x, int y)
 
 void InventorySlot::Update()
 {
-	UI::Update();
+	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
+	{
+		return;
+	}
+
+	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
+	if (Collision(mousePos.first, mousePos.second) == true)
+	{
+		if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_LBUTTON) == true)
+		{
+			std::cout << "슬롯 번호 : " << mSlotNum << "클릭" << std::endl;
+		}
+	}
 }
 
 void InventorySlot::Render()
@@ -66,6 +79,8 @@ bool Inventory::Initialize(int x, int y)
 				return false;
 			}
 
+			// 슬롯 번호
+			slot->SetSlotNum(mChildUIs.size());
 			slot->Visible();
 
 			// 자식 추가
@@ -85,20 +100,15 @@ bool Inventory::Initialize(int x, int y)
 
 void Inventory::Update()
 {
-	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
-	if (Collision(mousePos.first, mousePos.second) == true)
+	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
 	{
-		//if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_LBUTTON) == true)
-		//{
-		//	SetPosition(mousePos.first, mousePos.second);
-		//}
-		//else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_RBUTTON) == true)
-		//{
-		//	std::cout << "UI 마우스 우 클릭" << std::endl;
-		//}
+		return;
 	}
 
-	UI::Update();
+	for (auto& child : mChildUIs)
+	{
+		child->Update();
+	}
 }
 
 void Inventory::Render()

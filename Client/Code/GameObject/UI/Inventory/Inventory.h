@@ -11,7 +11,10 @@ public:
 	virtual void Update();
 	virtual void Render();
 
+	void SetSlotNum(int num) { mSlotNum = num; }
+
 private:
+	int mSlotNum;
 };
 
 constexpr int MAX_INVENTORY_WIDTH_SLOT_SIZE = 5;
