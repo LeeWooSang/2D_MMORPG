@@ -21,4 +21,7 @@ public:
 protected:
 	UI* mParentUI;
 	std::vector<UI*> mChildUIs;
+
+	int mOriginX;
+	int mOriginY;
 };

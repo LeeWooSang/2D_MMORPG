@@ -1,4 +1,5 @@
 #include "Inventory.h"
+#include "../../../Input/Input.h"
 
 InventorySlot::InventorySlot()
 	: UI()
@@ -30,6 +31,8 @@ Inventory::Inventory()
 	: UI()
 {
 	mSlotGap = 0;
+	mSlotWidth = 0;
+	mSlotHeight = 0;
 }
 
 Inventory::~Inventory()
@@ -44,7 +47,7 @@ bool Inventory::Initialize(int x, int y)
 	mSlotWidth = 64;
 	mSlotHeight = 64;
 
-	int originX = 9;
+	int originX = 8;
 	int originY = 47;
 	int tempX = originX;
 	int tempY = originY;
@@ -62,6 +65,7 @@ bool Inventory::Initialize(int x, int y)
 			{
 				return false;
 			}
+
 			slot->Visible();
 
 			// 자식 추가
@@ -74,11 +78,26 @@ bool Inventory::Initialize(int x, int y)
 		tempY += (mSlotHeight + mSlotGap);
 	}
 
+	SetPosition(x, y);
+
 	return true;
 }
 
 void Inventory::Update()
 {
+	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
+	if (Collision(mousePos.first, mousePos.second) == true)
+	{
+		//if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_LBUTTON) == true)
+		//{
+		//	SetPosition(mousePos.first, mousePos.second);
+		//}
+		//else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_RBUTTON) == true)
+		//{
+		//	std::cout << "UI 마우스 우 클릭" << std::endl;
+		//}
+	}
+
 	UI::Update();
 }
 

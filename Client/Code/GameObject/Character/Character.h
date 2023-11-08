@@ -32,6 +32,7 @@ protected:
 	unsigned long mMessageTime;
 };
 
+class Inventory;
 class Player : public Character
 {
 public:
@@ -42,4 +43,7 @@ public:
 	virtual void Update();
 	virtual void Render();
 	void Move(char dir);
+
+private:
+	Inventory* mInventory;
 };

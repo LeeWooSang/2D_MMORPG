@@ -4,9 +4,6 @@
 #include "../Input/Input.h"
 #include "../GameObject/Map/Map.h"
 #include "../GameObject/Character/Character.h"
-#include "../GameObject/UI/UI.h"
-#include "../GameObject/UI/Inventory/Inventory.h"
-
 #include "../Network/Network.h"
 #define	 WM_SOCKET WM_USER + 1
 
@@ -23,11 +20,6 @@ Core::~Core()
 	for (auto& tile : mMaps)
 	{
 		delete tile;
-	}
-
-	for (auto& ui : mUIs)
-	{
-		delete ui.second;
 	}
 
 	mPlayer.reset();
@@ -127,19 +119,6 @@ bool Core::Initialize(HWND handle, int width, int height)
 		mMonsters.emplace(i, monster);
 	}
 
-	// ºÎ¸ğ ui
-	UI* parentUI = new Inventory;
-	if (parentUI->Initialize(0, 0) == false)
-	{
-		return false;
-	}
-	if (parentUI->SetTexture("Inventory") == false)
-	{
-		return false;
-	}
-	parentUI->Visible();
-	mUIs.emplace("Inventory", parentUI);
-
 #ifdef SERVER_CONNECT
 	if (GET_INSTANCE(Network)->Initialize(handle) == false)
 	{
@@ -169,12 +148,6 @@ void Core::Run()
 		}
 	}
 
-	for (auto& ui : mUIs)
-	{
-		ui.second->Update();
-	}
-
-
 	// render
 	GET_INSTANCE(GraphicEngine)->RenderStart();
 	for (auto& tile : mMaps)
@@ -192,11 +165,6 @@ void Core::Run()
 	for (auto& monster : mMonsters)
 	{
 		monster.second->Render();
-	}
-
-	for (auto& ui : mUIs)
-	{
-		ui.second->Render();
 	}
 
 	GET_INSTANCE(GraphicEngine)->RenderEnd();

@@ -31,6 +31,5 @@ private:
 	std::shared_ptr<Player> mPlayer;
 	std::unordered_map<int, std::shared_ptr<Character>> mOtherPlayers;
 	std::unordered_map<int, std::shared_ptr<Character>> mMonsters;
-	std::unordered_map<std::string, UI*> mUIs;
 };
 

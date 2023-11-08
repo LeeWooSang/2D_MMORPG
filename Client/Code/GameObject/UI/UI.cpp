@@ -8,6 +8,8 @@ UI::UI()
 {
 	mParentUI = nullptr;
 	mChildUIs.clear();
+	mOriginX = 0;
+	mOriginY = 0;
 }
 
 UI::~UI()
@@ -22,7 +24,10 @@ UI::~UI()
 
 bool UI::Initialize(int x, int y)
 {
-	GameObject::Initialize(x, y);
+	mOriginX = x;
+	mOriginY = y;
+
+	GameObject::Initialize(0, 0);
 
 	return true;
 }
@@ -32,19 +37,6 @@ void UI::Update()
 	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
 	{
 		return;
-	}
-
-	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
-	if (Collision(mousePos.first, mousePos.second) == true)
-	{
-		if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_LBUTTON) == true)
-		{
-			std::cout << "UI 마우스 좌 클릭" << std::endl;
-		}
-		else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_RBUTTON) == true)
-		{
-			std::cout << "UI 마우스 우 클릭" << std::endl;
-		}
 	}
 
 	for (auto& child : mChildUIs)
@@ -81,14 +73,14 @@ void UI::SetPosition(int x, int y)
 	// 최상위 부모UI 라면,
 	if (mParentUI == nullptr)
 	{
-		mPos = std::make_pair(x, y);
+		mPos.first = mOriginX + x;
+		mPos.second = mOriginY + y;
 	}
-
 	else
 	{
 		std::pair<int, int> pos = mParentUI->mPos;
-		mPos.first += pos.first;
-		mPos.second += pos.second;
+		mPos.first = mOriginX + pos.first;
+		mPos.second = mOriginY + pos.second;
 	}
 
 	for (auto& child : mChildUIs)

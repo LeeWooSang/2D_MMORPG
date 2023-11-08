@@ -3,6 +3,7 @@
 #include "../../GraphicEngine/GraphicEngine.h"
 #include "../../Resource/Texture/Texture.h"
 #include "../../Input/Input.h"
+#include "../UI/Inventory/Inventory.h"
 #include <string>
 
 Character::Character()
@@ -92,15 +93,31 @@ void Character::SetAnimationInfo(int frameSize)
 Player::Player()
 	: Character()
 {
+	mInventory = nullptr;
 }
 
 Player::~Player()
 {
+	delete mInventory;
 }
 
 bool Player::Initialize(int x, int y)
 {
 	Character::Initialize(x, y);
+
+	// ºÎ¸ð ui
+	mInventory = new Inventory;
+	if (mInventory->Initialize(0, 0) == false)
+	{
+		return false;
+	}
+	if (mInventory->SetTexture("Inventory") == false)
+	{
+		return false;
+	}
+	mInventory->Visible();
+
+	//mInventory->SetPosition(100, 150);
 
 	return true;
 }
@@ -160,13 +177,17 @@ void Player::Update()
 	}
 	GET_INSTANCE(Camera)->SetPosition(mPos.first, mPos.second);
 
+	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_LBUTTON) == true)
 	{
+		mInventory->SetPosition(mousePos.first, mousePos.second);
 	}
 	else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_RBUTTON) == true)
 	{
 	}
 #endif 
+
+	mInventory->Update();
 }
 
 void Player::Render()
@@ -203,6 +224,8 @@ void Player::Render()
 		std::wstring text = L"MY POSITION (" + std::to_wstring(mPos.first) + L", " + std::to_wstring(mPos.second) + L")";
 		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, D3DCOLOR_ARGB(255, 255, 255, 255));
 	}
+
+	mInventory->Render();
 }
 
 void Player::Move(char dir)
