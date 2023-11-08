@@ -1,21 +1,11 @@
-#ifdef _DEBUG
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
-#endif // DEBUG
-
-
 #define WIN32_LEAN_AND_MEAN  
 #define INITGUID
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
 
-#include <windows.h>
-#include <crtdbg.h>
+#include "./Common/Defines.h"
 #include "Core/Core.h"
 
 // defines for windows 
 #define WINDOW_CLASS_NAME L"Client"  // class name
-
-#define WINDOW_WIDTH    750
-#define WINDOW_HEIGHT   800
 
 // GLOBALS ////////////////////////////////////////////////
 
@@ -27,7 +17,7 @@ int				g_top_y = 0;
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
-	GET_INSTANCE(Core)->WindowProc(msg, wparam, lparam);
+	GET_INSTANCE(Core)->WindowProc(hwnd, msg, wparam, lparam);
 
 	PAINTSTRUCT	ps;		 
 	HDC					hdc;	 

@@ -141,6 +141,7 @@
     <ClCompile Include="..\Code\GameObject\Character\Character.cpp" />
     <ClCompile Include="..\Code\GameObject\GameObject.cpp" />
     <ClCompile Include="..\Code\GameObject\Map\Map.cpp" />
+    <ClCompile Include="..\Code\GameObject\UI\UI.cpp" />
     <ClCompile Include="..\Code\GraphicEngine\GraphicEngine.cpp" />
     <ClCompile Include="..\Code\Input\Input.cpp" />
     <ClCompile Include="..\Code\Main.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="..\Code\GameObject\Character\Character.h" />
     <ClInclude Include="..\Code\GameObject\GameObject.h" />
     <ClInclude Include="..\Code\GameObject\Map\Map.h" />
+    <ClInclude Include="..\Code\GameObject\UI\UI.h" />
     <ClInclude Include="..\Code\GraphicEngine\GraphicEngine.h" />
     <ClInclude Include="..\Code\Input\Input.h" />
     <ClInclude Include="..\Code\Network\Network.h" />

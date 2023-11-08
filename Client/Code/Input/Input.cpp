@@ -1,4 +1,5 @@
 #include "Input.h"
+#include <iostream>
 //#include <imm.h>
 //#pragma comment(lib,"imm32.lib")
 
@@ -6,8 +7,8 @@ INIT_INSTACNE(Input)
 Input::Input()
 {
 	mFlag = false;
-	mMousePos.x = 0;
-	mMousePos.y = 0;
+	mMousePos.first = 0;
+	mMousePos.second = 0;
 }
 
 Input::~Input()
@@ -50,26 +51,26 @@ LRESULT Input::ProcessWindowMessage(HWND hWnd, UINT message, WPARAM wParam, LPAR
 {
 	switch (message)
 	{
-	case WM_IME_COMPOSITION:
-	case WM_IME_NOTIFY:		
-	case WM_CHAR:				
-	case WM_KEYDOWN:
-	case WM_KEYUP:
-	case WM_SYSKEYDOWN:
-	case WM_SYSKEYUP:
-		ProcessKeyboardMessage(hWnd, message, wParam, lParam);
-		break;
+		case WM_IME_COMPOSITION:
+		case WM_IME_NOTIFY:		
+		case WM_CHAR:				
+		case WM_KEYDOWN:
+		case WM_KEYUP:
+		case WM_SYSKEYDOWN:
+		case WM_SYSKEYUP:
+			ProcessKeyboardMessage(hWnd, message, wParam, lParam);
+			break;
 
-	case WM_LBUTTONDOWN:
-	case WM_LBUTTONUP:
-	case WM_RBUTTONDOWN:
-	case WM_RBUTTONUP:
-	case WM_MOUSEMOVE:
-		ProcessMouseMessage(hWnd, message, lParam);
-		break;
+		case WM_LBUTTONDOWN:
+		case WM_LBUTTONUP:
+		case WM_RBUTTONDOWN:
+		case WM_RBUTTONUP:
+		case WM_MOUSEMOVE:
+			ProcessMouseMessage(hWnd, message, lParam);
+			break;
 
-	default:
-		return(::DefWindowProc(hWnd, message, wParam, lParam));
+		default:
+			return(::DefWindowProc(hWnd, message, wParam, lParam));
 	}
 
 	return 0;
@@ -86,23 +87,24 @@ LRESULT Input::ProcessKeyboardMessage(HWND hWnd, UINT message, WPARAM wParam, LP
 
 void Input::ProcessMouseMessage(HWND hWnd, UINT message, LPARAM lParam)
 {
-	mMousePos.x = LOWORD(lParam);
-	mMousePos.y = HIWORD(lParam);
+	mMousePos.first = LOWORD(lParam);
+	mMousePos.second = HIWORD(lParam);
 
 	switch (message)
 	{
-	case WM_LBUTTONDOWN:
-	case WM_LBUTTONUP:
-	case WM_RBUTTONDOWN:
-	case WM_RBUTTONUP:
-	case WM_MOUSEMOVE:
+		case WM_LBUTTONDOWN:
+		case WM_LBUTTONUP:
+		case WM_RBUTTONDOWN:
+		case WM_RBUTTONUP:
+		case WM_MOUSEMOVE:
+		{
+			std::cout << "X : " << mMousePos.first << ", Y : " << mMousePos.second << std::endl;
+			//cout << "mX : " << mouse.x << ", mY : " << mouse.y << endl;
+			break;
+		}
 
-		//cout << "X : " << x << ", Y : " << y << endl;
-		//cout << "mX : " << mouse.x << ", mY : " << mouse.y << endl;
-		break;
-
-	default:
-		break;
+		default:
+			break;
 	}
 }
 

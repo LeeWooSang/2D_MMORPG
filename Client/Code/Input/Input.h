@@ -56,7 +56,7 @@ public:
 	LRESULT ProcessKeyboardMessage(HWND, UINT, WPARAM, LPARAM);
 	void ProcessMouseMessage(HWND, UINT, LPARAM);
 
-	const POINT& GetMousePos() const { return mMousePos; }
+	const std::pair<int, int>& GetMousePos() const { return mMousePos; }
 
 	bool KeyOnceCheck(KEY_TYPE);
 	bool GetIsPushed(KEY_TYPE key)	const { return mKeyStateList[key].pushed; }
@@ -64,8 +64,9 @@ public:
 	bool GetIsPop(KEY_TYPE key)	const { return mKeyStateList[key].pop; }
 	void ProcessKeyEvent();
 
+	
 private:
 	std::array<KeyState, MAX_KEY_TYPE> mKeyStateList;
-	POINT mMousePos;
+	std::pair<int, int> mMousePos;
 	bool mFlag;
 };

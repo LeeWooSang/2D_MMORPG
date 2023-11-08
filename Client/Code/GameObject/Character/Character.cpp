@@ -139,6 +139,7 @@ bool Player::Initialize(int x, int y)
 
 void Player::Update()
 {
+#ifdef SERVER_CONNECT
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::LEFT_KEY) == true)
 	{
 		GET_INSTANCE(Network)->SendMovePacket(DIRECTION_TYPE::LEFT);
@@ -172,6 +173,34 @@ void Player::Update()
 	{
 		GET_INSTANCE(Network)->SendChangeChannel(3);
 	}
+#else
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::LEFT_KEY) == true)
+	{
+		Move(DIRECTION_TYPE::LEFT);
+	}
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::RIGHT_KEY) == true)
+	{
+		Move(DIRECTION_TYPE::RIGHT);
+	}
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::UP_KEY) == true)
+	{
+		Move(DIRECTION_TYPE::UP);
+	}
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::DOWN_KEY) == true)
+	{
+		Move(DIRECTION_TYPE::DOWN);
+	}
+	GET_INSTANCE(Camera)->SetPosition(mPos.first, mPos.second);
+
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_LBUTTON) == true)
+	{
+		std::cout << "마우스 좌 클릭" << std::endl;
+	}
+	else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_RBUTTON) == true)
+	{
+		std::cout << "마우스 우 클릭" << std::endl;
+	}
+#endif 
 }
 
 void Player::Render()
@@ -191,6 +220,7 @@ void Player::Render()
 	std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
 
 	D3DXVECTOR3 pos = D3DXVECTOR3((mPos.first - cameraPos.first) * 65.0f + 8, (mPos.second - cameraPos.second) * 65.0f + 8, 0.0);
+	//D3DXVECTOR3 pos = D3DXVECTOR3(0.0, 0.0, 0.0);
 	GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
 	{
 		int windowHeight = 800;
@@ -202,17 +232,18 @@ void Player::Render()
 	{
 		GET_INSTANCE(GraphicEngine)->RenderText(mMessage, static_cast<int>(pos.x), static_cast<int>(pos.y), D3DCOLOR_ARGB(255, 200, 200, 255));
 	}
-
-	int windowHeight = 800;
-	std::wstring text = L"MY POSITION (" + std::to_wstring(mPos.first) + L", " + std::to_wstring(mPos.second) + L")";
-	GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, D3DCOLOR_ARGB(255, 255, 255, 255));
+	{
+		int windowHeight = 800;
+		std::wstring text = L"MY POSITION (" + std::to_wstring(mPos.first) + L", " + std::to_wstring(mPos.second) + L")";
+		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, D3DCOLOR_ARGB(255, 255, 255, 255));
+	}
 }
 
 void Player::Move(char dir)
 {
 	int x = mPos.first;
 	int y = mPos.second;
-	switch (dir)
+	switch (dir + 1)
 	{
 	case KEY_TYPE::UP_KEY:
 	{
@@ -240,10 +271,9 @@ void Player::Move(char dir)
 		break;
 	}
 
-	if (x <= 999 && x >= 0 && y <= 999 && y >= 0)
-	{
+	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
+	{		
 		mPos.first = x;
 		mPos.second = y;
 	}
-	std::cout << mPos.first << ", " << mPos.second << std::endl;
 }

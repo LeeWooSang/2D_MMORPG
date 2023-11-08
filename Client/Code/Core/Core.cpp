@@ -5,7 +5,7 @@
 #include "../GameObject/Map/Map.h"
 #include "../GameObject/Character/Character.h"
 #include "../Network/Network.h"
-#define	WM_SOCKET	WM_USER + 1
+#define	 WM_SOCKET WM_USER + 1
 
 INIT_INSTACNE(Core)
 Core::Core()
@@ -120,10 +120,12 @@ bool Core::Initialize(HWND handle, int width, int height)
 		mMonsters.emplace(i, monster);
 	}
 
+#ifdef SERVER_CONNECT
 	if (GET_INSTANCE(Network)->Initialize(handle) == false)
 	{
 		return false;
 	}
+#endif 
 
 	return true;
 }
@@ -169,7 +171,7 @@ void Core::Run()
 	GET_INSTANCE(GraphicEngine)->RenderEnd();
 }
 
-void Core::WindowProc(unsigned int msg, unsigned long long wparam, long long lparam)
+void Core::WindowProc(HWND handle, unsigned int msg, unsigned long long wparam, long long lparam)
 {
 	switch (msg)
 	{
@@ -177,7 +179,7 @@ void Core::WindowProc(unsigned int msg, unsigned long long wparam, long long lpa
 		{
 			if (wparam == VK_ESCAPE)
 			{
-				PostMessage(mHandle, WM_DESTROY, 0, 0);
+				PostMessage(mHandle, WM_DESTROY, 0, 0);				
 			}
 			break;
 		}
@@ -189,6 +191,9 @@ void Core::WindowProc(unsigned int msg, unsigned long long wparam, long long lpa
 		}
 
 	default:
-		break;
+		{
+			GET_INSTANCE(Input)->ProcessMouseMessage(handle, msg, lparam);
+			break;
+		}
 	}
 }

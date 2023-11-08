@@ -16,7 +16,7 @@ public:
 	bool Initialize(HWND handle, int width, int height);
 	void Run();
 
-	void WindowProc(unsigned int msg, unsigned long long wparam, long long lparam);
+	void WindowProc(HWND handle, unsigned int msg, unsigned long long wparam, long long lparam);
 
 	Player* GetPlayer() { return mPlayer.get(); }
 	Character* GetOtherPlayer(int id) { return mOtherPlayers[id].get(); }

@@ -1,10 +1,7 @@
 #pragma once
 #include "../Common/Macro.h"
 #include "../Common/Defines.h"
-
 #include "../../../Server/Code/Common/Protocol.h"
-
-#pragma comment (lib, "ws2_32.lib")
 
 struct NetworkBuffer
 {
