@@ -15,6 +15,7 @@ Core::Core()
 	mHandle = nullptr;
 	mMaps.clear();
 	mPlayer = nullptr;
+	mIsReady = false;
 }
 
 Core::~Core()
@@ -24,7 +25,9 @@ Core::~Core()
 		delete tile;
 	}
 
-	mPlayer.reset();
+	//mPlayer.reset();
+	delete mPlayer;
+
 	mOtherPlayers.clear();
 	mMonsters.clear();
 
@@ -53,6 +56,112 @@ bool Core::Initialize(HWND handle, int width, int height)
 		return false;
 	}
 
+#ifdef SERVER_CONNECT
+	if (GET_INSTANCE(Network)->Initialize(handle) == false)
+	{
+		return false;
+	}
+
+	std::string loginId = LOGIN_ID;
+	std::string loginPassword = LOGIN_PASSWORD;
+	GET_INSTANCE(Network)->SendLoginPacket(loginId, loginPassword);
+#else
+	if (AddObject() == false)
+	{
+		return false;
+	}
+#endif 
+
+	return true;
+}
+
+void Core::Run()
+{
+#ifdef SERVER_CONNECT
+	if (mIsReady == false)
+	{
+		return;
+	}
+#endif 
+
+	GET_INSTANCE(Input)->ProcessKeyEvent();
+
+	// update
+	mPlayer->Update();
+
+	for (auto& tile : mMaps)
+	{
+		if (tile->CheckDistance(mPlayer->GetPosition().first, mPlayer->GetPosition().second) == true)
+		{
+			tile->Visible();
+		}
+		else
+		{
+			tile->NotVisible();
+		}
+	}
+
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true)
+	{
+		mPlayer->GetInventory()->OpenInventory();
+	}
+
+	// render
+	GET_INSTANCE(GraphicEngine)->RenderStart();
+	for (auto& tile : mMaps)
+	{
+		tile->Render();
+	}
+
+	mPlayer->Render();
+
+	for (auto& player : mOtherPlayers)
+	{
+		player.second->Render();
+	}
+
+	for (auto& monster : mMonsters)
+	{
+		monster.second->Render();
+	}
+
+	GET_INSTANCE(GraphicEngine)->RenderEnd();
+}
+
+void Core::Quit()
+{
+	PostMessage(mHandle, WM_DESTROY, 0, 0);
+}
+
+void Core::WindowProc(HWND handle, unsigned int msg, unsigned long long wparam, long long lparam)
+{
+	switch (msg)
+	{
+		case WM_KEYDOWN:
+		{
+			if (wparam == VK_ESCAPE)
+			{
+				Quit();
+			}
+			break;
+		}
+
+		case WM_SOCKET:
+		{
+			GET_INSTANCE(Network)->PreocessNetwork(wparam, lparam);
+			break;
+		}
+
+	default:
+		{
+			GET_INSTANCE(Input)->ProcessMouseMessage(handle, msg, lparam);
+			break;
+		}
+	}
+}
+
+bool Core::AddObject(int myId)
+{
 	mMaps.reserve(WIDTH * HEIGHT);
 	for (int i = 0; i < WIDTH; ++i)
 	{
@@ -71,8 +180,9 @@ bool Core::Initialize(HWND handle, int width, int height)
 			mMaps.emplace_back(map);
 		}
 	}
-	
-	mPlayer = std::make_shared<Player>();
+
+	mPlayer = new Player;
+	//mPlayer = std::make_shared<Player>();
 	if (mPlayer->Initialize(0, 0) == false)
 	{
 		return false;
@@ -82,12 +192,12 @@ bool Core::Initialize(HWND handle, int width, int height)
 		return false;
 	}
 	mPlayer->Visible();
-	mPlayer->SetId(0);
+	mPlayer->SetId(myId);
 
 	// 나를 제외한 나머지 유저 수
-	for (int i = 0; i < MAX_USER; ++i)
+	for (int i = 0; i < MAX_CHANNEL_USER; ++i)
 	{
-		if (i == mPlayer->GetId())
+		if (i == myId)
 		{
 			continue;
 		}
@@ -121,85 +231,5 @@ bool Core::Initialize(HWND handle, int width, int height)
 		mMonsters.emplace(i, monster);
 	}
 
-#ifdef SERVER_CONNECT
-	if (GET_INSTANCE(Network)->Initialize(handle) == false)
-	{
-		return false;
-	}
-#endif 
-
-	return true;
-}
-
-void Core::Run()
-{
-	GET_INSTANCE(Input)->ProcessKeyEvent();
-
-	// update
-	mPlayer.get()->Update();
-
-	for (auto& tile : mMaps)
-	{
-		if (tile->CheckDistance(mPlayer.get()->GetPosition().first, mPlayer.get()->GetPosition().second) == true)
-		{
-			tile->Visible();
-		}
-		else
-		{
-			tile->NotVisible();
-		}
-	}
-
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true)
-	{
-		mPlayer->GetInventory()->OpenInventory();
-	}
-
-	// render
-	GET_INSTANCE(GraphicEngine)->RenderStart();
-	for (auto& tile : mMaps)
-	{
-		tile->Render();
-	}
-
-	mPlayer.get()->Render();
-
-	for (auto& player : mOtherPlayers)
-	{
-		player.second->Render();
-	}
-
-	for (auto& monster : mMonsters)
-	{
-		monster.second->Render();
-	}
-
-	GET_INSTANCE(GraphicEngine)->RenderEnd();
-}
-
-void Core::WindowProc(HWND handle, unsigned int msg, unsigned long long wparam, long long lparam)
-{
-	switch (msg)
-	{
-		case WM_KEYDOWN:
-		{
-			if (wparam == VK_ESCAPE)
-			{
-				PostMessage(mHandle, WM_DESTROY, 0, 0);				
-			}
-			break;
-		}
-
-		case WM_SOCKET:
-		{
-			GET_INSTANCE(Network)->PreocessNetwork(wparam, lparam);
-			break;
-		}
-
-	default:
-		{
-			GET_INSTANCE(Input)->ProcessMouseMessage(handle, msg, lparam);
-			break;
-		}
-	}
+	mIsReady = true;
 }

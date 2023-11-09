@@ -21,11 +21,12 @@ public:
 	Player& GetUser(int index) { return mUsers[index]; }
 	Channel& GetChannel(int channel) { return mChannels[channel]; }
 
+	void SendLoginOkPacket(int to);
+	void SendLoginFailPacket(int to);
 	void SendPositionPacket(int to, int obj);
 	void SendAddObjectPacket(int to, int obj);
 	void SendAddMonsterPacket(int to, int obj, int x, int y);
 	void SendMonsterPositionPacket(int to, int obj, int x, int y);
-
 	void SendRemoveObjectPacket(int to, int obj);
 	void SendChangeChannelPacket(int to, bool result);
 

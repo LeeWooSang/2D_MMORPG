@@ -7,6 +7,7 @@
 #define	WM_SOCKET	WM_USER + 1
 
 INIT_INSTACNE(Network)
+int Network::myId = 0;
 Network::Network()
 	: mSocket(0)
 {
@@ -76,6 +77,16 @@ void Network::PreocessNetwork(unsigned long long wparam, long long lparam)
 	}
 }
 
+void Network::SendLoginPacket(const std::string& loginId, const std::string& loginPassword)
+{
+	CSLoginPacket packet;
+	packet.size = sizeof(CSLoginPacket);
+	packet.type = CS_PACKET_TYPE::CS_LOGIN;
+	//strncpy(packet.loginId, loginId, sizeof(loginId));
+	//strncpy(packet.loginPassword, loginPassword, sizeof(loginPassword));
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
 void Network::SendMovePacket(char dir)
 {
 	CSMovePacket packet;
@@ -102,22 +113,36 @@ void Network::processPacket()
 	{
 		case SC_PACKET_TYPE::SC_LOGIN_OK:
 		{
+			SCLoginOkPacket* packet = reinterpret_cast<SCLoginOkPacket*>(mPacketBuffer);
+			myId = packet->id;
+			if (GET_INSTANCE(Core)->AddObject(myId) == false)
+			{
+				GET_INSTANCE(Core)->Quit();
+			}
 			break;
 		}
 
 		case SC_PACKET_TYPE::SC_LOGIN_FAIL:
 		{
+			SCLoginFailPacket* packet = reinterpret_cast<SCLoginFailPacket*>(mPacketBuffer);
+			std::cout << "로그인 실패" << std::endl;
 			break;
 		}
 
 		case SC_PACKET_TYPE::SC_POSITION:
 		{
-			SCPositionPacket* packet = reinterpret_cast<SCPositionPacket*>(mPacketBuffer);
-			
+			// 준비가 아직 안됬으면 걍 리턴
+			if (GET_INSTANCE(Core)->GetIsReady() == false)
+			{
+				break;
+			}
+
+			SCPositionPacket* packet = reinterpret_cast<SCPositionPacket*>(mPacketBuffer);			
 			int id = packet->id;
 			int x = packet->x;
 			int y = packet->y;
-			if (GET_INSTANCE(Core)->GetPlayer()->GetId() == id)
+
+			if (myId == id)
 			{
 				GET_INSTANCE(Camera)->SetPosition(x, y);
 				GET_INSTANCE(Core)->GetPlayer()->SetPosition(x, y);
@@ -138,13 +163,20 @@ void Network::processPacket()
 
 		case SC_PACKET_TYPE::SC_ADD_OBJECT:
 		{
-			SCAddObjectPacket* packet = reinterpret_cast<SCAddObjectPacket*>(mPacketBuffer);
+			// 준비가 아직 안됬으면 걍 리턴
+			if (GET_INSTANCE(Core)->GetIsReady() == false)
+			{
+				break;
+			}
 
+			SCAddObjectPacket* packet = reinterpret_cast<SCAddObjectPacket*>(mPacketBuffer);
 			int id = packet->id;
 			int x = packet->x;
 			int y = packet->y;
-			if (GET_INSTANCE(Core)->GetPlayer()->GetId() == id)
+
+			if (myId == id)
 			{
+				GET_INSTANCE(Camera)->SetPosition(x, y);
 				GET_INSTANCE(Core)->GetPlayer()->SetPosition(x, y);
 			}
 			else
@@ -165,8 +197,13 @@ void Network::processPacket()
 
 		case SC_PACKET_TYPE::SC_REMOVE_OBJECT:
 		{
-			SCRemoveObjectPacket* packet = reinterpret_cast<SCRemoveObjectPacket*>(mPacketBuffer);
+			// 준비가 아직 안됬으면 걍 리턴
+			if (GET_INSTANCE(Core)->GetIsReady() == false)
+			{
+				break;
+			}
 
+			SCRemoveObjectPacket* packet = reinterpret_cast<SCRemoveObjectPacket*>(mPacketBuffer);
 			int id = packet->id;
 			if (id < MAX_USER)
 			{
@@ -181,6 +218,12 @@ void Network::processPacket()
 
 		case SC_PACKET_TYPE::SC_CHANGE_CHANNEL:
 		{
+			// 준비가 아직 안됬으면 걍 리턴
+			if (GET_INSTANCE(Core)->GetIsReady() == false)
+			{
+				break;
+			}
+
 			SCChangeChannelPacket* packet = reinterpret_cast<SCChangeChannelPacket*>(mPacketBuffer);
 			if (packet->result == true)
 			{

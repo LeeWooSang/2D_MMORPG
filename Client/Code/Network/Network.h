@@ -1,5 +1,6 @@
 #pragma once
 #include "../Common/Macro.h"
+#include <string>
 #include "../Common/Defines.h"
 #include "../../../Server/Code/Common/Protocol.h"
 
@@ -29,8 +30,9 @@ class Network
 
 public:
 	bool Initialize(const HWND& handle);
-
 	void PreocessNetwork(unsigned long long wparam, long long lparam);
+
+	void SendLoginPacket(const std::string& loginId, const std::string& loginPassword);
 	void SendMovePacket(char dir);
 	void SendChangeChannel(char channel);
 
@@ -44,4 +46,5 @@ private:
 	NetworkBuffer mSendBuffer;
 	RecvBuffer mRecvBuffer;
 	char mPacketBuffer[MAX_BUFFER];
+	static int myId;
 };

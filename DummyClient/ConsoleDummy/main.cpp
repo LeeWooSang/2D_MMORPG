@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 #include <thread>
 #include <mutex>
 #include <random>
@@ -47,7 +48,6 @@ struct Client
 	char packetBuf[MAX_BUFFER];
 	int prevSize;
 	int sendBytes;
-	std::mutex clientMtx;
 };
 
 HANDLE gIOCP;
@@ -57,7 +57,8 @@ std::thread gAIThread;
 SOCKET gListenSocket;
 
 Client gClients[MAX_OBJECT];
-int gConnectNum = MAX_CHANNEL_USER;
+
+constexpr int MAX_DUMMY_CLINET = MAX_CHANNEL_USER - 100;
 
 bool Initialize();
 void ThreadPool();
@@ -72,6 +73,7 @@ void SendPacket(int id, char* packet);
 void ProcessPacket(int id, char* buf);
 void Disconnect(int id);
 
+void SendLoginPacket(int id);
 void SendMovePacket(int id, char dir);
 
 int main()
@@ -171,6 +173,7 @@ void ThreadPool()
 						packetSize = p[0];
 
 					// 패킷을 만들기 위한 크기?
+					//gClientMtx.lock();
 					int required = packetSize - gClients[id].prevSize;
 					// 패킷을 만들 수 있다면, (현재 들어온 패킷의 크기가 required 보다 크면)
 					if (restSize >= required)
@@ -215,17 +218,16 @@ void ThreadPool()
 
 void DoConnect()
 {
-	int clientsCount = 1;
-	while (clientsCount < gConnectNum)
+	int num = 0;
+	while (num < MAX_DUMMY_CLINET)
 	{
 		// 서버 접속
-		if (ConnectServer(clientsCount) == false)
+		if (ConnectServer(num) == false)
 		{
-			std::cout << clientsCount << "번 클라이언트 - 서버 연결 실패" << std::endl;
+			std::cout << num << "번 클라이언트 - 서버 연결 실패" << std::endl;
 			return;
 		}
-
-		++clientsCount;
+		num++;
 	}
 }
 
@@ -239,7 +241,7 @@ void DoAI()
 	{
 		std::this_thread::sleep_for(100ms);
 		// move ai
-		for (int i = 1; i < gConnectNum; ++i)
+		for (int i = 1; i < MAX_DUMMY_CLINET; ++i)
 		{
 			if (gClients[i].isConnect == false)
 			{
@@ -316,9 +318,9 @@ bool ConnectServer(int id)
 
 	CreateIoCompletionPort(reinterpret_cast<HANDLE>(gClients[id].socket), gIOCP, id, 0);
 	RecvPacket(id);
-
-	gClients[id].isConnect = true;
 	
+	SendLoginPacket(id);
+		
 	return true;
 }
 
@@ -366,6 +368,13 @@ void ProcessPacket(int id, char* buf)
 {
 	switch (buf[1])
 	{
+		case SC_PACKET_TYPE::SC_LOGIN_OK:
+		{
+			SCLoginOkPacket* packet = reinterpret_cast<SCLoginOkPacket*>(buf);
+			gClients[packet->id].isConnect = true;
+			break;
+		}
+
 		case SC_PACKET_TYPE::SC_POSITION:
 		{
 			SCPositionPacket* packet = reinterpret_cast<SCPositionPacket*>(buf);
@@ -402,6 +411,14 @@ void Disconnect(int id)
 {
 	gClients[id].isConnect = false;
 	std::cout << id << "번 클라이언트 연결 끊어짐" << std::endl;
+}
+
+void SendLoginPacket(int id)
+{
+	CSLoginPacket packet;
+	packet.size = sizeof(CSLoginPacket);
+	packet.type = CS_PACKET_TYPE::CS_LOGIN;
+	SendPacket(id, reinterpret_cast<char*>(&packet));
 }
 
 void SendMovePacket(int id, char dir)

@@ -116,6 +116,25 @@ void Core::ServerQuit()
 	Release();
 }
 
+void Core::SendLoginOkPacket(int to)
+{
+	SCLoginOkPacket packet;
+	packet.size = sizeof(SCLoginOkPacket);
+	packet.type = SC_PACKET_TYPE::SC_LOGIN_OK;
+	packet.id = to;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendLoginFailPacket(int to)
+{
+	SCLoginFailPacket packet;
+	packet.size = sizeof(SCLoginFailPacket);
+	packet.type = SC_PACKET_TYPE::SC_LOGIN_FAIL;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
 void Core::SendPositionPacket(int to, int obj)
 {
 	int x = mUsers[obj].GetX();
@@ -275,38 +294,14 @@ void Core::acceptClient()
 			break;
 		}
 
-		// 채널 먼저 접속
-		int channel = FindChannel();
-
 		// 빈 아이디를 생성해줌
 		int id = createPlayerId();
-
 		mUsers[id].SetSocket(clientSocket);
 		mUsers[id].PlayerConnect();
-
-		int channelIndex = mChannels[channel].PushUser(id);
-		mUsers[id].SetChannelIndex(channelIndex);
-		mUsers[id].SetChannel(channel);
-		SendChangeChannelPacket(id, true);
-
-		if (id == 0)
-		{
-			mUsers[id].SetPosition(0, 0);
-		}
-
-		int x = mUsers[id].GetX();
-		int y = mUsers[id].GetY();
-
-		// 섹터 찾아서 넣기
-		mChannels[channel].PushSectorObject(x, y, id);
+		std::cout << "Accept - " << id << "번 Client" << std::endl;
 
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(clientSocket), mIOCP, id, 0);
 		recvPacket(id);
-
-		// 워커스레드에게 넘겨야됨
-		mUsers[id].ProcessLoginViewList();
-
-		std::cout << id << "번 클라이언트 접속 - 채널 : " << channel << ", 좌표 : " << x << ", " << y << std::endl;
 	}
 }
 
@@ -467,9 +462,30 @@ void Core::sendPacket(int id, char* packet)
 
 void Core::processPacket(int id, char* buf)
 {
-	auto start = std::chrono::high_resolution_clock::now();
+	//auto start = std::chrono::high_resolution_clock::now();
 	switch (buf[1])
 	{
+		case CS_PACKET_TYPE::CS_LOGIN:
+		{
+			CSLoginPacket* packet = reinterpret_cast<CSLoginPacket*>(buf);
+			// 아이디, 비번 비교
+
+			// 채널 먼저 접속
+			int channel = FindChannel();
+			int channelIndex = mChannels[channel].PushUser(id);
+			mUsers[id].SetChannelIndex(channelIndex);
+			mUsers[id].SetChannel(channel);
+			SendLoginOkPacket(id);
+
+			int x = mUsers[id].GetX();
+			int y = mUsers[id].GetY();
+
+			// 섹터 찾아서 넣기
+			mChannels[channel].PushSectorObject(x, y, id);
+			mUsers[id].ProcessLoginViewList();			
+			break;
+		}
+
 		case CS_PACKET_TYPE::CS_MOVE:
 		{
 			CSMovePacket* packet = reinterpret_cast<CSMovePacket*>(buf);
@@ -511,7 +527,6 @@ void Core::processPacket(int id, char* buf)
 				std::cout << id << " 클라이언트 채널변경 : " << oldChannel << " --> " << newChannel << std::endl;
 			}
 			SendChangeChannelPacket(id, result);
-
 			break;
 		}
 
@@ -520,8 +535,8 @@ void Core::processPacket(int id, char* buf)
 			break;
 		}
 	}
-	auto end = std::chrono::high_resolution_clock::now() - start;
-	auto time = std::chrono::duration<double>(end).count();
+	//auto end = std::chrono::high_resolution_clock::now() - start;
+	//auto time = std::chrono::duration<double>(end).count();
 	//std::cout << "패킷 처리 시간 : " << time << "초" << std::endl;
 }
 

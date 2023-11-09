@@ -111,6 +111,16 @@ enum SC_PACKET_TYPE
 #pragma pack(push, 1)
 // size : 패킷 사이즈
 // type : 어떤 패킷인지
+constexpr int MAX_LOGIN_ID_LENGTH = 20;
+constexpr int MAX_LOGIN_PASSWORD_LENGTH = 30;
+
+struct CSLoginPacket
+{
+	char size;
+	char type;
+	char loginId[MAX_LOGIN_ID_LENGTH];
+	char loginPassword[MAX_LOGIN_PASSWORD_LENGTH];
+};
 struct CSMovePacket
 {
 	char	size;
@@ -123,7 +133,19 @@ struct CSChangeChannelPacket
 	char	type;
 	char channel;
 };
-
+///////////////////////////////////////////////////
+struct SCLoginOkPacket
+{
+	char size;
+	char type;
+	int id;
+	int channel;
+};
+struct SCLoginFailPacket
+{
+	char size;
+	char type;
+};
 struct SCPositionPacket
 {
 	char size;
@@ -132,7 +154,6 @@ struct SCPositionPacket
 	int x;
 	int y;
 };
-
 struct SCAddObjectPacket
 {
 	char size;
@@ -141,14 +162,12 @@ struct SCAddObjectPacket
 	int x;
 	int y;
 };
-
 struct SCRemoveObjectPacket
 {
 	char size;
 	char type;
 	int id;
 };
-
 struct SCChangeChannelPacket
 {
 	char size;
