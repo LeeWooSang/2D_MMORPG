@@ -1,14 +1,20 @@
 #include "Inventory.h"
+#include "../../../Resource/Texture/Texture.h"
 #include "../../../Input/Input.h"
 
 InventorySlot::InventorySlot()
 	: UI()
 {
 	mSlotNum = 0;
+	mItem = nullptr;
 }
 
 InventorySlot::~InventorySlot()
 {
+	if (mItem != nullptr)
+	{
+		delete mItem;
+	}
 }
 
 bool InventorySlot::Initialize(int x, int y)
@@ -40,6 +46,15 @@ void InventorySlot::Render()
 	UI::Render();
 }
 
+void InventorySlot::AddItem(const std::string& name)
+{
+	// 아이템 추가
+	mItem = new InventoryItem;
+	mItem->SetPosition(mPos.first, mPos.second);
+	// 텍스쳐 추가
+	SetTexture(name);
+}
+
 Inventory::Inventory()
 	: UI()
 {
@@ -67,6 +82,7 @@ bool Inventory::Initialize(int x, int y)
 	int tempX = originX;
 	int tempY = originY;
 
+	int num = 0;
 	for (int i = 0; i < MAX_INVENTORY_WIDTH_SLOT_SIZE; ++i)
 	{
 		for (int j = 0; j < MAX_INVENTORY_HEIGHT_SLOT_SIZE; ++j)
@@ -82,11 +98,11 @@ bool Inventory::Initialize(int x, int y)
 			}
 
 			// 슬롯 번호
-			slot->SetSlotNum(mChildUIs.size());
+			slot->SetSlotNum(num++);
 			slot->Visible();
 
 			// 자식 추가
-			AddChildUI(slot);
+			AddChildUI("Slot", slot);
 
 			tempX += (mSlotWidth + mSlotGap);
 		}
@@ -109,13 +125,30 @@ void Inventory::Update()
 
 	for (auto& child : mChildUIs)
 	{
-		child->Update();
+		for (int i = 0; i < child.second.size(); ++i)
+		{
+			child.second[i]->Update();
+		}
 	}
 }
 
 void Inventory::Render()
 {
 	UI::Render();
+}
+
+void Inventory::AddItem(const std::string& name)
+{
+	for (auto& inventorySlot : mChildUIs["Slot"])
+	{
+		InventorySlot* slot = static_cast<InventorySlot*>(inventorySlot);
+		// 비어있는 슬롯에 추가
+		if (slot->GetItem() == nullptr)
+		{
+			slot->AddItem(name);
+			break;
+		}
+	}
 }
 
 void Inventory::OpenInventory()
@@ -132,4 +165,30 @@ void Inventory::OpenInventory()
 		mOpen = false;
 		NotVisible();		
 	}
+}
+
+InventoryItem::InventoryItem()
+	: UI()
+{
+}
+
+InventoryItem::~InventoryItem()
+{
+}
+
+bool InventoryItem::Initialize(int x, int y)
+{
+	UI::Initialize(x, y);
+
+	return true;
+}
+
+void InventoryItem::Update()
+{
+	UI::Update();
+}
+
+void InventoryItem::Render()
+{
+	UI::Render();
 }

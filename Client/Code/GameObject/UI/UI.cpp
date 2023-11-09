@@ -16,7 +16,10 @@ UI::~UI()
 {
 	for (auto& child : mChildUIs)
 	{
-		delete child;
+		for (int i = 0; i < child.second.size(); ++i)
+		{
+			delete child.second[i];
+		}
 	}
 
 	mChildUIs.clear();
@@ -41,7 +44,10 @@ void UI::Update()
 
 	for (auto& child : mChildUIs)
 	{
-		child->Update();
+		for (int i = 0; i < child.second.size(); ++i)
+		{
+			child.second[i]->Update();
+		}
 	}
 }
 
@@ -64,7 +70,10 @@ void UI::Render()
 
 	for (auto& child : mChildUIs)
 	{
-		child->Render();
+		for (int i = 0; i < child.second.size(); ++i)
+		{
+			child.second[i]->Render();
+		}
 	}
 }
 
@@ -85,7 +94,10 @@ void UI::SetPosition(int x, int y)
 
 	for (auto& child : mChildUIs)
 	{
-		child->SetPosition(x, y);
+		for (int i = 0; i < child.second.size(); ++i)
+		{
+			child.second[i]->SetPosition(x, y);
+		}
 	}
 }
 
@@ -106,8 +118,17 @@ bool UI::Collision(int x, int y)
 	return false;
 }
 
-void UI::AddChildUI(UI* ui)
+void UI::AddChildUI(std::string key, UI* ui)
 {
-	mChildUIs.emplace_back(ui);
+	if (mChildUIs.count(key) == false)
+	{
+		std::vector<UI*> v;
+		v.emplace_back(ui);
+		mChildUIs.emplace(key, v);
+	}
+	else
+	{
+		mChildUIs[key].emplace_back(ui);
+	}
 	ui->mParentUI = this;
 }

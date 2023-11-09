@@ -66,6 +66,18 @@ bool ResourceManager::Initialize()
 		}
 		mTextureList.emplace("Sword", texture);
 	}
+
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(65, 65);
+		if (texture->LoadTexture(L"../Resource/Textures/Ax.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		{
+			texture.reset();
+			return false;
+		}
+		mTextureList.emplace("Ax", texture);
+	}
+
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(300, 453);

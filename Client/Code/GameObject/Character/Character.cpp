@@ -116,6 +116,7 @@ bool Player::Initialize(int x, int y)
 		return false;
 	}
 	
+	mInventory->AddItem("Ax");
 	//mInventory->SetPosition(100, 150);
 
 	return true;
