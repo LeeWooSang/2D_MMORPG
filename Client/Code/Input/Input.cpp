@@ -41,6 +41,13 @@ bool Input::Initialize()
 	mKeyStateList[KEY_TYPE::F11_KEY].keyType = VK_F11;
 	mKeyStateList[KEY_TYPE::F12_KEY].keyType = VK_F12;
 
+	// A~ZŰ
+	int key = 0x41;
+	for (int i = KEY_TYPE::A_KEY; i <= KEY_TYPE::Z_KEY; ++i)
+	{
+		mKeyStateList[i].keyType = key++;
+	}
+
 	mKeyStateList[KEY_TYPE::MOUSE_LBUTTON].keyType = VK_LBUTTON;
 	mKeyStateList[KEY_TYPE::MOUSE_RBUTTON].keyType = VK_RBUTTON;
 

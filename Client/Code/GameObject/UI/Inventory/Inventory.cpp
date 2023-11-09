@@ -46,6 +46,8 @@ Inventory::Inventory()
 	mSlotGap = 0;
 	mSlotWidth = 0;
 	mSlotHeight = 0;
+
+	mOpen = false;
 }
 
 Inventory::~Inventory()
@@ -114,4 +116,20 @@ void Inventory::Update()
 void Inventory::Render()
 {
 	UI::Render();
+}
+
+void Inventory::OpenInventory()
+{
+	// 닫혀있다면
+	if (mOpen == false)
+	{
+		mOpen = true;
+		Visible();		
+	}
+	// 열려있다면
+	else
+	{
+		mOpen = false;
+		NotVisible();		
+	}
 }

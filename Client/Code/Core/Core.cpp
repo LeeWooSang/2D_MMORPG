@@ -4,6 +4,8 @@
 #include "../Input/Input.h"
 #include "../GameObject/Map/Map.h"
 #include "../GameObject/Character/Character.h"
+#include "../GameObject/UI/Inventory/Inventory.h"
+
 #include "../Network/Network.h"
 #define	 WM_SOCKET WM_USER + 1
 
@@ -146,6 +148,11 @@ void Core::Run()
 		{
 			tile->NotVisible();
 		}
+	}
+
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true)
+	{
+		mPlayer->GetInventory()->OpenInventory();
 	}
 
 	// render

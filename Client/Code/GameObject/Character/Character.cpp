@@ -115,8 +115,7 @@ bool Player::Initialize(int x, int y)
 	{
 		return false;
 	}
-	mInventory->Visible();
-
+	
 	//mInventory->SetPosition(100, 150);
 
 	return true;

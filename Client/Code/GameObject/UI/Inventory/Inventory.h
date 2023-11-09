@@ -28,9 +28,13 @@ public:
 	virtual void Update();
 	virtual void Render();
 
+	void OpenInventory();
+
 private:
 	// 슬롯 간의 간격
 	int mSlotGap;
 	int mSlotWidth;
 	int mSlotHeight;
+
+	bool mOpen;
 };
