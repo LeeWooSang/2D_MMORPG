@@ -45,6 +45,9 @@
     <Filter Include="Code\GameObject\UI\Inventory">
       <UniqueIdentifier>{35b2c8e4-af15-46c4-a865-e12a7201a0d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\GameObject\UI\Scroll">
+      <UniqueIdentifier>{d7c9d6d3-a26a-4e82-9bd7-36f49dabf140}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -82,6 +85,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\GameObject\UI\Inventory\Inventory.cpp">
       <Filter>Code\GameObject\UI\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\UI\Scroll\Scroll.cpp">
+      <Filter>Code\GameObject\UI\Scroll</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +132,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameObject\UI\Inventory\Inventory.h">
       <Filter>Code\GameObject\UI\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\UI\Scroll\Scroll.h">
+      <Filter>Code\GameObject\UI\Scroll</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

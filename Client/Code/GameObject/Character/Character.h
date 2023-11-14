@@ -44,6 +44,7 @@ public:
 	virtual void Render();
 	void Move(char dir);
 
+	void AddItem();
 	Inventory* GetInventory() { return mInventory; }
 
 private:

@@ -106,6 +106,11 @@ void Core::Run()
 		mPlayer->GetInventory()->OpenInventory();
 	}
 
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::Z_KEY) == true)
+	{
+		mPlayer->AddItem();
+	}
+
 	// render
 	GET_INSTANCE(GraphicEngine)->RenderStart();
 	for (auto& tile : mMaps)

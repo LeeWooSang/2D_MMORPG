@@ -1,4 +1,5 @@
 #include "Inventory.h"
+#include "../Scroll/Scroll.h"
 #include "../../../Resource/Texture/Texture.h"
 #include "../../../Input/Input.h"
 
@@ -39,11 +40,21 @@ void InventorySlot::Update()
 			std::cout << "슬롯 번호 : " << mSlotNum << "클릭" << std::endl;
 		}
 	}
+
+	if (mItem != nullptr)
+	{
+		mItem->Update();
+	}
 }
 
 void InventorySlot::Render()
 {
 	UI::Render();
+
+	if (mItem != nullptr)
+	{
+		mItem->Render();
+	}
 }
 
 void InventorySlot::AddItem(const std::string& name)
@@ -52,7 +63,8 @@ void InventorySlot::AddItem(const std::string& name)
 	mItem = new InventoryItem;
 	mItem->SetPosition(mPos.first, mPos.second);
 	// 텍스쳐 추가
-	SetTexture(name);
+	mItem->SetTexture(name);
+	mItem->Visible();
 }
 
 Inventory::Inventory()
@@ -77,7 +89,7 @@ bool Inventory::Initialize(int x, int y)
 	mSlotWidth = 64;
 	mSlotHeight = 64;
 
-	int originX = 8;
+	int originX = 7;
 	int originY = 47;
 	int tempX = originX;
 	int tempY = originY;
@@ -92,7 +104,7 @@ bool Inventory::Initialize(int x, int y)
 			{
 				return false;
 			}
-			if (slot->SetTexture("Sword") == false)
+			if (slot->SetTexture("Slot") == false)
 			{
 				return false;
 			}
@@ -110,6 +122,15 @@ bool Inventory::Initialize(int x, int y)
 		tempX = originX;
 		tempY += (mSlotHeight + mSlotGap);
 	}
+
+	//if (mChildUIs["Slot"].size() > 20)
+	//{
+		Scroll* scroll = new Scroll;
+		scroll->Initialize(300, 47);
+		scroll->SetTexture("ScrollBackground");
+		scroll->Visible();
+		AddChildUI("Scroll", scroll);
+	//}
 
 	SetPosition(x, y);
 
@@ -148,6 +169,15 @@ void Inventory::AddItem(const std::string& name)
 			slot->AddItem(name);
 			break;
 		}
+	}
+}
+
+void Inventory::AddItem(int slotNum, const std::string& name)
+{
+	InventorySlot* slot = static_cast<InventorySlot*>(mChildUIs["Slot"][slotNum]);
+	if (slot->GetItem() == nullptr)
+	{
+		slot->AddItem(name);
 	}
 }
 

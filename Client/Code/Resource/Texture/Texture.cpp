@@ -9,7 +9,9 @@ Texture::Texture()
 	mWidth = 0;
 	mHeight = 0;
 	mNumBytes = 0;
-	mBuffer = nullptr;   
+	mBuffer = nullptr;
+
+	mSprite = nullptr;
 }
 
 Texture::~Texture()
@@ -18,6 +20,11 @@ Texture::~Texture()
 	if (mBuffer != nullptr)
 	{
 		mBuffer->Release();
+	}
+
+	if (mSprite != nullptr)
+	{
+		mSprite->Release();
 	}
 }
 
@@ -30,6 +37,8 @@ void Texture::CreateTexture(int width, int height)
 	mHeight = height;
 	mNumBytes = width * height * 2;
 	mBuffer = nullptr;
+
+	InitializeSprite();
 }
 
 void Texture::CreateTexture(int width, int height, std::vector<std::pair<int, int>>& texPositions)
@@ -40,6 +49,8 @@ void Texture::CreateTexture(int width, int height, std::vector<std::pair<int, in
 	mHeight = height;
 	mNumBytes = width * height * 2;
 	mBuffer = nullptr;
+
+	InitializeSprite();
 }
 
 bool Texture::LoadTexture(const wchar_t* path, int cx, int cy, int mode)
@@ -64,6 +75,17 @@ bool Texture::LoadTexture(const wchar_t* path, int cx, int cy, int mode)
 		NULL, NULL, &mBuffer
 	);
 
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool Texture::InitializeSprite()
+{
+	HRESULT result = D3DXCreateSprite(GET_INSTANCE(GraphicEngine)->GetDevice(), &mSprite);
 	if (FAILED(result))
 	{
 		return false;

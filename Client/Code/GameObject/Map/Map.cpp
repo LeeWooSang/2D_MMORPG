@@ -92,5 +92,10 @@ void Map::Render()
 		(mPos.second - cameraPos.second) * mTexture->GetSize().second + 8.0,
 		0.0
 	);
-	GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	//GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+
+	mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
+	mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));	
+	mTexture->GetSprite()->End();
 }

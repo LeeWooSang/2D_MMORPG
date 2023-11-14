@@ -58,6 +58,48 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(300, 453);
+		if (texture->LoadTexture(L"../Resource/Textures/InventoryBackground.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		{
+			texture.reset();
+			return false;
+		}
+		//texture->SetSize(65, 65);
+		mTextureList.emplace("Inventory", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(65, 65);
+		if (texture->LoadTexture(L"../Resource/Textures/Slot.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		{
+			texture.reset();
+			return false;
+		}
+		mTextureList.emplace("Slot", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(30, 350);
+		if (texture->LoadTexture(L"../Resource/Textures/ScrollBackground.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		{
+			texture.reset();
+			return false;
+		}
+		mTextureList.emplace("ScrollBackground", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(131, 580);
+		if (texture->LoadTexture(L"../Resource/Textures/ScrollBar.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		{
+			texture.reset();
+			return false;
+		}
+		//texture->SetSize(20, 100);
+		mTextureList.emplace("ScrollBar", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(65, 65);
 		if (texture->LoadTexture(L"../Resource/Textures/Sword.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
 		{
@@ -66,7 +108,6 @@ bool ResourceManager::Initialize()
 		}
 		mTextureList.emplace("Sword", texture);
 	}
-
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(65, 65);
@@ -77,19 +118,16 @@ bool ResourceManager::Initialize()
 		}
 		mTextureList.emplace("Ax", texture);
 	}
-
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(300, 453);
-		if (texture->LoadTexture(L"../Resource/Textures/Inventory.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		texture->CreateTexture(65, 65);
+		if (texture->LoadTexture(L"../Resource/Textures/Club.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
 		{
 			texture.reset();
 			return false;
 		}
-		//texture->SetSize(65, 65);
-		mTextureList.emplace("Inventory", texture);
+		mTextureList.emplace("Club", texture);
 	}
-
 
 	return true;
 }

@@ -24,6 +24,9 @@ public:
 
 	LPDIRECT3DTEXTURE9 GetBuffer() { return mBuffer; }
 
+	bool InitializeSprite();
+	LPD3DXSPRITE GetSprite() { return mSprite; }
+
 protected:
 	//int bpp;            // bits per pixel
 	std::vector<std::pair<int, int>> mTexPositions;
@@ -31,5 +34,7 @@ protected:
 	int mHeight;  
 	int mNumBytes;								// total bytes of bitmap
 	LPDIRECT3DTEXTURE9 mBuffer;      // pixels of bitmap
+
+	LPD3DXSPRITE mSprite;
 };
 

@@ -5,6 +5,7 @@
 #include "../../Input/Input.h"
 #include "../UI/Inventory/Inventory.h"
 #include <string>
+#include <random>
 
 Character::Character()
     : GameObject()
@@ -52,7 +53,11 @@ void Character::Render()
 	//D3DXVECTOR3 pos = D3DXVECTOR3(mPos.first * 65.0f + 8, mPos.second * 65.0f + 8, 0.0);
 	std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
 	D3DXVECTOR3 pos = D3DXVECTOR3((mPos.first - cameraPos.first) * 65.0f + 8, (mPos.second - cameraPos.second) * 65.0f + 8, 0.0);
-	GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	
+	//GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
+	mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	mTexture->GetSprite()->End();
 	{
 		int windowHeight = 800;
 		std::wstring text = L"My Id (" + std::to_wstring(mId) + L")";
@@ -116,7 +121,6 @@ bool Player::Initialize(int x, int y)
 		return false;
 	}
 	
-	mInventory->AddItem("Ax");
 	//mInventory->SetPosition(100, 150);
 
 	return true;
@@ -204,7 +208,11 @@ void Player::Render()
 
 	D3DXVECTOR3 pos = D3DXVECTOR3((mPos.first - cameraPos.first) * 65.0f + 8, (mPos.second - cameraPos.second) * 65.0f + 8, 0.0);
 	//D3DXVECTOR3 pos = D3DXVECTOR3(0.0, 0.0, 0.0);
-	GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	//GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
+	mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	mTexture->GetSprite()->End();
+
 	{
 		int windowHeight = 800;
 		std::wstring text = L"My Id (" + std::to_wstring(mId) + L")";
@@ -261,4 +269,29 @@ void Player::Move(char dir)
 		mPos.first = x;
 		mPos.second = y;
 	}
+}
+
+void Player::AddItem()
+{
+	std::string itemName = "";
+
+	std::random_device rd;
+	std::default_random_engine dre(rd());
+	std::uniform_int_distribution<int> uid(0, 2);
+	switch (uid(dre))
+	{
+	case 0:
+		itemName = "Ax";
+		break;
+
+	case 1:
+		itemName = "Sword";
+		break;
+
+	default:
+		itemName = "Club";
+		break;
+	}
+	
+	mInventory->AddItem(itemName);
 }

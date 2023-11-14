@@ -35,6 +35,8 @@ public:
 	virtual void Render();
 
 	void AddItem(const std::string& name);
+	void AddItem(int slot, const std::string& name);
+
 	void OpenInventory();
 
 private:

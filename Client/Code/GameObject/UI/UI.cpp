@@ -66,7 +66,10 @@ void UI::Render()
 	src.bottom = mTexture->GetPos(mCurrFrame).second + mTexture->GetSize().second;
 
 	D3DXVECTOR3 pos = D3DXVECTOR3(mPos.first, mPos.second, 0.0);
-	GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	//GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
+	mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	mTexture->GetSprite()->End();
 
 	for (auto& child : mChildUIs)
 	{

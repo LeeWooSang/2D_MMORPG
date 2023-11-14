@@ -142,6 +142,7 @@
     <ClCompile Include="..\Code\GameObject\GameObject.cpp" />
     <ClCompile Include="..\Code\GameObject\Map\Map.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\Inventory\Inventory.cpp" />
+    <ClCompile Include="..\Code\GameObject\UI\Scroll\Scroll.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\UI.cpp" />
     <ClCompile Include="..\Code\GraphicEngine\GraphicEngine.cpp" />
     <ClCompile Include="..\Code\Input\Input.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="..\Code\GameObject\GameObject.h" />
     <ClInclude Include="..\Code\GameObject\Map\Map.h" />
     <ClInclude Include="..\Code\GameObject\UI\Inventory\Inventory.h" />
+    <ClInclude Include="..\Code\GameObject\UI\Scroll\Scroll.h" />
     <ClInclude Include="..\Code\GameObject\UI\UI.h" />
     <ClInclude Include="..\Code\GraphicEngine\GraphicEngine.h" />
     <ClInclude Include="..\Code\Input\Input.h" />
