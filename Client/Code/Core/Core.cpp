@@ -192,10 +192,10 @@ bool Core::AddObject(int myId)
 	{
 		return false;
 	}
-	if (mPlayer->SetTexture("Player") == false)
-	{
-		return false;
-	}
+	//if (mPlayer->SetTexture("Player") == false)
+	//{
+	//	return false;
+	//}
 	mPlayer->Visible();
 	mPlayer->SetId(myId);
 

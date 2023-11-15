@@ -79,11 +79,6 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline
 	main_instance = hinstance;
 
 	// 게임 초기화
-	//if (Game_Init() == false)
-	//{
-	//	return -1;
-	//}
-
 	if (GET_INSTANCE(Core)->Initialize(main_window_handle, WINDOW_WIDTH, WINDOW_HEIGHT) == false)
 	{
 		GET_INSTANCE(Core)->Release();

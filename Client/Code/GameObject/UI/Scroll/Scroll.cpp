@@ -17,7 +17,7 @@ bool Scroll::Initialize(int x, int y)
 	UI::Initialize(x, y);
 
 	ScrollBar* scrollBar = new ScrollBar;
-	scrollBar->Initialize(5, 0);
+	scrollBar->Initialize(1210, 200);
 
 	AddChildUI("ScrollBar", scrollBar);
 
@@ -70,10 +70,10 @@ bool ScrollBar::Initialize(int x, int y)
 	SetTexture("ScrollBar");
 	Visible();
 
-	mTexture->InitializeSprite();
+	//mTexture->InitializeSprite();
 	D3DXMATRIX matrix;
 	mTexture->GetSprite()->GetTransform(&matrix);
-	D3DXMatrixScaling(&matrix, 0.3, 0.3, 0.0);
+	D3DXMatrixScaling(&matrix, 0.2, 0.2, 0.0);
 	mTexture->GetSprite()->SetTransform(&matrix);	
 
 	//UI::Initialize(x, y);

@@ -110,6 +110,33 @@ bool Player::Initialize(int x, int y)
 {
 	Character::Initialize(x, y);
 
+	if (SetTexture("Player") == false)
+	{
+		return false;
+	}
+
+	//D3DXMATRIX position, trans, scale;
+	//D3DXMatrixIdentity(&position);
+	//D3DXMatrixIdentity(&trans);
+	//D3DXMatrixIdentity(&scale);
+	//D3DXMatrixTranslation(&trans, mPos.first, mPos.second, 0.0);
+	//D3DXMatrixScaling(&scale, 0.7, 0.7, 0.0);
+	//position = scale * trans;
+	//mTexture->GetSprite()->SetTransform(&position);
+
+	//D3DXVECTOR2 scale = D3DXVECTOR2(1, 1);
+	//D3DXVECTOR2 pos = D3DXVECTOR2(mPos.first, mPos.second);
+
+	//D3DXMATRIX mat;
+	//D3DXMatrixTransformation2D(&mat, nullptr, 0.0, &scale, nullptr, 0.0, &pos);
+	//mTexture->GetSprite()->SetTransform(&mat);
+
+
+	//D3DXMATRIX matrix;
+	//mTexture->GetSprite()->GetTransform(&matrix);
+	//D3DXMatrixScaling(&matrix, 0.7, 0.7, 0.0);
+	//mTexture->GetSprite()->SetTransform(&matrix);
+
 	// ºÎ¸ð ui
 	mInventory = new Inventory;
 	if (mInventory->Initialize(0, 0) == false)
