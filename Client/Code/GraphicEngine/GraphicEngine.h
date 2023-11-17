@@ -4,6 +4,15 @@
 #include <d3dx9tex.h>
 #pragma comment (lib, "d3d9.lib")
 #pragma comment (lib, "../Lib/d3dx9.lib")
+
+#include <d2d1helper.h>
+#include <d2d1_3.h>
+#include <dwrite_3.h>
+#include <wincodec.h>
+#pragma comment( lib, "d2d1.lib" )
+#pragma comment(lib, "dwrite.lib")
+//using namespace D2D1;
+
 #include <Windows.h>
 #include <vector>
 
@@ -29,6 +38,10 @@ public:
     const LPDIRECT3DDEVICE9 GetDevice() const { return mDevice; }
     const LPD3DXSPRITE GetSprite() const { return mSprite; }
 
+	IWICImagingFactory* GetWICImagingFactory() { return mWICImagingFactory; }
+	ID2D1HwndRenderTarget* GetRenderTarget() { return mRenderTarget; }
+	ID2D1SolidColorBrush* GetRedBrush() { return mRedBrush; }
+
 private:
 	int mWidth;
 	int mHeight;
@@ -38,6 +51,11 @@ private:
 	LPD3DXSPRITE mSprite;
 	LPD3DXFONT mFont;
 	std::vector<LPDIRECT3DTEXTURE9> mTextures;
+
+	ID2D1Factory3* mFactory;
+	IWICImagingFactory* mWICImagingFactory;
+	ID2D1HwndRenderTarget* mRenderTarget;
+	ID2D1SolidColorBrush* mRedBrush;
 };
 
 class Camera

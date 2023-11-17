@@ -80,6 +80,7 @@ bool Texture::LoadTexture(const wchar_t* path, int cx, int cy, int mode)
 		return false;
 	}
 
+	Init(path);
 	return true;
 }
 
@@ -90,6 +91,60 @@ bool Texture::InitializeSprite()
 	{
 		return false;
 	}
+
+	return true;
+}
+
+bool Texture::Init(const wchar_t* path)
+{
+	IWICBitmapDecoder* pBitmapDecoder;
+	HRESULT result = GET_INSTANCE(GraphicEngine)->GetWICImagingFactory()->CreateDecoderFromFilename(path, NULL, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &pBitmapDecoder);
+	if (result != S_OK)
+		return false;
+
+	IWICBitmapFrameDecode* pFrameDecode;
+	result = pBitmapDecoder->GetFrame(0, &pFrameDecode);
+	if (result != S_OK)
+		return false;
+
+	IWICBitmapSource* wicSource = pFrameDecode;
+
+	// 이미지 뒤집기
+	IWICBitmapFlipRotator* flipRotator = nullptr;
+	//result = GET_INSTANCE(GraphicEngine)->GetWICImagingFactory()->CreateBitmapFlipRotator(&flipRotator);
+	//if (result != S_OK)
+	//	return false;
+
+	//result = flipRotator->Initialize(wicSource, WICBitmapTransformRotate180);
+	////result = flipRotator->Initialize(wicSource, WICBitmapTransformFlipVertical);
+	//if (result != S_OK)
+	//	return false;
+	//wicSource = flipRotator;
+
+	IWICFormatConverter* pFormatConverter;
+	result = GET_INSTANCE(GraphicEngine)->GetWICImagingFactory()->CreateFormatConverter(&pFormatConverter);
+	if (result != S_OK)
+		return false;
+	//result = pFormatConverter->Initialize(pFrameDecode, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, NULL, 0.0f, WICBitmapPaletteTypeCustom);
+	result = pFormatConverter->Initialize(wicSource, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, NULL, 0.0f, WICBitmapPaletteTypeMedianCut);
+	if (result != S_OK)
+		return false;
+
+	result = GET_INSTANCE(GraphicEngine)->GetRenderTarget()->CreateBitmapFromWicBitmap(pFormatConverter, &mImage);
+	if (result != S_OK)
+		return false;
+
+	if (pBitmapDecoder)
+		pBitmapDecoder->Release();
+
+	if (pFrameDecode)
+		pFrameDecode->Release();
+
+	if (pFormatConverter)
+		pFormatConverter->Release();
+
+	if (flipRotator)
+		flipRotator->Release();
 
 	return true;
 }

@@ -79,6 +79,7 @@ LRESULT Input::ProcessWindowMessage(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		case WM_RBUTTONDOWN:
 		case WM_RBUTTONUP:
 		case WM_MOUSEMOVE:
+		case WM_VSCROLL:
 			ProcessMouseMessage(hWnd, message, lParam);
 			break;
 
@@ -111,8 +112,14 @@ void Input::ProcessMouseMessage(HWND hWnd, UINT message, LPARAM lParam)
 			mMousePos.first = LOWORD(lParam);
 			mMousePos.second = HIWORD(lParam);
 
-			//std::cout << "X : " << mMousePos.first << ", Y : " << mMousePos.second << std::endl;
+			std::cout << "X : " << mMousePos.first << ", Y : " << mMousePos.second << std::endl;
 			//cout << "mX : " << mouse.x << ", mY : " << mouse.y << endl;
+			break;
+		}
+
+		case WM_VSCROLL:
+		{
+			std::cout << "스크롤 이벤트" << std::endl;
 			break;
 		}
 

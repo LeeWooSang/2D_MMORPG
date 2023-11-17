@@ -1,8 +1,8 @@
 #include "Map.h"
 #include <iostream>
+#include "../../GraphicEngine/GraphicEngine.h"
 #include "../../Resource/ResourceManager.h"
 #include "../../Resource/Texture/Texture.h"
-#include "../../GraphicEngine/GraphicEngine.h"
 
 Map::Map()
 	: GameObject()
@@ -95,7 +95,27 @@ void Map::Render()
 
 	//GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-	mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
-	mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));	
-	mTexture->GetSprite()->End();
+	//mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
+	//mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));	
+	//mTexture->GetSprite()->End();
+
+	{
+		// 이미지 크기
+		D2D1_RECT_F rect;
+		rect.left = mTexture->GetPos().first;
+		rect.top = mTexture->GetPos().second;
+		rect.right = mTexture->GetPos().first + mTexture->GetSize().first;
+		rect.bottom = mTexture->GetPos().second + mTexture->GetSize().second;
+
+		// 이미지 위치
+		D2D1_RECT_F pos;
+		pos.left = (mPos.first - cameraPos.first) * mTexture->GetSize().first + 8.0;
+		pos.top = (mPos.second - cameraPos.second) * mTexture->GetSize().second + 8.0;
+		pos.right = pos.left + mTexture->GetSize().first;
+		pos.bottom = pos.top + mTexture->GetSize().second;
+
+		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->DrawBitmap(
+			GET_INSTANCE(ResourceManager)->FindTexture("Tile")->GetImage(),
+			pos, 1.0, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, rect);
+	}
 }

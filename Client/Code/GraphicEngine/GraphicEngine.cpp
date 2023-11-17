@@ -38,6 +38,9 @@ GraphicEngine::~GraphicEngine()
 	{
 		mDirect3D->Release();
 	}
+
+	mRenderTarget->Release();
+	mFactory->Release();
 }
 
 bool GraphicEngine::Initialize(HWND handle, int width, int height)
@@ -76,6 +79,24 @@ bool GraphicEngine::Initialize(HWND handle, int width, int height)
 	mWidth = width;
 	mHeight = height;
 	//screen_bpp = bpp;
+	
+	result = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &mFactory);
+	if (result != S_OK)
+		return false;
+
+	D2D1_SIZE_U size = D2D1::SizeU(mWidth, mHeight);
+	D2D1_RENDER_TARGET_PROPERTIES d2dRTProps = D2D1::RenderTargetProperties();
+	D2D1_HWND_RENDER_TARGET_PROPERTIES d2dHwndRTProps = D2D1::HwndRenderTargetProperties(handle, size, D2D1_PRESENT_OPTIONS_IMMEDIATELY);
+	result = mFactory->CreateHwndRenderTarget(d2dRTProps, d2dHwndRTProps, &mRenderTarget);
+	if (result != S_OK)
+		return false;
+
+	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red, 1.0f), &mRedBrush);
+
+
+	result = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, __uuidof(IWICImagingFactory), (void**)&mWICImagingFactory);
+	if (result != S_OK)
+		return false;
 
 	return true;
 }
@@ -97,6 +118,8 @@ void GraphicEngine::RenderStart()
 	mDevice->BeginScene();
 
 	mSprite->Begin(D3DXSPRITE_ALPHABLEND);
+
+
 	//mSprite->Begin(D3DXSPRITE_SORT_TEXTURE);
 }
 

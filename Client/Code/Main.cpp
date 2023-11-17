@@ -20,8 +20,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	GET_INSTANCE(Core)->WindowProc(hwnd, msg, wparam, lparam);
 
 	PAINTSTRUCT	ps;		 
-	HDC					hdc;	 
-
+	HDC	hdc;	 
+	
 	switch (msg)
 	{
 	case WM_CREATE:
@@ -29,6 +29,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 	case WM_PAINT:
 		hdc = BeginPaint(hwnd, &ps);
+		//RoundRect(hdc, 50, 50, 300, 300, 200, 200);
 		EndPaint(hwnd, &ps);
 		return 0;
 	

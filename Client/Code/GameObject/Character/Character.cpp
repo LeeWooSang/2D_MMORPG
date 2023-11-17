@@ -1,6 +1,7 @@
 #include "Character.h"
 #include "../../Network/Network.h"
 #include "../../GraphicEngine/GraphicEngine.h"
+#include "../../Resource/ResourceManager.h"
 #include "../../Resource/Texture/Texture.h"
 #include "../../Input/Input.h"
 #include "../UI/Inventory/Inventory.h"
@@ -234,11 +235,10 @@ void Player::Render()
 	std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
 
 	D3DXVECTOR3 pos = D3DXVECTOR3((mPos.first - cameraPos.first) * 65.0f + 8, (mPos.second - cameraPos.second) * 65.0f + 8, 0.0);
-	//D3DXVECTOR3 pos = D3DXVECTOR3(0.0, 0.0, 0.0);
 	//GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
-	mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
-	mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
-	mTexture->GetSprite()->End();
+	//mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
+	//mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	//mTexture->GetSprite()->End();
 
 	{
 		int windowHeight = 800;
@@ -254,6 +254,29 @@ void Player::Render()
 		int windowHeight = 800;
 		std::wstring text = L"MY POSITION (" + std::to_wstring(mPos.first) + L", " + std::to_wstring(mPos.second) + L")";
 		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, D3DCOLOR_ARGB(255, 255, 255, 255));
+	}
+
+	{
+		// 이미지 크기
+		D2D1_RECT_F rect;
+		rect.left = mTexture->GetPos().first;
+		rect.top = mTexture->GetPos().second;
+		rect.right = mTexture->GetPos().first + mTexture->GetSize().first;
+		rect.bottom = mTexture->GetPos().second + mTexture->GetSize().second;
+
+		// 이미지 위치
+		D2D1_RECT_F pos;
+		pos.left = (mPos.first - cameraPos.first) * 65.0 + 8.0;
+		pos.top = (mPos.second - cameraPos.second) * 65.0 + 8.0;
+		pos.right = pos.left + mTexture->GetSize().first;
+		pos.bottom = pos.top + mTexture->GetSize().second;
+
+		//GET_INSTANCE(GraphicEngine)->GetRenderTarget()->DrawBitmap(
+		//	GET_INSTANCE(ResourceManager)->FindTexture("Player")->GetImage(),
+		//	pos, 1.0, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, rect);
+		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->DrawBitmap(
+			GET_INSTANCE(ResourceManager)->FindTexture("Player")->GetImage(),
+			pos);
 	}
 
 	mInventory->Render();

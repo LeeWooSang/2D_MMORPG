@@ -6,6 +6,9 @@
 #include "../GameObject/Character/Character.h"
 #include "../GameObject/UI/Inventory/Inventory.h"
 
+#include "../Resource/ResourceManager.h"
+#include "../Resource/Texture/Texture.h"
+
 #include "../Network/Network.h"
 #define	 WM_SOCKET WM_USER + 1
 
@@ -112,7 +115,29 @@ void Core::Run()
 	}
 
 	// render
-	GET_INSTANCE(GraphicEngine)->RenderStart();
+	//GET_INSTANCE(GraphicEngine)->RenderStart();
+	//for (auto& tile : mMaps)
+	//{
+	//	tile->Render();
+	//}
+
+	//mPlayer->Render();
+
+	//for (auto& player : mOtherPlayers)
+	//{
+	//	player.second->Render();
+	//}
+
+	//for (auto& monster : mMonsters)
+	//{
+	//	monster.second->Render();
+	//}
+
+	//GET_INSTANCE(GraphicEngine)->RenderEnd();
+
+
+	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->BeginDraw();
+	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::Black));
 	for (auto& tile : mMaps)
 	{
 		tile->Render();
@@ -120,17 +145,48 @@ void Core::Run()
 
 	mPlayer->Render();
 
-	for (auto& player : mOtherPlayers)
 	{
-		player.second->Render();
+		D2D1_RECT_F rect;
+		rect.left = 0;
+		rect.top = 0;
+		rect.right = 65;
+		rect.bottom = 65;
+		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->DrawRectangle(rect, GET_INSTANCE(GraphicEngine)->GetRedBrush());
+	}
+	{
+		D2D1_RECT_F rect;
+		rect.left = 65;
+		rect.top = 0;
+		rect.right = 130;
+		rect.bottom = 65;
+		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->DrawRectangle(rect, GET_INSTANCE(GraphicEngine)->GetRedBrush());
 	}
 
-	for (auto& monster : mMonsters)
 	{
-		monster.second->Render();
+		// 이미지 크기
+		D2D1_RECT_F rect;
+		rect.left = 0;
+		rect.top = 0;
+		rect.right = 65;
+		rect.bottom = 65;
+
+		// 이미지 위치
+		D2D1_RECT_F pos;
+		pos.left = 0;
+		pos.top = 0;
+		pos.right = 65;
+		pos.bottom = 65;
+
+		//GET_INSTANCE(GraphicEngine)->GetRenderTarget()->DrawBitmap(
+		//	GET_INSTANCE(ResourceManager)->FindTexture("Tile")->GetImage(),
+		//	rect);
+
+		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->DrawBitmap(
+			GET_INSTANCE(ResourceManager)->FindTexture("Tile")->GetImage(),
+			pos, 1.0, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, rect);
 	}
 
-	GET_INSTANCE(GraphicEngine)->RenderEnd();
+	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->EndDraw();
 }
 
 void Core::Quit()
@@ -237,4 +293,6 @@ bool Core::AddObject(int myId)
 	}
 
 	mIsReady = true;
+
+	return true;
 }
