@@ -14,12 +14,30 @@
 //using namespace D2D1;
 
 #include <Windows.h>
+#include <string>
 #include <vector>
+#include <unordered_map>
 
 constexpr int MAX_TEXTURE = 16;
 constexpr int MAX_BOB_FRAMES = 64;   // maximum number of bob frames
 constexpr int MAX_BOB_ANIMATIONS = 16;   // maximum number of animation sequeces
 constexpr int BOB_ATTR_VISIBLE = 16;  // bob is visible
+constexpr int MAX_FONT_COUNT = 2;
+
+struct FontInfo
+{
+	FontInfo()
+		: font(nullptr), textLayout(nullptr), fontSize(0.f) {}
+	FontInfo(IDWriteTextFormat* _font, IDWriteTextLayout* _layout, float _size)
+		: font(_font), textLayout(_layout), fontSize(_size) {}
+
+	// 폰트 객체
+	IDWriteTextFormat* font{ nullptr };
+	// 폰트 형식
+	IDWriteTextLayout* textLayout{ nullptr };
+
+	float fontSize;
+};
 
 class Texture;
 class GraphicEngine
@@ -33,7 +51,13 @@ public:
 
 	void RenderStart();
 	void RenderEnd();
-    void RenderText(const wchar_t* text, int x, int y, D3DCOLOR color);
+
+	void RenderRectangle(const D2D1_RECT_F& rect);
+	void RenderTexture(Texture* texture, const D2D1_RECT_F& pos);
+	void RenderTexture(Texture* texture, const D2D1_RECT_F& pos, const D2D1_RECT_F& rect);
+    void RenderText(const std::wstring& text, int x, int y, const std::string& font);
+
+	void createGameFont();
 
     const LPDIRECT3DDEVICE9 GetDevice() const { return mDevice; }
     const LPD3DXSPRITE GetSprite() const { return mSprite; }
@@ -54,8 +78,11 @@ private:
 
 	ID2D1Factory3* mFactory;
 	IWICImagingFactory* mWICImagingFactory;
+	IDWriteFactory5* mWriteFactory;
+	IDWriteFontCollection1* mFontCollection;
 	ID2D1HwndRenderTarget* mRenderTarget;
 	ID2D1SolidColorBrush* mRedBrush;
+	std::unordered_map<std::string, FontInfo> mFontMap;
 };
 
 class Camera

@@ -12,6 +12,9 @@ public:
 	virtual void Update();
 	virtual void Render();
 
+	virtual void SetPosition(int x, int y);
+
+	int GetSlotNum()	const { return mSlotNum; }
 	void SetSlotNum(int num) { mSlotNum = num; }
 
 	void AddItem(const std::string& name);
@@ -23,7 +26,7 @@ private:
 	InventoryItem* mItem;
 };
 
-constexpr int MAX_INVENTORY_WIDTH_SLOT_SIZE = 5;
+constexpr int MAX_INVENTORY_WIDTH_SLOT_SIZE = 10;
 constexpr int MAX_INVENTORY_HEIGHT_SLOT_SIZE = 4;
 class Inventory : public UI
 {
@@ -33,6 +36,9 @@ public:
 	virtual bool Initialize(int x, int y);
 	virtual void Update();
 	virtual void Render();
+
+	void ProcessMouseWheelEvent(unsigned long long wParam);
+	virtual bool CheckContain(int left, int top, int right, int bottom);
 
 	void AddItem(const std::string& name);
 	void AddItem(int slot, const std::string& name);

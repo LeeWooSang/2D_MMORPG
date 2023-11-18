@@ -1,5 +1,7 @@
 #include "Inventory.h"
+#include "../../../GraphicEngine/GraphicEngine.h"
 #include "../Scroll/Scroll.h"
+#include "../../../Resource/ResourceManager.h"
 #include "../../../Resource/Texture/Texture.h"
 #include "../../../Input/Input.h"
 
@@ -51,9 +53,26 @@ void InventorySlot::Render()
 {
 	UI::Render();
 
+	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
+	{
+		return;
+	}
+
+	std::wstring text = std::to_wstring(mSlotNum);
+	GET_INSTANCE(GraphicEngine)->RenderText(text, mPos.first, mPos.second, "메이플");
 	if (mItem != nullptr)
 	{
 		mItem->Render();
+	}
+}
+
+void InventorySlot::SetPosition(int x, int y)
+{
+	UI::SetPosition(x, y);
+	
+	if (mItem != nullptr)
+	{
+		mItem->SetPosition(mPos.first, mPos.second);
 	}
 }
 
@@ -86,8 +105,9 @@ bool Inventory::Initialize(int x, int y)
 	UI::Initialize(x, y);
 
 	mSlotGap = 10;
-	mSlotWidth = 64;
-	mSlotHeight = 64;
+	
+	mSlotWidth = GET_INSTANCE(ResourceManager)->FindTexture("Slot")->GetSize().first;
+	mSlotHeight = GET_INSTANCE(ResourceManager)->FindTexture("Slot")->GetSize().second;
 
 	int originX = 7;
 	int originY = 47;
@@ -111,7 +131,6 @@ bool Inventory::Initialize(int x, int y)
 
 			// 슬롯 번호
 			slot->SetSlotNum(num++);
-			slot->Visible();
 
 			// 자식 추가
 			AddChildUI("Slot", slot);
@@ -144,6 +163,23 @@ void Inventory::Update()
 		return;
 	}
 
+	// 보이는 슬롯만 렌더링하도록
+	for (auto& slot : mChildUIs["Slot"])
+	{
+		int left = slot->GetPosition().first;
+		int top = slot->GetPosition().second;
+		int right = left + slot->GetTexture()->GetSize().first;
+		int bottom = top + slot->GetTexture()->GetSize().second;
+		if (CheckContain(left, top, right, bottom) == false)
+		{
+			slot->NotVisible();
+		}
+		else
+		{
+			slot->Visible();
+		}
+	}
+
 	for (auto& child : mChildUIs)
 	{
 		for (int i = 0; i < child.second.size(); ++i)
@@ -155,7 +191,117 @@ void Inventory::Update()
 
 void Inventory::Render()
 {
-	UI::Render();
+	// 보이는 것만 렌더
+	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
+	{
+		return;
+	}
+
+	RECT src;
+	src.left = mTexture->GetPos(mCurrFrame).first;
+	src.top = mTexture->GetPos(mCurrFrame).second;
+	src.right = mTexture->GetPos(mCurrFrame).first + mTexture->GetSize().first;
+	src.bottom = mTexture->GetPos(mCurrFrame).second + mTexture->GetSize().second;
+
+	D2D1_RECT_F pos;
+	pos.left = mPos.first;
+	pos.top = mPos.second;
+	pos.right = pos.left + mTexture->GetSize().first;
+	pos.bottom = pos.top + mTexture->GetSize().second;
+
+	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+
+	pos.left = mPos.first;
+	pos.top = mPos.second + 30;
+	pos.right = pos.left + mTexture->GetSize().first;
+	pos.bottom = pos.top + mTexture->GetSize().second - 60;
+	GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+
+	for (auto& child : mChildUIs)
+	{
+		for (int i = 0; i < child.second.size(); ++i)
+		{
+			child.second[i]->Render();
+		}
+	}
+}
+
+void Inventory::ProcessMouseWheelEvent(unsigned long long wParam)
+{
+	bool upFlag = false, downFlag = false;
+	int min = 0;
+	int max = MAX_INVENTORY_WIDTH_SLOT_SIZE - 5;
+	static int scrollBar = max;
+
+	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
+	if (Collision(mousePos.first, mousePos.second) == false)
+	{
+		return;
+	}
+
+	std::cout << "인벤토리 안에서 스크롤 이벤트" << std::endl;
+
+	for (auto& child : mChildUIs["Slot"])
+	{
+		InventorySlot* slot = static_cast<InventorySlot*>(child);
+		std::pair<int, int> originPos = slot->GetOriginPosition();
+		if ((SHORT)HIWORD(wParam) > 0)
+		{
+			if (scrollBar < max)
+			{
+				originPos.second += (slot->GetTexture()->GetSize().second + mSlotGap);
+				upFlag = true;
+			}
+		}
+		else
+		{
+			if (scrollBar > min)
+			{
+				originPos.second -= (slot->GetTexture()->GetSize().second + mSlotGap);
+				downFlag = true;
+			}
+		}		
+		slot->SetOriginPosition(originPos.first, originPos.second);
+		std::pair<int, int> pos = slot->GetPosition();
+		slot->SetPosition(pos.first, pos.second);
+		if (slot->GetItem() != nullptr)
+		{
+			slot->GetItem()->SetPosition(slot->GetPosition().first, slot->GetPosition().second);
+		}
+	}
+
+	if (upFlag == true)
+	{
+		++scrollBar;
+		if (scrollBar > max)
+		{
+			scrollBar = max;
+		}
+	}
+	if (downFlag == true)
+	{
+		--scrollBar;
+		if (scrollBar < min)
+		{
+			scrollBar = min;
+		}
+	}
+}
+
+bool Inventory::CheckContain(int left, int top, int right, int bottom)
+{
+	D2D1_RECT_F rect;
+	rect.left = mPos.first;
+	rect.top = mPos.second + 30;
+	rect.right = rect.left + mTexture->GetSize().first;
+	rect.bottom = rect.top + mTexture->GetSize().second - 60;
+
+	if (left < rect.left || right > rect.right || top < rect.top || bottom > rect.bottom)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void Inventory::AddItem(const std::string& name)

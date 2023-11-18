@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
+
 #include "../Common/Defines.h"
 
 class Map;
@@ -19,7 +20,7 @@ public:
 	void Run();
 	void Quit();
 
-	void WindowProc(HWND handle, unsigned int msg, unsigned long long wparam, long long lparam);
+	void WindowProc(HWND handle, unsigned int msg, unsigned long long wParam, long long lParam);
 
 	bool AddObject(int myId = 0);
 

@@ -21,9 +21,4 @@ public:
 	virtual void Render();
 
 private:
-	// 간격 표시자
-	//BOB mMarks[MAX_MARK];
-	// 맵
-	//std::shared_ptr<Texture> mBlackTile;
-	//std::shared_ptr<Texture>mWhiteTile;
 };

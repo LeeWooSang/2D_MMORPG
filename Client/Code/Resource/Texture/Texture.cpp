@@ -12,6 +12,8 @@ Texture::Texture()
 	mBuffer = nullptr;
 
 	mSprite = nullptr;
+
+	mImage = nullptr;
 }
 
 Texture::~Texture()
@@ -25,6 +27,11 @@ Texture::~Texture()
 	if (mSprite != nullptr)
 	{
 		mSprite->Release();
+	}
+
+	if (mImage != nullptr)
+	{
+		mImage->Release();
 	}
 }
 
@@ -80,22 +87,10 @@ bool Texture::LoadTexture(const wchar_t* path, int cx, int cy, int mode)
 		return false;
 	}
 
-	Init(path);
 	return true;
 }
 
-bool Texture::InitializeSprite()
-{
-	HRESULT result = D3DXCreateSprite(GET_INSTANCE(GraphicEngine)->GetDevice(), &mSprite);
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	return true;
-}
-
-bool Texture::Init(const wchar_t* path)
+bool Texture::LoadTexture(const wchar_t* path)
 {
 	IWICBitmapDecoder* pBitmapDecoder;
 	HRESULT result = GET_INSTANCE(GraphicEngine)->GetWICImagingFactory()->CreateDecoderFromFilename(path, NULL, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &pBitmapDecoder);
@@ -145,6 +140,16 @@ bool Texture::Init(const wchar_t* path)
 
 	if (flipRotator)
 		flipRotator->Release();
+
+	return true;
+}
+bool Texture::InitializeSprite()
+{
+	HRESULT result = D3DXCreateSprite(GET_INSTANCE(GraphicEngine)->GetDevice(), &mSprite);
+	if (FAILED(result))
+	{
+		return false;
+	}
 
 	return true;
 }

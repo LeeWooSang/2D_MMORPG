@@ -15,7 +15,7 @@ bool ResourceManager::Initialize()
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(531, 532);
-		if (texture->LoadTexture(L"../Resource/Textures/Map.bmp", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		if (texture->LoadTexture(L"../Resource/Textures/Map.bmp") == false)
 		{
 			texture.reset();
 			return false;
@@ -26,7 +26,7 @@ bool ResourceManager::Initialize()
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(65, 65);
-		if (texture->LoadTexture(L"../Resource/Textures/Player.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		if (texture->LoadTexture(L"../Resource/Textures/Player.png") == false)
 		{
 			texture.reset();
 			return false;
@@ -37,7 +37,7 @@ bool ResourceManager::Initialize()
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(65, 65);
-		if (texture->LoadTexture(L"../Resource/Textures/OtherPlayer.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		if (texture->LoadTexture(L"../Resource/Textures/OtherPlayer.png") == false)
 		{
 			texture.reset();
 			return false;
@@ -48,7 +48,7 @@ bool ResourceManager::Initialize()
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(65, 65);
-		if (texture->LoadTexture(L"../Resource/Textures/OrangeMushroom.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		if (texture->LoadTexture(L"../Resource/Textures/OrangeMushroom.png") == false)
 		{
 			texture.reset();
 			return false;
@@ -59,7 +59,7 @@ bool ResourceManager::Initialize()
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(300, 453);
-		if (texture->LoadTexture(L"../Resource/Textures/InventoryBackground.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		if (texture->LoadTexture(L"../Resource/Textures/InventoryBackground.png") == false)
 		{
 			texture.reset();
 			return false;
@@ -69,8 +69,8 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(65, 65);
-		if (texture->LoadTexture(L"../Resource/Textures/Slot.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		texture->CreateTexture(64, 64);
+		if (texture->LoadTexture(L"../Resource/Textures/Slot.png") == false)
 		{
 			texture.reset();
 			return false;
@@ -80,7 +80,7 @@ bool ResourceManager::Initialize()
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(30, 350);
-		if (texture->LoadTexture(L"../Resource/Textures/ScrollBackground.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		if (texture->LoadTexture(L"../Resource/Textures/ScrollBackground.png") == false)
 		{
 			texture.reset();
 			return false;
@@ -89,8 +89,8 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(131, 580);
-		if (texture->LoadTexture(L"../Resource/Textures/ScrollBar.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		texture->CreateTexture(30, 376);
+		if (texture->LoadTexture(L"../Resource/Textures/ScrollBar.png") == false)
 		{
 			texture.reset();
 			return false;
@@ -101,7 +101,7 @@ bool ResourceManager::Initialize()
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(65, 65);
-		if (texture->LoadTexture(L"../Resource/Textures/Sword.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		if (texture->LoadTexture(L"../Resource/Textures/Sword.png") == false)
 		{
 			texture.reset();
 			return false;
@@ -111,7 +111,7 @@ bool ResourceManager::Initialize()
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(65, 65);
-		if (texture->LoadTexture(L"../Resource/Textures/Ax.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		if (texture->LoadTexture(L"../Resource/Textures/Ax.png") == false)
 		{
 			texture.reset();
 			return false;
@@ -121,7 +121,7 @@ bool ResourceManager::Initialize()
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(65, 65);
-		if (texture->LoadTexture(L"../Resource/Textures/Club.png", 0, 0, BITMAP_EXTRACT_MODE_ABS) == false)
+		if (texture->LoadTexture(L"../Resource/Textures/Club.png") == false)
 		{
 			texture.reset();
 			return false;

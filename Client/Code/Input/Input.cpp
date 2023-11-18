@@ -1,5 +1,8 @@
 #include "Input.h"
 #include <iostream>
+#include "../Core/Core.h"
+#include "../GameObject/Character/Character.h"
+#include <Windows.h>
 //#include <imm.h>
 //#pragma comment(lib,"imm32.lib")
 
@@ -54,15 +57,9 @@ bool Input::Initialize()
 	return true;
 }
 
-LRESULT Input::ProcessWindowMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+void Input::ProcessWindowMessage(unsigned int msg, unsigned long long wParam, long long lParam)
 {
-	HWND handle = GetFocus();
-	if (handle == nullptr)
-	{
-		return 0;
-	}
-
-	switch (message)
+	switch (msg)
 	{
 		case WM_IME_COMPOSITION:
 		case WM_IME_NOTIFY:		
@@ -71,7 +68,7 @@ LRESULT Input::ProcessWindowMessage(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		case WM_KEYUP:
 		case WM_SYSKEYDOWN:
 		case WM_SYSKEYUP:
-			ProcessKeyboardMessage(hWnd, message, wParam, lParam);
+			ProcessKeyboardMessage(msg, wParam, lParam);
 			break;
 
 		case WM_LBUTTONDOWN:
@@ -80,28 +77,24 @@ LRESULT Input::ProcessWindowMessage(HWND hWnd, UINT message, WPARAM wParam, LPAR
 		case WM_RBUTTONUP:
 		case WM_MOUSEMOVE:
 		case WM_VSCROLL:
-			ProcessMouseMessage(hWnd, message, lParam);
+			ProcessMouseMessage(msg, wParam, lParam);
 			break;
 
 		default:
-			return(::DefWindowProc(hWnd, message, wParam, lParam));
+			break;
 	}
-
-	return 0;
 }
 
-LRESULT Input::ProcessKeyboardMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+void Input::ProcessKeyboardMessage(unsigned int msg, unsigned long long wParam, long long lParam)
 {
 	//Scene* scene = GET_INSTANCE(SceneManager)->GetScene();
 	//if (scene != nullptr)
 	//	scene->ProcessKeyboardMessage(hWnd, message, wParam, lParam);
-
-	return 0;
 }
 
-void Input::ProcessMouseMessage(HWND hWnd, UINT message, LPARAM lParam)
+void Input::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)
 {
-	switch (message)
+	switch (msg)
 	{
 		case WM_LBUTTONDOWN:
 		case WM_LBUTTONUP:
@@ -112,14 +105,17 @@ void Input::ProcessMouseMessage(HWND hWnd, UINT message, LPARAM lParam)
 			mMousePos.first = LOWORD(lParam);
 			mMousePos.second = HIWORD(lParam);
 
-			std::cout << "X : " << mMousePos.first << ", Y : " << mMousePos.second << std::endl;
+			//std::cout << "X : " << mMousePos.first << ", Y : " << mMousePos.second << std::endl;
 			//cout << "mX : " << mouse.x << ", mY : " << mouse.y << endl;
 			break;
 		}
 
-		case WM_VSCROLL:
+		case WM_MOUSEWHEEL:
 		{
-			std::cout << "스크롤 이벤트" << std::endl;
+			if (GET_INSTANCE(Core)->GetPlayer() != nullptr)
+			{
+				GET_INSTANCE(Core)->GetPlayer()->ProcessMouseMessage(msg, wParam, lParam);
+			}
 			break;
 		}
 

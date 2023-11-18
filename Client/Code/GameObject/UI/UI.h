@@ -13,9 +13,13 @@ public:
 	virtual void Update();
 	virtual void Render();
 
+	std::pair<int, int> GetOriginPosition()	const { return std::make_pair(mOriginX, mOriginY); }
+	void SetOriginPosition(int x, int y) { mOriginX = x;	mOriginY = y; }
+
 	virtual void SetPosition(int x, int y);
 
 	bool Collision(int x, int y);
+	virtual bool CheckContain(int left, int top, int right, int bottom);
 
 	UI* GetParentUI() { return mParentUI; }
 	void AddChildUI(std::string key, UI* ui);

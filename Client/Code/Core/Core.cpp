@@ -1,7 +1,10 @@
 #include "Core.h"
+#include "../Network/Network.h"
+
 #include "../GraphicEngine/GraphicEngine.h"
 #include "../Resource/ResourceManager.h"
 #include "../Input/Input.h"
+
 #include "../GameObject/Map/Map.h"
 #include "../GameObject/Character/Character.h"
 #include "../GameObject/UI/Inventory/Inventory.h"
@@ -9,7 +12,7 @@
 #include "../Resource/ResourceManager.h"
 #include "../Resource/Texture/Texture.h"
 
-#include "../Network/Network.h"
+
 #define	 WM_SOCKET WM_USER + 1
 
 INIT_INSTACNE(Core)
@@ -145,47 +148,15 @@ void Core::Run()
 
 	mPlayer->Render();
 
+	for (auto& player : mOtherPlayers)
 	{
-		D2D1_RECT_F rect;
-		rect.left = 0;
-		rect.top = 0;
-		rect.right = 65;
-		rect.bottom = 65;
-		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->DrawRectangle(rect, GET_INSTANCE(GraphicEngine)->GetRedBrush());
-	}
-	{
-		D2D1_RECT_F rect;
-		rect.left = 65;
-		rect.top = 0;
-		rect.right = 130;
-		rect.bottom = 65;
-		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->DrawRectangle(rect, GET_INSTANCE(GraphicEngine)->GetRedBrush());
+		player.second->Render();
 	}
 
+	for (auto& monster : mMonsters)
 	{
-		// 이미지 크기
-		D2D1_RECT_F rect;
-		rect.left = 0;
-		rect.top = 0;
-		rect.right = 65;
-		rect.bottom = 65;
-
-		// 이미지 위치
-		D2D1_RECT_F pos;
-		pos.left = 0;
-		pos.top = 0;
-		pos.right = 65;
-		pos.bottom = 65;
-
-		//GET_INSTANCE(GraphicEngine)->GetRenderTarget()->DrawBitmap(
-		//	GET_INSTANCE(ResourceManager)->FindTexture("Tile")->GetImage(),
-		//	rect);
-
-		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->DrawBitmap(
-			GET_INSTANCE(ResourceManager)->FindTexture("Tile")->GetImage(),
-			pos, 1.0, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, rect);
+		monster.second->Render();
 	}
-
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->EndDraw();
 }
 
@@ -196,6 +167,12 @@ void Core::Quit()
 
 void Core::WindowProc(HWND handle, unsigned int msg, unsigned long long wparam, long long lparam)
 {
+	HWND focus = GetFocus();
+	if (focus == nullptr)
+	{
+		return;
+	}
+
 	switch (msg)
 	{
 		case WM_KEYDOWN:
@@ -215,7 +192,7 @@ void Core::WindowProc(HWND handle, unsigned int msg, unsigned long long wparam, 
 
 	default:
 		{
-			GET_INSTANCE(Input)->ProcessMouseMessage(handle, msg, lparam);
+			GET_INSTANCE(Input)->ProcessMouseMessage(msg, wparam, lparam);
 			break;
 		}
 	}

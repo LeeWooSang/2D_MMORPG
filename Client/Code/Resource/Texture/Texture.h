@@ -18,6 +18,7 @@ public:
 	void CreateTexture(int width, int height);
 	void CreateTexture(int width, int height, std::vector<std::pair<int, int>>& texPositions);
 	bool LoadTexture(const wchar_t* path, int cx, int cy, int mode);
+	bool LoadTexture(const wchar_t* path);
 
 	std::pair<int, int> GetPos(int currFrame = 0)		const { return mTexPositions[currFrame]; }
 	std::pair<int, int> GetSize() const { return std::make_pair(mWidth, mHeight); };

@@ -17,7 +17,7 @@ bool Scroll::Initialize(int x, int y)
 	UI::Initialize(x, y);
 
 	ScrollBar* scrollBar = new ScrollBar;
-	scrollBar->Initialize(1210, 200);
+	scrollBar->Initialize(3, 5);
 
 	AddChildUI("ScrollBar", scrollBar);
 
@@ -70,14 +70,6 @@ bool ScrollBar::Initialize(int x, int y)
 	SetTexture("ScrollBar");
 	Visible();
 
-	//mTexture->InitializeSprite();
-	D3DXMATRIX matrix;
-	mTexture->GetSprite()->GetTransform(&matrix);
-	D3DXMatrixScaling(&matrix, 0.2, 0.2, 0.0);
-	mTexture->GetSprite()->SetTransform(&matrix);	
-
-	//UI::Initialize(x, y);
-
 	return true;
 }
 
@@ -112,12 +104,18 @@ void ScrollBar::Render()
 	src.right = mTexture->GetPos(mCurrFrame).first + mTexture->GetSize().first;
 	src.bottom = mTexture->GetPos(mCurrFrame).second + mTexture->GetSize().second;
 
-	D3DXVECTOR3 pos = D3DXVECTOR3(mPos.first, mPos.second, 0.0);
+	//D3DXVECTOR3 pos = D3DXVECTOR3(mPos.first, mPos.second, 0.0);
 	//GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
 
-	mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
-	mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
-	mTexture->GetSprite()->End();
+	D2D1_RECT_F pos;
+	pos.left = mPos.first;
+	pos.top = mPos.second;
+	//pos.right = pos.left + mTexture->GetSize().first;
+	//pos.bottom = pos.top + mTexture->GetSize().second;
+	pos.right = pos.left + 25;
+	pos.bottom = pos.top + 340;
+
+	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 	for (auto& child : mChildUIs)
 	{

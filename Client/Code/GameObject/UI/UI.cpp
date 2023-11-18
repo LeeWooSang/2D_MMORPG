@@ -65,11 +65,18 @@ void UI::Render()
 	src.right = mTexture->GetPos(mCurrFrame).first + mTexture->GetSize().first;
 	src.bottom = mTexture->GetPos(mCurrFrame).second + mTexture->GetSize().second;
 
-	D3DXVECTOR3 pos = D3DXVECTOR3(mPos.first, mPos.second, 0.0);
-	//GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
-	mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
-	mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
-	mTexture->GetSprite()->End();
+	//D3DXVECTOR3 pos = D3DXVECTOR3(mPos.first, mPos.second, 0.0);
+	////GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	//mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
+	//mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
+	//mTexture->GetSprite()->End();
+
+	D2D1_RECT_F pos;
+	pos.left = mPos.first;
+	pos.top = mPos.second;
+	pos.right = pos.left + mTexture->GetSize().first;
+	pos.bottom = pos.top + mTexture->GetSize().second;
+	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 	for (auto& child : mChildUIs)
 	{
@@ -118,6 +125,11 @@ bool UI::Collision(int x, int y)
 		return true;
 	}
 
+	return false;
+}
+
+bool UI::CheckContain(int left, int top, int right, int bottom)
+{
 	return false;
 }
 

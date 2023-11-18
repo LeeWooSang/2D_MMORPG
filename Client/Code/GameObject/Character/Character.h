@@ -42,8 +42,10 @@ public:
 	virtual bool Initialize(int x, int y);
 	virtual void Update();
 	virtual void Render();
-	void Move(char dir);
 
+	void ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam);
+
+	void Move(char dir);
 	void AddItem();
 	Inventory* GetInventory() { return mInventory; }
 

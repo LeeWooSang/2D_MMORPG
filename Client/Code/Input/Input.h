@@ -1,6 +1,5 @@
 #pragma once
 #include "../Common/Macro.h"
-#include <Windows.h>
 #include <array>
 
 constexpr int MAX_LEN = 256;
@@ -54,10 +53,9 @@ class Input
 public:		
 	virtual bool Initialize();
 
-	virtual LRESULT CALLBACK ProcessWindowMessage(HWND, UINT, WPARAM, LPARAM);
-
-	LRESULT ProcessKeyboardMessage(HWND, UINT, WPARAM, LPARAM);
-	void ProcessMouseMessage(HWND, UINT, LPARAM);
+	void ProcessWindowMessage(unsigned int msg, unsigned long long wParam, long long lParam);
+	void ProcessKeyboardMessage(unsigned int msg, unsigned long long wParam, long long lParam);
+	void ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam);
 
 	const std::pair<int, int>& GetMousePos() const { return mMousePos; }
 
