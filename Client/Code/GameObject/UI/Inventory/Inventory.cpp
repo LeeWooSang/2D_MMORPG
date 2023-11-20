@@ -58,27 +58,22 @@ void InventorySlot::Render()
 		return;
 	}
 
+	if (mItem != nullptr)
+	{
+		mItem->Render();
+		return;
+	}
+
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
 	pos.right = pos.left + mTexture->GetSize().first;
 	pos.bottom = pos.top + mTexture->GetSize().second;
 
-	D2D1_RECT_F rect;
-	rect.left = mPos.first;
-	rect.top = mPos.second;
-	rect.right = rect.left + mTexture->GetSize().first;
-	rect.bottom = rect.top + mTexture->GetSize().second - 10;
-
-	//GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, rect, pos);
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 	std::wstring text = std::to_wstring(mSlotNum);
-	GET_INSTANCE(GraphicEngine)->RenderText(text, mPos.first, mPos.second, "메이플");
-	if (mItem != nullptr)
-	{
-		mItem->Render();
-	}
+	GET_INSTANCE(GraphicEngine)->RenderText(text, mPos.first, mPos.second, "메이플", "하늘색");
 
 	for (auto& child : mChildUIs)
 	{
@@ -224,12 +219,6 @@ void Inventory::Render()
 	{
 		return;
 	}
-
-	RECT src;
-	src.left = mTexture->GetPos(mCurrFrame).first;
-	src.top = mTexture->GetPos(mCurrFrame).second;
-	src.right = mTexture->GetPos(mCurrFrame).first + mTexture->GetSize().first;
-	src.bottom = mTexture->GetPos(mCurrFrame).second + mTexture->GetSize().second;
 
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
@@ -440,5 +429,31 @@ void InventoryItem::Update()
 
 void InventoryItem::Render()
 {
-	UI::Render();
+	// 보이는 것만 렌더
+	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
+	{
+		return;
+	}
+
+	D2D1_RECT_F pos;
+	pos.left = mPos.first;
+	pos.top = mPos.second;
+	pos.right = pos.left + mTexture->GetSize().first;
+	pos.bottom = pos.top + mTexture->GetSize().second;
+
+	//D2D1_RECT_F rect;
+	//rect.left = 0;
+	//rect.top = 0;
+	//rect.right = rect.left + 118;
+	//rect.bottom = rect.top + 118;
+
+	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+
+	for (auto& child : mChildUIs)
+	{
+		for (int i = 0; i < child.second.size(); ++i)
+		{
+			child.second[i]->Render();
+		}
+	}
 }

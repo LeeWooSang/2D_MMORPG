@@ -79,7 +79,7 @@ void Character::Render()
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 	std::wstring text = L"My Id (" + std::to_wstring(mId) + L")";
-	GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top), "메이플");
+	GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top), "메이플", "검은색");
 }
 
 void Character::Reset()
@@ -198,12 +198,14 @@ void Player::Update()
 	}
 	GET_INSTANCE(Camera)->SetPosition(mPos.first, mPos.second);
 
+#endif 
+
 	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_RBUTTON) == true)
 	{
 		mInventory->SetPosition(mousePos.first, mousePos.second);
 	}
-#endif 
+
 	mInventory->Update();
 }
 
@@ -257,11 +259,11 @@ void Player::Render()
 		GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 		std::wstring text = L"My Id (" + std::to_wstring(mId) + L")";
-		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top), "메이플");
+		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top), "메이플", "검은색");
 
 		int windowHeight = 800;
 		text = L"MY POSITION (" + std::to_wstring(mPos.first) + L", " + std::to_wstring(mPos.second) + L")";
-		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, "메이플");
+		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, "메이플", "빨간색");
 	}
 
 	mInventory->Render();

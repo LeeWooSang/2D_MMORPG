@@ -64,7 +64,8 @@ void UI::Render()
 	pos.top = mPos.second;
 	pos.right = pos.left + mTexture->GetSize().first;
 	pos.bottom = pos.top + mTexture->GetSize().second;
-	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos, pos);
+
+	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 	for (auto& child : mChildUIs)
 	{

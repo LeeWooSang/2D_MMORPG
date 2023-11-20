@@ -22,8 +22,9 @@ constexpr int MAX_TEXTURE = 16;
 constexpr int MAX_BOB_FRAMES = 64;   // maximum number of bob frames
 constexpr int MAX_BOB_ANIMATIONS = 16;   // maximum number of animation sequeces
 constexpr int BOB_ATTR_VISIBLE = 16;  // bob is visible
-constexpr int MAX_FONT_COUNT = 2;
 
+constexpr int MAX_FONT_COUNT = 2;
+constexpr int MAX_COLOR_COUNT = 8;
 struct FontInfo
 {
 	FontInfo()
@@ -55,9 +56,10 @@ public:
 	void RenderRectangle(const D2D1_RECT_F& rect);
 	void RenderTexture(Texture* texture, const D2D1_RECT_F& pos);
 	void RenderTexture(Texture* texture, const D2D1_RECT_F& pos, const D2D1_RECT_F& rect);
-    void RenderText(const std::wstring& text, int x, int y, const std::string& font);
+    void RenderText(const std::wstring& text, int x, int y, const std::string& font, const std::string& color);
 
-	void createGameFont();
+	void createFont();
+	void createFontColor();
 
     const LPDIRECT3DDEVICE9 GetDevice() const { return mDevice; }
     const LPD3DXSPRITE GetSprite() const { return mSprite; }
@@ -82,7 +84,9 @@ private:
 	IDWriteFontCollection1* mFontCollection;
 	ID2D1HwndRenderTarget* mRenderTarget;
 	ID2D1SolidColorBrush* mRedBrush;
+
 	std::unordered_map<std::string, FontInfo> mFontMap;
+	std::unordered_map<std::string, ID2D1SolidColorBrush*> mFontColorMap;
 };
 
 class Camera

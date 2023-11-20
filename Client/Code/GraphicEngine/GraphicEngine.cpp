@@ -52,6 +52,12 @@ GraphicEngine::~GraphicEngine()
 		font.second.textLayout->Release();
 		font.second.font->Release();
 	}
+
+	for (auto& color : mFontColorMap)
+	{
+		color.second->Release();
+	}
+
 	mFontCollection->Release();
 	mRedBrush->Release();
 	mRenderTarget->Release();
@@ -138,7 +144,8 @@ bool GraphicEngine::Initialize(HWND handle, int width, int height)
 		return false;
 	}
 
-	createGameFont();
+	createFont();
+	createFontColor();
 
 	return true;
 }
@@ -190,16 +197,16 @@ void GraphicEngine::RenderTexture(Texture* texture, const D2D1_RECT_F& pos, cons
 	mRenderTarget->DrawBitmap(texture->GetImage(), pos, 1.0, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, rect);
 }
 
-void GraphicEngine::RenderText(const std::wstring& text, int x, int y, const std::string& font)
+void GraphicEngine::RenderText(const std::wstring& text, int x, int y, const std::string& font, const std::string& color)
 {
 	//RECT rect = { x, y, mWidth, mHeight };
 	//mFont->DrawTextW(mSprite, text, -1, &rect, 0, color);
 
-	D2D1_RECT_F rect = {x, y, mWidth, mHeight };
-	mRenderTarget->DrawTextW(text.c_str(), static_cast<UINT32>(text.length()), mFontMap[font].font, &rect, mRedBrush);
+	D2D1_RECT_F rect = {x, y, mWidth + 100, mHeight };
+	mRenderTarget->DrawTextW(text.c_str(), static_cast<UINT32>(text.length()), mFontMap[font].font, &rect, mFontColorMap[color]);
 }
 
-void GraphicEngine::createGameFont()
+void GraphicEngine::createFont()
 {
 	// 폰트 경로
 	std::wstring fontPath[] = { L"../Resource/Fonts/a피오피동글.ttf", L"../Resource/Fonts/메이플스토리.ttf" };
@@ -276,11 +283,41 @@ void GraphicEngine::createGameFont()
 		{
 			result = pFont[i]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 			result = pFont[i]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
-			result = mWriteFactory->CreateTextLayout(wstr.c_str(), static_cast<UINT32>(wstr.length()), pFont[i], 4096.0f, 4096.0f, &pTextLayout[i]);
+			result = mWriteFactory->CreateTextLayout(wstr.c_str(), static_cast<UINT32>(wstr.length()), pFont[i], 0, 0, &pTextLayout[i]);
 
 			mFontMap.emplace("메이플", FontInfo(pFont[i], pTextLayout[i], fontSize));
 		}
 	}
+}
+
+void GraphicEngine::createFontColor()
+{
+	ID2D1SolidColorBrush* color[MAX_COLOR_COUNT];
+
+	int index = 0;
+	HRESULT result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DeepPink, 1.0f), &color[index]);
+	mFontColorMap.emplace("분홍색", color[index++]);
+
+	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Brown, 1.0f), &color[index]);
+	mFontColorMap.emplace("갈색", color[index++]);
+
+	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White, 1.0f), &color[index]);
+	mFontColorMap.emplace("흰색", color[index++]);
+
+	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black, 1.0f), &color[index]);
+	mFontColorMap.emplace("검은색", color[index++]);
+
+	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::SkyBlue, 1.0f), &color[index]);
+	mFontColorMap.emplace("하늘색", color[index++]);
+
+	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LavenderBlush, 1.0f), &color[index]);
+	mFontColorMap.emplace("연분홍색", color[index++]);
+
+	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red, 1.0f), &color[index]);
+	mFontColorMap.emplace("빨간색", color[index++]);
+
+	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Orange, 1.0f), &color[index]);
+	mFontColorMap.emplace("주황색", color[index++]);
 }
 
 INIT_INSTACNE(Camera)

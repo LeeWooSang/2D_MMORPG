@@ -123,57 +123,25 @@ void Core::Run()
 		mPlayer->AddItem();
 	}
 
-	// render
-	//GET_INSTANCE(GraphicEngine)->RenderStart();
-	//for (auto& tile : mMaps)
-	//{
-	//	tile->Render();
-	//}
-
-	//mPlayer->Render();
-
-	//for (auto& player : mOtherPlayers)
-	//{
-	//	player.second->Render();
-	//}
-
-	//for (auto& monster : mMonsters)
-	//{
-	//	monster.second->Render();
-	//}
-
-	//GET_INSTANCE(GraphicEngine)->RenderEnd();
-
-
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->BeginDraw();
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::Black));
-
-	{
-		int size = 100;
-		D2D1_RECT_F rect;
-		rect.left = 0;
-		rect.top = 0;
-		rect.right = rect.left + size;
-		rect.bottom = rect.top + size;
-		GET_INSTANCE(GraphicEngine)->RenderTexture(GET_INSTANCE(ResourceManager)->FindTexture("Sword"), rect);
-	}
 
 	for (auto& tile : mMaps)
 	{
 		tile->Render();
 	}
 
-	mPlayer->Render();
+	for (auto& monster : mMonsters)
+	{
+		monster.second->Render();
+	}
 
 	for (auto& player : mOtherPlayers)
 	{
 		player.second->Render();
 	}
 
-	for (auto& monster : mMonsters)
-	{
-		monster.second->Render();
-	}
+	mPlayer->Render();
 
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->EndDraw();
 }
