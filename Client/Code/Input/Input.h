@@ -57,6 +57,7 @@ public:
 	void ProcessKeyboardMessage(unsigned int msg, unsigned long long wParam, long long lParam);
 	void ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam);
 
+	void SetMousePos(std::pair<int, int> pos) { mMousePos = pos; }
 	const std::pair<int, int>& GetMousePos() const { return mMousePos; }
 
 	bool KeyOnceCheck(KEY_TYPE);

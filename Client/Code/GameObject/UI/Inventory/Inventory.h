@@ -26,8 +26,10 @@ private:
 	InventoryItem* mItem;
 };
 
-constexpr int MAX_INVENTORY_WIDTH_SLOT_SIZE = 10;
+constexpr int MAX_INVENTORY_WIDTH_SLOT_SIZE = 8;
 constexpr int MAX_INVENTORY_HEIGHT_SLOT_SIZE = 4;
+constexpr int VIEW_SLOT_HEIGHT = 5;
+
 class Inventory : public UI
 {
 public:

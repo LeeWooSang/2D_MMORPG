@@ -103,7 +103,14 @@ bool GraphicEngine::Initialize(HWND handle, int width, int height)
 		return false;
 	}
 
-	D2D1_SIZE_U size = D2D1::SizeU(mWidth, mHeight);
+	// ÄÞ°´Ã¼ ÃÊ±âÈ­
+	result = CoInitialize(nullptr);
+	if (result != S_OK)
+	{
+		return false;
+	}
+
+	D2D1_SIZE_U size = D2D1::SizeU(width, height);
 	D2D1_RENDER_TARGET_PROPERTIES d2dRTProps = D2D1::RenderTargetProperties();
 	D2D1_HWND_RENDER_TARGET_PROPERTIES d2dHwndRTProps = D2D1::HwndRenderTargetProperties(handle, size, D2D1_PRESENT_OPTIONS_IMMEDIATELY);
 	result = mFactory->CreateHwndRenderTarget(d2dRTProps, d2dHwndRTProps, &mRenderTarget);

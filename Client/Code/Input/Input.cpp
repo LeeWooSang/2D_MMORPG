@@ -94,6 +94,8 @@ void Input::ProcessKeyboardMessage(unsigned int msg, unsigned long long wParam, 
 
 void Input::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)
 {
+	//mMousePos.first = LOWORD(lParam);
+	//mMousePos.second = HIWORD(lParam);
 	switch (msg)
 	{
 		case WM_LBUTTONDOWN:
@@ -102,8 +104,8 @@ void Input::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, lon
 		case WM_RBUTTONUP:
 		case WM_MOUSEMOVE:
 		{
-			mMousePos.first = LOWORD(lParam);
-			mMousePos.second = HIWORD(lParam);
+			//mMousePos.first = LOWORD(lParam);
+			//mMousePos.second = HIWORD(lParam);
 
 			//std::cout << "X : " << mMousePos.first << ", Y : " << mMousePos.second << std::endl;
 			//cout << "mX : " << mouse.x << ", mY : " << mouse.y << endl;

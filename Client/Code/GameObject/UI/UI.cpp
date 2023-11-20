@@ -59,24 +59,12 @@ void UI::Render()
 		return;
 	}
 
-	RECT src;
-	src.left = mTexture->GetPos(mCurrFrame).first;
-	src.top = mTexture->GetPos(mCurrFrame).second;
-	src.right = mTexture->GetPos(mCurrFrame).first + mTexture->GetSize().first;
-	src.bottom = mTexture->GetPos(mCurrFrame).second + mTexture->GetSize().second;
-
-	//D3DXVECTOR3 pos = D3DXVECTOR3(mPos.first, mPos.second, 0.0);
-	////GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
-	//mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
-	//mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
-	//mTexture->GetSprite()->End();
-
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
 	pos.right = pos.left + mTexture->GetSize().first;
 	pos.bottom = pos.top + mTexture->GetSize().second;
-	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos, pos);
 
 	for (auto& child : mChildUIs)
 	{

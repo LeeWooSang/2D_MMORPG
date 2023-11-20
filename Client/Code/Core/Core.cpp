@@ -83,6 +83,12 @@ bool Core::Initialize(HWND handle, int width, int height)
 
 void Core::Run()
 {
+	POINT mouse;
+	::GetCursorPos(&mouse);
+	::ScreenToClient(mHandle, &mouse);
+	GET_INSTANCE(Input)->SetMousePos(std::make_pair(mouse.x, mouse.y));
+	//std::cout << mouse.x << ", " << mouse.y << std::endl;
+
 #ifdef SERVER_CONNECT
 	if (mIsReady == false)
 	{
@@ -141,6 +147,17 @@ void Core::Run()
 
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->BeginDraw();
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::Black));
+
+	{
+		int size = 100;
+		D2D1_RECT_F rect;
+		rect.left = 0;
+		rect.top = 0;
+		rect.right = rect.left + size;
+		rect.bottom = rect.top + size;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(GET_INSTANCE(ResourceManager)->FindTexture("Sword"), rect);
+	}
+
 	for (auto& tile : mMaps)
 	{
 		tile->Render();
@@ -157,6 +174,7 @@ void Core::Run()
 	{
 		monster.second->Render();
 	}
+
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->EndDraw();
 }
 

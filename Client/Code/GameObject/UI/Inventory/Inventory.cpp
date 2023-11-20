@@ -35,11 +35,12 @@ void InventorySlot::Update()
 	}
 
 	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
-	if (Collision(mousePos.first, mousePos.second) == true)
+	
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_LBUTTON) == true)
 	{
-		if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_LBUTTON) == true)
+		if (Collision(mousePos.first, mousePos.second) == true)
 		{
-			std::cout << "슬롯 번호 : " << mSlotNum << "클릭" << std::endl;
+			std::cout << mSlotNum << "번호 슬롯 클릭" << std::endl;
 		}
 	}
 
@@ -51,18 +52,40 @@ void InventorySlot::Update()
 
 void InventorySlot::Render()
 {
-	UI::Render();
-
+	// 보이는 것만 렌더
 	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
 	{
 		return;
 	}
+
+	D2D1_RECT_F pos;
+	pos.left = mPos.first;
+	pos.top = mPos.second;
+	pos.right = pos.left + mTexture->GetSize().first;
+	pos.bottom = pos.top + mTexture->GetSize().second;
+
+	D2D1_RECT_F rect;
+	rect.left = mPos.first;
+	rect.top = mPos.second;
+	rect.right = rect.left + mTexture->GetSize().first;
+	rect.bottom = rect.top + mTexture->GetSize().second - 10;
+
+	//GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, rect, pos);
+	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 	std::wstring text = std::to_wstring(mSlotNum);
 	GET_INSTANCE(GraphicEngine)->RenderText(text, mPos.first, mPos.second, "메이플");
 	if (mItem != nullptr)
 	{
 		mItem->Render();
+	}
+
+	for (auto& child : mChildUIs)
+	{
+		for (int i = 0; i < child.second.size(); ++i)
+		{
+			child.second[i]->Render();
+		}
 	}
 }
 
@@ -109,6 +132,7 @@ bool Inventory::Initialize(int x, int y)
 	mSlotWidth = GET_INSTANCE(ResourceManager)->FindTexture("Slot")->GetSize().first;
 	mSlotHeight = GET_INSTANCE(ResourceManager)->FindTexture("Slot")->GetSize().second;
 
+	// 슬롯의 모델좌표
 	int originX = 7;
 	int originY = 47;
 	int tempX = originX;
@@ -142,14 +166,18 @@ bool Inventory::Initialize(int x, int y)
 		tempY += (mSlotHeight + mSlotGap);
 	}
 
-	//if (mChildUIs["Slot"].size() > 20)
-	//{
+	if (MAX_INVENTORY_WIDTH_SLOT_SIZE > VIEW_SLOT_HEIGHT)
+	{
 		Scroll* scroll = new Scroll;
 		scroll->Initialize(300, 47);
+
+		int alphaValue = ((originY + (VIEW_SLOT_HEIGHT - 1) * (mSlotHeight + 1 + mSlotGap)) - originY) / MAX_INVENTORY_WIDTH_SLOT_SIZE;
+		scroll->SetAlphaValue(alphaValue);
+
 		scroll->SetTexture("ScrollBackground");
 		scroll->Visible();
 		AddChildUI("Scroll", scroll);
-	//}
+	}
 
 	SetPosition(x, y);
 
@@ -215,7 +243,7 @@ void Inventory::Render()
 	pos.top = mPos.second + 30;
 	pos.right = pos.left + mTexture->GetSize().first;
 	pos.bottom = pos.top + mTexture->GetSize().second - 60;
-	GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+	//GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
 
 	for (auto& child : mChildUIs)
 	{
@@ -240,26 +268,38 @@ void Inventory::ProcessMouseWheelEvent(unsigned long long wParam)
 	}
 
 	std::cout << "인벤토리 안에서 스크롤 이벤트" << std::endl;
+	
+	if ((SHORT)HIWORD(wParam) > 0)
+	{
+		if (scrollBar < max)
+		{
+			upFlag = true;
+		}
+	}
+	else
+	{
+		if (scrollBar > min)
+		{
+			downFlag = true;
+		}
+	}
+
+	if (upFlag == false && downFlag == false)
+	{
+		return;
+	}
 
 	for (auto& child : mChildUIs["Slot"])
 	{
 		InventorySlot* slot = static_cast<InventorySlot*>(child);
 		std::pair<int, int> originPos = slot->GetOriginPosition();
-		if ((SHORT)HIWORD(wParam) > 0)
+		if (upFlag == true)
 		{
-			if (scrollBar < max)
-			{
-				originPos.second += (slot->GetTexture()->GetSize().second + mSlotGap);
-				upFlag = true;
-			}
+			originPos.second += (slot->GetTexture()->GetSize().second + mSlotGap);
 		}
 		else
 		{
-			if (scrollBar > min)
-			{
-				originPos.second -= (slot->GetTexture()->GetSize().second + mSlotGap);
-				downFlag = true;
-			}
+			originPos.second -= (slot->GetTexture()->GetSize().second + mSlotGap);
 		}		
 		slot->SetOriginPosition(originPos.first, originPos.second);
 		std::pair<int, int> pos = slot->GetPosition();
@@ -270,20 +310,54 @@ void Inventory::ProcessMouseWheelEvent(unsigned long long wParam)
 		}
 	}
 
-	if (upFlag == true)
+	// 스크롤이 있는경우에
+	if (mChildUIs.count("Scroll") != 0)
 	{
-		++scrollBar;
-		if (scrollBar > max)
+		// 스크롤 바;
+		ScrollBar* scrollBars = static_cast<ScrollBar*>(mChildUIs["Scroll"].front()->FindChildUIs("ScrollBar").front());
+		std::pair<int, int> scrollBarOriginPos = scrollBars->GetOriginPosition();
+		if (upFlag == true)
 		{
-			scrollBar = max;
+			++scrollBar;
+			scrollBarOriginPos.second -= scrollBars->GetAlphaValue();
+
+			if (scrollBar > max)
+			{
+				scrollBar = max;
+			}
 		}
-	}
-	if (downFlag == true)
-	{
-		--scrollBar;
-		if (scrollBar < min)
+		else if (downFlag == true)
 		{
-			scrollBar = min;
+			--scrollBar;
+			scrollBarOriginPos.second += scrollBars->GetAlphaValue();
+
+			if (scrollBar < min)
+			{
+				scrollBar = min;
+			}
+		}
+
+		scrollBars->SetOriginPosition(scrollBarOriginPos.first, scrollBarOriginPos.second);
+		std::pair<int, int> scrollBarPos = scrollBars->GetPosition();
+		scrollBars->SetPosition(scrollBarPos.first, scrollBarPos.second);
+	}
+	else
+	{
+		if (upFlag == true)
+		{
+			++scrollBar;
+			if (scrollBar > max)
+			{
+				scrollBar = max;
+			}
+		}
+		else if (downFlag == true)
+		{
+			--scrollBar;
+			if (scrollBar < min)
+			{
+				scrollBar = min;
+			}
 		}
 	}
 }

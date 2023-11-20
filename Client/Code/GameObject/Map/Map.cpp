@@ -112,6 +112,6 @@ void Map::Render()
 	pos.right = pos.left + mTexture->GetSize().first;
 	pos.bottom = pos.top + mTexture->GetSize().second;
 
-	GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+	//GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos, rect);
 }

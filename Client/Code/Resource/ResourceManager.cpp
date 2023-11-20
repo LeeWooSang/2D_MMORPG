@@ -79,7 +79,7 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(30, 350);
+		texture->CreateTexture(30, 360);
 		if (texture->LoadTexture(L"../Resource/Textures/ScrollBackground.png") == false)
 		{
 			texture.reset();
@@ -89,7 +89,7 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(30, 376);
+		texture->CreateTexture(30, 360);
 		if (texture->LoadTexture(L"../Resource/Textures/ScrollBar.png") == false)
 		{
 			texture.reset();
@@ -101,7 +101,7 @@ bool ResourceManager::Initialize()
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(65, 65);
-		if (texture->LoadTexture(L"../Resource/Textures/Sword.png") == false)
+		if (texture->LoadTexture(L"../Resource/Textures/Sword2.png") == false)
 		{
 			texture.reset();
 			return false;
@@ -128,7 +128,16 @@ bool ResourceManager::Initialize()
 		}
 		mTextureList.emplace("Club", texture);
 	}
-
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(65, 65);
+		if (texture->LoadTexture(L"../Resource/Textures/Dagger.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		mTextureList.emplace("Dagger", texture);
+	}
 	return true;
 }
 

@@ -317,7 +317,7 @@ void Player::AddItem()
 
 	std::random_device rd;
 	std::default_random_engine dre(rd());
-	std::uniform_int_distribution<int> uid(0, 2);
+	std::uniform_int_distribution<int> uid(0, 3);
 	switch (uid(dre))
 	{
 	case 0:
@@ -326,6 +326,10 @@ void Player::AddItem()
 
 	case 1:
 		itemName = "Sword";
+		break;
+
+	case 2:
+		itemName = "Dagger";
 		break;
 
 	default:

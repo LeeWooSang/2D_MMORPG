@@ -23,6 +23,7 @@ public:
 
 	UI* GetParentUI() { return mParentUI; }
 	void AddChildUI(std::string key, UI* ui);
+	std::vector<UI*>& FindChildUIs(const std::string& key) { return mChildUIs[key]; }
 
 protected:
 	UI* mParentUI;

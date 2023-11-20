@@ -12,9 +12,6 @@
 HWND main_window_handle = nullptr; // save the window handle
 HINSTANCE main_instance = nullptr; // save the instance
 
-int				g_left_x = 0;
-int				g_top_y = 0;
-
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	GET_INSTANCE(Core)->WindowProc(hwnd, msg, wparam, lparam);
@@ -30,6 +27,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	case WM_PAINT:
 		hdc = BeginPaint(hwnd, &ps);
 		//RoundRect(hdc, 50, 50, 300, 300, 200, 200);
+
+		//Rectangle(hdc, 207, 121, 207 + 64, 121 + 64);
 		EndPaint(hwnd, &ps);
 		return 0;
 	
@@ -79,8 +78,12 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline
 	main_window_handle = hwnd;
 	main_instance = hinstance;
 
+	RECT rect;
+	GetClientRect(hwnd, &rect);
+	int width = rect.right - rect.left;
+	int height = rect.bottom - rect.top;
 	// 게임 초기화
-	if (GET_INSTANCE(Core)->Initialize(main_window_handle, WINDOW_WIDTH, WINDOW_HEIGHT) == false)
+	if (GET_INSTANCE(Core)->Initialize(main_window_handle, width, height) == false)
 	{
 		GET_INSTANCE(Core)->Release();
 		return false;
@@ -105,21 +108,4 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline
 	GET_INSTANCE(Core)->Release();
 
 	return(msg.wParam);
-} 
-
-int Game_Init(void *parms)
-{
-	// this function is where you do all the initialization 
-	// for your game
-
-	if (GET_INSTANCE(Core)->Initialize(main_window_handle, WINDOW_WIDTH, WINDOW_HEIGHT) == false)
-	{
-		return false;
-	}
-
-
-	// hide the mouse
-	//ShowCursor(FALSE);
-
-	return 1;
 } 

@@ -2,10 +2,12 @@
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../../../Resource/Texture/Texture.h"
 #include "../../../Input/Input.h"
+#include "../Inventory/Inventory.h"
 
 Scroll::Scroll()
 	: UI()
 {
+	mAlphaValue = 0;
 }
 
 Scroll::~Scroll()
@@ -17,7 +19,8 @@ bool Scroll::Initialize(int x, int y)
 	UI::Initialize(x, y);
 
 	ScrollBar* scrollBar = new ScrollBar;
-	scrollBar->Initialize(3, 5);
+	
+	scrollBar->Initialize(3, 0);
 
 	AddChildUI("ScrollBar", scrollBar);
 
@@ -54,9 +57,21 @@ void Scroll::Render()
 	UI::Render();
 }
 
+void Scroll::SetAlphaValue(int value)
+{
+	mAlphaValue = value;
+
+	for (auto& child : mChildUIs["ScrollBar"])
+	{
+		ScrollBar* scrollBar = static_cast<ScrollBar*>(child);
+		scrollBar->SetAlphaValue(value);
+	}
+}
+
 ScrollBar::ScrollBar()
 	: UI()
 {
+	mAlphaValue = 0;
 }
 
 ScrollBar::~ScrollBar()
@@ -98,23 +113,13 @@ void ScrollBar::Render()
 		return;
 	}
 
-	RECT src;
-	src.left = mTexture->GetPos(mCurrFrame).first;
-	src.top = mTexture->GetPos(mCurrFrame).second;
-	src.right = mTexture->GetPos(mCurrFrame).first + mTexture->GetSize().first;
-	src.bottom = mTexture->GetPos(mCurrFrame).second + mTexture->GetSize().second;
-
-	//D3DXVECTOR3 pos = D3DXVECTOR3(mPos.first, mPos.second, 0.0);
-	//GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
-
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
-	//pos.right = pos.left + mTexture->GetSize().first;
-	//pos.bottom = pos.top + mTexture->GetSize().second;
-	pos.right = pos.left + 25;
-	pos.bottom = pos.top + 340;
+	pos.right = pos.left + mTexture->GetSize().first - 5;
+	pos.bottom = pos.top + mTexture->GetSize().second - (MAX_INVENTORY_WIDTH_SLOT_SIZE - VIEW_SLOT_HEIGHT) * mAlphaValue;
 
+	//GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 	for (auto& child : mChildUIs)

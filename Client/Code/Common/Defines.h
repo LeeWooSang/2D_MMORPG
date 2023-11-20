@@ -11,7 +11,7 @@
 
 #include <Windows.h>
 
-#define WINDOW_WIDTH    750
+#define WINDOW_WIDTH    800
 #define WINDOW_HEIGHT   800
 
 //#define SERVER_CONNECT
