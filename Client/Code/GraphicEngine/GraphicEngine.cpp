@@ -295,8 +295,8 @@ void GraphicEngine::createFontColor()
 	ID2D1SolidColorBrush* color[MAX_COLOR_COUNT];
 
 	int index = 0;
-	HRESULT result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DeepPink, 1.0f), &color[index]);
-	mFontColorMap.emplace("분홍색", color[index++]);
+	HRESULT result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Blue, 1.0f), &color[index]);
+	mFontColorMap.emplace("파란색", color[index++]);
 
 	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Brown, 1.0f), &color[index]);
 	mFontColorMap.emplace("갈색", color[index++]);

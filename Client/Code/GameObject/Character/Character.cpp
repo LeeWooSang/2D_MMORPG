@@ -263,7 +263,7 @@ void Player::Render()
 
 		int windowHeight = 800;
 		text = L"MY POSITION (" + std::to_wstring(mPos.first) + L", " + std::to_wstring(mPos.second) + L")";
-		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, "메이플", "빨간색");
+		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, "메이플", "파란색");
 	}
 
 	mInventory->Render();

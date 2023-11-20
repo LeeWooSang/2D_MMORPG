@@ -23,7 +23,6 @@ public:
 	void WindowProc(HWND handle, unsigned int msg, unsigned long long wParam, long long lParam);
 
 	bool AddObject(int myId = 0);
-
 	//Player* GetPlayer() { return mPlayer.get(); }
 	Player* GetPlayer() { return mPlayer; }
 	Character* GetOtherPlayer(int id) { return mOtherPlayers[id].get(); }
@@ -31,6 +30,7 @@ public:
 
 	bool GetIsReady()	const { return mIsReady; }
 
+	void render();
 private:
 	HWND mHandle;
 

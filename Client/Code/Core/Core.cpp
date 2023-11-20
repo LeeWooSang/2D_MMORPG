@@ -1,7 +1,7 @@
 #include "Core.h"
 #include "../Network/Network.h"
-
 #include "../GraphicEngine/GraphicEngine.h"
+#include "../GameTimer/GameTimer.h"
 #include "../Resource/ResourceManager.h"
 #include "../Input/Input.h"
 
@@ -41,6 +41,7 @@ Core::~Core()
 	GET_INSTANCE(Network)->Release();
 	GET_INSTANCE(Input)->Release();
 	GET_INSTANCE(ResourceManager)->Release();
+	GET_INSTANCE(GameTimer)->Release();
 	GET_INSTANCE(GraphicEngine)->Release();
 }
 
@@ -83,6 +84,9 @@ bool Core::Initialize(HWND handle, int width, int height)
 
 void Core::Run()
 {
+	GET_INSTANCE(GameTimer)->Tick(0);
+	float elapsedTime = GET_INSTANCE(GameTimer)->GetElapsedTime();
+
 	POINT mouse;
 	::GetCursorPos(&mouse);
 	::ScreenToClient(mHandle, &mouse);
@@ -123,27 +127,10 @@ void Core::Run()
 		mPlayer->AddItem();
 	}
 
-	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->BeginDraw();
-	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::Black));
+	render();
 
-	for (auto& tile : mMaps)
-	{
-		tile->Render();
-	}
-
-	for (auto& monster : mMonsters)
-	{
-		monster.second->Render();
-	}
-
-	for (auto& player : mOtherPlayers)
-	{
-		player.second->Render();
-	}
-
-	mPlayer->Render();
-
-	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->EndDraw();
+	std::wstring title = L"MapleStory " + std::to_wstring(GET_INSTANCE(GameTimer)->GetFrameRate()) + L" FPS";
+	::SetWindowText(mHandle, const_cast<wchar_t*>(title.c_str()));
 }
 
 void Core::Quit()
@@ -258,4 +245,29 @@ bool Core::AddObject(int myId)
 	mIsReady = true;
 
 	return true;
+}
+
+void Core::render()
+{
+	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->BeginDraw();
+	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::Black));
+
+	for (auto& tile : mMaps)
+	{
+		tile->Render();
+	}
+
+	for (auto& monster : mMonsters)
+	{
+		monster.second->Render();
+	}
+
+	for (auto& player : mOtherPlayers)
+	{
+		player.second->Render();
+	}
+
+	mPlayer->Render();
+
+	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->EndDraw();
 }
