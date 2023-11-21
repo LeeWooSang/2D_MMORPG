@@ -93,25 +93,10 @@ void UI::Render()
 
 void UI::MouseOver()
 {
-	//D2D1_RECT_F pos;
-	//pos.left = mPos.first;
-	//pos.top = mPos.second;
-	//pos.right = pos.left + mTexture->GetSize().first;
-	//pos.bottom = pos.top + mTexture->GetSize().second;
-
-	//GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
 }
 
 void UI::MouseLButtonDown()
 {
-	std::cout << "UI 안에서 LButton Down" << std::endl;
-	D2D1_RECT_F pos;
-	pos.left = mPos.first;
-	pos.top = mPos.second;
-	pos.right = pos.left + mTexture->GetSize().first;
-	pos.bottom = pos.top + mTexture->GetSize().second;
-
-	GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "파란색");
 }
 
 void UI::MouseLButtonUp()

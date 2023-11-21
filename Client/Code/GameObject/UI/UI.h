@@ -22,7 +22,7 @@ public:
 	void SetOriginPosition(int x, int y) { mOriginX = x;	mOriginY = y; }
 
 	virtual void SetPosition(int x, int y);
-
+	
 	bool Collision(int x, int y);
 	virtual void MouseOverCollision(int x, int y);
 

@@ -76,6 +76,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline
 	GetClientRect(hwnd, &rect);
 	int width = rect.right - rect.left;
 	int height = rect.bottom - rect.top;
+
 	// 게임 초기화
 	if (GET_INSTANCE(Core)->Initialize(hwnd, width, height) == false)
 	{

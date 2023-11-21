@@ -32,18 +32,27 @@ enum KEY_TYPE
 
 constexpr int MAX_KEY_TYPE = MOUSE_RBUTTON + 1;
 
+enum class KEY_STATE
+{
+	NONE,	// 누르지 않았고, 이전에도 눌리지 않은 상태
+	TAP,		// 막 누른 시점
+	HOLD,	// 누르고 있는
+	AWAY	// 막 땐 시점
+};
 struct KeyState
 {
 	KeyState()
-		: keyType(NONE), pushed(false), pushing(false), pop(false) {}
+		: keyType(KEY_TYPE::NONE), keyState(KEY_STATE::NONE), isPrevPush(false) {}
 
 	int keyType;
-	// 키를 누를 순간
-	bool pushed;
-	// 키를 계속 누르고 있을 때
-	bool pushing;
-	// 키를 떼는 순간
-	bool pop;
+	KEY_STATE keyState;
+	bool isPrevPush;
+	//// 키를 누를 순간
+	//bool pushed;
+	//// 키를 계속 누르고 있을 때
+	//bool pushing;
+	//// 키를 떼는 순간
+	//bool pop;
 };
 
 class Input
@@ -61,9 +70,11 @@ public:
 	const std::pair<int, int>& GetMousePos() const { return mMousePos; }
 
 	bool KeyOnceCheck(KEY_TYPE);
-	bool GetIsPushed(KEY_TYPE key)	const { return mKeyStateList[key].pushed; }
-	bool GetIsPushing(KEY_TYPE key)	const { return mKeyStateList[key].pushing; }
-	bool GetIsPop(KEY_TYPE key)	const { return mKeyStateList[key].pop; }
+	
+	KEY_STATE GetKeyState(KEY_TYPE key) const { return mKeyStateList[key].keyState; }
+	//bool GetIsPushed(KEY_TYPE key)	const { return mKeyStateList[key].pushed; }
+	//bool GetIsPushing(KEY_TYPE key)	const { return mKeyStateList[key].pushing; }
+	//bool GetIsPop(KEY_TYPE key)	const { return mKeyStateList[key].pop; }
 	void ProcessKeyEvent();
 
 	

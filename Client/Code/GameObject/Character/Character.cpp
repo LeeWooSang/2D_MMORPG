@@ -217,14 +217,6 @@ void Player::Update()
 	GET_INSTANCE(Camera)->SetPosition(mPos.first, mPos.second);
 
 #endif 
-
-	//std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
-	//if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_RBUTTON) == true)
-	//{
-	//	mInventory->SetPosition(mousePos.first, mousePos.second);
-	//}
-
-	//mInventory->Update();
 }
 
 void Player::Render()
@@ -283,8 +275,6 @@ void Player::Render()
 		text = L"MY POSITION (" + std::to_wstring(mPos.first) + L", " + std::to_wstring(mPos.second) + L")";
 		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, "메이플", "파란색");
 	}
-
-	//mInventory->Render();
 }
 
 void Player::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)

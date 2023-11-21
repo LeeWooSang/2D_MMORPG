@@ -135,6 +135,8 @@ Inventory::Inventory()
 	mSlotHeight = 0;
 
 	mOpen = false;
+
+	mDragStartPos = std::make_pair(0, 0);
 }
 
 Inventory::~Inventory()
@@ -229,6 +231,11 @@ void Inventory::Update()
 	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
 	MouseOverCollision(mousePos.first, mousePos.second);
 
+	if (mMouseLButtonDown == true)
+	{
+		Move();
+	}
+
 	for (auto& child : mChildUIs)
 	{
 		for (int i = 0; i < child.second.size(); ++i)
@@ -267,6 +274,46 @@ void Inventory::Render()
 		for (int i = 0; i < child.second.size(); ++i)
 		{
 			child.second[i]->Render();
+		}
+	}
+}
+
+void Inventory::MouseOver()
+{	
+}
+
+void Inventory::MouseLButtonDown()
+{
+	mDragStartPos = GET_INSTANCE(Input)->GetMousePos();
+}
+
+void Inventory::MouseLButtonUp()
+{
+	UI::MouseLButtonUp();
+}
+
+void Inventory::MouseLButtonClick()
+{
+	UI::MouseLButtonClick();
+}
+
+void Inventory::Move()
+{
+	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
+
+	int x = mousePos.first - mDragStartPos.first;
+	int y = mousePos.second - mDragStartPos.second;
+
+	mPos.first += x;
+	mPos.second += y;
+
+	mDragStartPos = GET_INSTANCE(Input)->GetMousePos();
+
+	for (auto& child : mChildUIs)
+	{
+		for (int i = 0; i < child.second.size(); ++i)
+		{
+			child.second[i]->SetPosition(x, y);
 		}
 	}
 }

@@ -17,7 +17,6 @@ public:
 	virtual void MouseLButtonUp();
 	virtual void MouseLButtonClick();
 
-
 	virtual void SetPosition(int x, int y);
 
 	int GetSlotNum()	const { return mSlotNum; }
@@ -45,6 +44,13 @@ public:
 	virtual void Update();
 	virtual void Render();
 
+	virtual void MouseOver();
+	virtual void MouseLButtonDown();
+	virtual void MouseLButtonUp();
+	virtual void MouseLButtonClick();
+
+	void Move();
+
 	void ProcessMouseWheelEvent(unsigned long long wParam);
 	virtual bool CheckContain(int left, int top, int right, int bottom);
 
@@ -53,6 +59,9 @@ public:
 
 	void OpenInventory();
 
+	std::pair<int, int> GetDragStartPos()	const { return mDragStartPos; }
+	void SetDragStartPos(std::pair<int, int> pos) { mDragStartPos = pos; }
+
 private:
 	// 슬롯 간의 간격
 	int mSlotGap;
@@ -60,6 +69,8 @@ private:
 	int mSlotHeight;
 
 	bool mOpen;
+
+	std::pair<int, int> mDragStartPos;
 };
 
 class InventoryItem : public UI

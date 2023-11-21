@@ -104,8 +104,8 @@ void Input::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, lon
 		case WM_RBUTTONUP:
 		case WM_MOUSEMOVE:
 		{
-			//mMousePos.first = LOWORD(lParam);
-			//mMousePos.second = HIWORD(lParam);
+			mMousePos.first = LOWORD(lParam);
+			mMousePos.second = HIWORD(lParam);
 
 			//std::cout << "X : " << mMousePos.first << ", Y : " << mMousePos.second << std::endl;
 			//cout << "mX : " << mouse.x << ", mY : " << mouse.y << endl;
@@ -130,7 +130,7 @@ bool Input::KeyOnceCheck(KEY_TYPE key)
 {
 	//processKeyEvent();
 
-	if (mKeyStateList[key].pop == true)
+	if (mKeyStateList[key].keyState == KEY_STATE::TAP)
 	{
 		return true;
 	}
@@ -147,8 +147,6 @@ void Input::ProcessKeyEvent()
 		return;
 	}
 
-	mFlag = false;
-
 	for (auto& key : mKeyStateList)
 	{
 		// 키가 정의 되어 있지 않으면,
@@ -161,36 +159,34 @@ void Input::ProcessKeyEvent()
 		if (KEY_DOWN(key.keyType))
 		{
 			// 키를 처음 누른 경우
-			if (key.pushing == false)
+			if (key.isPrevPush == true)
 			{
-				key.pushed = true;
+				key.keyState = KEY_STATE::HOLD;
 			}
 			// 키를 계속 누르고 있을 때,
 			else
 			{
-				key.pushed = false;
+				key.keyState = KEY_STATE::TAP;
 			}
 
-			key.pushing = true;
-			mFlag = true;
+			key.isPrevPush = true;
 		}
 
 		// 키가 눌리지 않았을 때
 		else
 		{
 			// 키를 눌렀다가 땔 떼
-			if (key.pushing == true)
+			if (key.isPrevPush == true)
 			{
-				key.pop = true;
+				key.keyState = KEY_STATE::AWAY;
 			}
 			// 키를 누르지도 않았을 때
 			else
 			{
-				key.pop = false;
+				key.keyState = KEY_STATE::NONE;
 			}
 
-			key.pushing = false;
-			key.pushed = false;
+			key.isPrevPush = false;
 		}
 	}
 }

@@ -32,6 +32,12 @@ void UIManager::Render()
 
 void UIManager::Update()
 {
+	HWND handle = GetFocus();
+	if (handle == nullptr)
+	{
+		return;
+	}
+
 	for (auto ui : mUIs)
 	{
 		ui->Visible();
@@ -51,13 +57,15 @@ void UIManager::Update()
 		targetUI->MouseOver();
 
 		// 키를 누른 순간
-		if (GET_INSTANCE(Input)->GetIsPushed(KEY_TYPE::MOUSE_LBUTTON) == true)
+		//if (GET_INSTANCE(Input)->GetIsPushed(KEY_TYPE::MOUSE_LBUTTON) == true)
+		if (GET_INSTANCE(Input)->GetKeyState(KEY_TYPE::MOUSE_LBUTTON) == KEY_STATE::TAP)
 		{
 			targetUI->MouseLButtonDown();
 			targetUI->SetMouseLButtonDown(true);
 		}
 		// 키를 뗀 순간
-		else if (GET_INSTANCE(Input)->GetIsPop(KEY_TYPE::MOUSE_LBUTTON) == true)
+		//else if (GET_INSTANCE(Input)->GetIsPop(KEY_TYPE::MOUSE_LBUTTON) == true)
+		else if (GET_INSTANCE(Input)->GetKeyState(KEY_TYPE::MOUSE_LBUTTON) == KEY_STATE::AWAY)
 		{
 			targetUI->MouseLButtonUp();
 			// 유아이 안에서 키를 누르고 뗐을 때만 클릭
@@ -130,7 +138,8 @@ UI* UIManager::getTargetUI(UI* parentUI)
 		}
 	}
 
-	if (GET_INSTANCE(Input)->GetIsPop(KEY_TYPE::MOUSE_LBUTTON) == true)
+	if (GET_INSTANCE(Input)->GetKeyState(KEY_TYPE::MOUSE_LBUTTON) == KEY_STATE::AWAY)
+	//if (GET_INSTANCE(Input)->GetIsPop(KEY_TYPE::MOUSE_LBUTTON) == true)
 	{
 		for (auto& ui : noneTargetUIs)
 		{
@@ -146,7 +155,8 @@ UI* UIManager::getFocusUI()
 	// 기존 포커스된 UI와 새로운 포커스된 UI 비교용도
 	UI* focusUI = mFocusUI;
 	// 키를 누른 순간
-	if (GET_INSTANCE(Input)->GetIsPushed(KEY_TYPE::MOUSE_LBUTTON) == false)
+	//if (GET_INSTANCE(Input)->GetIsPushed(KEY_TYPE::MOUSE_LBUTTON) == false)
+	if (GET_INSTANCE(Input)->GetKeyState(KEY_TYPE::MOUSE_LBUTTON) != KEY_STATE::TAP)
 	{
 		return focusUI;
 	}
