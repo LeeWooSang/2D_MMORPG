@@ -12,6 +12,7 @@
 #include "../Resource/ResourceManager.h"
 #include "../Resource/Texture/Texture.h"
 
+#include "../GameObject/UI/UIManager.h"
 
 #define	 WM_SOCKET WM_USER + 1
 
@@ -77,6 +78,9 @@ bool Core::Initialize(HWND handle, int width, int height)
 	{
 		return false;
 	}
+
+	GET_INSTANCE(GameTimer)->Reset();
+
 #endif 
 
 	return true;
@@ -84,14 +88,13 @@ bool Core::Initialize(HWND handle, int width, int height)
 
 void Core::Run()
 {
-	GET_INSTANCE(GameTimer)->Tick(0);
+	GET_INSTANCE(GameTimer)->Tick();
 	float elapsedTime = GET_INSTANCE(GameTimer)->GetElapsedTime();
 
 	POINT mouse;
 	::GetCursorPos(&mouse);
 	::ScreenToClient(mHandle, &mouse);
 	GET_INSTANCE(Input)->SetMousePos(std::make_pair(mouse.x, mouse.y));
-	//std::cout << mouse.x << ", " << mouse.y << std::endl;
 
 #ifdef SERVER_CONNECT
 	if (mIsReady == false)
@@ -101,6 +104,7 @@ void Core::Run()
 #endif 
 
 	GET_INSTANCE(Input)->ProcessKeyEvent();
+	//GET_INSTANCE(UIManager)->Update();
 
 	// update
 	mPlayer->Update();
@@ -129,6 +133,7 @@ void Core::Run()
 
 	render();
 
+	//std::cout << GET_INSTANCE(GameTimer)->GetFrameRate() << std::endl;
 	std::wstring title = L"MapleStory " + std::to_wstring(GET_INSTANCE(GameTimer)->GetFrameRate()) + L" FPS";
 	::SetWindowText(mHandle, const_cast<wchar_t*>(title.c_str()));
 }
@@ -268,6 +273,9 @@ void Core::render()
 	}
 
 	mPlayer->Render();
+
+	GET_INSTANCE(UIManager)->Update();
+
 
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->EndDraw();
 }

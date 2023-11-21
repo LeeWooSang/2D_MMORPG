@@ -6,18 +6,19 @@ class GameTimer
 {
 	SINGLE_TONE(GameTimer)
 
-	void Tick(float);
+	void Tick(int fps = 0);
 	void Start();
 	void Stop();
 	void Reset();
 
 	unsigned int GetFrameRate()	const { return m_nCurrentFrameRate; }
-	float GetElapsedTime() const { return m_ElapsedTime; }
+	float GetElapsedTime() const { return mElapsedTime; }
 	float GetTotalTime();
 
 private:
-	double							m_TimeScale;						
-	float								m_ElapsedTime;		
+	bool								mStopped;
+	double							mTimeScale;
+	float								mElapsedTime;		
 
 	__int64							m_nBasePerformanceCounter;
 	__int64							m_nPausedPerformanceCounter;
@@ -32,7 +33,5 @@ private:
 
     unsigned int					m_nCurrentFrameRate;				
 	unsigned int					m_nFramesPerSecond;					
-	float								m_fFPSTimeElapsed;		
-
-	bool								m_bStopped;
+	float								m_fFPSTimeElapsed;
 };

@@ -95,6 +95,9 @@
     <ClCompile Include="..\Code\GameTimer\GameTimer.cpp">
       <Filter>Code\GameTimer</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\GameObject\UI\UIManager.cpp">
+      <Filter>Code\GameObject\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Code\GameObject\GameObject.h">
@@ -144,6 +147,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameTimer\GameTimer.h">
       <Filter>Code\GameTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\UI\UIManager.h">
+      <Filter>Code\GameObject\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

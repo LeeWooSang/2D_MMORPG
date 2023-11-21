@@ -10,6 +10,9 @@ UI::UI()
 	mChildUIs.clear();
 	mOriginX = 0;
 	mOriginY = 0;
+
+	mMouseOver = false;
+	mMouseLButtonDown = false;
 }
 
 UI::~UI()
@@ -37,6 +40,7 @@ bool UI::Initialize(int x, int y)
 
 void UI::Update()
 {
+
 	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
 	{
 		return;
@@ -74,6 +78,33 @@ void UI::Render()
 			child.second[i]->Render();
 		}
 	}
+}
+
+void UI::MouseOver()
+{
+	//std::cout << "UI 안에서 MouseOver" << std::endl;
+	D2D1_RECT_F pos;
+	pos.left = mPos.first;
+	pos.top = mPos.second;
+	pos.right = pos.left + mTexture->GetSize().first;
+	pos.bottom = pos.top + mTexture->GetSize().second;
+
+	GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+}
+
+void UI::MouseLButtonDown()
+{
+	std::cout << "UI 안에서 LButton Down" << std::endl;
+}
+
+void UI::MouseLButtonUp()
+{
+	std::cout << "UI  안에서 LButton Up" << std::endl;
+}
+
+void UI::MouseLButtonClick()
+{
+	std::cout << "UI LButton 클릭" << std::endl;
 }
 
 void UI::SetPosition(int x, int y)

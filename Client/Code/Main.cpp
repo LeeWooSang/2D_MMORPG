@@ -7,11 +7,6 @@
 // defines for windows 
 #define WINDOW_CLASS_NAME L"Client"  // class name
 
-// GLOBALS ////////////////////////////////////////////////
-
-HWND main_window_handle = nullptr; // save the window handle
-HINSTANCE main_instance = nullptr; // save the instance
-
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	GET_INSTANCE(Core)->WindowProc(hwnd, msg, wparam, lparam);
@@ -26,15 +21,14 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 	case WM_PAINT:
 		hdc = BeginPaint(hwnd, &ps);
-		//RoundRect(hdc, 50, 50, 300, 300, 200, 200);
-
-		//Rectangle(hdc, 207, 121, 207 + 64, 121 + 64);
 		EndPaint(hwnd, &ps);
 		return 0;
 	
 	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
+		{
+			PostQuitMessage(0);
+			return 0;
+		}
 
 	default:
 		break;
@@ -75,15 +69,15 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline
 		nullptr)))	// creation parms
 		return(0);
 
-	main_window_handle = hwnd;
-	main_instance = hinstance;
+	//main_window_handle = hwnd;
+	//main_instance = hinstance;
 
 	RECT rect;
 	GetClientRect(hwnd, &rect);
 	int width = rect.right - rect.left;
 	int height = rect.bottom - rect.top;
 	// 게임 초기화
-	if (GET_INSTANCE(Core)->Initialize(main_window_handle, width, height) == false)
+	if (GET_INSTANCE(Core)->Initialize(hwnd, width, height) == false)
 	{
 		GET_INSTANCE(Core)->Release();
 		return false;
@@ -100,8 +94,6 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline
 			DispatchMessage(&msg);
 		} 
 
-		// start the timing clock
-		//Start_Clock();
 		GET_INSTANCE(Core)->Run();
 	} 
 
