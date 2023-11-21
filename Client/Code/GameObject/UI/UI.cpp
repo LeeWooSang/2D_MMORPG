@@ -40,11 +40,13 @@ bool UI::Initialize(int x, int y)
 
 void UI::Update()
 {
-
 	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
 	{
 		return;
 	}
+
+	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
+	MouseOverCollision(mousePos.first, mousePos.second);
 
 	for (auto& child : mChildUIs)
 	{
@@ -71,6 +73,15 @@ void UI::Render()
 
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
+	if (mMouseLButtonDown)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "파란색");
+	}
+	else if (mMouseOver)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+	}
+
 	for (auto& child : mChildUIs)
 	{
 		for (int i = 0; i < child.second.size(); ++i)
@@ -82,19 +93,25 @@ void UI::Render()
 
 void UI::MouseOver()
 {
-	//std::cout << "UI 안에서 MouseOver" << std::endl;
+	//D2D1_RECT_F pos;
+	//pos.left = mPos.first;
+	//pos.top = mPos.second;
+	//pos.right = pos.left + mTexture->GetSize().first;
+	//pos.bottom = pos.top + mTexture->GetSize().second;
+
+	//GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+}
+
+void UI::MouseLButtonDown()
+{
+	std::cout << "UI 안에서 LButton Down" << std::endl;
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
 	pos.right = pos.left + mTexture->GetSize().first;
 	pos.bottom = pos.top + mTexture->GetSize().second;
 
-	GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
-}
-
-void UI::MouseLButtonDown()
-{
-	std::cout << "UI 안에서 LButton Down" << std::endl;
+	GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "파란색");
 }
 
 void UI::MouseLButtonUp()
@@ -146,6 +163,38 @@ bool UI::Collision(int x, int y)
 	}
 
 	return false;
+}
+
+void UI::MouseOverCollision(int x, int y)
+{
+	if (IsVisible() == false)
+	{
+		return;
+	}
+
+	// ui의 rect와 닿았는가?
+	RECT collisionBox;
+	collisionBox.left = mPos.first;
+	collisionBox.right = mPos.first + mTexture->GetSize().first;
+	collisionBox.top = mPos.second;
+	collisionBox.bottom = mPos.second + mTexture->GetSize().second;
+
+	if (x >= collisionBox.left && x <= collisionBox.right && y >= collisionBox.top && y <= collisionBox.bottom)
+	{
+		mMouseOver = true;
+	}
+	else
+	{
+		mMouseOver = false;
+	}
+
+	//for (auto& child : mChildUIs)
+	//{
+	//	for (int i = 0; i < child.second.size(); ++i)
+	//	{
+	//		child.second[i]->MouseOverCollision(x, y);
+	//	}
+	//}
 }
 
 bool UI::CheckContain(int left, int top, int right, int bottom)

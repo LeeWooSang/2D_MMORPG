@@ -10,32 +10,42 @@
 INIT_INSTACNE(UIManager)
 UIManager::UIManager()
 {
+	mFocusUI = nullptr;
 }
 
 UIManager::~UIManager()
 {
+	for (auto& ui : mUIs)
+	{
+		delete ui;
+	}
+	mUIs.clear();
+}
+
+void UIManager::Render()
+{
+	for (auto ui : mUIs)
+	{
+		ui->Render();
+	}
 }
 
 void UIManager::Update()
 {
-	if (GET_INSTANCE(Core)->GetPlayer() == nullptr)
+	for (auto ui : mUIs)
+	{
+		ui->Visible();
+		ui->Update();
+	}
+
+	mFocusUI = getFocusUI();
+	if (mFocusUI == nullptr)
 	{
 		return;
 	}
 
-	Inventory* inventory = GET_INSTANCE(Core)->GetPlayer()->GetInventory();
-
-	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
-	if (inventory->Collision(mousePos.first, mousePos.second) == true)
-	{
-		inventory->SetMouseOver(true);
-	}
-	else
-	{
-		inventory->SetMouseOver(false);
-	}
-
-	UI* targetUI = getTargetUI(inventory);
+	//UI* targetUI = getTargetUI(mUIs.front());
+	UI* targetUI = getTargetUI(mFocusUI);
 	if (targetUI != nullptr)
 	{
 		targetUI->MouseOver();
@@ -58,6 +68,28 @@ void UIManager::Update()
 			targetUI->SetMouseLButtonDown(false);
 		}
 	}
+}
+
+void UIManager::SetFocusUI(UI* ui)
+{
+	if (mFocusUI == ui || ui == nullptr)
+	{
+		mFocusUI = ui;
+		return;
+	}
+	mFocusUI = ui;
+
+	std::list<UI*>::iterator targetIter = mUIs.end();
+	for (auto iter = mUIs.begin(); iter != mUIs.end(); ++iter)
+	{
+		if (mFocusUI == (*iter))
+		{
+			break;
+		}
+	}
+
+	mUIs.erase(targetIter);
+	mUIs.emplace_back(mFocusUI);
 }
 
 UI* UIManager::getTargetUI(UI* parentUI)
@@ -107,4 +139,35 @@ UI* UIManager::getTargetUI(UI* parentUI)
 	}
 
 	return targetUI;
+}
+
+UI* UIManager::getFocusUI()
+{
+	// 기존 포커스된 UI와 새로운 포커스된 UI 비교용도
+	UI* focusUI = mFocusUI;
+	// 키를 누른 순간
+	if (GET_INSTANCE(Input)->GetIsPushed(KEY_TYPE::MOUSE_LBUTTON) == false)
+	{
+		return focusUI;
+	}
+
+	std::list<UI*>::iterator targetIter = mUIs.end();
+	for (auto iter = mUIs.begin(); iter != mUIs.end(); ++iter)
+	{
+		if ((*iter)->GetMouseOver() == true)
+		{
+			targetIter = iter;
+		}
+	}
+
+	if (targetIter == mUIs.end())
+	{
+		return nullptr;
+	}
+
+	focusUI = (*targetIter);
+	mUIs.erase(targetIter);
+	mUIs.emplace_back(focusUI);
+
+	return focusUI;
 }

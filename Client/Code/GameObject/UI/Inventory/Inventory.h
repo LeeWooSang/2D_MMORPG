@@ -12,6 +12,12 @@ public:
 	virtual void Update();
 	virtual void Render();
 
+	virtual void MouseOver();
+	virtual void MouseLButtonDown();
+	virtual void MouseLButtonUp();
+	virtual void MouseLButtonClick();
+
+
 	virtual void SetPosition(int x, int y);
 
 	int GetSlotNum()	const { return mSlotNum; }

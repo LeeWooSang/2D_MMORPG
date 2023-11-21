@@ -35,14 +35,7 @@ void InventorySlot::Update()
 	}
 
 	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
-	
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_LBUTTON) == true)
-	{
-		if (Collision(mousePos.first, mousePos.second) == true)
-		{
-			std::cout << mSlotNum << "번호 슬롯 클릭" << std::endl;
-		}
-	}
+	MouseOverCollision(mousePos.first, mousePos.second);
 
 	if (mItem != nullptr)
 	{
@@ -75,6 +68,15 @@ void InventorySlot::Render()
 	std::wstring text = std::to_wstring(mSlotNum);
 	GET_INSTANCE(GraphicEngine)->RenderText(text, mPos.first, mPos.second, "메이플", "하늘색");
 
+	if (mMouseLButtonDown)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "파란색");
+	}
+	else if (mMouseOver)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+	}
+
 	for (auto& child : mChildUIs)
 	{
 		for (int i = 0; i < child.second.size(); ++i)
@@ -82,6 +84,27 @@ void InventorySlot::Render()
 			child.second[i]->Render();
 		}
 	}
+}
+
+void InventorySlot::MouseOver()
+{
+	UI::MouseOver();
+}
+
+void InventorySlot::MouseLButtonDown()
+{
+	UI::MouseLButtonDown();
+}
+
+void InventorySlot::MouseLButtonUp()
+{
+	UI::MouseLButtonUp();
+}
+
+void InventorySlot::MouseLButtonClick()
+{
+	std::cout << mSlotNum << "번호 슬롯 마우스 클릭" << std::endl;
+	UI::MouseLButtonClick();
 }
 
 void InventorySlot::SetPosition(int x, int y)
@@ -203,6 +226,9 @@ void Inventory::Update()
 		}
 	}
 
+	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
+	MouseOverCollision(mousePos.first, mousePos.second);
+
 	for (auto& child : mChildUIs)
 	{
 		for (int i = 0; i < child.second.size(); ++i)
@@ -225,14 +251,16 @@ void Inventory::Render()
 	pos.top = mPos.second;
 	pos.right = pos.left + mTexture->GetSize().first;
 	pos.bottom = pos.top + mTexture->GetSize().second;
-
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
-	pos.left = mPos.first;
-	pos.top = mPos.second + 30;
-	pos.right = pos.left + mTexture->GetSize().first;
-	pos.bottom = pos.top + mTexture->GetSize().second - 60;
-	//GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+	if (mMouseLButtonDown)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "파란색");
+	}
+	else if (mMouseOver)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+	}
 
 	for (auto& child : mChildUIs)
 	{

@@ -120,3 +120,14 @@ bool GameObject::CheckDistance(int x, int y)
 
     return true;
 }
+
+bool GameObject::IsVisible()
+{
+    // 보이는 것만 렌더
+    if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
+    {
+        return false;
+    }
+
+    return true;
+}

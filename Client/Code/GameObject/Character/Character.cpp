@@ -6,6 +6,8 @@
 #include "../UI/Inventory/Inventory.h"
 #include <string>
 #include <random>
+#include "../UI/UIManager.h"
+
 
 Character::Character()
     : GameObject()
@@ -128,18 +130,34 @@ bool Player::Initialize(int x, int y)
 	}
 
 	// 부모 ui
-	mInventory = new Inventory;
-	if (mInventory->Initialize(0, 0) == false)
 	{
-		return false;
-	}
-	if (mInventory->SetTexture("Inventory") == false)
-	{
-		return false;
-	}
-	
-	//mInventory->SetPosition(100, 150);
+		mInventory = new Inventory;
+		if (mInventory->Initialize(0, 0) == false)
+		{
+			return false;
+		}
+		if (mInventory->SetTexture("Inventory") == false)
+		{
+			return false;
+		}
 
+		GET_INSTANCE(UIManager)->AddUI(mInventory);
+	}
+
+	// 부모 ui
+	{
+		mInventory = new Inventory;
+		if (mInventory->Initialize(100, 0) == false)
+		{
+			return false;
+		}
+		if (mInventory->SetTexture("Inventory") == false)
+		{
+			return false;
+		}
+
+		GET_INSTANCE(UIManager)->AddUI(mInventory);
+	}
 	return true;
 }
 
@@ -200,13 +218,13 @@ void Player::Update()
 
 #endif 
 
-	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_RBUTTON) == true)
-	{
-		mInventory->SetPosition(mousePos.first, mousePos.second);
-	}
+	//std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
+	//if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_RBUTTON) == true)
+	//{
+	//	mInventory->SetPosition(mousePos.first, mousePos.second);
+	//}
 
-	mInventory->Update();
+	//mInventory->Update();
 }
 
 void Player::Render()
@@ -266,7 +284,7 @@ void Player::Render()
 		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, "메이플", "파란색");
 	}
 
-	mInventory->Render();
+	//mInventory->Render();
 }
 
 void Player::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)

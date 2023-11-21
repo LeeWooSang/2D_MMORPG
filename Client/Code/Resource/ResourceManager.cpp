@@ -58,7 +58,7 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(300, 453);
+		texture->CreateTexture(330, 453);
 		if (texture->LoadTexture(L"../Resource/Textures/InventoryBackground.png") == false)
 		{
 			texture.reset();
@@ -89,7 +89,7 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(30, 360);
+		texture->CreateTexture(25, 360);
 		if (texture->LoadTexture(L"../Resource/Textures/ScrollBar.png") == false)
 		{
 			texture.reset();

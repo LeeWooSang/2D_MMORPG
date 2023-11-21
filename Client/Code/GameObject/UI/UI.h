@@ -24,6 +24,8 @@ public:
 	virtual void SetPosition(int x, int y);
 
 	bool Collision(int x, int y);
+	virtual void MouseOverCollision(int x, int y);
+
 	virtual bool CheckContain(int left, int top, int right, int bottom);
 
 	UI* GetParentUI() { return mParentUI; }

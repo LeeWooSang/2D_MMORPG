@@ -26,6 +26,13 @@ public:
 	virtual void Update();
 	virtual void Render();
 
+	virtual void MouseOver();
+	virtual void MouseLButtonDown();
+	virtual void MouseLButtonUp();
+	virtual void MouseLButtonClick();
+
+	virtual void MouseOverCollision(int x, int y);
+
 	int GetAlphaValue()	const { return mAlphaValue; }
 	void SetAlphaValue(int value) { mAlphaValue = value; }
 

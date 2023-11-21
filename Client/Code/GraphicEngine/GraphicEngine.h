@@ -53,13 +53,13 @@ public:
 	void RenderStart();
 	void RenderEnd();
 
-	void RenderRectangle(const D2D1_RECT_F& rect);
+	void RenderRectangle(const D2D1_RECT_F& rect, const std::string& color = "»¡°£»ö");
 	void RenderTexture(Texture* texture, const D2D1_RECT_F& pos);
 	void RenderTexture(Texture* texture, const D2D1_RECT_F& pos, const D2D1_RECT_F& rect);
     void RenderText(const std::wstring& text, int x, int y, const std::string& font, const std::string& color);
 
 	void createFont();
-	void createFontColor();
+	void createBrushColor();
 
     const LPDIRECT3DDEVICE9 GetDevice() const { return mDevice; }
     const LPD3DXSPRITE GetSprite() const { return mSprite; }
@@ -86,7 +86,7 @@ private:
 	ID2D1SolidColorBrush* mRedBrush;
 
 	std::unordered_map<std::string, FontInfo> mFontMap;
-	std::unordered_map<std::string, ID2D1SolidColorBrush*> mFontColorMap;
+	std::unordered_map<std::string, ID2D1SolidColorBrush*> mBrushColorMap;
 };
 
 class Camera

@@ -104,7 +104,6 @@ void Core::Run()
 #endif 
 
 	GET_INSTANCE(Input)->ProcessKeyEvent();
-	//GET_INSTANCE(UIManager)->Update();
 
 	// update
 	mPlayer->Update();
@@ -120,6 +119,8 @@ void Core::Run()
 			tile->NotVisible();
 		}
 	}
+
+	GET_INSTANCE(UIManager)->Update();
 
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true)
 	{
@@ -274,8 +275,7 @@ void Core::render()
 
 	mPlayer->Render();
 
-	GET_INSTANCE(UIManager)->Update();
-
+	GET_INSTANCE(UIManager)->Render();
 
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->EndDraw();
 }

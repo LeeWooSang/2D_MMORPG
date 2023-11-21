@@ -21,6 +21,7 @@ GraphicEngine::GraphicEngine()
 	mRenderTarget = nullptr;
 	mRedBrush = nullptr;
 	mFontMap.clear();
+	mBrushColorMap.clear();
 }
 
 GraphicEngine::~GraphicEngine()
@@ -53,7 +54,7 @@ GraphicEngine::~GraphicEngine()
 		font.second.font->Release();
 	}
 
-	for (auto& color : mFontColorMap)
+	for (auto& color : mBrushColorMap)
 	{
 		color.second->Release();
 	}
@@ -145,7 +146,7 @@ bool GraphicEngine::Initialize(HWND handle, int width, int height)
 	}
 
 	createFont();
-	createFontColor();
+	createBrushColor();
 
 	return true;
 }
@@ -181,10 +182,10 @@ void GraphicEngine::RenderEnd()
 	Flip();
 }
 
-void GraphicEngine::RenderRectangle(const D2D1_RECT_F& pos)
+void GraphicEngine::RenderRectangle(const D2D1_RECT_F& pos, const std::string& color)
 {
 	// 마지막 인자 굵기
-	mRenderTarget->DrawRectangle(pos, mRedBrush, 3.0);
+	mRenderTarget->DrawRectangle(pos, mBrushColorMap[color], 3.0);
 }
 
 void GraphicEngine::RenderTexture(Texture* texture, const D2D1_RECT_F& pos)
@@ -203,7 +204,7 @@ void GraphicEngine::RenderText(const std::wstring& text, int x, int y, const std
 	//mFont->DrawTextW(mSprite, text, -1, &rect, 0, color);
 
 	D2D1_RECT_F rect = {x, y, mWidth + 100, mHeight };
-	mRenderTarget->DrawTextW(text.c_str(), static_cast<UINT32>(text.length()), mFontMap[font].font, &rect, mFontColorMap[color]);
+	mRenderTarget->DrawTextW(text.c_str(), static_cast<UINT32>(text.length()), mFontMap[font].font, &rect, mBrushColorMap[color]);
 }
 
 void GraphicEngine::createFont()
@@ -290,34 +291,34 @@ void GraphicEngine::createFont()
 	}
 }
 
-void GraphicEngine::createFontColor()
+void GraphicEngine::createBrushColor()
 {
 	ID2D1SolidColorBrush* color[MAX_COLOR_COUNT];
 
 	int index = 0;
 	HRESULT result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Blue, 1.0f), &color[index]);
-	mFontColorMap.emplace("파란색", color[index++]);
+	mBrushColorMap.emplace("파란색", color[index++]);
 
 	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Brown, 1.0f), &color[index]);
-	mFontColorMap.emplace("갈색", color[index++]);
+	mBrushColorMap.emplace("갈색", color[index++]);
 
 	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White, 1.0f), &color[index]);
-	mFontColorMap.emplace("흰색", color[index++]);
+	mBrushColorMap.emplace("흰색", color[index++]);
 
 	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black, 1.0f), &color[index]);
-	mFontColorMap.emplace("검은색", color[index++]);
+	mBrushColorMap.emplace("검은색", color[index++]);
 
 	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::SkyBlue, 1.0f), &color[index]);
-	mFontColorMap.emplace("하늘색", color[index++]);
+	mBrushColorMap.emplace("하늘색", color[index++]);
 
 	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LavenderBlush, 1.0f), &color[index]);
-	mFontColorMap.emplace("연분홍색", color[index++]);
+	mBrushColorMap.emplace("연분홍색", color[index++]);
 
 	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red, 1.0f), &color[index]);
-	mFontColorMap.emplace("빨간색", color[index++]);
+	mBrushColorMap.emplace("빨간색", color[index++]);
 
 	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Orange, 1.0f), &color[index]);
-	mFontColorMap.emplace("주황색", color[index++]);
+	mBrushColorMap.emplace("주황색", color[index++]);
 }
 
 INIT_INSTACNE(Camera)

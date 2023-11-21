@@ -29,27 +29,7 @@ bool Scroll::Initialize(int x, int y)
 
 void Scroll::Update()
 {
-	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
-	{
-		return;
-	}
-
-	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
-	if (Collision(mousePos.first, mousePos.second) == true)
-	{
-		if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_LBUTTON) == true)
-		{
-			std::cout << "스크롤 배경 클릭" << std::endl;
-		}
-	}
-
-	for (auto& child : mChildUIs)
-	{
-		for (int i = 0; i < child.second.size(); ++i)
-		{
-			child.second[i]->Update();
-		}
-	}
+	UI::Update();
 }
 
 void Scroll::Render()
@@ -90,19 +70,7 @@ bool ScrollBar::Initialize(int x, int y)
 
 void ScrollBar::Update()
 {
-	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
-	{
-		return;
-	}
-
-	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
-	if (Collision(mousePos.first, mousePos.second) == true)
-	{
-		if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::MOUSE_LBUTTON) == true)
-		{
-			std::cout << "스크롤 바 클릭" << std::endl;
-		}
-	}
+	UI::Update();
 }
 
 void ScrollBar::Render()
@@ -116,11 +84,18 @@ void ScrollBar::Render()
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
-	pos.right = pos.left + mTexture->GetSize().first - 5;
+	pos.right = pos.left + mTexture->GetSize().first;
 	pos.bottom = pos.top + mTexture->GetSize().second - (MAX_INVENTORY_WIDTH_SLOT_SIZE - VIEW_SLOT_HEIGHT) * mAlphaValue;
-
-	//GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+
+	if (mMouseLButtonDown)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "파란색");
+	}
+	else if (mMouseOver)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+	}
 
 	for (auto& child : mChildUIs)
 	{
@@ -129,4 +104,52 @@ void ScrollBar::Render()
 			child.second[i]->Render();
 		}
 	}
+}
+
+void ScrollBar::MouseOver()
+{
+}
+
+void ScrollBar::MouseLButtonDown()
+{
+}
+
+void ScrollBar::MouseLButtonUp()
+{
+}
+
+void ScrollBar::MouseLButtonClick()
+{
+}
+
+void ScrollBar::MouseOverCollision(int x, int y)
+{
+	if (IsVisible() == false)
+	{
+		return;
+	}
+
+	// ui의 rect와 닿았는가?
+	RECT collisionBox;
+	collisionBox.left = mPos.first;
+	collisionBox.right = collisionBox.left + mTexture->GetSize().first;
+	collisionBox.top = mPos.second;
+	collisionBox.bottom = collisionBox.top + mTexture->GetSize().second - (MAX_INVENTORY_WIDTH_SLOT_SIZE - VIEW_SLOT_HEIGHT) * mAlphaValue;
+
+	if (x >= collisionBox.left && x <= collisionBox.right && y >= collisionBox.top && y <= collisionBox.bottom)
+	{
+		mMouseOver = true;
+	}
+	else
+	{
+		mMouseOver = false;
+	}
+
+	//for (auto& child : mChildUIs)
+	//{
+	//	for (int i = 0; i < child.second.size(); ++i)
+	//	{
+	//		child.second[i]->MouseOverCollision(x, y);
+	//	}
+	//}
 }
