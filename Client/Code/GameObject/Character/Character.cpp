@@ -145,19 +145,19 @@ bool Player::Initialize(int x, int y)
 	}
 
 	// ºÎ¸ð ui
-	{
-		mInventory = new Inventory;
-		if (mInventory->Initialize(100, 0) == false)
-		{
-			return false;
-		}
-		if (mInventory->SetTexture("Inventory") == false)
-		{
-			return false;
-		}
+	//{
+	//	mInventory = new Inventory;
+	//	if (mInventory->Initialize(100, 0) == false)
+	//	{
+	//		return false;
+	//	}
+	//	if (mInventory->SetTexture("Inventory") == false)
+	//	{
+	//		return false;
+	//	}
 
-		GET_INSTANCE(UIManager)->AddUI(mInventory);
-	}
+	//	GET_INSTANCE(UIManager)->AddUI(mInventory);
+	//}
 	return true;
 }
 

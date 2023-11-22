@@ -40,8 +40,10 @@ void UIManager::Update()
 
 	for (auto ui : mUIs)
 	{
-		ui->Visible();
-		ui->Update();
+		if (ui->IsVisible() == true)
+		{
+			ui->Update();
+		}
 	}
 
 	mFocusUI = getFocusUI();

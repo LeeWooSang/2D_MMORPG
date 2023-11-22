@@ -17,6 +17,7 @@
 #define	 WM_SOCKET WM_USER + 1
 
 INIT_INSTACNE(Core)
+bool Collision(const D2D1_RECT_F& rect1, const D2D1_RECT_F& rect2);
 Core::Core()
 {
 	mHandle = nullptr;
@@ -78,10 +79,8 @@ bool Core::Initialize(HWND handle, int width, int height)
 	{
 		return false;
 	}
-
-	GET_INSTANCE(GameTimer)->Reset();
-
 #endif 
+	GET_INSTANCE(GameTimer)->Reset();
 
 	return true;
 }
@@ -146,12 +145,6 @@ void Core::Quit()
 
 void Core::WindowProc(HWND handle, unsigned int msg, unsigned long long wparam, long long lparam)
 {
-	HWND focus = GetFocus();
-	if (focus == nullptr)
-	{
-		return;
-	}
-
 	switch (msg)
 	{
 		case WM_KEYDOWN:
@@ -277,5 +270,78 @@ void Core::render()
 
 	GET_INSTANCE(UIManager)->Render();
 
+	//std::pair<float, float> tilePos = std::make_pair(350.0, 350.0);
+	//static std::pair<float, float> boxPos = std::make_pair(350.0, 0.0);
+	//static std::pair<float, float> boxPos2 = std::make_pair(600.0, 350.0);
+	//static std::pair<float, float> boxPos3 = std::make_pair(0.0, 350.0);
+	//static std::pair<float, float> boxPos4 = std::make_pair(350.0, 750.0);
+	//{
+	//	float gravity = 9.8;
+	//	float speed = 0.2;
+
+	//	D2D1_RECT_F rect1;
+	//	rect1.left = tilePos.first;
+	//	rect1.top = tilePos.second;
+	//	rect1.right = rect1.left + 100;
+	//	rect1.bottom = rect1.top + 100;
+
+	//	D2D1_RECT_F rect2;
+	//	rect2.left = boxPos.first;
+	//	rect2.top = boxPos.second;
+	//	rect2.right = rect2.left + 60;
+	//	rect2.bottom = rect2.top + 60;
+
+	//	D2D1_RECT_F rect3;
+	//	rect3.left = boxPos2.first;
+	//	rect3.top = boxPos2.second;
+	//	rect3.right = rect3.left + 60;
+	//	rect3.bottom = rect3.top + 60;
+
+	//	D2D1_RECT_F rect4;
+	//	rect4.left = boxPos3.first;
+	//	rect4.top = boxPos3.second;
+	//	rect4.right = rect4.left + 60;
+	//	rect4.bottom = rect4.top + 60;
+
+	//	D2D1_RECT_F rect5;
+	//	rect5.left = boxPos4.first;
+	//	rect5.top = boxPos4.second;
+	//	rect5.right = rect5.left + 60;
+	//	rect5.bottom = rect5.top + 60;
+
+	//	if (Collision(rect2, rect1) == false && rect2.bottom < WINDOW_HEIGHT)
+	//	{
+	//		boxPos.second += gravity * speed;
+	//	}
+	//	if (Collision(rect3, rect1) == false && rect3.left >= 0)
+	//	{
+	//		boxPos2.first -= gravity * speed;
+	//	}
+	//	if (Collision(rect4, rect1) == false && rect4.left < WINDOW_WIDTH)
+	//	{
+	//		boxPos3.first += gravity * speed;
+	//	}
+	//	if (Collision(rect5, rect1) == false && rect5.top >= 0)
+	//	{
+	//		boxPos4.second -= gravity * speed;
+	//	}
+	//	GET_INSTANCE(GraphicEngine)->RenderRectangle(rect1, "Èò»ö");
+	//	GET_INSTANCE(GraphicEngine)->RenderRectangle(rect2);		
+	//	GET_INSTANCE(GraphicEngine)->RenderRectangle(rect3);
+	//	GET_INSTANCE(GraphicEngine)->RenderRectangle(rect4);
+	//	GET_INSTANCE(GraphicEngine)->RenderRectangle(rect5);
+	//}
+
+
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->EndDraw();
+}
+
+bool Collision(const D2D1_RECT_F& rect1, const D2D1_RECT_F& rect2)
+{
+	if (rect1.left <= rect2.right && rect1.right >= rect2.left && rect1.bottom >= rect2.top && rect1.top <= rect2.bottom)
+	{
+		return true;
+	}
+
+	return false;
 }
