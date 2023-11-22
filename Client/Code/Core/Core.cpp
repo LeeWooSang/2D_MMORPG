@@ -8,6 +8,7 @@
 #include "../GameObject/Map/Map.h"
 #include "../GameObject/Character/Character.h"
 #include "../GameObject/UI/Inventory/Inventory.h"
+#include "../GameObject/UI/ChattingBox/ChattingBox.h"
 
 #include "../Resource/ResourceManager.h"
 #include "../Resource/Texture/Texture.h"
@@ -120,6 +121,11 @@ void Core::Run()
 	}
 
 	GET_INSTANCE(UIManager)->Update();
+
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
+	{
+		mPlayer->GetChattingBox()->OpenChattingBox();
+	}
 
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true)
 	{

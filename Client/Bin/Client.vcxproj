@@ -141,6 +141,7 @@
     <ClCompile Include="..\Code\GameObject\Character\Character.cpp" />
     <ClCompile Include="..\Code\GameObject\GameObject.cpp" />
     <ClCompile Include="..\Code\GameObject\Map\Map.cpp" />
+    <ClCompile Include="..\Code\GameObject\UI\ChattingBox\ChattingBox.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\Inventory\Inventory.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\Scroll\Scroll.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\UI.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="..\Code\GameObject\Character\Character.h" />
     <ClInclude Include="..\Code\GameObject\GameObject.h" />
     <ClInclude Include="..\Code\GameObject\Map\Map.h" />
+    <ClInclude Include="..\Code\GameObject\UI\ChattingBox\ChattingBox.h" />
     <ClInclude Include="..\Code\GameObject\UI\Inventory\Inventory.h" />
     <ClInclude Include="..\Code\GameObject\UI\Scroll\Scroll.h" />
     <ClInclude Include="..\Code\GameObject\UI\UI.h" />

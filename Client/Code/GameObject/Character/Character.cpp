@@ -4,6 +4,8 @@
 #include "../../Resource/Texture/Texture.h"
 #include "../../Input/Input.h"
 #include "../UI/Inventory/Inventory.h"
+#include "../UI/ChattingBox/ChattingBox.h"
+
 #include <string>
 #include <random>
 #include "../UI/UIManager.h"
@@ -113,11 +115,11 @@ Player::Player()
 	: Character()
 {
 	mInventory = nullptr;
+	mChattingBox = nullptr;
 }
 
 Player::~Player()
 {
-	delete mInventory;
 }
 
 bool Player::Initialize(int x, int y)
@@ -145,24 +147,25 @@ bool Player::Initialize(int x, int y)
 	}
 
 	// ºÎ¸ð ui
-	//{
-	//	mInventory = new Inventory;
-	//	if (mInventory->Initialize(100, 0) == false)
-	//	{
-	//		return false;
-	//	}
-	//	if (mInventory->SetTexture("Inventory") == false)
-	//	{
-	//		return false;
-	//	}
+	{
+		mChattingBox = new ChattingBox;
+		if (mChattingBox->Initialize(0, 0) == false)
+		{
+			return false;
+		}
+		GET_INSTANCE(UIManager)->AddUI(mChattingBox);
+	}
 
-	//	GET_INSTANCE(UIManager)->AddUI(mInventory);
-	//}
 	return true;
 }
 
 void Player::Update()
 {
+	if (mChattingBox->GetIsOpen() == true)
+	{
+		return;
+	}
+
 #ifdef SERVER_CONNECT
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::LEFT_KEY) == true)
 	{

@@ -172,14 +172,6 @@ void UI::MouseOverCollision(int x, int y)
 	{
 		mMouseOver = false;
 	}
-
-	//for (auto& child : mChildUIs)
-	//{
-	//	for (int i = 0; i < child.second.size(); ++i)
-	//	{
-	//		child.second[i]->MouseOverCollision(x, y);
-	//	}
-	//}
 }
 
 bool UI::CheckContain(int left, int top, int right, int bottom)

@@ -33,6 +33,7 @@ protected:
 };
 
 class Inventory;
+class ChattingBox;
 class Player : public Character
 {
 public:
@@ -48,7 +49,8 @@ public:
 	void Move(char dir);
 	void AddItem();
 	Inventory* GetInventory() { return mInventory; }
-
+	ChattingBox* GetChattingBox() { return mChattingBox; }
 private:
 	Inventory* mInventory;
+	ChattingBox* mChattingBox;
 };

@@ -51,6 +51,9 @@ bool Input::Initialize()
 		mKeyStateList[i].keyType = key++;
 	}
 
+	mKeyStateList[KEY_TYPE::BACK_SPACE].keyType = VK_BACK;
+	mKeyStateList[KEY_TYPE::SPACE].keyType = VK_SPACE;
+
 	mKeyStateList[KEY_TYPE::MOUSE_LBUTTON].keyType = VK_LBUTTON;
 	mKeyStateList[KEY_TYPE::MOUSE_RBUTTON].keyType = VK_RBUTTON;
 

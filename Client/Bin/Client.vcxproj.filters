@@ -51,6 +51,9 @@
     <Filter Include="Code\GameTimer">
       <UniqueIdentifier>{4baade2e-27d0-40cc-b09d-da5e7077fd40}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\GameObject\UI\ChattingBox">
+      <UniqueIdentifier>{6aa5e0b7-88f9-4438-b4f8-d5c6028efd5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -97,6 +100,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\GameObject\UI\UIManager.cpp">
       <Filter>Code\GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\UI\ChattingBox\ChattingBox.cpp">
+      <Filter>Code\GameObject\UI\ChattingBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +156,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameObject\UI\UIManager.h">
       <Filter>Code\GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\UI\ChattingBox\ChattingBox.h">
+      <Filter>Code\GameObject\UI\ChattingBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
