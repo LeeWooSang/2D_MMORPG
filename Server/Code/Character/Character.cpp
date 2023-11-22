@@ -673,13 +673,14 @@ void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 }
 
 Monster::Monster()
-	: Character(), mSleep(true)
+	: Character()
 {
 	mRangeMin = std::make_pair(0, 0);
 	mRangeMax = std::make_pair(0, 0);
 
 	mSectorXId = 0;
 	mSectorYId = 0;
+	mState = MONSTER_STATE::SLEEP;
 }
 
 Monster::~Monster()
@@ -690,10 +691,10 @@ Monster::~Monster()
 void Monster::Reset()
 {
 	Character::Reset();
-	mSleep = true;
 	//mSectorId = std::make_pair(0, 0);
 	mSectorXId = 0;
 	mSectorYId = 0;
+	mState = MONSTER_STATE::SLEEP;
 }
 
 bool Monster::Inititalize(int id)
@@ -712,8 +713,6 @@ bool Monster::Inititalize(int id)
 
 	mChannelIndex = -1;
 	mChannel = -1;
-
-	mSleep = true;
 
 	mRangeMin = std::make_pair(0, 0);
 	mRangeMax = std::make_pair(0, 0);
@@ -778,6 +777,18 @@ bool Monster::CheckRange(int x, int y)
 
 using namespace std;
 void Monster::WakeUp()
+{
+	if (mState != MONSTER_STATE::SLEEP)
+	{
+		return;
+	}
+
+	mState = MONSTER_STATE::READY;
+
+	MoveEvent();
+}
+
+void Monster::MoveEvent()
 {
 	int myId = mOver->myId;
 	// 타이머에 1초뒤에 move 전달
@@ -891,8 +902,13 @@ void Monster::ProcessMoveViewList()
 		}
 	}
 
-	//if (newViewList.size() > 0)
-	//{
-	//	WakeUp();
-	//}
+	// 시야에 플레이어가 있으면 계속 움직인다.
+	if (newViewList.size() > 0)
+	{
+		MoveEvent();
+	}
+	else
+	{
+		mState = MONSTER_STATE::SLEEP;
+	}
 }

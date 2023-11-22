@@ -549,9 +549,12 @@ void Core::processEvent(Over* over)
 		{
 			int index = mChannels[over->channel].FindSectorObjectIndexById(over->sectorXId, over->sectorYId, over->myId);
 			Monster& monster = mChannels[over->channel].FindSectorById(over->sectorXId, over->sectorYId).GetMonster(index);
+			monster.SetState(MONSTER_STATE::MOVE);
+
 			char dir = monster.RandomDirection();
 			monster.ProcessMove(dir);
 			monster.ProcessMoveViewList();
+
 			delete over;
 			break;
 		}

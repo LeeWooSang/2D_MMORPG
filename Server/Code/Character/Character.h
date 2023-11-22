@@ -84,6 +84,12 @@ private:
 	bool mConnect;
 };
 
+enum class MONSTER_STATE
+{
+	SLEEP,
+	READY,
+	MOVE
+};
 class Monster : public Character
 {
 public:
@@ -96,20 +102,23 @@ public:
 	virtual bool CheckRange(int x, int y);
 
 	virtual void WakeUp();
+	void MoveEvent();
 
 	char RandomDirection()	const;
 	void ProcessMoveViewList();
 
 	void SetRange(std::pair<int, int> min, std::pair<int, int> max) { mRangeMin = min; mRangeMax = max; }
-	void SetSleep(bool sleep) { mSleep = sleep; }
+	
+	MONSTER_STATE GetState()		const { return mState; }
+	void SetState(MONSTER_STATE state) { mState = state; }
 	void SetSectorId(std::pair<int, int> sectorId) { mSectorXId = sectorId.first, mSectorYId = sectorId.second; }
 
 private:
 	std::pair<int, int> mRangeMin;
 	std::pair<int, int> mRangeMax;
 
-	bool mSleep;
-
 	int mSectorXId;
 	int mSectorYId;
+
+	MONSTER_STATE mState;
 };
