@@ -30,7 +30,9 @@ public:
 
 	bool GetIsReady()	const { return mIsReady; }
 
+private:
 	void render();
+
 private:
 	HWND mHandle;
 
@@ -41,5 +43,6 @@ private:
 	std::unordered_map<int, std::shared_ptr<Character>> mMonsters;
 
 	bool mIsReady;
+
 };
 

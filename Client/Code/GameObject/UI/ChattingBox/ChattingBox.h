@@ -21,8 +21,13 @@ public:
 	void processInput();
 
 	bool GetIsOpen()	const { return mOpen; }
+	std::pair<float, float> GetTextSize(wchar_t c);
 
 private:
 	bool mOpen;
 	std::vector<wchar_t> mChattings;
+	int mCarrotIndex;
+
+	std::pair<float, float> mCarrotPos;
+	float mElapsedTime;
 };

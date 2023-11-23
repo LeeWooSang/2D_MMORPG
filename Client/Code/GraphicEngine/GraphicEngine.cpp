@@ -19,7 +19,6 @@ GraphicEngine::GraphicEngine()
 	mWriteFactory = nullptr;
 	mFontCollection = nullptr;
 	mRenderTarget = nullptr;
-	mRedBrush = nullptr;
 	mFontMap.clear();
 	mBrushColorMap.clear();
 }
@@ -60,7 +59,6 @@ GraphicEngine::~GraphicEngine()
 	}
 
 	mFontCollection->Release();
-	mRedBrush->Release();
 	mRenderTarget->Release();
 	mWriteFactory->Release();
 	mWICImagingFactory->Release();
@@ -126,12 +124,6 @@ bool GraphicEngine::Initialize(HWND handle, int width, int height)
 		return false;
 	}
 
-	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red, 1.0f), &mRedBrush);
-	if (result != S_OK)
-	{
-		return false;
-	}
-
 	result = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, __uuidof(IWICImagingFactory), (void**)&mWICImagingFactory);
 	if (result != S_OK)
 	{
@@ -188,6 +180,11 @@ void GraphicEngine::RenderRectangle(const D2D1_RECT_F& pos, const std::string& c
 	mRenderTarget->DrawRectangle(pos, mBrushColorMap[color], 3.0);
 }
 
+void GraphicEngine::RenderFillRectangle(const D2D1_RECT_F& pos, const std::string& color)
+{
+	mRenderTarget->FillRectangle(pos, mBrushColorMap[color]);
+}
+
 void GraphicEngine::RenderTexture(Texture* texture, const D2D1_RECT_F& pos)
 {
 	mRenderTarget->DrawBitmap(texture->GetImage(), pos);
@@ -205,6 +202,11 @@ void GraphicEngine::RenderText(const std::wstring& text, int x, int y, const std
 
 	D2D1_RECT_F rect = {x, y, mWidth + 100, mHeight };
 	mRenderTarget->DrawTextW(text.c_str(), static_cast<UINT32>(text.length()), mFontMap[font].font, &rect, mBrushColorMap[color]);
+
+	//float pointX;
+	//float pointY;
+	//DWRITE_HIT_TEST_METRICS metrics;
+	//mFontMap[font].textLayout->HitTestTextPosition(0, false, &pointX, &pointY, &metrics);
 }
 
 void GraphicEngine::createFont()
@@ -264,12 +266,20 @@ void GraphicEngine::createFont()
 	IDWriteTextFormat* pFont[MAX_FONT_COUNT];
 	// 폰트 형식
 	IDWriteTextLayout* pTextLayout[MAX_FONT_COUNT];
-	std::wstring wstr = L"TextLayout Initialize";
+	std::wstring wstr = L"M TextLayout Initialize";
 
 	for (int i = 0; i < MAX_FONT_COUNT; ++i)
 	{
 		// 폰트 객체 생성	
-		result = mWriteFactory->CreateTextFormat(fontName[i].c_str(), mFontCollection, DWRITE_FONT_WEIGHT_DEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, fontSize, L"en-US", &pFont[i]);
+		result = mWriteFactory->CreateTextFormat(
+			fontName[i].c_str(), 
+			mFontCollection, 
+			DWRITE_FONT_WEIGHT_DEMI_BOLD, 
+			DWRITE_FONT_STYLE_NORMAL, 
+			DWRITE_FONT_STRETCH_NORMAL, 
+			fontSize, 
+			L"en-US", 
+			&pFont[i]);
 
 		if (i == 0)
 		{
@@ -285,7 +295,6 @@ void GraphicEngine::createFont()
 			result = pFont[i]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 			result = pFont[i]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
 			result = mWriteFactory->CreateTextLayout(wstr.c_str(), static_cast<UINT32>(wstr.length()), pFont[i], 0, 0, &pTextLayout[i]);
-
 			mFontMap.emplace("메이플", FontInfo(pFont[i], pTextLayout[i], fontSize));
 		}
 	}

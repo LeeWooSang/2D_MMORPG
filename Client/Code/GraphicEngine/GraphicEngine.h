@@ -53,7 +53,9 @@ public:
 	void RenderStart();
 	void RenderEnd();
 
-	void RenderRectangle(const D2D1_RECT_F& rect, const std::string& color = "說除儀");
+	void RenderRectangle(const D2D1_RECT_F& pos, const std::string& color = "說除儀");
+	void RenderFillRectangle(const D2D1_RECT_F& pos, const std::string& color = "說除儀");
+
 	void RenderTexture(Texture* texture, const D2D1_RECT_F& pos);
 	void RenderTexture(Texture* texture, const D2D1_RECT_F& pos, const D2D1_RECT_F& rect);
     void RenderText(const std::wstring& text, int x, int y, const std::string& font, const std::string& color);
@@ -66,7 +68,10 @@ public:
 
 	IWICImagingFactory* GetWICImagingFactory() { return mWICImagingFactory; }
 	ID2D1HwndRenderTarget* GetRenderTarget() { return mRenderTarget; }
-	ID2D1SolidColorBrush* GetRedBrush() { return mRedBrush; }
+	
+	IDWriteFactory5* GetWriteFactory() { return mWriteFactory; }
+	FontInfo& GetFont(const std::string& key) { return mFontMap[key]; }
+
 
 private:
 	int mWidth;
@@ -83,7 +88,6 @@ private:
 	IDWriteFactory5* mWriteFactory;
 	IDWriteFontCollection1* mFontCollection;
 	ID2D1HwndRenderTarget* mRenderTarget;
-	ID2D1SolidColorBrush* mRedBrush;
 
 	std::unordered_map<std::string, FontInfo> mFontMap;
 	std::unordered_map<std::string, ID2D1SolidColorBrush*> mBrushColorMap;
