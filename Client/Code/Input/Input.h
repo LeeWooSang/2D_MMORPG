@@ -2,27 +2,19 @@
 #include "../Common/Macro.h"
 #include <array>
 
-constexpr int MAX_LEN = 256;
 #define KEY_DOWN(VK_CODE)	((GetAsyncKeyState(VK_CODE) & 0x8000) ? 1 : 0)
 #define KEY_UP(VK_CODE)			((GetAsyncKeyState(VK_CODE) & 0x8000) ? 0 : 1)
-
-//struct TextInfo
-//{
-//	TextInfo(unsigned char key, const wstring& text)
-//		: m_Key(key), m_Text(text) {}
-//
-//	unsigned char m_Key;
-//	wstring m_Text;
-//};
 
 enum KEY_TYPE
 {
 	NONE = 0,
 
 	UP_KEY, DOWN_KEY, LEFT_KEY, RIGHT_KEY,
-	TAB_KEY, ENTER_KEY, CONTROL_KEY, ALT_KEY,
+	TAB_KEY, ENTER_KEY, CONTROL_KEY, ALT_KEY, CAPS_LOCK_KEY,
 
 	F1_KEY, F2_KEY, F3_KEY, F4_KEY, F5_KEY, F6_KEY, F7_KEY, F8_KEY, F9_KEY, F10_KEY, F11_KEY, F12_KEY,
+	NUM0_KEY, NUM1_KEY, NUM2_KEY, NUM3_KEY, NUM4_KEY, NUM5_KEY, NUM6_KEY, NUM7_KEY, NUM8_KEY, NUM9_KEY,
+	NUMPAD0_KEY, NUMPAD1_KEY, NUMPAD2_KEY, NUMPAD3_KEY, NUMPAD4_KEY, NUMPAD5_KEY, NUMPAD6_KEY, NUMPAD7_KEY, NUMPAD8_KEY, NUMPAD9_KEY,
 
 	A_KEY, B_KEY, C_KEY, D_KEY, E_KEY, F_KEY, G_KEY, H_KEY, I_KEY, J_KEY, K_KEY, L_KEY, M_KEY, N_KEY, 
 	O_KEY, P_KEY, Q_KEY, R_KEY, S_KEY, T_KEY, U_KEY, V_KEY, W_KEY, X_KEY, Y_KEY, Z_KEY,
@@ -84,4 +76,5 @@ private:
 	std::array<KeyState, MAX_KEY_TYPE> mKeyStateList;
 	std::pair<int, int> mMousePos;
 	bool mFlag;
+
 };

@@ -2,6 +2,7 @@
 #include "../../../Input/Input.h"
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../../../GameTimer/GameTimer.h"
+#include "../../../Resource/ResourceManager.h"
 
 ChattingBox::ChattingBox()
 	: UI()
@@ -23,34 +24,6 @@ bool ChattingBox::Initialize(int x, int y)
 	SetPosition(0, 500);
 	mCarrotPos = mPos;
 
-	{
-		std::wstring text = L"abcdefghijklmnopqrstuvwxyz";
-		IDWriteTextLayout* layout;
-
-		HRESULT result = GET_INSTANCE(GraphicEngine)->GetWriteFactory()->CreateTextLayout(
-			text.c_str(),
-			static_cast<UINT32>(text.length()),
-			GET_INSTANCE(GraphicEngine)->GetFont("메이플").font,
-			50.0, 50.0f,
-			&layout);
-
-		for(int i = 0; i < text.length(); ++i)
-		{
-			float xx;
-			float yy;
-			DWRITE_HIT_TEST_METRICS metrics;
-			layout->HitTestTextPosition(i, true, &xx, &yy, &metrics);
-			
-			std::pair<float, float> size = GetTextSize(text[i]);
-
-			std::cout << metrics.width << ", " << metrics.height << std::endl;
-			std::cout << size.first << ", " << size.second << std::endl;
-			std::cout << "========" << std::endl;
-		}
-
-		layout->Release();
-	}
-
 	return true;
 }
 
@@ -69,6 +42,7 @@ void ChattingBox::Update()
 
 	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
 	MouseOverCollision(mousePos.first, mousePos.second);
+	//SetCarrotPos();
 
 	if (mOpen == true)
 	{
@@ -190,11 +164,11 @@ void ChattingBox::OpenChattingBox()
 
 void ChattingBox::processInput()
 {
-	for (int i = KEY_TYPE::A_KEY; i <= KEY_TYPE::Z_KEY; ++i)
+	for (int i = KEY_TYPE::NUM0_KEY; i <= KEY_TYPE::NUM9_KEY; ++i)
 	{
 		if (GET_INSTANCE(Input)->KeyOnceCheck(static_cast<KEY_TYPE>(i)) == true)
 		{
-			wchar_t wc = i + 76;
+			wchar_t wc = i + 26;
 			if (mCarrotIndex == mChattings.size())
 			{
 				mChattings.emplace_back(wc);
@@ -204,8 +178,52 @@ void ChattingBox::processInput()
 				mChattings.insert(mChattings.begin() + (mCarrotIndex), wc);
 			}
 
-			std::pair<float, float> size = GetTextSize(wc);
-			mCarrotPos.first += size.first;
+			++mCarrotIndex;
+		}
+	}
+
+	bool numLock = ::GetKeyState(VK_NUMLOCK);
+	if (numLock == true)
+	{
+		for (int i = KEY_TYPE::NUMPAD0_KEY; i <= KEY_TYPE::NUMPAD9_KEY; ++i)
+		{
+			if (GET_INSTANCE(Input)->KeyOnceCheck(static_cast<KEY_TYPE>(i)) == true)
+			{
+				wchar_t wc = i + 16;
+				if (mCarrotIndex == mChattings.size())
+				{
+					mChattings.emplace_back(wc);
+				}
+				else
+				{
+					mChattings.insert(mChattings.begin() + (mCarrotIndex), wc);
+				}
+
+				++mCarrotIndex;
+			}
+		}
+	}
+	
+	bool capsLock = ::GetKeyState(VK_CAPITAL);
+	int alpha = 'a' - KEY_TYPE::A_KEY;
+	if (capsLock == true)
+	{
+		alpha = 'A' - KEY_TYPE::A_KEY;
+	}
+	for (int i = KEY_TYPE::A_KEY; i <= KEY_TYPE::Z_KEY; ++i)
+	{
+		if (GET_INSTANCE(Input)->KeyOnceCheck(static_cast<KEY_TYPE>(i)) == true)
+		{
+			wchar_t wc = i + alpha;
+			if (mCarrotIndex == mChattings.size())
+			{
+				mChattings.emplace_back(wc);
+			}
+			else
+			{
+				mChattings.insert(mChattings.begin() + (mCarrotIndex), wc);
+			}
+		
 			++mCarrotIndex;
 		}
 	}
@@ -222,8 +240,6 @@ void ChattingBox::processInput()
 			mChattings.insert(mChattings.begin() + (mCarrotIndex), wc);
 		}
 
-		std::pair<float, float> size = GetTextSize(wc);
-		mCarrotPos.first += size.first;
 		++mCarrotIndex;
 	}
 
@@ -232,11 +248,8 @@ void ChattingBox::processInput()
 		if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::LEFT_KEY) == true)
 		{
 			if (mCarrotIndex > 0)
-			{				
-				std::pair<float, float> size = GetTextSize(mChattings[mCarrotIndex - 1]);
-				mCarrotPos.first -= size.first;
-
-				--mCarrotIndex;
+			{
+				--mCarrotIndex;		
 			}
 		}
 		else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::RIGHT_KEY) == true)
@@ -244,61 +257,52 @@ void ChattingBox::processInput()
 			if (mCarrotIndex < mChattings.size())
 			{
 				++mCarrotIndex;
-
-				std::pair<float, float> size = GetTextSize(mChattings[mCarrotIndex - 1]);
-				mCarrotPos.first += size.first;
 			}
 		}
 		else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::BACK_SPACE) == true)
 		{
 			if (mCarrotIndex >= mChattings.size())
 			{
-				std::pair<float, float> size = GetTextSize(mChattings[mCarrotIndex - 1]);
-				mCarrotPos.first -= size.first;
-
 				mChattings.pop_back();
 				--mCarrotIndex;
 			}
 			else if(mCarrotIndex > 0)
 			{
-				std::pair<float, float> size = GetTextSize(mChattings[mCarrotIndex - 1]);
-				mCarrotPos.first -= size.first;
-
 				mChattings.erase(mChattings.begin() + mCarrotIndex - 1);
 				--mCarrotIndex;
 			}
 		}
+
+		SetCarrotPos();
 	}
 }
 
-std::pair<float, float> ChattingBox::GetTextSize(wchar_t c)
+void ChattingBox::SetCarrotPos()
 {
-	std::pair<float, float> size;
-	/*if (c == 'e')
-	{
-		size.first = 14.35;
-		size.second = 27.875;
-		return size;
-	}*/
-
 	std::wstring text = L"";
-	text += c;
+	for (int i = 0; i < mCarrotIndex; ++i)
+	{
+		text += mChattings[i];
+	}
+
 	IDWriteTextLayout* layout;
 
 	HRESULT result = GET_INSTANCE(GraphicEngine)->GetWriteFactory()->CreateTextLayout(
-		text.c_str(), 
-		static_cast<UINT32>(text.length()), 
-		GET_INSTANCE(GraphicEngine)->GetFont("메이플").font, 
-		50.0, 50.0f, 
+		text.c_str(),
+		static_cast<UINT32>(text.length()),
+		GET_INSTANCE(GraphicEngine)->GetFont("메이플").font,
+		50.0, 50.0f,
 		&layout);
 
-	float x;
-	float y;
-	DWRITE_HIT_TEST_METRICS metrics;
-	layout->HitTestTextPosition(0, false, &x, &y, &metrics);
-	size = std::make_pair(metrics.width, metrics.height);
+	mCarrotPos.first = 0.0;
+	for (int i = 0; i < text.length(); ++i)
+	{
+		float x;
+		float y;
+		DWRITE_HIT_TEST_METRICS metrics;
+		layout->HitTestTextPosition(i, false, &x, &y, &metrics);
+		mCarrotPos.first += metrics.width;
+	}
 
 	layout->Release();
-
-	return size;
 }

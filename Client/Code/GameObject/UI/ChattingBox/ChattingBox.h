@@ -21,7 +21,7 @@ public:
 	void processInput();
 
 	bool GetIsOpen()	const { return mOpen; }
-	std::pair<float, float> GetTextSize(wchar_t c);
+	void SetCarrotPos();
 
 private:
 	bool mOpen;

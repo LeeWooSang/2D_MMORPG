@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Code\Common\JsonFormat.cpp" />
     <ClCompile Include="..\Code\Core\Core.cpp" />
     <ClCompile Include="..\Code\GameObject\Character\Character.cpp" />
     <ClCompile Include="..\Code\GameObject\GameObject.cpp" />
@@ -157,6 +158,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Server\Code\Common\Protocol.h" />
     <ClInclude Include="..\Code\Common\Defines.h" />
+    <ClInclude Include="..\Code\Common\JsonFormat.h" />
     <ClInclude Include="..\Code\Common\Macro.h" />
     <ClInclude Include="..\Code\Core\Core.h" />
     <ClInclude Include="..\Code\GameObject\Character\Character.h" />

@@ -104,6 +104,9 @@
     <ClCompile Include="..\Code\GameObject\UI\ChattingBox\ChattingBox.cpp">
       <Filter>Code\GameObject\UI\ChattingBox</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Common\JsonFormat.cpp">
+      <Filter>Code\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Code\GameObject\GameObject.h">
@@ -159,6 +162,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameObject\UI\ChattingBox\ChattingBox.h">
       <Filter>Code\GameObject\UI\ChattingBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Common\JsonFormat.h">
+      <Filter>Code\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

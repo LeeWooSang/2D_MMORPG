@@ -1,5 +1,6 @@
 #include "ResourceManager.h"
 #include "Texture/Texture.h"
+#include "../Common/JsonFormat.h"
 
 INIT_INSTACNE(ResourceManager)
 ResourceManager::ResourceManager()
@@ -8,6 +9,8 @@ ResourceManager::ResourceManager()
 
 ResourceManager::~ResourceManager()
 {
+	mTextInfos.clear();
+	GET_INSTANCE(JsonFormat)->Release();
 }
 
 bool ResourceManager::Initialize()
@@ -138,6 +141,12 @@ bool ResourceManager::Initialize()
 		}
 		mTextureList.emplace("Dagger", texture);
 	}
+
+	if (LoadJsonFile() == false)
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -149,4 +158,33 @@ Texture* ResourceManager::FindTexture(const std::string& name)
 	}
 
 	return mTextureList[name].get();
+}
+
+bool ResourceManager::LoadJsonFile()
+{
+	rapidjson::Document doc;
+	if (GET_INSTANCE(JsonFormat)->LoadJsonFile(doc, "../Resource/fontData.json") == false)
+	{
+		return false;
+	}
+
+	std::string font = doc["font"].GetString();
+	std::unordered_map<int, std::unordered_map<wchar_t, TextInfo>> um0;
+	for (int i = 0; i < doc["fontData"].Size(); ++i)
+	{
+		int fontSize = doc["fontData"][i]["fontSize"].GetFloat();
+
+		std::unordered_map<wchar_t, TextInfo> um1;
+		for (int j = 0; j < doc["fontData"][i]["data"].Size(); ++j)
+		{
+			wchar_t wc = doc["fontData"][i]["data"][j]["wc"].GetInt();
+			float width = doc["fontData"][i]["data"][j]["width"].GetFloat();
+			float height = doc["fontData"][i]["data"][j]["height"].GetFloat();
+			um1.emplace(wc, TextInfo(width, height));
+		}
+		um0.emplace(fontSize, um1);
+	}
+	mTextInfos.emplace(font, um0);
+
+	return true;
 }

@@ -30,6 +30,7 @@ bool Input::Initialize()
 	mKeyStateList[KEY_TYPE::ENTER_KEY].keyType = VK_RETURN;
 	mKeyStateList[KEY_TYPE::CONTROL_KEY].keyType = VK_CONTROL;
 	mKeyStateList[KEY_TYPE::ALT_KEY].keyType = VK_MENU;
+	mKeyStateList[KEY_TYPE::CAPS_LOCK_KEY].keyType = VK_CAPITAL;
 
 	mKeyStateList[KEY_TYPE::F1_KEY].keyType = VK_F1;
 	mKeyStateList[KEY_TYPE::F2_KEY].keyType = VK_F2;
@@ -44,11 +45,29 @@ bool Input::Initialize()
 	mKeyStateList[KEY_TYPE::F11_KEY].keyType = VK_F11;
 	mKeyStateList[KEY_TYPE::F12_KEY].keyType = VK_F12;
 
-	// A~ZŰ
-	int key = 0x41;
-	for (int i = KEY_TYPE::A_KEY; i <= KEY_TYPE::Z_KEY; ++i)
+	// 0 ~ 9
 	{
-		mKeyStateList[i].keyType = key++;
+		int key = 0x30;
+		for (int i = KEY_TYPE::NUM0_KEY; i <= KEY_TYPE::NUM9_KEY; ++i)
+		{
+			mKeyStateList[i].keyType = key++;
+		}
+	}
+	// numpad0 ~ 9
+	{
+		int key = 0x60;
+		for (int i = KEY_TYPE::NUMPAD0_KEY; i <= KEY_TYPE::NUMPAD9_KEY; ++i)
+		{
+			mKeyStateList[i].keyType = key++;
+		}
+	}
+	{
+		// A~ZŰ
+		int key = 0x41;
+		for (int i = KEY_TYPE::A_KEY; i <= KEY_TYPE::Z_KEY; ++i)
+		{
+			mKeyStateList[i].keyType = key++;
+		}
 	}
 
 	mKeyStateList[KEY_TYPE::BACK_SPACE].keyType = VK_BACK;

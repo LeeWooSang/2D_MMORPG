@@ -272,13 +272,14 @@ void GraphicEngine::createFont()
 	{
 		// 폰트 객체 생성	
 		result = mWriteFactory->CreateTextFormat(
-			fontName[i].c_str(), 
-			mFontCollection, 
-			DWRITE_FONT_WEIGHT_DEMI_BOLD, 
-			DWRITE_FONT_STYLE_NORMAL, 
-			DWRITE_FONT_STRETCH_NORMAL, 
-			fontSize, 
-			L"en-US", 
+			fontName[i].c_str(),
+			mFontCollection,
+			//DWRITE_FONT_WEIGHT_NORMAL,
+			DWRITE_FONT_WEIGHT_DEMI_BOLD,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			fontSize,
+			L"en-US",
 			&pFont[i]);
 
 		if (i == 0)
