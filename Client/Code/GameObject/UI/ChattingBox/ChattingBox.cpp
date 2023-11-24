@@ -22,12 +22,33 @@ bool ChattingBox::Initialize(int x, int y)
 
 	SetPosition(0, 500);
 	mCarrotPos = mPos;
+
 	{
-		float x;
-		float y;
-		DWRITE_HIT_TEST_METRICS metrics;
-		GET_INSTANCE(GraphicEngine)->GetFont("메이플").textLayout->HitTestTextPosition(0, false, &x, &y, &metrics);
-		std::cout << metrics.width << ", " << metrics.height << std::endl;
+		std::wstring text = L"abcdefghijklmnopqrstuvwxyz";
+		IDWriteTextLayout* layout;
+
+		HRESULT result = GET_INSTANCE(GraphicEngine)->GetWriteFactory()->CreateTextLayout(
+			text.c_str(),
+			static_cast<UINT32>(text.length()),
+			GET_INSTANCE(GraphicEngine)->GetFont("메이플").font,
+			50.0, 50.0f,
+			&layout);
+
+		for(int i = 0; i < text.length(); ++i)
+		{
+			float xx;
+			float yy;
+			DWRITE_HIT_TEST_METRICS metrics;
+			layout->HitTestTextPosition(i, true, &xx, &yy, &metrics);
+			
+			std::pair<float, float> size = GetTextSize(text[i]);
+
+			std::cout << metrics.width << ", " << metrics.height << std::endl;
+			std::cout << size.first << ", " << size.second << std::endl;
+			std::cout << "========" << std::endl;
+		}
+
+		layout->Release();
 	}
 
 	return true;
@@ -253,6 +274,12 @@ void ChattingBox::processInput()
 std::pair<float, float> ChattingBox::GetTextSize(wchar_t c)
 {
 	std::pair<float, float> size;
+	/*if (c == 'e')
+	{
+		size.first = 14.35;
+		size.second = 27.875;
+		return size;
+	}*/
 
 	std::wstring text = L"";
 	text += c;
