@@ -97,13 +97,24 @@ void Network::SendMovePacket(char dir)
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 
-void Network::SendChangeChannel(char channel)
+void Network::SendChangeChannelPacket(char channel)
 {
 	CSChangeChannelPacket packet;
 	packet.size = sizeof(CSChangeChannelPacket);
 	packet.type = CS_PACKET_TYPE::CS_CHANGE_CHANNEL;
 	packet.channel = channel;
 
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
+void Network::SendChatPacket(const std::wstring& chat)
+{
+	CSChatPacket packet;
+	packet.size = sizeof(CSChatPacket);
+	packet.type = CS_PACKET_TYPE::CS_CHAT;
+	wcsncpy_s(packet.chat, chat.c_str(), MAX_CHAT_LENGTH);
+	
+	std::cout << "채팅 패킷 전송" << std::endl;
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 
@@ -233,6 +244,13 @@ void Network::processPacket()
 			{
 				std::cout << "채널 변경 실패" << std::endl;
 			}
+			break;
+		}
+
+		case SC_PACKET_TYPE::SC_CHAT:
+		{
+			SCChatPacket* packet = reinterpret_cast<SCChatPacket*>(mPacketBuffer);
+			std::wcout << packet->chat << std::endl;
 			break;
 		}
 

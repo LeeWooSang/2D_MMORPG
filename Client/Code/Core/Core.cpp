@@ -139,7 +139,6 @@ void Core::Run()
 
 	render();
 
-	//std::cout << GET_INSTANCE(GameTimer)->GetFrameRate() << std::endl;
 	std::wstring title = L"MapleStory " + std::to_wstring(GET_INSTANCE(GameTimer)->GetFrameRate()) + L" FPS";
 	::SetWindowText(mHandle, const_cast<wchar_t*>(title.c_str()));
 }

@@ -29,6 +29,7 @@ public:
 	void SendMonsterPositionPacket(int to, int obj, int x, int y);
 	void SendRemoveObjectPacket(int to, int obj);
 	void SendChangeChannelPacket(int to, bool result);
+	void SendChatPacket(int to, int obj, wchar_t* chat);
 
 private:
 	void errorDisplay(const char* msg, int error);

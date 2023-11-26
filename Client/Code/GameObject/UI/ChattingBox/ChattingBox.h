@@ -1,6 +1,13 @@
 #pragma once
 #include "../UI.h"
 
+enum class CHAT_STATE
+{
+	NONE = 0,
+	CHATTING,
+	CHAT_END
+};
+
 class ChattingBox : public UI
 {
 public:
@@ -18,6 +25,8 @@ public:
 	virtual void MouseLButtonClick();
 
 	void OpenChattingBox();
+
+	void SetChatState(CHAT_STATE state) { mChatState = state; }
 	void processInput();
 
 	bool GetIsOpen()	const { return mOpen; }
@@ -25,6 +34,8 @@ public:
 
 private:
 	bool mOpen;
+	CHAT_STATE mChatState;
+
 	std::vector<wchar_t> mChattings;
 	int mCarrotIndex;
 

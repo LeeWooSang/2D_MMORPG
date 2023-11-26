@@ -209,6 +209,17 @@ void Core::SendChangeChannelPacket(int to, bool result)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
+void Core::SendChatPacket(int to, int obj, wchar_t* chat)
+{
+	SCChatPacket packet;
+	packet.size = sizeof(SCChatPacket);
+	packet.type = SC_PACKET_TYPE::SC_CHAT;
+	packet.id = obj;
+	wcsncpy_s(packet.chat, chat, MAX_CHAT_LENGTH);
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
 void Core::errorDisplay(const char* msg, int error)
 {
 	WCHAR* lpMsgBuf;
@@ -527,6 +538,13 @@ void Core::processPacket(int id, char* buf)
 				std::cout << id << " 클라이언트 채널변경 : " << oldChannel << " --> " << newChannel << std::endl;
 			}
 			SendChangeChannelPacket(id, result);
+			break;
+		}
+
+		case CS_PACKET_TYPE::CS_CHAT:
+		{
+			CSChatPacket* packet = reinterpret_cast<CSChatPacket*>(buf);
+			SendChatPacket(id, id, packet->chat);
 			break;
 		}
 

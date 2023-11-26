@@ -1,4 +1,5 @@
 #include "ChattingBox.h"
+#include "../../../Network/Network.h"
 #include "../../../Input/Input.h"
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../../../GameTimer/GameTimer.h"
@@ -8,6 +9,8 @@ ChattingBox::ChattingBox()
 	: UI()
 {
 	mOpen = false;
+	mChatState = CHAT_STATE::NONE;
+
 	mCarrotIndex = 0;
 	mCarrotPos = std::make_pair(0.0, 0.0);
 	mElapsedTime = 0.0;
@@ -22,7 +25,8 @@ bool ChattingBox::Initialize(int x, int y)
 	UI::Initialize(x, y);
 
 	SetPosition(0, 500);
-	mCarrotPos = mPos;
+
+	mCarrotPos = std::make_pair(mPos.first, mPos.second + 200);
 
 	return true;
 }
@@ -82,13 +86,6 @@ void ChattingBox::Render()
 	{
 		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
 	}
-
-	std::wstring chatting = L"";
-	for(auto& chat : mChattings)
-	{
-		chatting += chat;
-	}
-	GET_INSTANCE(GraphicEngine)->RenderText(chatting, mPos.first, mPos.second, "메이플", "흰색");
 	
 	if (mElapsedTime > 0.5)
 	{
@@ -99,6 +96,17 @@ void ChattingBox::Render()
 		carrotRect.bottom = carrotRect.top + 25;
 
 		GET_INSTANCE(GraphicEngine)->RenderFillRectangle(carrotRect);
+	}
+
+	std::wstring chatting = L"";
+
+	for (auto& chat : mChattings)
+	{
+		chatting += chat;
+	}
+	if (chatting.size() > 0)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderText(chatting, mPos.first, mCarrotPos.second, "메이플", "흰색");
 	}
 
 	for (auto& child : mChildUIs)
@@ -148,10 +156,16 @@ void ChattingBox::MouseLButtonClick()
 
 void ChattingBox::OpenChattingBox()
 {
+	if (mChatState != CHAT_STATE::NONE)
+	{
+		return;
+	}
+
 	// 닫혀있다면
 	if (mOpen == false)
 	{
 		mOpen = true;
+		mChatState = CHAT_STATE::CHATTING;
 		Visible();
 	}
 	// 열려있다면
@@ -273,7 +287,33 @@ void ChattingBox::processInput()
 			}
 		}
 
+		if (mChatState == CHAT_STATE::CHATTING)
+		{
+			// 채팅 패킷 전송하고, 계속 채팅상태
+			if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
+			{
+				std::wstring chatting;
+				for (auto& chat : mChattings)
+				{
+					chatting += chat;
+				}
+#ifdef SERVER_CONNECT
+				GET_INSTANCE(Network)->SendChatPacket(chatting);
+#endif 
+				mChattings.clear();
+				mCarrotIndex = 0;	
+			}
+		}
+
 		SetCarrotPos();
+	}
+	else
+	{
+		// 채팅상태 중이면서, 채팅길이가 0이고, 엔터눌렀을때는 종료
+		if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
+		{
+			mChatState = CHAT_STATE::NONE;
+		}
 	}
 }
 

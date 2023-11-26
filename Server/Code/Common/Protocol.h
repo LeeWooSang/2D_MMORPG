@@ -95,7 +95,8 @@ enum CS_PACKET_TYPE
 {
 	CS_LOGIN = 0,
 	CS_MOVE,
-	CS_CHANGE_CHANNEL
+	CS_CHANGE_CHANNEL,
+	CS_CHAT
 };
 
 enum SC_PACKET_TYPE
@@ -106,6 +107,7 @@ enum SC_PACKET_TYPE
 	SC_ADD_OBJECT,
 	SC_REMOVE_OBJECT,
 	SC_CHANGE_CHANNEL,
+	SC_CHAT
 };
 
 #pragma pack(push, 1)
@@ -113,7 +115,7 @@ enum SC_PACKET_TYPE
 // type : 어떤 패킷인지
 constexpr int MAX_LOGIN_ID_LENGTH = 20;
 constexpr int MAX_LOGIN_PASSWORD_LENGTH = 30;
-
+constexpr int MAX_CHAT_LENGTH = 50;
 struct CSLoginPacket
 {
 	char size;
@@ -132,6 +134,12 @@ struct CSChangeChannelPacket
 	char	size;
 	char	type;
 	char channel;
+};
+struct CSChatPacket
+{
+	char size;
+	char type;
+	wchar_t chat[MAX_CHAT_LENGTH];
 };
 ///////////////////////////////////////////////////
 struct SCLoginOkPacket
@@ -173,4 +181,11 @@ struct SCChangeChannelPacket
 	char size;
 	char type;
 	bool result;
+};
+struct SCChatPacket
+{
+	char size;
+	char type;
+	int id;
+	wchar_t chat[MAX_CHAT_LENGTH];
 };

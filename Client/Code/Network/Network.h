@@ -34,8 +34,8 @@ public:
 
 	void SendLoginPacket(const std::string& loginId, const std::string& loginPassword);
 	void SendMovePacket(char dir);
-	void SendChangeChannel(char channel);
-
+	void SendChangeChannelPacket(char channel);
+	void SendChatPacket(const std::wstring& chat);
 private:
 	void processPacket();
 	void recvPacket();

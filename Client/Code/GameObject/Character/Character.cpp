@@ -186,19 +186,19 @@ void Player::Update()
 
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::F1_KEY) == true)
 	{
-		GET_INSTANCE(Network)->SendChangeChannel(0);
+		GET_INSTANCE(Network)->SendChangeChannelPacket(0);
 	}
 	else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::F2_KEY) == true)
 	{
-		GET_INSTANCE(Network)->SendChangeChannel(1);
+		GET_INSTANCE(Network)->SendChangeChannelPacket(1);
 	}
 	else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::F3_KEY) == true)
 	{
-		GET_INSTANCE(Network)->SendChangeChannel(2);
+		GET_INSTANCE(Network)->SendChangeChannelPacket(2);
 	}
 	else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::F4_KEY) == true)
 	{
-		GET_INSTANCE(Network)->SendChangeChannel(3);
+		GET_INSTANCE(Network)->SendChangeChannelPacket(3);
 	}
 #else
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::LEFT_KEY) == true)
