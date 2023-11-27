@@ -49,7 +49,7 @@ public:
 	virtual void MouseLButtonUp();
 	virtual void MouseLButtonClick();
 
-	void Move();
+	void Move(int mouseX, int mouseY);
 
 	void ProcessMouseWheelEvent(unsigned long long wParam);
 	virtual bool CheckContain(int left, int top, int right, int bottom);

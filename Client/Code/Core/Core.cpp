@@ -91,11 +91,6 @@ void Core::Run()
 	GET_INSTANCE(GameTimer)->Tick();
 	float elapsedTime = GET_INSTANCE(GameTimer)->GetElapsedTime();
 
-	POINT mouse;
-	::GetCursorPos(&mouse);
-	::ScreenToClient(mHandle, &mouse);
-	GET_INSTANCE(Input)->SetMousePos(std::make_pair(mouse.x, mouse.y));
-
 #ifdef SERVER_CONNECT
 	if (mIsReady == false)
 	{

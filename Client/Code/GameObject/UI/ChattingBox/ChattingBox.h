@@ -8,6 +8,16 @@ enum class CHAT_STATE
 	CHAT_END
 };
 
+struct ChattingLog
+{
+	ChattingLog(const std::wstring& _chatting, int _x, int _y)
+		: chatting(_chatting), x(_x), y(_y) {}
+
+	std::wstring chatting;
+	int x;
+	int y;
+};
+
 class ChattingBox : public UI
 {
 public:
@@ -24,6 +34,8 @@ public:
 	virtual void MouseLButtonUp();
 	virtual void MouseLButtonClick();
 
+	virtual bool CheckContain(int left, int top, int right, int bottom);
+
 	void OpenChattingBox();
 
 	void SetChatState(CHAT_STATE state) { mChatState = state; }
@@ -36,6 +48,7 @@ private:
 	bool mOpen;
 	CHAT_STATE mChatState;
 
+	std::vector<ChattingLog> mChattingLog;
 	std::vector<wchar_t> mChattings;
 	int mCarrotIndex;
 

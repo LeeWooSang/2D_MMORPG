@@ -28,6 +28,7 @@ public:
 	Character* GetOtherPlayer(int id) { return mOtherPlayers[id].get(); }
 	Character* GetMonster(int id) { return mMonsters[id].get(); }
 
+	HWND GetMainHandle() { return mHandle; }
 	bool GetIsReady()	const { return mIsReady; }
 
 private:
@@ -43,6 +44,5 @@ private:
 	std::unordered_map<int, std::shared_ptr<Character>> mMonsters;
 
 	bool mIsReady;
-
 };
 

@@ -7,6 +7,7 @@
 //#pragma comment(lib,"imm32.lib")
 
 INIT_INSTACNE(Input)
+std::pair<int, int> Input::mMousePos = std::make_pair(0, 0);
 Input::Input()
 {
 	mFlag = false;
@@ -169,6 +170,8 @@ void Input::ProcessKeyEvent()
 		return;
 	}
 
+	setMousePos();
+
 	for (auto& key : mKeyStateList)
 	{
 		// 키가 정의 되어 있지 않으면,
@@ -211,4 +214,13 @@ void Input::ProcessKeyEvent()
 			key.isPrevPush = false;
 		}
 	}
+}
+
+void Input::setMousePos()
+{
+	POINT mouse;
+	::GetCursorPos(&mouse);
+	::ScreenToClient(GET_INSTANCE(Core)->GetMainHandle(), &mouse);
+	mMousePos.first = mouse.x;
+	mMousePos.second = mouse.y;
 }

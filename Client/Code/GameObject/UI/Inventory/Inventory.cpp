@@ -230,10 +230,9 @@ void Inventory::Update()
 
 	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
 	MouseOverCollision(mousePos.first, mousePos.second);
-
 	if (mMouseLButtonDown == true)
 	{
-		Move();
+		Move(mousePos.first, mousePos.second);
 	}
 
 	for (auto& child : mChildUIs)
@@ -297,12 +296,10 @@ void Inventory::MouseLButtonClick()
 	UI::MouseLButtonClick();
 }
 
-void Inventory::Move()
+void Inventory::Move(int mouseX, int mouseY)
 {
-	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
-
-	int x = mousePos.first - mDragStartPos.first;
-	int y = mousePos.second - mDragStartPos.second;
+	int x = mouseX - mDragStartPos.first;
+	int y = mouseY - mDragStartPos.second;
 
 	mPos.first += x;
 	mPos.second += y;

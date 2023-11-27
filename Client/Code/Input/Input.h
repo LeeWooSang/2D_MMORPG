@@ -60,7 +60,6 @@ public:
 	void ProcessKeyboardMessage(unsigned int msg, unsigned long long wParam, long long lParam);
 	void ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam);
 
-	void SetMousePos(std::pair<int, int> pos) { mMousePos = pos; }
 	const std::pair<int, int>& GetMousePos() const { return mMousePos; }
 
 	bool KeyOnceCheck(KEY_TYPE);
@@ -71,10 +70,12 @@ public:
 	//bool GetIsPop(KEY_TYPE key)	const { return mKeyStateList[key].pop; }
 	void ProcessKeyEvent();
 
+private:
+	void setMousePos();
 	
 private:
 	std::array<KeyState, MAX_KEY_TYPE> mKeyStateList;
-	std::pair<int, int> mMousePos;
+	static std::pair<int, int> mMousePos;
 	bool mFlag;
 
 };
