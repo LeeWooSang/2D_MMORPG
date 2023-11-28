@@ -2,6 +2,8 @@
 #include "../../Common/Macro.h"
 #include <list>
 #include <vector>
+#include <unordered_map>
+#include <string>
 
 class UI;
 class UIManager
@@ -11,10 +13,16 @@ class UIManager
 public:
 	void Render();
 	void Update();
-	void AddUI(UI* ui) { mUIs.emplace_back(ui); };
+
+	UI* FindUI(const std::string& name);
+	void AddUI(const std::string& name, UI* ui);
 	void SetFocusUI(UI* ui);
 
 private:
+	void processKeyboardMessage();
+
+private:
+	std::unordered_map<std::string, UI*> mUIsMap;
 	std::list<UI*> mUIs;
 	//std::vector<UI*> mUIs;
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "../UI.h"
+#include <mutex>
 
 enum class CHAT_STATE
 {
@@ -10,9 +11,10 @@ enum class CHAT_STATE
 
 struct ChattingLog
 {
-	ChattingLog(const std::wstring& _chatting, int _x, int _y)
-		: chatting(_chatting), x(_x), y(_y) {}
+	ChattingLog(int _id, const std::wstring& _chatting, int _x, int _y)
+		: id(_id), chatting(_chatting), x(_x), y(_y) {}
 
+	int id;
 	std::wstring chatting;
 	int x;
 	int y;
@@ -33,16 +35,19 @@ public:
 	virtual void MouseLButtonDown();
 	virtual void MouseLButtonUp();
 	virtual void MouseLButtonClick();
-
 	virtual bool CheckContain(int left, int top, int right, int bottom);
 
 	void OpenChattingBox();
+	void AddChattingLog(int id, wchar_t* chatting);
 
+	CHAT_STATE GetChatState()		const { return mChatState; }
 	void SetChatState(CHAT_STATE state) { mChatState = state; }
-	void processInput();
 
 	bool GetIsOpen()	const { return mOpen; }
 	void SetCarrotPos();
+
+private:
+	void processInput();
 
 private:
 	bool mOpen;
@@ -54,4 +59,5 @@ private:
 
 	std::pair<float, float> mCarrotPos;
 	float mElapsedTime;
+	std::mutex mChattingLogMtx;
 };

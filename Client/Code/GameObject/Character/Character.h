@@ -44,13 +44,17 @@ public:
 	virtual void Update();
 	virtual void Render();
 
+	void ProcessKeyboardMessage();
 	void ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam);
 
 	void Move(char dir);
 	void AddItem();
 	Inventory* GetInventory() { return mInventory; }
 	ChattingBox* GetChattingBox() { return mChattingBox; }
+
 private:
 	Inventory* mInventory;
 	ChattingBox* mChattingBox;
+	float mElapsedTime;
+	bool mFlag;
 };

@@ -488,6 +488,8 @@ void Core::processPacket(int id, char* buf)
 			mUsers[id].SetChannel(channel);
 			SendLoginOkPacket(id);
 
+			mUsers[id].SetPosition(0, 0);
+
 			int x = mUsers[id].GetX();
 			int y = mUsers[id].GetY();
 
@@ -545,6 +547,16 @@ void Core::processPacket(int id, char* buf)
 		{
 			CSChatPacket* packet = reinterpret_cast<CSChatPacket*>(buf);
 			SendChatPacket(id, id, packet->chat);
+			// 주변 사람들에게 채팅보냄
+			mUsers[id].ProcessChat(packet->chat);
+			break;
+		}
+
+		case CS_PACKET_TYPE::CS_ATTACK:
+		{
+			CSAttackPacket* packet = reinterpret_cast<CSAttackPacket*>(buf);
+			// 몬스터에게 공격했는지 체크
+			mUsers[id].ProcessAttack();
 			break;
 		}
 

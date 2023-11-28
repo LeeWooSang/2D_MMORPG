@@ -75,6 +75,8 @@ public:
 	void CheckViewList();
 
 	void ProcessChangeChannelViewList(int oldChannel, int newChannel);
+	void ProcessChat(wchar_t* chat);
+	void ProcessAttack();
 
 private:
 	SOCKET mSocket;
@@ -112,6 +114,9 @@ public:
 	MONSTER_STATE GetState()		const { return mState; }
 	void SetState(MONSTER_STATE state) { mState = state; }
 	void SetSectorId(std::pair<int, int> sectorId) { mSectorXId = sectorId.first, mSectorYId = sectorId.second; }
+	void SetTargetId(int id) { mTargetId = id; }
+
+	bool CheckCollision(int x, int y);
 
 private:
 	std::pair<int, int> mRangeMin;
@@ -121,4 +126,6 @@ private:
 	int mSectorYId;
 
 	MONSTER_STATE mState;
+
+	int mTargetId;
 };

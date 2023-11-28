@@ -116,16 +116,11 @@ void Core::Run()
 	}
 
 	GET_INSTANCE(UIManager)->Update();
-
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
-	{
-		mPlayer->GetChattingBox()->OpenChattingBox();
-	}
-
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true)
-	{
-		mPlayer->GetInventory()->OpenInventory();
-	}
+	//if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
+	//{
+	//	mPlayer->GetChattingBox()->OpenChattingBox();
+	//	//mChattingBox->OpenChattingBox();
+	//}
 
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::Z_KEY) == true)
 	{

@@ -2,6 +2,8 @@
 #include <iostream>
 #include "../Core/Core.h"
 #include "../GameObject/Character/Character.h"
+#include "../GameObject/UI/UIManager.h"
+#include "../GameObject/UI/ChattingBox/ChattingBox.h"
 #include "../GraphicEngine/GraphicEngine.h"
 
 #define	WM_SOCKET	WM_USER + 1
@@ -114,7 +116,15 @@ void Network::SendChatPacket(const std::wstring& chat)
 	packet.type = CS_PACKET_TYPE::CS_CHAT;
 	wcsncpy_s(packet.chat, chat.c_str(), MAX_CHAT_LENGTH);
 	
-	std::cout << "채팅 패킷 전송" << std::endl;
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
+void Network::SendAttackPacket()
+{
+	CSAttackPacket packet;
+	packet.size = sizeof(CSAttackPacket);
+	packet.type = CS_PACKET_TYPE::CS_ATTACK;
+
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 
@@ -250,7 +260,11 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_CHAT:
 		{
 			SCChatPacket* packet = reinterpret_cast<SCChatPacket*>(mPacketBuffer);
-			std::wcout << packet->chat << std::endl;
+			ChattingBox* ui = static_cast<ChattingBox*>(GET_INSTANCE(UIManager)->FindUI("ChattingBox"));
+			if (ui != nullptr)
+			{
+				ui->AddChattingLog(packet->id, packet->chat);
+			}
 			break;
 		}
 

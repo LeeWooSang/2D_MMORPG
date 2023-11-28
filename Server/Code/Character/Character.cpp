@@ -672,6 +672,86 @@ void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 	}
 }
 
+void Player::ProcessChat(wchar_t* chat)
+{
+	int myId = mOver->myId;
+	Player* users = GET_INSTANCE(Core)->GetUsers();
+
+	std::unordered_set<int> newViewList;
+
+	// 검색해야할 유저 아이디 목록
+	std::vector<int> sectorUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetSectorUserIds(mX, mY);
+	// 나와 근처에 있는 오브젝트 아이디를 새로운 뷰리스트에 넣음
+	for (int i = 0; i < sectorUserIds.size(); ++i)
+	{
+		int id = sectorUserIds[i];
+		if (id == myId)
+		{
+			continue;
+		}
+
+		if (users[id].GetIsConnect() == false)
+		{
+			continue;
+		}
+
+		int x = users[id].GetX();
+		int y = users[id].GetY();
+		if (CheckDistance(x, y) == false)
+		{
+			continue;
+		}
+
+		newViewList.emplace(id);
+	}
+
+	for (auto& id : newViewList)
+	{
+		GET_INSTANCE(Core)->SendChatPacket(id, myId, chat);
+	}
+}
+
+void Player::ProcessAttack()
+{
+	int myId = mOver->myId;
+	std::unordered_map<int, int> newViewList;
+
+	Sector& sector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(mX, mY);
+	// 같은 섹터의 몬스터만 검색
+	Monster* monsters = sector.GetMonsters();
+	int index = 0;
+	for (int i = sector.GetStartId(); i < sector.GetEndId(); ++i, ++index)
+	{
+		if (CheckDistance(monsters[index].GetX(), monsters[index].GetY()) == false)
+		{
+			// 만약 전에 시야에 있었는데, 지금은 없다면? 나한테도 지우고, 걔한테도 지워야댐
+			if (mViewList.count(i) == true)
+			{
+				mViewList.erase(i);
+				GET_INSTANCE(Core)->SendRemoveObjectPacket(myId, i);
+			}
+
+			if (monsters[index].GetViewList().count(myId) == true)
+			{
+				monsters[index].GetViewList().erase(myId);
+			}
+
+			continue;
+		}
+		newViewList.emplace(i, index);
+	}
+
+	for (auto& obj : newViewList)
+	{
+		int index = obj.second;
+		if (monsters[index].CheckCollision(mX, mY) == true)
+		{
+			monsters[index].SetTargetId(myId);
+		}
+	}
+
+}
+
 Monster::Monster()
 	: Character()
 {
@@ -681,6 +761,8 @@ Monster::Monster()
 	mSectorXId = 0;
 	mSectorYId = 0;
 	mState = MONSTER_STATE::SLEEP;
+
+	mTargetId = -1;
 }
 
 Monster::~Monster()
@@ -695,6 +777,7 @@ void Monster::Reset()
 	mSectorXId = 0;
 	mSectorYId = 0;
 	mState = MONSTER_STATE::SLEEP;
+	mTargetId = -1;
 }
 
 bool Monster::Inititalize(int id)
@@ -720,6 +803,9 @@ bool Monster::Inititalize(int id)
 	mSectorXId = 0;
 	mSectorYId = 0;
 
+	mState = MONSTER_STATE::SLEEP;
+	mTargetId = -1;
+
 	return true;
 }
 
@@ -727,6 +813,38 @@ void Monster::ProcessMove(char dir)
 {
 	int x = mX;
 	int y = mY;
+
+	if (mTargetId != -1)
+	{
+		Player* users = GET_INSTANCE(Core)->GetUsers();
+		int targetX = users[mTargetId].GetX();
+		int targetY = users[mTargetId].GetY();
+		if (x < targetX)
+		{
+			++x;
+		}
+		else if (x > targetX)
+		{
+			--x;
+		}
+		else if (y < targetY)
+		{
+			++y;
+		}
+		else if(y > targetY)
+		{
+			--y;
+		}
+
+		if (CheckRange(x, y) == false)
+		{
+			return;
+		}
+
+		mX = x;
+		mY = y;
+		return;
+	}
 
 	switch (dir)
 	{
@@ -811,7 +929,7 @@ char Monster::RandomDirection() const
 
 void Monster::ProcessMoveViewList()
 {
-	Sector& sector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(mX, mY);
+	//Sector& sector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(mX, mY);
 
 	int myId = mOver->myId;
 	int myIndex = GET_INSTANCE(Core)->GetChannel(mChannel).FindSectorObjectIndex(mX, mY, myId);
@@ -909,6 +1027,29 @@ void Monster::ProcessMoveViewList()
 	}
 	else
 	{
+		mTargetId = -1;
 		mState = MONSTER_STATE::SLEEP;
 	}
+}
+
+bool Monster::CheckCollision(int x, int y)
+{
+	if (x - 1 <= mX && y == mY)
+	{
+		return true;
+	}
+	else if (x + 1 >= mX && y == mY)
+	{
+		return true;
+	}
+	else if (x == mX && y - 1 <= mY)
+	{
+		return true;
+	}
+	else if (x == mX && y + 1 >= mY)
+	{
+		return true;
+	}
+
+	return false;
 }

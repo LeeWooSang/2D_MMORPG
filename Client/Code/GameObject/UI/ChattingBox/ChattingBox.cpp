@@ -38,6 +38,12 @@ bool ChattingBox::Initialize(int x, int y)
 
 void ChattingBox::Update()
 {
+	if (mChatState == CHAT_STATE::NONE)
+	{
+		mOpen = false;
+		NotVisible();
+	}
+
 	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
 	{
 		return;
@@ -92,11 +98,14 @@ void ChattingBox::Render()
 		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
 	}
 	
-	for (int i = 0; i < mChattingLog.size(); ++i)
+	//mChattingLogMtx.lock();
+	int chattingLogSize = mChattingLog.size();
+	//mChattingLogMtx.unlock();
+	for (int i = 0; i < chattingLogSize; ++i)
 	{
 		int x = mPos.first;
 		//int y = mPos.second + 200 - (GET_INSTANCE(GraphicEngine)->GetFont("메이플").fontSize * (mChattingLog.size() - i));
-		int y = mPos.second + 200 - ((GET_INSTANCE(GraphicEngine)->GetFont("메이플").fontSize + 1) * (mChattingLog.size() - i));
+		int y = mPos.second + 200 - ((GET_INSTANCE(GraphicEngine)->GetFont("메이플").fontSize + 1) * (chattingLogSize - i));
 
 		int left = x;
 		int top = y;
@@ -107,7 +116,10 @@ void ChattingBox::Render()
 			continue;
 		}
 
-		GET_INSTANCE(GraphicEngine)->RenderText(mChattingLog[i].chatting, x, y, "메이플", "검은색");
+		//mChattingLogMtx.lock();
+		std::wstring chatting = std::to_wstring(mChattingLog[i].id) + L" : " + mChattingLog[i].chatting;
+		//mChattingLogMtx.unlock();
+		GET_INSTANCE(GraphicEngine)->RenderText(chatting, x, y, "메이플", "검은색");
 	}
 
 	if (mElapsedTime > 0.5)
@@ -194,24 +206,32 @@ bool ChattingBox::CheckContain(int left, int top, int right, int bottom)
 
 void ChattingBox::OpenChattingBox()
 {
-	if (mChatState != CHAT_STATE::NONE)
-	{
-		return;
-	}
+	//if (mChatState != CHAT_STATE::NONE)
+	//{
+	//	return;
+	//}
 
 	// 닫혀있다면
 	if (mOpen == false)
 	{
-		mOpen = true;
 		mChatState = CHAT_STATE::CHATTING;
+		mOpen = true;
 		Visible();
 	}
-	// 열려있다면
 	else
 	{
-		mOpen = false;
-		NotVisible();
+		if (mChatState == CHAT_STATE::CHATTING && mChattings.size() <= 0)
+		{
+			mChatState = CHAT_STATE::NONE;
+		}
 	}
+}
+
+void ChattingBox::AddChattingLog(int id, wchar_t* chatting)
+{
+	//mChattingLogMtx.lock();
+	mChattingLog.emplace_back(ChattingLog(id, chatting, 0, 0));
+	//mChattingLogMtx.unlock();	
 }
 
 void ChattingBox::processInput()
@@ -230,6 +250,7 @@ void ChattingBox::processInput()
 				mChattings.insert(mChattings.begin() + (mCarrotIndex), wc);
 			}
 
+			mChatState = CHAT_STATE::CHATTING;
 			++mCarrotIndex;
 		}
 	}
@@ -251,6 +272,7 @@ void ChattingBox::processInput()
 					mChattings.insert(mChattings.begin() + (mCarrotIndex), wc);
 				}
 
+				mChatState = CHAT_STATE::CHATTING;
 				++mCarrotIndex;
 			}
 		}
@@ -276,6 +298,7 @@ void ChattingBox::processInput()
 				mChattings.insert(mChattings.begin() + (mCarrotIndex), wc);
 			}
 		
+			mChatState = CHAT_STATE::CHATTING;
 			++mCarrotIndex;
 		}
 	}
@@ -292,6 +315,7 @@ void ChattingBox::processInput()
 			mChattings.insert(mChattings.begin() + (mCarrotIndex), wc);
 		}
 
+		mChatState = CHAT_STATE::CHATTING;
 		++mCarrotIndex;
 	}
 
@@ -330,23 +354,24 @@ void ChattingBox::processInput()
 			// 채팅 패킷 전송하고, 계속 채팅상태
 			if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
 			{
+				mChatState = CHAT_STATE::CHAT_END;
+
 				std::wstring chatting;
 				for (auto& chat : mChattings)
 				{
 					chatting += chat;
 				}
 
-				// 채팅 기록
-				mChattingLog.emplace_back(ChattingLog(chatting, 0, 0));
-
 				mChattings.clear();
 				mCarrotIndex = 0;
 #ifdef SERVER_CONNECT
 				GET_INSTANCE(Network)->SendChatPacket(chatting);
+#else
+				// 채팅 기록
+				mChattingLog.emplace_back(ChattingLog(chatting, 0, 0));
 #endif 
 			}
 		}
-
 		SetCarrotPos();
 	}
 	else
@@ -354,7 +379,10 @@ void ChattingBox::processInput()
 		// 채팅상태 중이면서, 채팅길이가 0이고, 엔터눌렀을때는 종료
 		if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
 		{
-			mChatState = CHAT_STATE::NONE;
+			if (mChatState == CHAT_STATE::CHAT_END)
+			{
+				mChatState = CHAT_STATE::NONE;
+			}
 		}
 	}
 }

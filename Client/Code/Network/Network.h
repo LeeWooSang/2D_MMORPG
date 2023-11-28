@@ -36,6 +36,8 @@ public:
 	void SendMovePacket(char dir);
 	void SendChangeChannelPacket(char channel);
 	void SendChatPacket(const std::wstring& chat);
+	void SendAttackPacket();
+
 private:
 	void processPacket();
 	void recvPacket();

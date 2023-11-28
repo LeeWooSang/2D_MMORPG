@@ -96,7 +96,8 @@ enum CS_PACKET_TYPE
 	CS_LOGIN = 0,
 	CS_MOVE,
 	CS_CHANGE_CHANNEL,
-	CS_CHAT
+	CS_CHAT,
+	CS_ATTACK
 };
 
 enum SC_PACKET_TYPE
@@ -140,6 +141,11 @@ struct CSChatPacket
 	char size;
 	char type;
 	wchar_t chat[MAX_CHAT_LENGTH];
+};
+struct CSAttackPacket
+{
+	char size;
+	char type;
 };
 ///////////////////////////////////////////////////
 struct SCLoginOkPacket

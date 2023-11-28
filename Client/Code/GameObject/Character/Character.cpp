@@ -6,6 +6,7 @@
 #include "../UI/Inventory/Inventory.h"
 #include "../UI/ChattingBox/ChattingBox.h"
 
+#include "../../GameTimer/GameTimer.h"
 #include <string>
 #include <random>
 #include "../UI/UIManager.h"
@@ -116,6 +117,8 @@ Player::Player()
 {
 	mInventory = nullptr;
 	mChattingBox = nullptr;
+	mElapsedTime = 0.0;
+	mFlag = false;
 }
 
 Player::~Player()
@@ -143,7 +146,7 @@ bool Player::Initialize(int x, int y)
 			return false;
 		}
 
-		GET_INSTANCE(UIManager)->AddUI(mInventory);
+		GET_INSTANCE(UIManager)->AddUI("Inventory", mInventory);
 	}
 
 	// 부모 ui
@@ -153,7 +156,7 @@ bool Player::Initialize(int x, int y)
 		{
 			return false;
 		}
-		GET_INSTANCE(UIManager)->AddUI(mChattingBox);
+		GET_INSTANCE(UIManager)->AddUI("ChattingBox", mChattingBox);
 	}
 
 	return true;
@@ -161,6 +164,84 @@ bool Player::Initialize(int x, int y)
 
 void Player::Update()
 {
+	ProcessKeyboardMessage();
+	GET_INSTANCE(Camera)->SetPosition(mPos.first, mPos.second);
+
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::CONTROL_KEY) == true)
+	{
+		mFlag = true;
+#ifdef SERVER_CONNECT
+		GET_INSTANCE(Network)->SendAttackPacket();
+#endif // SERVER_CONNECT
+	}
+
+	if (mFlag == true)
+	{
+		mElapsedTime += GET_INSTANCE(GameTimer)->GetElapsedTime();
+	}
+
+	if (mElapsedTime > 2.0)
+	{
+		mElapsedTime = 0.0;
+		mFlag = false;
+	}
+}
+
+void Player::Render()
+{
+	// 보이는 것만 렌더
+	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
+	{
+		return;
+	}
+
+	std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
+
+	//if (mMessageTime > GetTickCount() - 2000)
+	//{
+	//	GET_INSTANCE(GraphicEngine)->RenderText(mMessage, static_cast<int>(pos.x), static_cast<int>(pos.y), D3DCOLOR_ARGB(255, 200, 200, 255));
+	//}
+	//{
+	//	int windowHeight = 800;
+	//	std::wstring text = L"MY POSITION (" + std::to_wstring(mPos.first) + L", " + std::to_wstring(mPos.second) + L")";
+	//	GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, D3DCOLOR_ARGB(255, 255, 255, 255));
+	//}
+
+	{
+		// 이미지 위치
+		D2D1_RECT_F pos;
+		pos.left = (mPos.first - cameraPos.first) * 65.0 + 8.0;
+		pos.top = (mPos.second - cameraPos.second) * 65.0 + 8.0;
+		pos.right = pos.left + mTexture->GetSize().first;
+		pos.bottom = pos.top + mTexture->GetSize().second;
+
+		//GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "흰색");
+		GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+
+		std::wstring text = L"My Id (" + std::to_wstring(mId) + L")";
+		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top), "메이플", "검은색");
+
+		int windowHeight = 800;
+		text = L"MY POSITION (" + std::to_wstring(mPos.first) + L", " + std::to_wstring(mPos.second) + L")";
+		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, "메이플", "파란색");
+
+		if (mFlag == true)
+		{
+			GET_INSTANCE(GraphicEngine)->RenderText(L"ATTACK!!!", 
+				static_cast<int>(pos.left), static_cast<int>(pos.top - 30), "메이플", "빨간색");
+		}
+	}
+}
+
+void Player::ProcessKeyboardMessage()
+{
+
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true
+		&& mChattingBox->GetIsOpen() == false)
+	{
+		mInventory->OpenInventory();
+	}
+
 	if (mChattingBox->GetIsOpen() == true)
 	{
 		return;
@@ -217,67 +298,7 @@ void Player::Update()
 	{
 		Move(DIRECTION_TYPE::DOWN);
 	}
-	GET_INSTANCE(Camera)->SetPosition(mPos.first, mPos.second);
-
-#endif 
-}
-
-void Player::Render()
-{
-	// 보이는 것만 렌더
-	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
-	{
-		return;
-	}
-
-	RECT src;
-	src.left = mTexture->GetPos(mCurrFrame).first;
-	src.top = mTexture->GetPos(mCurrFrame).second;
-	src.right = mTexture->GetPos(mCurrFrame).first + mTexture->GetSize().first;
-	src.bottom = mTexture->GetPos(mCurrFrame).second + mTexture->GetSize().second;
-
-	std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
-
-	//D3DXVECTOR3 pos = D3DXVECTOR3((mPos.first - cameraPos.first) * 65.0f + 8, (mPos.second - cameraPos.second) * 65.0f + 8, 0.0);
-	//GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
-	//mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
-	//mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
-	//mTexture->GetSprite()->End();
-
-	//{
-	//	int windowHeight = 800;
-	//	std::wstring text = L"My Id (" + std::to_wstring(mId) + L")";
-	//	GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.x), static_cast<int>(pos.y), D3DCOLOR_ARGB(255, 255, 0, 0));
-	//}
-
-	//if (mMessageTime > GetTickCount() - 2000)
-	//{
-	//	GET_INSTANCE(GraphicEngine)->RenderText(mMessage, static_cast<int>(pos.x), static_cast<int>(pos.y), D3DCOLOR_ARGB(255, 200, 200, 255));
-	//}
-	//{
-	//	int windowHeight = 800;
-	//	std::wstring text = L"MY POSITION (" + std::to_wstring(mPos.first) + L", " + std::to_wstring(mPos.second) + L")";
-	//	GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, D3DCOLOR_ARGB(255, 255, 255, 255));
-	//}
-
-	{
-		// 이미지 위치
-		D2D1_RECT_F pos;
-		pos.left = (mPos.first - cameraPos.first) * 65.0 + 8.0;
-		pos.top = (mPos.second - cameraPos.second) * 65.0 + 8.0;
-		pos.right = pos.left + mTexture->GetSize().first;
-		pos.bottom = pos.top + mTexture->GetSize().second;
-
-		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
-		GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
-
-		std::wstring text = L"My Id (" + std::to_wstring(mId) + L")";
-		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top), "메이플", "검은색");
-
-		int windowHeight = 800;
-		text = L"MY POSITION (" + std::to_wstring(mPos.first) + L", " + std::to_wstring(mPos.second) + L")";
-		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, "메이플", "파란색");
-	}
+#endif
 }
 
 void Player::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)

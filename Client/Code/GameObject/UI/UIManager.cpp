@@ -3,6 +3,7 @@
 #include "../Character/Character.h"
 #include "UI.h"
 #include  "Inventory/Inventory.h"
+#include "ChattingBox/ChattingBox.h"
 #include "../../Input/Input.h"
 #include <queue>
 #include <list>
@@ -19,7 +20,9 @@ UIManager::~UIManager()
 	{
 		delete ui;
 	}
+	
 	mUIs.clear();
+	mUIsMap.clear();
 }
 
 void UIManager::Render()
@@ -37,6 +40,8 @@ void UIManager::Update()
 	{
 		return;
 	}
+
+	processKeyboardMessage();
 
 	for (auto ui : mUIs)
 	{
@@ -80,6 +85,22 @@ void UIManager::Update()
 	}
 }
 
+UI* UIManager::FindUI(const std::string& name)
+{
+	if (mUIsMap.count(name) == false)
+	{
+		return nullptr;
+	}
+
+	return mUIsMap[name];
+}
+
+void UIManager::AddUI(const std::string& name, UI* ui)
+{
+	mUIs.emplace_back(ui);
+	mUIsMap.emplace(name, ui);
+}
+
 void UIManager::SetFocusUI(UI* ui)
 {
 	if (mFocusUI == ui || ui == nullptr)
@@ -100,6 +121,14 @@ void UIManager::SetFocusUI(UI* ui)
 
 	mUIs.erase(targetIter);
 	mUIs.emplace_back(mFocusUI);
+}
+
+void UIManager::processKeyboardMessage()
+{
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
+	{
+		static_cast<ChattingBox*>(mUIsMap["ChattingBox"])->OpenChattingBox();
+	}
 }
 
 UI* UIManager::getTargetUI(UI* parentUI)
