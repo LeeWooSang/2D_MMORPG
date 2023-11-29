@@ -117,8 +117,6 @@ void Input::ProcessKeyboardMessage(unsigned int msg, unsigned long long wParam, 
 
 void Input::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)
 {
-	//mMousePos.first = LOWORD(lParam);
-	//mMousePos.second = HIWORD(lParam);
 	switch (msg)
 	{
 		case WM_LBUTTONDOWN:
@@ -137,10 +135,10 @@ void Input::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, lon
 
 		case WM_MOUSEWHEEL:
 		{
-			if (GET_INSTANCE(Core)->GetPlayer() != nullptr)
-			{
-				GET_INSTANCE(Core)->GetPlayer()->ProcessMouseMessage(msg, wParam, lParam);
-			}
+			//if (GET_INSTANCE(Core)->GetPlayer() != nullptr)
+			//{
+			//	GET_INSTANCE(Core)->GetPlayer()->ProcessMouseMessage(msg, wParam, lParam);
+			//}
 			break;
 		}
 

@@ -154,6 +154,10 @@
     <ClCompile Include="..\Code\Network\Network.cpp" />
     <ClCompile Include="..\Code\Resource\ResourceManager.cpp" />
     <ClCompile Include="..\Code\Resource\Texture\Texture.cpp" />
+    <ClCompile Include="..\Code\Scene\InGameScene\InGameScene.cpp" />
+    <ClCompile Include="..\Code\Scene\LoginScene\LoginScene.cpp" />
+    <ClCompile Include="..\Code\Scene\Scene.cpp" />
+    <ClCompile Include="..\Code\Scene\SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Server\Code\Common\Protocol.h" />
@@ -175,6 +179,10 @@
     <ClInclude Include="..\Code\Network\Network.h" />
     <ClInclude Include="..\Code\Resource\ResourceManager.h" />
     <ClInclude Include="..\Code\Resource\Texture\Texture.h" />
+    <ClInclude Include="..\Code\Scene\InGameScene\InGameScene.h" />
+    <ClInclude Include="..\Code\Scene\LoginScene\LoginScene.h" />
+    <ClInclude Include="..\Code\Scene\Scene.h" />
+    <ClInclude Include="..\Code\Scene\SceneManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

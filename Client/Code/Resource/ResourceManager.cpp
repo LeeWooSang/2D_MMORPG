@@ -17,6 +17,17 @@ bool ResourceManager::Initialize()
 {
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		//texture->CreateTexture(1920, 1080);
+		texture->CreateTexture(800, 800);
+		if (texture->LoadTexture(L"../Resource/Textures/LoginScene.jpg") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		mTextureList.emplace("LoginScene", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(531, 532);
 		if (texture->LoadTexture(L"../Resource/Textures/Map.bmp") == false)
 		{

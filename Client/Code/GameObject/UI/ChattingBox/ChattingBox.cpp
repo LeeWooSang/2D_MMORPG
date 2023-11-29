@@ -368,7 +368,7 @@ void ChattingBox::processInput()
 				GET_INSTANCE(Network)->SendChatPacket(chatting);
 #else
 				// 채팅 기록
-				mChattingLog.emplace_back(ChattingLog(chatting, 0, 0));
+				mChattingLog.emplace_back(ChattingLog(0, chatting, 0, 0));
 #endif 
 			}
 		}

@@ -1,10 +1,12 @@
 #include "Network.h"
 #include <iostream>
 #include "../Core/Core.h"
-#include "../GameObject/Character/Character.h"
+
+#include "../Scene/SceneManager.h"
+#include "../Scene/InGameScene/InGameScene.h"
+
 #include "../GameObject/UI/UIManager.h"
 #include "../GameObject/UI/ChattingBox/ChattingBox.h"
-#include "../GraphicEngine/GraphicEngine.h"
 
 #define	WM_SOCKET	WM_USER + 1
 
@@ -133,13 +135,12 @@ void Network::processPacket()
 	switch (mPacketBuffer[1])
 	{
 		case SC_PACKET_TYPE::SC_LOGIN_OK:
-		{
+		{		
 			SCLoginOkPacket* packet = reinterpret_cast<SCLoginOkPacket*>(mPacketBuffer);
-			myId = packet->id;
-			if (GET_INSTANCE(Core)->AddObject(myId) == false)
-			{
-				GET_INSTANCE(Core)->Quit();
-			}
+			InGamePacket p;
+			p.id = packet->id;
+		
+			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, SC_LOGIN_OK, p);
 			break;
 		}
 
@@ -152,95 +153,43 @@ void Network::processPacket()
 
 		case SC_PACKET_TYPE::SC_POSITION:
 		{
-			// 준비가 아직 안됬으면 걍 리턴
-			if (GET_INSTANCE(Core)->GetIsReady() == false)
-			{
-				break;
-			}
-
 			SCPositionPacket* packet = reinterpret_cast<SCPositionPacket*>(mPacketBuffer);			
-			int id = packet->id;
-			int x = packet->x;
-			int y = packet->y;
+			InGamePacket p;
+			p.id = packet->id;
+			p.x = packet->x;
+			p.y = packet->y;
 
-			if (myId == id)
-			{
-				GET_INSTANCE(Camera)->SetPosition(x, y);
-				GET_INSTANCE(Core)->GetPlayer()->SetPosition(x, y);
-			}
-			else
-			{
-				if (id < MAX_USER)
-				{
-					GET_INSTANCE(Core)->GetOtherPlayer(id)->SetPosition(x, y);
-				}
-				else
-				{
-					GET_INSTANCE(Core)->GetMonster(id)->SetPosition(x, y);
-				}
-			}
+			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, SC_POSITION, p);
 			break;
 		}
 
 		case SC_PACKET_TYPE::SC_ADD_OBJECT:
 		{
-			// 준비가 아직 안됬으면 걍 리턴
-			if (GET_INSTANCE(Core)->GetIsReady() == false)
-			{
-				break;
-			}
-
 			SCAddObjectPacket* packet = reinterpret_cast<SCAddObjectPacket*>(mPacketBuffer);
-			int id = packet->id;
-			int x = packet->x;
-			int y = packet->y;
+			InGamePacket p;
+			p.id = packet->id;
+			p.x = packet->x;
+			p.y = packet->y;
 
-			if (myId == id)
-			{
-				GET_INSTANCE(Camera)->SetPosition(x, y);
-				GET_INSTANCE(Core)->GetPlayer()->SetPosition(x, y);
-			}
-			else
-			{
-				if (id < MAX_USER)
-				{
-					GET_INSTANCE(Core)->GetOtherPlayer(id)->SetPosition(x, y);
-					GET_INSTANCE(Core)->GetOtherPlayer(id)->Visible();
-				}
-				else
-				{
-					GET_INSTANCE(Core)->GetMonster(id)->SetPosition(x, y);
-					GET_INSTANCE(Core)->GetMonster(id)->Visible();
-				}
-			}
+			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, SC_ADD_OBJECT, p);
 			break;
 		}
 
 		case SC_PACKET_TYPE::SC_REMOVE_OBJECT:
 		{
-			// 준비가 아직 안됬으면 걍 리턴
-			if (GET_INSTANCE(Core)->GetIsReady() == false)
-			{
-				break;
-			}
-
 			SCRemoveObjectPacket* packet = reinterpret_cast<SCRemoveObjectPacket*>(mPacketBuffer);
-			int id = packet->id;
-			if (id < MAX_USER)
-			{
-				GET_INSTANCE(Core)->GetOtherPlayer(id)->NotVisible();
-			}
-			else
-			{
-				GET_INSTANCE(Core)->GetMonster(id)->NotVisible();
-			}
+			InGamePacket p;
+			p.id = packet->id;
+
+			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, SC_REMOVE_OBJECT, p);
 			break;
 		}
 
 		case SC_PACKET_TYPE::SC_CHANGE_CHANNEL:
 		{
 			// 준비가 아직 안됬으면 걍 리턴
-			if (GET_INSTANCE(Core)->GetIsReady() == false)
+			InGameScene* scene = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE));
+			if (scene->GetIsReady() == false)
 			{
 				break;
 			}
