@@ -49,11 +49,9 @@ public:
 
 	void Move(char dir);
 	void AddItem();
-	Inventory* GetInventory() { return mInventory; }
 	ChattingBox* GetChattingBox() { return mChattingBox; }
 
 private:
-	Inventory* mInventory;
 	ChattingBox* mChattingBox;
 	float mElapsedTime;
 	bool mFlag;

@@ -138,9 +138,10 @@ void Network::processPacket()
 		{		
 			SCLoginOkPacket* packet = reinterpret_cast<SCLoginOkPacket*>(mPacketBuffer);
 			InGamePacket p;
+			p.packetType = SC_LOGIN_OK;
 			p.id = packet->id;
 		
-			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, SC_LOGIN_OK, p);
+			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, p);
 			break;
 		}
 
@@ -155,11 +156,12 @@ void Network::processPacket()
 		{
 			SCPositionPacket* packet = reinterpret_cast<SCPositionPacket*>(mPacketBuffer);			
 			InGamePacket p;
+			p.packetType = SC_POSITION;
 			p.id = packet->id;
 			p.x = packet->x;
 			p.y = packet->y;
 
-			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, SC_POSITION, p);
+			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, p);
 			break;
 		}
 
@@ -167,11 +169,12 @@ void Network::processPacket()
 		{
 			SCAddObjectPacket* packet = reinterpret_cast<SCAddObjectPacket*>(mPacketBuffer);
 			InGamePacket p;
+			p.packetType = SC_ADD_OBJECT;
 			p.id = packet->id;
 			p.x = packet->x;
 			p.y = packet->y;
 
-			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, SC_ADD_OBJECT, p);
+			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, p);
 			break;
 		}
 
@@ -179,9 +182,10 @@ void Network::processPacket()
 		{
 			SCRemoveObjectPacket* packet = reinterpret_cast<SCRemoveObjectPacket*>(mPacketBuffer);
 			InGamePacket p;
+			p.packetType = SC_REMOVE_OBJECT;
 			p.id = packet->id;
 
-			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, SC_REMOVE_OBJECT, p);
+			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, p);
 			break;
 		}
 

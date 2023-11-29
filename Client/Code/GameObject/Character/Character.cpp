@@ -48,33 +48,8 @@ void Character::Render()
 		return;
 	}
 
-	RECT src;
-	src.left = mTexture->GetPos(mCurrFrame).first;
-	src.top = mTexture->GetPos(mCurrFrame).second;
-	src.right = mTexture->GetPos(mCurrFrame).first + mTexture->GetSize().first;
-	src.bottom = mTexture->GetPos(mCurrFrame).second + mTexture->GetSize().second;
-	
-	//D3DXVECTOR3 pos = D3DXVECTOR3((mPos.first - g_left_x) * 65.0f + 8, (mPos.second - g_top_y) * 65.0f + 8, 0.0);
-	//D3DXVECTOR3 pos = D3DXVECTOR3(mPos.first * 65.0f + 8, mPos.second * 65.0f + 8, 0.0);
 	std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
-	//D3DXVECTOR3 pos = D3DXVECTOR3((mPos.first - cameraPos.first) * 65.0f + 8, (mPos.second - cameraPos.second) * 65.0f + 8, 0.0);	
-	//GET_INSTANCE(GraphicEngine)->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
-	//mTexture->GetSprite()->Begin(D3DXSPRITE_ALPHABLEND);
-	//mTexture->GetSprite()->Draw(mTexture->GetBuffer(), &src, NULL, &pos, D3DCOLOR_ARGB(255, 255, 255, 255));
-	//mTexture->GetSprite()->End();
 
-	//{
-	//	int windowHeight = 800;
-	//	std::wstring text = L"My Id (" + std::to_wstring(mId) + L")";
-	//	GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.x), static_cast<int>(pos.y), D3DCOLOR_ARGB(255, 255, 0, 0));
-	//}
-
-	//if (mMessageTime > GetTickCount() - 2000)
-	//{
-	//	GET_INSTANCE(GraphicEngine)->RenderText(mMessage, static_cast<int>(pos.x), static_cast<int>(pos.y), D3DCOLOR_ARGB(255, 200, 200, 255));
-	//}
-	// 
-	
 	// 이미지 위치
 	D2D1_RECT_F pos;
 	pos.left = (mPos.first - cameraPos.first) * 65.0 + 8.0;
@@ -83,7 +58,7 @@ void Character::Render()
 	pos.bottom = pos.top + mTexture->GetSize().second;
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
-	std::wstring text = L"My Id (" + std::to_wstring(mId) + L")";
+	std::wstring text = L"Id (" + std::to_wstring(mId) + L")";
 	GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top), "메이플", "검은색");
 }
 
@@ -115,7 +90,6 @@ void Character::SetAnimationInfo(int frameSize)
 Player::Player()
 	: Character()
 {
-	mInventory = nullptr;
 	mChattingBox = nullptr;
 	mElapsedTime = 0.0;
 	mFlag = false;
@@ -136,17 +110,17 @@ bool Player::Initialize(int x, int y)
 
 	// 부모 ui
 	{
-		mInventory = new Inventory;
-		if (mInventory->Initialize(0, 0) == false)
+		UI* inventory = new Inventory;
+		if (inventory->Initialize(0, 0) == false)
 		{
 			return false;
 		}
-		if (mInventory->SetTexture("Inventory") == false)
+		if (inventory->SetTexture("Inventory") == false)
 		{
 			return false;
 		}
 
-		GET_INSTANCE(UIManager)->AddUI("Inventory", mInventory);
+		GET_INSTANCE(UIManager)->AddUI("Inventory", inventory);
 	}
 
 	// 부모 ui
@@ -218,7 +192,7 @@ void Player::Render()
 		//GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "흰색");
 		GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
-		std::wstring text = L"My Id (" + std::to_wstring(mId) + L")";
+		std::wstring text = L"MyId (" + std::to_wstring(mId) + L")";
 		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top), "메이플", "검은색");
 
 		int windowHeight = 800;
@@ -239,7 +213,7 @@ void Player::ProcessKeyboardMessage()
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true
 		&& mChattingBox->GetIsOpen() == false)
 	{
-		mInventory->OpenInventory();
+		static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->OpenInventory();
 	}
 
 	if (mChattingBox->GetIsOpen() == true)
@@ -303,7 +277,7 @@ void Player::ProcessKeyboardMessage()
 
 void Player::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)
 {
-	mInventory->ProcessMouseWheelEvent(wParam);
+	static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->ProcessMouseWheelEvent(wParam);
 }
 
 void Player::Move(char dir)
@@ -371,5 +345,5 @@ void Player::AddItem()
 		break;
 	}
 	
-	mInventory->AddItem(itemName);
+	static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->AddItem(itemName);
 }

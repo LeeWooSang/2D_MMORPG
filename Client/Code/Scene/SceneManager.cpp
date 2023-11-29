@@ -3,6 +3,7 @@
 #include "../Input/Input.h"
 #include "LoginScene/LoginScene.h"
 #include "InGameScene/InGameScene.h"
+#include "../GameObject/Character/Character.h"
 
 INIT_INSTACNE(SceneManager)
 std::queue<PacketEvent> SceneManager::mEventQueue;
@@ -19,6 +20,14 @@ SceneManager::~SceneManager()
 		delete scene.second;
 	}
 	mSceneMap.clear();
+}
+
+void SceneManager::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)
+{
+	if (mSceneType == INGAME_SCENE)
+	{
+		static_cast<InGameScene*>(mSceneMap[mSceneType])->GetPlayer()->ProcessMouseMessage(msg, wParam, lParam);
+	}
 }
 
 void SceneManager::AddScene(SCENE_TYPE type)
@@ -81,7 +90,7 @@ void SceneManager::processPacketEvent()
 		PacketEvent& ev = mEventQueue.front();
 		InGameScene* scene = static_cast<InGameScene*>(mSceneMap[ev.sceneType]);
 		InGamePacket& packet = ev.packet;
-		switch (ev.packetType)
+		switch (packet.packetType)
 		{
 		case SC_LOGIN_OK:
 		{

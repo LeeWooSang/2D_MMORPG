@@ -1,7 +1,7 @@
 #include "Input.h"
 #include <iostream>
 #include "../Core/Core.h"
-#include "../GameObject/Character/Character.h"
+#include "../Scene/SceneManager.h"
 #include <Windows.h>
 //#include <imm.h>
 //#pragma comment(lib,"imm32.lib")
@@ -135,10 +135,7 @@ void Input::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, lon
 
 		case WM_MOUSEWHEEL:
 		{
-			//if (GET_INSTANCE(Core)->GetPlayer() != nullptr)
-			//{
-			//	GET_INSTANCE(Core)->GetPlayer()->ProcessMouseMessage(msg, wParam, lParam);
-			//}
+			GET_INSTANCE(SceneManager)->ProcessMouseMessage(msg, wParam, lParam);
 			break;
 		}
 
