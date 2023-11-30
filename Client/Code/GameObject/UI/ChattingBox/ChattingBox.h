@@ -51,13 +51,14 @@ private:
 
 private:
 	bool mOpen;
+	float mElapsedTime;
+
 	CHAT_STATE mChatState;
 
 	std::vector<ChattingLog> mChattingLog;
 	std::vector<wchar_t> mChattings;
 	int mCarrotIndex;
-
 	std::pair<float, float> mCarrotPos;
-	float mElapsedTime;
+
 	std::mutex mChattingLogMtx;
 };

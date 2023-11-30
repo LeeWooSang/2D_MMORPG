@@ -1,6 +1,5 @@
 #include "SceneManager.h"
 #include "Scene.h"
-#include "../Input/Input.h"
 #include "LoginScene/LoginScene.h"
 #include "InGameScene/InGameScene.h"
 #include "../GameObject/Character/Character.h"
@@ -62,11 +61,6 @@ void SceneManager::Update()
 	if (mSceneMap[mSceneType]->GetIsReady() == false)
 	{
 		return;
-	}
-
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
-	{
-		ChangeScene(SCENE_TYPE::INGAME_SCENE);
 	}
 
 	processPacketEvent();

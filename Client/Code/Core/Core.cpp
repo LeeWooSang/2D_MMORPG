@@ -95,15 +95,6 @@ void Core::WindowProc(HWND handle, unsigned int msg, unsigned long long wparam, 
 {
 	switch (msg)
 	{
-		case WM_KEYDOWN:
-		{
-			if (wparam == VK_ESCAPE)
-			{
-				Quit();
-			}
-			break;
-		}
-
 		case WM_SOCKET:
 		{
 			GET_INSTANCE(Network)->PreocessNetwork(wparam, lparam);
@@ -112,7 +103,7 @@ void Core::WindowProc(HWND handle, unsigned int msg, unsigned long long wparam, 
 
 	default:
 		{
-			GET_INSTANCE(Input)->ProcessMouseMessage(msg, wparam, lparam);
+			GET_INSTANCE(Input)->ProcessWindowMessage(msg, wparam, lparam);
 			break;
 		}
 	}

@@ -73,10 +73,24 @@ bool Input::Initialize()
 
 	mKeyStateList[KEY_TYPE::BACK_SPACE].keyType = VK_BACK;
 	mKeyStateList[KEY_TYPE::SPACE].keyType = VK_SPACE;
+	mKeyStateList[KEY_TYPE::SHIFT_KEY].keyType = VK_SHIFT;
+
+	mKeyStateList[KEY_TYPE::COMMA_KEY].keyType = VK_OEM_COMMA;
+	mKeyStateList[KEY_TYPE::DOT_KEY].keyType = VK_OEM_PERIOD;
+	mKeyStateList[KEY_TYPE::SLASH_KEY].keyType = VK_OEM_2;
+	mKeyStateList[KEY_TYPE::LEFT_BRACKET].keyType = VK_OEM_4;
+	mKeyStateList[KEY_TYPE::BACK_SLASH_KEY].keyType = VK_OEM_5;
+	mKeyStateList[KEY_TYPE::RIGHT_BRACKET].keyType = VK_OEM_6;
+	mKeyStateList[KEY_TYPE::TILDE_KEY].keyType = VK_OEM_3;
+	mKeyStateList[KEY_TYPE::SEMICOLON_KEY].keyType = VK_OEM_1;
+	mKeyStateList[KEY_TYPE::APOSTROPHE_KEY].keyType = VK_OEM_7;
+	mKeyStateList[KEY_TYPE::PLUS_KEY].keyType = VK_OEM_PLUS;
+	mKeyStateList[KEY_TYPE::HYPHEN_KEY].keyType = VK_OEM_MINUS;
+	
 
 	mKeyStateList[KEY_TYPE::MOUSE_LBUTTON].keyType = VK_LBUTTON;
 	mKeyStateList[KEY_TYPE::MOUSE_RBUTTON].keyType = VK_RBUTTON;
-
+	
 	return true;
 }
 
@@ -110,6 +124,17 @@ void Input::ProcessWindowMessage(unsigned int msg, unsigned long long wParam, lo
 
 void Input::ProcessKeyboardMessage(unsigned int msg, unsigned long long wParam, long long lParam)
 {
+	if (msg == WM_KEYDOWN)
+	{
+		if (wParam == VK_ESCAPE)
+		{
+			GET_INSTANCE(Core)->Quit();
+			return;
+		}
+		
+		std::cout << wParam << std::endl;	
+	}
+
 	//Scene* scene = GET_INSTANCE(SceneManager)->GetScene();
 	//if (scene != nullptr)
 	//	scene->ProcessKeyboardMessage(hWnd, message, wParam, lParam);

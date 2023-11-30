@@ -40,6 +40,7 @@ public:
 	void AddScene(SCENE_TYPE type);
 	void AddScene(SCENE_TYPE type, Scene* scene) { mSceneMap.emplace(type, scene); }
 
+	SCENE_TYPE GetCurSceneType()	const { return mSceneType; }
 	Scene* GetCurScene() { return mSceneMap[mSceneType]; }
 	Scene* FindScene(SCENE_TYPE type);
 

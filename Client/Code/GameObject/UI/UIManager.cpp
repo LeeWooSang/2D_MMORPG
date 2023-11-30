@@ -4,6 +4,7 @@
 #include "UI.h"
 #include  "Inventory/Inventory.h"
 #include "ChattingBox/ChattingBox.h"
+#include "../../Scene/SceneManager.h"
 #include "../../Input/Input.h"
 #include <queue>
 #include <list>
@@ -128,7 +129,7 @@ void UIManager::processKeyboardMessage()
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
 	{
 		static_cast<ChattingBox*>(mUIsMap["ChattingBox"])->OpenChattingBox();
-	}
+	}	
 }
 
 UI* UIManager::getTargetUI(UI* parentUI)

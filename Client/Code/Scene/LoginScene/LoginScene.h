@@ -1,6 +1,7 @@
 #pragma once
 #include "../Scene.h"
 
+class UI;
 class LoginScene : public Scene
 {
 public:
@@ -12,4 +13,5 @@ public:
 	virtual void Render();
 
 private:
+	UI* mInputUI;
 };
