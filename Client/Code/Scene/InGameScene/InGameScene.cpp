@@ -160,6 +160,46 @@ void InGameScene::Render()
 	}
 
 	mPlayer->Render();
+	{
+		D2D1_RECT_F rect;
+		rect.left = 45;
+		rect.top = 660;
+		rect.right = rect.left + 245;
+		rect.bottom = rect.top + 20;
+		std::wstring text = L"Lv 200";
+		GET_INSTANCE(GraphicEngine)->RenderText(text, 0, rect.top, "메이플", "빨간색");
+	}
+	{
+		D2D1_RECT_F rect;
+		rect.left = 45;
+		rect.top = 685;
+		rect.right = rect.left + 245;
+		rect.bottom = rect.top + 20;
+		GET_INSTANCE(GraphicEngine)->RenderFillRectangle(rect, "빨간색");
+		GET_INSTANCE(GraphicEngine)->RenderText(L"HP", 0, rect.top, "메이플", "빨간색");
+		GET_INSTANCE(GraphicEngine)->RenderText(L"50", 145, rect.top - 2, "메이플", "흰색");
+	}
+	{
+		D2D1_RECT_F rect;
+		rect.left = 45;
+		rect.top = 710;
+		rect.right = rect.left + 245;
+		rect.bottom = rect.top + 20;
+		GET_INSTANCE(GraphicEngine)->RenderFillRectangle(rect, "파란색");
+		GET_INSTANCE(GraphicEngine)->RenderText(L"MP", 0, rect.top, "메이플", "파란색");
+		GET_INSTANCE(GraphicEngine)->RenderText(L"50", 145, rect.top - 2, "메이플", "흰색");
+	}
+
+	{
+		D2D1_RECT_F rect;
+		rect.left = 55;
+		rect.top = 735;
+		rect.right = rect.left +745;
+		rect.bottom = rect.top + 20;
+		GET_INSTANCE(GraphicEngine)->RenderFillRectangle(rect, "주황색");
+		GET_INSTANCE(GraphicEngine)->RenderText(L"EXP", 0, rect.top, "메이플", "주황색");
+		GET_INSTANCE(GraphicEngine)->RenderText(L"100%", 380, rect.top - 2, "메이플", "흰색");
+	}
 
 	GET_INSTANCE(UIManager)->Render();
 }

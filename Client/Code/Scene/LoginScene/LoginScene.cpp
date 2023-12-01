@@ -26,7 +26,7 @@ bool LoginScene::Initialize()
 		return false;
 	}
 	
-	//static_cast<InputUI*>(mInputUI)->SetText(L"127.0.0.1");
+	static_cast<InputUI*>(mInputUI)->SetText(L"127.0.0.1");
 
 	return true;
 }

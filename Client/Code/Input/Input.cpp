@@ -7,6 +7,7 @@
 //#pragma comment(lib,"imm32.lib")
 
 INIT_INSTACNE(Input)
+//std::array<KeyState, MAX_KEY_TYPE> Input::mKeyStateList;
 std::pair<int, int> Input::mMousePos = std::make_pair(0, 0);
 Input::Input()
 {
@@ -20,7 +21,14 @@ Input::~Input()
 }
 
 bool Input::Initialize()
-{
+{	
+	for (int i = 0; i < MAX_KEY_TYPE; ++i)
+	{
+		mKeyStateList[i].keyType = KEY_TYPE::NONE;
+		mKeyStateList[i].keyState = KEY_STATE::NONE;
+		mKeyStateList[i].isPrevPush = false;
+	}
+
 	mKeyStateList[KEY_TYPE::NONE].keyType = KEY_TYPE::NONE;
 	mKeyStateList[KEY_TYPE::LEFT_KEY].keyType = VK_LEFT;
 	mKeyStateList[KEY_TYPE::RIGHT_KEY].keyType = VK_RIGHT;
@@ -87,10 +95,9 @@ bool Input::Initialize()
 	mKeyStateList[KEY_TYPE::PLUS_KEY].keyType = VK_OEM_PLUS;
 	mKeyStateList[KEY_TYPE::HYPHEN_KEY].keyType = VK_OEM_MINUS;
 	
-
 	mKeyStateList[KEY_TYPE::MOUSE_LBUTTON].keyType = VK_LBUTTON;
 	mKeyStateList[KEY_TYPE::MOUSE_RBUTTON].keyType = VK_RBUTTON;
-	
+
 	return true;
 }
 
@@ -114,6 +121,7 @@ void Input::ProcessWindowMessage(unsigned int msg, unsigned long long wParam, lo
 		case WM_RBUTTONUP:
 		case WM_MOUSEMOVE:
 		case WM_VSCROLL:
+		case WM_MOUSEWHEEL:
 			ProcessMouseMessage(msg, wParam, lParam);
 			break;
 
@@ -192,46 +200,44 @@ void Input::ProcessKeyEvent()
 
 	setMousePos();
 
-	for (auto& key : mKeyStateList)
+	for (int i = 0; i < mKeyStateList.size(); ++i)
 	{
 		// 키가 정의 되어 있지 않으면,
-		if (key.keyType == KEY_TYPE::NONE)
+		if (mKeyStateList[i].keyType == KEY_TYPE::NONE)
 		{
 			continue;
 		}
 
 		// 지금 확인하는 키가 눌린 상태
-		if (KEY_DOWN(key.keyType))
+		if (KEY_DOWN(mKeyStateList[i].keyType))
 		{
 			// 키를 처음 누른 경우
-			if (key.isPrevPush == true)
+			if (mKeyStateList[i].isPrevPush == true)
 			{
-				key.keyState = KEY_STATE::HOLD;
+				mKeyStateList[i].keyState = KEY_STATE::HOLD;
 			}
 			// 키를 계속 누르고 있을 때,
 			else
 			{
-				key.keyState = KEY_STATE::TAP;
+				mKeyStateList[i].keyState = KEY_STATE::TAP;
 			}
-
-			key.isPrevPush = true;
+			mKeyStateList[i].isPrevPush = true;
 		}
 
 		// 키가 눌리지 않았을 때
 		else
 		{
 			// 키를 눌렀다가 땔 떼
-			if (key.isPrevPush == true)
+			if (mKeyStateList[i].isPrevPush == true)
 			{
-				key.keyState = KEY_STATE::AWAY;
+				mKeyStateList[i].keyState = KEY_STATE::AWAY;
 			}
 			// 키를 누르지도 않았을 때
 			else
 			{
-				key.keyState = KEY_STATE::NONE;
+				mKeyStateList[i].keyState = KEY_STATE::NONE;
 			}
-
-			key.isPrevPush = false;
+			mKeyStateList[i].isPrevPush = false;
 		}
 	}
 }

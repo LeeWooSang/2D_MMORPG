@@ -488,7 +488,7 @@ void Core::processPacket(int id, char* buf)
 			mUsers[id].SetChannel(channel);
 			SendLoginOkPacket(id);
 
-			mUsers[id].SetPosition(0, 0);
+			//mUsers[id].SetPosition(0, 0);
 
 			int x = mUsers[id].GetX();
 			int y = mUsers[id].GetY();

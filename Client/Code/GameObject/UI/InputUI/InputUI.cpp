@@ -99,17 +99,25 @@ void InputUI::MouseLButtonClick()
 {
 }
 
+void InputUI::SetText(const std::wstring& text)
+{
+	mText = text;
+	mCarrotIndex = mText.length();
+	setCarrotPos();
+}
+
 void InputUI::processInput()
 {
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::DOT_KEY) == true)
 	{
+		wchar_t wc = '.';
 		if (mCarrotIndex == mText.length())
 		{
-			mText += 46;
+			mText += wc;
 		}
 		else
 		{
-			mText.insert(mText.begin() + (mCarrotIndex), KEY_TYPE::DOT_KEY);
+			mText.insert(mText.begin() + (mCarrotIndex), wc);
 		}
 		++mCarrotIndex;
 	}

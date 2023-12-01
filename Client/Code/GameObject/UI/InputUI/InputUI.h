@@ -16,7 +16,7 @@ public:
 	virtual void MouseLButtonUp();
 	virtual void MouseLButtonClick();
 
-	void SetText(const std::wstring& text) { mText = text; }
+	void SetText(const std::wstring& text);
 
 private:
 	void processInput();

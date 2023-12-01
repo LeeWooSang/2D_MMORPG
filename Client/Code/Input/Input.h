@@ -1,6 +1,7 @@
 #pragma once
 #include "../Common/Macro.h"
 #include <array>
+#include <vector>
 
 #define KEY_DOWN(VK_CODE)	((GetAsyncKeyState(VK_CODE) & 0x8000) ? 1 : 0)
 #define KEY_UP(VK_CODE)			((GetAsyncKeyState(VK_CODE) & 0x8000) ? 0 : 1)
@@ -49,6 +50,8 @@ struct KeyState
 {
 	KeyState()
 		: keyType(KEY_TYPE::NONE), keyState(KEY_STATE::NONE), isPrevPush(false) {}
+	KeyState(int type, KEY_STATE state, bool prevPush)
+		: keyType(type), keyState(state), isPrevPush(prevPush) {}
 
 	int keyType;
 	KEY_STATE keyState;
@@ -60,13 +63,22 @@ struct KeyState
 	//// 키를 떼는 순간
 	//bool pop;
 };
+struct KeyState2
+{
+	KeyState2()
+		: keyType(0), keyState(0), isPrevPush(false) {}
+
+	int keyType;
+	int keyState;
+	bool isPrevPush;
+};
 
 class Input
 {
 	SINGLE_TONE(Input)
 		
 public:		
-	virtual bool Initialize();
+	bool Initialize();
 
 	void ProcessWindowMessage(unsigned int msg, unsigned long long wParam, long long lParam);
 	void ProcessKeyboardMessage(unsigned int msg, unsigned long long wParam, long long lParam);
@@ -76,7 +88,10 @@ public:
 
 	bool KeyOnceCheck(KEY_TYPE);
 	
-	KEY_STATE GetKeyState(KEY_TYPE key) const { return mKeyStateList[key].keyState; }
+	KEY_STATE GetKeyState(KEY_TYPE key) 
+	{
+		return mKeyStateList[key].keyState; 
+	}
 	//bool GetIsPushed(KEY_TYPE key)	const { return mKeyStateList[key].pushed; }
 	//bool GetIsPushing(KEY_TYPE key)	const { return mKeyStateList[key].pushing; }
 	//bool GetIsPop(KEY_TYPE key)	const { return mKeyStateList[key].pop; }
@@ -86,7 +101,9 @@ private:
 	void setMousePos();
 	
 private:
+	//static std::array<KeyState, MAX_KEY_TYPE> mKeyStateList;
 	std::array<KeyState, MAX_KEY_TYPE> mKeyStateList;
+
 	static std::pair<int, int> mMousePos;
 	bool mFlag;
 

@@ -195,9 +195,8 @@ void Player::Render()
 		std::wstring text = L"MyId (" + std::to_wstring(mId) + L")";
 		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top), "메이플", "검은색");
 
-		int windowHeight = 800;
 		text = L"MY POSITION (" + std::to_wstring(mPos.first) + L", " + std::to_wstring(mPos.second) + L")";
-		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 10, windowHeight - 64, "메이플", "파란색");
+		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 0, 0, "메이플", "파란색");
 
 		if (mFlag == true)
 		{
