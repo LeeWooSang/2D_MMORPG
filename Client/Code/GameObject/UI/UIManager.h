@@ -19,9 +19,6 @@ public:
 	void SetFocusUI(UI* ui);
 
 private:
-	void processKeyboardMessage();
-
-private:
 	std::unordered_map<std::string, UI*> mUIsMap;
 	std::list<UI*> mUIs;
 	//std::vector<UI*> mUIs;

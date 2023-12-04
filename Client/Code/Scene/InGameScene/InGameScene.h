@@ -16,6 +16,7 @@ public:
 	virtual bool Initialize();
 	virtual void Update();
 	virtual void Render();
+	virtual void processKeyboardMessage();
 
 	void InitializeObject(int myId);
 	void AddObject(int id, int x, int y);

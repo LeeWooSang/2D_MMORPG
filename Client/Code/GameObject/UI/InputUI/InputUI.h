@@ -18,11 +18,11 @@ public:
 
 	void SetText(const std::wstring& text);
 
-private:
-	void processInput();
+protected:
+	virtual void processInput();
 	void setCarrotPos();
 
-private:
+protected:
 	std::wstring mText;
 	float mElapsedTime;
 	int mCarrotIndex;

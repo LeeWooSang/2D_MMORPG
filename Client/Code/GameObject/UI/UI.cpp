@@ -101,7 +101,7 @@ void UI::MouseLButtonDown()
 
 void UI::MouseLButtonUp()
 {
-	std::cout << "UI  안에서 LButton Up" << std::endl;
+	std::cout << "UI 안에서 LButton Up" << std::endl;
 }
 
 void UI::MouseLButtonClick()

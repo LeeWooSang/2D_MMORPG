@@ -303,6 +303,7 @@ void GraphicEngine::createFont()
 
 void GraphicEngine::createBrushColor()
 {
+	const int MAX_COLOR_COUNT = 9;
 	ID2D1SolidColorBrush* color[MAX_COLOR_COUNT];
 
 	int index = 0;
@@ -329,6 +330,9 @@ void GraphicEngine::createBrushColor()
 
 	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Orange, 1.0f), &color[index]);
 	mBrushColorMap.emplace("주황색", color[index++]);
+
+	result = mRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black, 0.5f), &color[index]);
+	mBrushColorMap.emplace("밝은검은색", color[index++]);
 }
 
 INIT_INSTACNE(Camera)

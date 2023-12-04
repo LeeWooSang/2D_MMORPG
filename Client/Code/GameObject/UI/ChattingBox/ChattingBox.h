@@ -2,13 +2,6 @@
 #include "../UI.h"
 #include <mutex>
 
-enum class CHAT_STATE
-{
-	NONE = 0,
-	CHATTING,
-	CHAT_END
-};
-
 struct ChattingLog
 {
 	ChattingLog(int _id, const std::wstring& _chatting, int _x, int _y)
@@ -38,27 +31,10 @@ public:
 	virtual bool CheckContain(int left, int top, int right, int bottom);
 
 	void OpenChattingBox();
-	void AddChattingLog(int id, wchar_t* chatting);
-
-	CHAT_STATE GetChatState()		const { return mChatState; }
-	void SetChatState(CHAT_STATE state) { mChatState = state; }
-
-	bool GetIsOpen()	const { return mOpen; }
-	void SetCarrotPos();
+	void AddChattingLog(int id, const wchar_t* chatting);
 
 private:
-	void processInput();
-
-private:
-	bool mOpen;
-	float mElapsedTime;
-
-	CHAT_STATE mChatState;
-
 	std::vector<ChattingLog> mChattingLog;
 	std::vector<wchar_t> mChattings;
-	int mCarrotIndex;
-	std::pair<float, float> mCarrotPos;
-
 	std::mutex mChattingLogMtx;
 };

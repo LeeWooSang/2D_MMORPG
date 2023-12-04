@@ -118,7 +118,7 @@ public:
 
 	bool CheckCollision(int x, int y);
 
-private:
+protected:
 	std::pair<int, int> mRangeMin;
 	std::pair<int, int> mRangeMax;
 
@@ -128,4 +128,15 @@ private:
 	MONSTER_STATE mState;
 
 	int mTargetId;
+};
+
+class FollowingMonster : public Monster
+{
+public:
+	FollowingMonster();
+	~FollowingMonster();
+	virtual void Reset();
+	virtual bool Inititalize(int id);
+
+private:
 };

@@ -142,10 +142,6 @@ void Input::ProcessKeyboardMessage(unsigned int msg, unsigned long long wParam, 
 		
 		std::cout << wParam << std::endl;	
 	}
-
-	//Scene* scene = GET_INSTANCE(SceneManager)->GetScene();
-	//if (scene != nullptr)
-	//	scene->ProcessKeyboardMessage(hWnd, message, wParam, lParam);
 }
 
 void Input::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)
@@ -160,9 +156,6 @@ void Input::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, lon
 		{
 			mMousePos.first = LOWORD(lParam);
 			mMousePos.second = HIWORD(lParam);
-
-			//std::cout << "X : " << mMousePos.first << ", Y : " << mMousePos.second << std::endl;
-			//cout << "mX : " << mouse.x << ", mY : " << mouse.y << endl;
 			break;
 		}
 

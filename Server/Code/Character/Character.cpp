@@ -1053,3 +1053,20 @@ bool Monster::CheckCollision(int x, int y)
 
 	return false;
 }
+
+FollowingMonster::FollowingMonster()
+{
+}
+
+FollowingMonster::~FollowingMonster()
+{
+}
+
+void FollowingMonster::Reset()
+{
+}
+
+bool FollowingMonster::Inititalize(int id)
+{
+	return false;
+}

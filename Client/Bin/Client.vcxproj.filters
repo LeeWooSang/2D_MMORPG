@@ -66,6 +66,12 @@
     <Filter Include="Code\GameObject\UI\InputUI">
       <UniqueIdentifier>{ed466f72-4b40-4fb3-bcda-612a2a10baa4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\GameObject\UI\ButtonUI">
+      <UniqueIdentifier>{803e96ed-ead3-4f7c-97a6-3929fbf7b7c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GameObject\UI\InputUI\ChattingInputUI">
+      <UniqueIdentifier>{7b0c8d00-7060-4340-afb1-ddb5d00ede02}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -133,6 +139,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\GameObject\UI\InputUI\InputUI.cpp">
       <Filter>Code\GameObject\UI\InputUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\UI\ButtonUI\ButtonUI.cpp">
+      <Filter>Code\GameObject\UI\ButtonUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\UI\InputUI\ChattingInputUI\ChattingInputUI.cpp">
+      <Filter>Code\GameObject\UI\InputUI\ChattingInputUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -207,6 +219,12 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameObject\UI\InputUI\InputUI.h">
       <Filter>Code\GameObject\UI\InputUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\UI\ButtonUI\ButtonUI.h">
+      <Filter>Code\GameObject\UI\ButtonUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\UI\InputUI\ChattingInputUI\ChattingInputUI.h">
+      <Filter>Code\GameObject\UI\InputUI\ChattingInputUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

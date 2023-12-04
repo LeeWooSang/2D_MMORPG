@@ -114,6 +114,16 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(30, 30);
+		if (texture->LoadTexture(L"../Resource/Textures/XButton.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		mTextureList.emplace("XButton", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(65, 65);
 		if (texture->LoadTexture(L"../Resource/Textures/Sword2.png") == false)
 		{

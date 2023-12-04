@@ -4,8 +4,6 @@
 #include "../../Resource/Texture/Texture.h"
 #include "../../Input/Input.h"
 #include "../UI/Inventory/Inventory.h"
-#include "../UI/ChattingBox/ChattingBox.h"
-
 #include "../../GameTimer/GameTimer.h"
 #include <string>
 #include <random>
@@ -90,7 +88,6 @@ void Character::SetAnimationInfo(int frameSize)
 Player::Player()
 	: Character()
 {
-	mChattingBox = nullptr;
 	mElapsedTime = 0.0;
 	mFlag = false;
 }
@@ -123,22 +120,11 @@ bool Player::Initialize(int x, int y)
 		GET_INSTANCE(UIManager)->AddUI("Inventory", inventory);
 	}
 
-	// ºÎ¸ð ui
-	{
-		mChattingBox = new ChattingBox;
-		if (mChattingBox->Initialize(0, 0) == false)
-		{
-			return false;
-		}
-		GET_INSTANCE(UIManager)->AddUI("ChattingBox", mChattingBox);
-	}
-
 	return true;
 }
 
 void Player::Update()
 {
-	ProcessKeyboardMessage();
 	GET_INSTANCE(Camera)->SetPosition(mPos.first, mPos.second);
 
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::CONTROL_KEY) == true)
@@ -208,16 +194,14 @@ void Player::Render()
 
 void Player::ProcessKeyboardMessage()
 {
-
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true
-		&& mChattingBox->GetIsOpen() == false)
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true)
 	{
 		static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->OpenInventory();
 	}
 
-	if (mChattingBox->GetIsOpen() == true)
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::Z_KEY) == true)
 	{
-		return;
+		AddItem();
 	}
 
 #ifdef SERVER_CONNECT

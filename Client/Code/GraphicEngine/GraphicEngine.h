@@ -24,7 +24,7 @@ constexpr int MAX_BOB_ANIMATIONS = 16;   // maximum number of animation sequeces
 constexpr int BOB_ATTR_VISIBLE = 16;  // bob is visible
 
 constexpr int MAX_FONT_COUNT = 2;
-constexpr int MAX_COLOR_COUNT = 8;
+
 struct FontInfo
 {
 	FontInfo()

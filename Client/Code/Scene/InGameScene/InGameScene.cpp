@@ -4,6 +4,9 @@
 #include "../../GameObject/Map/Map.h"
 #include "../../GraphicEngine/GraphicEngine.h"
 #include "../../GameObject/Character/Character.h"
+#include "../../GameObject/UI/ChattingBox/ChattingBox.h"
+#include "../../GameObject/UI/InputUI/ChattingInputUI/ChattingInputUI.h"
+
 #include "../../GameObject/UI/UIManager.h"
 #include "../../../../Server/Code/Common/Protocol.h"
 
@@ -95,6 +98,13 @@ bool InGameScene::Initialize()
 		mMonsters.emplace(i, monster);
 	}
 
+	ChattingBox* mChattingBox = new ChattingBox;
+	if (mChattingBox->Initialize(0, 0) == false)
+	{
+		return false;
+	}
+	GET_INSTANCE(UIManager)->AddUI("ChattingBox", mChattingBox);
+
 	mIsReady = true;
 
 	return true;
@@ -102,6 +112,8 @@ bool InGameScene::Initialize()
 
 void InGameScene::Update()
 {	
+	processKeyboardMessage();
+
 	if (mIsReady == false)
 	{
 		return;
@@ -127,11 +139,6 @@ void InGameScene::Update()
 	for (auto& otherPlayer : mOtherPlayers)
 	{
 		otherPlayer.second->Update();
-	}
-
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::Z_KEY) == true)
-	{
-		mPlayer->AddItem();
 	}
 
 	GET_INSTANCE(UIManager)->Update();
@@ -202,6 +209,27 @@ void InGameScene::Render()
 	}
 
 	GET_INSTANCE(UIManager)->Render();
+}
+
+void InGameScene::processKeyboardMessage()
+{
+	ChattingBox* chattingBoxUI = static_cast<ChattingBox*>(GET_INSTANCE(UIManager)->FindUI("ChattingBox"));
+	if (chattingBoxUI == nullptr)
+	{
+		return;
+	}
+
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
+	{
+		chattingBoxUI->OpenChattingBox();
+	}
+	else
+	{
+		if (static_cast<ChattingInputUI*>(chattingBoxUI->FindChildUIs("ChattingInputUI").front())->IsVisible() == false)
+		{
+			mPlayer->ProcessKeyboardMessage();
+		}
+	}
 }
 
 void InGameScene::InitializeObject(int myId)

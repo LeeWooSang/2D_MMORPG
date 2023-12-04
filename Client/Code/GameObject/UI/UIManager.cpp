@@ -42,8 +42,6 @@ void UIManager::Update()
 		return;
 	}
 
-	processKeyboardMessage();
-
 	for (auto ui : mUIs)
 	{
 		if (ui->IsVisible() == true)
@@ -122,14 +120,6 @@ void UIManager::SetFocusUI(UI* ui)
 
 	mUIs.erase(targetIter);
 	mUIs.emplace_back(mFocusUI);
-}
-
-void UIManager::processKeyboardMessage()
-{
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
-	{
-		static_cast<ChattingBox*>(mUIsMap["ChattingBox"])->OpenChattingBox();
-	}	
 }
 
 UI* UIManager::getTargetUI(UI* parentUI)

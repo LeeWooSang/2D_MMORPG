@@ -33,7 +33,6 @@ protected:
 };
 
 class Inventory;
-class ChattingBox;
 class Player : public Character
 {
 public:
@@ -49,10 +48,8 @@ public:
 
 	void Move(char dir);
 	void AddItem();
-	ChattingBox* GetChattingBox() { return mChattingBox; }
 
 private:
-	ChattingBox* mChattingBox;
 	float mElapsedTime;
 	bool mFlag;
 };

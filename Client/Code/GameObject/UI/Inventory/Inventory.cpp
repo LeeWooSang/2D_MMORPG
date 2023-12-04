@@ -1,6 +1,7 @@
 #include "Inventory.h"
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../Scroll/Scroll.h"
+#include "../ButtonUI/ButtonUI.h"
 #include "../../../Resource/ResourceManager.h"
 #include "../../../Resource/Texture/Texture.h"
 #include "../../../Input/Input.h"
@@ -198,6 +199,15 @@ bool Inventory::Initialize(int x, int y)
 		scroll->Visible();
 		AddChildUI("Scroll", scroll);
 	}
+
+	{
+		ButtonUI* button = new ButtonUI;
+		button->Initialize(300, 2);
+		button->SetTexture("XButton");
+		button->Visible();
+		AddChildUI("Button", button);
+	}
+
 
 	SetPosition(x, y);
 

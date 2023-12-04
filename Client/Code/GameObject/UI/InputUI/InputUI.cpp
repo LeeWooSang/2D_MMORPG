@@ -20,7 +20,7 @@ bool InputUI::Initialize(int x, int y)
 {
 	UI::Initialize(x, y);
 
-	SetPosition(200, 200);
+	//SetPosition(x, 200);
 	mCarrotPos = std::make_pair(mPos.first, mPos.second);
 	Visible();
 
@@ -55,8 +55,8 @@ void InputUI::Render()
 	pos.left = mPos.first;
 	pos.top = mPos.second;
 	pos.right = pos.left + 400;
-	pos.bottom = pos.top + 50;
-	GET_INSTANCE(GraphicEngine)->RenderFillRectangle(pos, "흰색");
+	pos.bottom = pos.top + 30;
+	GET_INSTANCE(GraphicEngine)->RenderFillRectangle(pos, "밝은검은색");
 
 	if (mElapsedTime > 0.5)
 	{
@@ -66,12 +66,12 @@ void InputUI::Render()
 		carrotRect.right = carrotRect.left + 2;
 		carrotRect.bottom = carrotRect.top + 25;
 
-		GET_INSTANCE(GraphicEngine)->RenderFillRectangle(carrotRect);
+		GET_INSTANCE(GraphicEngine)->RenderFillRectangle(carrotRect, "흰색");
 	}
-
+	
 	if (mText.length() > 0)
 	{
-		GET_INSTANCE(GraphicEngine)->RenderText(mText, mPos.first, mCarrotPos.second, "메이플", "검은색");
+		GET_INSTANCE(GraphicEngine)->RenderText(mText, mPos.first, mCarrotPos.second, "메이플", "흰색");
 	}
 
 	for (auto& child : mChildUIs)

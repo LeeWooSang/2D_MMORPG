@@ -21,7 +21,7 @@ bool LoginScene::Initialize()
 	mIsReady = true;
 
 	mInputUI = new InputUI;
-	if (mInputUI->Initialize(0, 0) == false)
+	if (mInputUI->Initialize(200, 200) == false)
 	{
 		return false;
 	}
@@ -33,11 +33,7 @@ bool LoginScene::Initialize()
 
 void LoginScene::Update()
 {
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
-	{
-		GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::INGAME_SCENE);
-	}
-
+	processKeyboardMessage();
 	mInputUI->Update();
 }
 
@@ -53,4 +49,12 @@ void LoginScene::Render()
 	GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
 
 	mInputUI->Render();
+}
+
+void LoginScene::processKeyboardMessage()
+{
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
+	{
+		GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::INGAME_SCENE);
+	}
 }
