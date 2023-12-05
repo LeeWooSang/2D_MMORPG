@@ -1,5 +1,7 @@
 #pragma once
 #include "../GameObject.h"
+#include <unordered_map>
+#include <string>
 
 enum class CHARACTER_STATE_TYPE
 {
@@ -26,10 +28,7 @@ public:
 protected:
 	int mId;
 
-	CHARACTER_STATE_TYPE mState;          // the state of the object (general)
-
-	wchar_t mMessage[256];
-	unsigned long mMessageTime;
+	CHARACTER_STATE_TYPE mState;
 };
 
 class Inventory;
@@ -52,4 +51,25 @@ public:
 private:
 	float mElapsedTime;
 	bool mFlag;
+};
+
+class AnimationCharacter : public GameObject
+{
+public:
+	AnimationCharacter();
+	virtual ~AnimationCharacter();
+	virtual bool Initialize(int x, int y);
+	virtual void Update();
+	virtual void Render();
+
+	virtual void SetPosition(int x, int y);
+	void SetOriginPos(int x, int y) { mOriginX = x; mOriginY = y; }
+
+	void AddChild(const std::string& name, AnimationCharacter* obj);
+
+private:
+	std::unordered_map<std::string, AnimationCharacter*> mChildObjects;
+	AnimationCharacter* mParent;
+	int mOriginX;
+	int mOriginY;
 };

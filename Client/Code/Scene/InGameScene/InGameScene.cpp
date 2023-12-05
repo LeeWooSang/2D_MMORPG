@@ -10,9 +10,16 @@
 #include "../../GameObject/UI/UIManager.h"
 #include "../../../../Server/Code/Common/Protocol.h"
 
+#include "../../Resource/ResourceManager.h"
+#include "../../Resource/Texture/Texture.h"
+#include "../../GameObject/GameObject.h"
+
 InGameScene::InGameScene()
 	: Scene()
 {
+	mTileMinPos = std::make_pair(0, 0);
+	mTileMaxPos = std::make_pair(0, 0);
+	mTiles.clear();
 	mPlayer = nullptr;
 	mIsReady = false;
 }
@@ -22,35 +29,41 @@ InGameScene::~InGameScene()
 	mOtherPlayers.clear();
 	mMonsters.clear();
 
-	for (auto& tile : mMaps)
+	for (int i = 0; i < mTiles.size(); ++i)
 	{
-		delete tile;
+		for (int j = 0; j < mTiles[i].size(); ++j)
+		{
+			delete mTiles[i][j];
+		}
 	}
 
-	//mPlayer.reset();
+	for (auto& npc : mNPCs)
+	{
+		delete npc;
+	}
+
 	delete mPlayer;
 }
 
 bool InGameScene::Initialize()
 {
-	mMaps.reserve(WIDTH * HEIGHT);
-
 	for (int i = 0; i < WIDTH; ++i)
 	{
+		std::vector<Map*> v;
 		for (int j = 0; j < HEIGHT; ++j)
 		{
-			Map* map = new Map;
-			if (map->Initialize(i, j) == false)
+			Map* tile = new Map;
+			if (tile->Initialize(i, j) == false)
 			{
 				return false;
 			}
-
-			if (map->SetTexture("Tile") == false)
+			if (tile->SetTexture("Tile") == false)
 			{
 				return false;
 			}
-			mMaps.emplace_back(map);
-}
+			v.emplace_back(tile);
+		}
+		mTiles.emplace_back(v);
 	}
 
 	mPlayer = new Player;
@@ -60,6 +73,9 @@ bool InGameScene::Initialize()
 	}
 	mPlayer->Visible();
 	mPlayer->SetId(-1);
+
+	mTileMinPos = std::make_pair(mPlayer->GetPosition().first - VIEW_DISTANCE, mPlayer->GetPosition().second - VIEW_DISTANCE);
+	mTileMaxPos = std::make_pair(mPlayer->GetPosition().first + VIEW_DISTANCE, mPlayer->GetPosition().second + VIEW_DISTANCE);
 
 	// 나를 제외한 나머지 유저 수
 	for (int i = 0; i < MAX_CHANNEL_USER; ++i)
@@ -105,6 +121,19 @@ bool InGameScene::Initialize()
 	}
 	GET_INSTANCE(UIManager)->AddUI("ChattingBox", mChattingBox);
 
+	for (int i = 0; i < 5; ++i)
+	{
+		AnimationCharacter* npc = new AnimationCharacter;
+		if (npc->Initialize(0, 0) == false)
+		{
+			return false;
+		}
+		npc->SetPosition(50, i * 100);
+		mNPCs.emplace_back(npc);
+	}
+
+
+
 	mIsReady = true;
 
 	return true;
@@ -122,18 +151,25 @@ void InGameScene::Update()
 	// update
 	mPlayer->Update();
 
-	for (auto& tile : mMaps)
+	// 플레이어가 볼수 있는 타일만 업데이트	
+	mTileMinPos = std::make_pair(mPlayer->GetPosition().first - VIEW_DISTANCE, mPlayer->GetPosition().second - VIEW_DISTANCE);
+	mTileMaxPos = std::make_pair(mPlayer->GetPosition().first + VIEW_DISTANCE, mPlayer->GetPosition().second + VIEW_DISTANCE);
+	for (int i = mTileMinPos.first; i <= mTileMaxPos.first; ++i)
 	{
-		if (tile->CheckDistance(mPlayer->GetPosition().first, mPlayer->GetPosition().second) == true)
+		for (int j = mTileMinPos.second; j <= mTileMaxPos.second; ++j)
 		{
-			tile->Visible();
+			if (checkRange(i, j) == false)
+			{
+				continue;
+			}
+			mTiles[i][j]->Visible();
+			mTiles[i][j]->Update();
 		}
-		else
-		{
-			tile->NotVisible();
-		}
+	}
 
-		tile->Update();
+	for (auto& monster : mMonsters)
+	{
+		monster.second->Update();
 	}
 
 	for (auto& otherPlayer : mOtherPlayers)
@@ -151,9 +187,16 @@ void InGameScene::Render()
 		return;
 	}
 
-	for (auto& tile : mMaps)
+	for (int i = mTileMinPos.first; i <= mTileMaxPos.first; ++i)
 	{
-		tile->Render();
+		for (int j = mTileMinPos.second; j <= mTileMaxPos.second; ++j)
+		{
+			if (checkRange(i, j) == false)
+			{
+				continue;
+			}
+			mTiles[i][j]->Render();
+		}
 	}
 
 	for (auto& monster : mMonsters)
@@ -164,6 +207,11 @@ void InGameScene::Render()
 	for (auto& player : mOtherPlayers)
 	{
 		player.second->Render();
+	}
+
+	for (auto& npc : mNPCs)
+	{
+		npc->Render();
 	}
 
 	mPlayer->Render();
@@ -287,4 +335,14 @@ void InGameScene::RemoveObject(int id)
 	{
 		mMonsters[id]->NotVisible();
 	}
+}
+
+bool InGameScene::checkRange(int x, int y)
+{
+	if (x < 0 || x > WIDTH - 1 || y < 0 || y > HEIGHT - 1)
+	{
+		return false;
+	}
+
+	return true;
 }

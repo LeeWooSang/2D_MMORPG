@@ -15,9 +15,6 @@ Character::Character()
 {
 	mId = -1;
 	mState = CHARACTER_STATE_TYPE::DEFAULT;
-
-	memset(mMessage, 0, sizeof(mMessage));
-	mMessageTime = 0;
 }
 
 Character::~Character()
@@ -28,8 +25,6 @@ bool Character::Initialize(int x, int y)
 {
 	GameObject::Initialize(x, y);
 	mState = CHARACTER_STATE_TYPE::LIVE;
-	memset(mMessage, 0, sizeof(mMessage));
-	mMessageTime = 0;
 
     return true;
 }
@@ -75,9 +70,6 @@ void Character::Reset()
 	{
 		mAnimations[i] = nullptr;
 	}
-
-	memset(mMessage, 0, sizeof(mMessage));
-	mMessageTime = 0;
 }
 
 void Character::SetAnimationInfo(int frameSize)
@@ -126,14 +118,6 @@ bool Player::Initialize(int x, int y)
 void Player::Update()
 {
 	GET_INSTANCE(Camera)->SetPosition(mPos.first, mPos.second);
-
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::CONTROL_KEY) == true)
-	{
-		mFlag = true;
-#ifdef SERVER_CONNECT
-		GET_INSTANCE(Network)->SendAttackPacket();
-#endif // SERVER_CONNECT
-	}
 
 	if (mFlag == true)
 	{
@@ -186,8 +170,25 @@ void Player::Render()
 
 		if (mFlag == true)
 		{
-			GET_INSTANCE(GraphicEngine)->RenderText(L"ATTACK!!!", 
-				static_cast<int>(pos.left), static_cast<int>(pos.top - 30), "메이플", "빨간색");
+			std::vector<std::pair<int, int>> dir{ {-1, 1}, {0, 1}, {1, 1}, {-1, 0}, {1, 0}, {-1, -1}, {0, -1}, {1, -1} };
+
+			for (int i = 0; i < dir.size(); ++i)
+			{
+				int attackX = mPos.first + dir[i].first;
+				int attackY = mPos.second + dir[i].second;
+				D2D1_RECT_F attackPos;
+				//attackPos.left = (attackX - cameraPos.first) * 65.0 + 8.0;
+				//attackPos.top = (attackY - cameraPos.second) * 65.0 + 8.0;
+				attackPos.left = (attackX - cameraPos.first) * 65.0 + 8.0;
+				attackPos.top = (attackY - cameraPos.second) * 65.0 + 8.0;
+				attackPos.right = attackPos.left + mTexture->GetSize().first;
+				attackPos.bottom = attackPos.top + mTexture->GetSize().second;
+
+				GET_INSTANCE(GraphicEngine)->RenderFillRectangle(attackPos, "주황색");
+				GET_INSTANCE(GraphicEngine)->RenderRectangle(attackPos, "검은색");
+			}
+			GET_INSTANCE(GraphicEngine)->RenderText(L"ATTACK!!!",
+				static_cast<int>(pos.left - 15), static_cast<int>(pos.top - 30), "메이플", "빨간색");
 		}
 	}
 }
@@ -202,6 +203,14 @@ void Player::ProcessKeyboardMessage()
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::Z_KEY) == true)
 	{
 		AddItem();
+	}
+
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::CONTROL_KEY) == true)
+	{
+		mFlag = true;
+#ifdef SERVER_CONNECT
+		GET_INSTANCE(Network)->SendAttackPacket();
+#endif
 	}
 
 #ifdef SERVER_CONNECT
@@ -329,4 +338,113 @@ void Player::AddItem()
 	}
 	
 	static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->AddItem(itemName);
+}
+
+AnimationCharacter::AnimationCharacter()
+	: GameObject()
+{
+	mParent = nullptr;
+	mOriginX = 0;
+	mOriginY = 0;
+	mChildObjects.clear();
+}
+
+AnimationCharacter::~AnimationCharacter()
+{
+	for (auto& obj : mChildObjects)
+	{
+		if (obj.second != nullptr)
+		{
+			delete obj.second;
+		}
+	}
+	mChildObjects.clear();
+}
+
+bool AnimationCharacter::Initialize(int x, int y)
+{
+	mOriginX = x;
+	mOriginY = y;
+
+	GameObject::Initialize(x, y);
+
+
+	AnimationCharacter* head = new AnimationCharacter;
+	AnimationCharacter* body = new AnimationCharacter;
+	AnimationCharacter* arm = new AnimationCharacter;
+
+	head->SetOriginPos(0, 1);
+	body->SetOriginPos(5, 44);
+	arm->SetOriginPos(5 + 16, 45);
+
+	head->SetTexture("FrontHead0");
+	body->SetTexture("IdleBody0");
+	arm->SetTexture("IdleArm0");
+
+	AddChild("head", head);
+	AddChild("body", body);
+	AddChild("arm", arm);
+
+	Visible();
+	for (auto& obj : mChildObjects)
+	{
+		obj.second->Visible();
+	}
+
+	return true;
+}
+
+void AnimationCharacter::Update()
+{
+}
+
+void AnimationCharacter::Render()
+{
+	// 보이는 것만 렌더
+	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
+	{
+		return;
+	}
+
+	if (mParent != nullptr)
+	{
+		D2D1_RECT_F pos;
+		pos.left = mPos.first;
+		pos.top = mPos.second;
+		pos.right = pos.left + mTexture->GetSize().first;
+		pos.bottom = pos.top + mTexture->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+	}
+
+	for (auto& obj : mChildObjects)
+	{
+		obj.second->Render();
+	}
+}
+
+void AnimationCharacter::SetPosition(int x, int y)
+{	
+	// 최상위 부모UI 라면,
+	if (mParent == nullptr)
+	{
+		mPos.first = mOriginX + x;
+		mPos.second = mOriginY + y;
+	}
+	else
+	{
+		std::pair<int, int> pos = mParent->mPos;
+		mPos.first = mOriginX + pos.first;
+		mPos.second = mOriginY + pos.second;
+	}
+
+	for (auto& child : mChildObjects)
+	{
+		child.second->SetPosition(x, y);
+	}
+}
+
+void AnimationCharacter::AddChild(const std::string& name, AnimationCharacter* obj)
+{
+	mChildObjects.emplace(name, obj);
+	obj->mParent = this;
 }

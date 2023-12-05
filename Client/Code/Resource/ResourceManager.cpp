@@ -162,6 +162,37 @@ bool ResourceManager::Initialize()
 		}
 		mTextureList.emplace("Dagger", texture);
 	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(39, 45);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Head/FrontHead0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		mTextureList.emplace("FrontHead0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(21, 31);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Body/Idle/IdleBody0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		mTextureList.emplace("IdleBody0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(10, 19);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Arm/Idle/IdleArm0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		mTextureList.emplace("IdleArm0", texture);
+	}
+
 
 	if (LoadJsonFile() == false)
 	{

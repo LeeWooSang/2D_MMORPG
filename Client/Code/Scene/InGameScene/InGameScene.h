@@ -7,6 +7,7 @@
 class Map;
 class Character;
 class Player;
+class AnimationCharacter;
 class InGameScene : public Scene
 {
 public:
@@ -28,8 +29,16 @@ public:
 	Character* GetMonster(int id) { return mMonsters[id].get(); }
 
 private:
-	std::vector<Map*> mMaps;
+	bool checkRange(int x, int y);
+
+private:
+	std::pair<int, int> mTileMinPos;
+	std::pair<int, int> mTileMaxPos;
+	std::vector<std::vector<Map*>> mTiles;
+
 	std::unordered_map<int, std::shared_ptr<Character>> mOtherPlayers;
 	std::unordered_map<int, std::shared_ptr<Character>> mMonsters;
 	Player* mPlayer;
+
+	std::vector<AnimationCharacter*> mNPCs;
 };
