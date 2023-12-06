@@ -33,7 +33,7 @@ bool LoginScene::Initialize()
 
 void LoginScene::Update()
 {
-	processKeyboardMessage();
+
 	mInputUI->Update();
 }
 
@@ -49,6 +49,8 @@ void LoginScene::Render()
 	GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
 
 	mInputUI->Render();
+
+	processKeyboardMessage();
 }
 
 void LoginScene::processKeyboardMessage()

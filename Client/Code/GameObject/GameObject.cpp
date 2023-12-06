@@ -26,23 +26,10 @@ GameObject::GameObject()
     mAnimationCounter = 0;
     mAnimationIndex = 0;
     mAnimationCountMax = 0;
-    for (int i = 0; i < MAX_ANIMATIONS; ++i)
-    {
-        mAnimations[i] = nullptr;
-    }
 }
 
 GameObject::~GameObject()
 {
-    for (int i = 0; i < MAX_ANIMATIONS; ++i)
-    {
-        if (mAnimations[i] != nullptr)
-        {
-            delete mAnimations[i];
-            mAnimations[i] = nullptr;
-        }
-    }
-
     Reset();
 }
 
@@ -61,10 +48,6 @@ bool GameObject::Initialize(int x, int y)
     mAnimationCounter = 0;
     mAnimationIndex = 0;
     mAnimationCountMax = 0;
-    for (int i = 0; i < MAX_ANIMATIONS; ++i)
-    {
-        mAnimations[i] = nullptr;
-    }
 
     return true;
 }
@@ -91,10 +74,6 @@ void GameObject::Reset()
     mAnimationCounter = 0;
     mAnimationIndex = 0;
     mAnimationCountMax = 0;
-    for (int i = 0; i < MAX_ANIMATIONS; ++i)
-    {
-        mAnimations[i] = nullptr;
-    }
 }
 
 bool GameObject::SetTexture(const std::string& name)

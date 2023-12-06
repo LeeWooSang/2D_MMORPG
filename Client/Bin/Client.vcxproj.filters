@@ -72,6 +72,9 @@
     <Filter Include="Code\GameObject\UI\InputUI\ChattingInputUI">
       <UniqueIdentifier>{7b0c8d00-7060-4340-afb1-ddb5d00ede02}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Animation">
+      <UniqueIdentifier>{f8beb07d-01ae-40b8-9cbb-634486b1c50e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -145,6 +148,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\GameObject\UI\InputUI\ChattingInputUI\ChattingInputUI.cpp">
       <Filter>Code\GameObject\UI\InputUI\ChattingInputUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Animation\Animation.cpp">
+      <Filter>Code\Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -225,6 +231,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameObject\UI\InputUI\ChattingInputUI\ChattingInputUI.h">
       <Filter>Code\GameObject\UI\InputUI\ChattingInputUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Animation\Animation.h">
+      <Filter>Code\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

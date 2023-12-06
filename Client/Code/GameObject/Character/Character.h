@@ -1,6 +1,7 @@
 #pragma once
 #include "../GameObject.h"
 #include <unordered_map>
+#include <list>
 #include <string>
 
 enum class CHARACTER_STATE_TYPE
@@ -53,6 +54,13 @@ private:
 	bool mFlag;
 };
 
+enum class ANIMATION_MONTION_TYPE
+{
+	IDLE,
+	WALK
+};
+
+class Animation;
 class AnimationCharacter : public GameObject
 {
 public:
@@ -66,10 +74,17 @@ public:
 	void SetOriginPos(int x, int y) { mOriginX = x; mOriginY = y; }
 
 	void AddChild(const std::string& name, AnimationCharacter* obj);
+	void AddAnimation(ANIMATION_MONTION_TYPE motion, Animation* animation)		{ mAnimations.emplace(motion, animation); }
+	void SetAnimationMotion(ANIMATION_MONTION_TYPE motion);
 
 private:
 	std::unordered_map<std::string, AnimationCharacter*> mChildObjects;
+	std::list<AnimationCharacter*> mRenderChildObjects;
+
 	AnimationCharacter* mParent;
 	int mOriginX;
 	int mOriginY;
+
+	ANIMATION_MONTION_TYPE mMotion;
+	std::unordered_map<ANIMATION_MONTION_TYPE, Animation*> mAnimations;
 };

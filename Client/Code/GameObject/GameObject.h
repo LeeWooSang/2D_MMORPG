@@ -62,6 +62,6 @@ protected:
 	int mAnimationCounter;   // used to time animation transitions
 	int mAnimationIndex;     // animation element index
 	int mAnimationCountMax; // number of cycles before animation
-	int* mAnimations[MAX_ANIMATIONS]; // animation sequences
+	//int* mAnimations[MAX_ANIMATIONS]; // animation sequences
 };
 

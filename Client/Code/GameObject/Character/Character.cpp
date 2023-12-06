@@ -8,7 +8,7 @@
 #include <string>
 #include <random>
 #include "../UI/UIManager.h"
-
+#include "../../Animation/Animation.h"
 
 Character::Character()
     : GameObject()
@@ -66,10 +66,6 @@ void Character::Reset()
 	mAnimationCounter = 0;
 	mAnimationIndex = 0;
 	mAnimationCountMax = 0;
-	for (int i = 0; i < MAX_ANIMATIONS; ++i)
-	{
-		mAnimations[i] = nullptr;
-	}
 }
 
 void Character::SetAnimationInfo(int frameSize)
@@ -351,10 +347,14 @@ AnimationCharacter::AnimationCharacter()
 	mOriginX = 0;
 	mOriginY = 0;
 	mChildObjects.clear();
+
+	mMotion = ANIMATION_MONTION_TYPE::IDLE;
+	mAnimations.clear();
 }
 
 AnimationCharacter::~AnimationCharacter()
 {
+	mRenderChildObjects.clear();
 	for (auto& obj : mChildObjects)
 	{
 		if (obj.second != nullptr)
@@ -363,6 +363,12 @@ AnimationCharacter::~AnimationCharacter()
 		}
 	}
 	mChildObjects.clear();
+
+	for (auto& ani : mAnimations)
+	{
+		delete ani.second;
+	}
+	mAnimations.clear();
 }
 
 bool AnimationCharacter::Initialize(int x, int y)
@@ -372,21 +378,91 @@ bool AnimationCharacter::Initialize(int x, int y)
 
 	GameObject::Initialize(x, y);
 
+	AnimationCharacter* head = nullptr;
+	AnimationCharacter* body = nullptr;
+	AnimationCharacter* arm = nullptr;
+	AnimationCharacter* weapon = nullptr;
 
-	AnimationCharacter* head = new AnimationCharacter;
-	AnimationCharacter* body = new AnimationCharacter;
-	AnimationCharacter* arm = new AnimationCharacter;
+	{
+		head = new AnimationCharacter;
+		head->SetOriginPos(0, 0);
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetTexture("FrontHead0");
+			head->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
+			head->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
+		}
+	}
 
-	head->SetOriginPos(0, 1);
-	body->SetOriginPos(5, 44);
-	arm->SetOriginPos(5 + 16, 45);
+	{
+		body = new AnimationCharacter;
+		body->SetOriginPos(5, 34);
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetTexture("IdleBody0");
+			ani->SetTexture("IdleBody1");
+			ani->SetTexture("IdleBody2");
+			body->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
+		}
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetTexture("WalkBody0");
+			ani->SetTexture("WalkBody1");
+			ani->SetTexture("WalkBody2");
+			ani->SetTexture("WalkBody3");
+			body->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
+		}
+	}
 
-	head->SetTexture("FrontHead0");
-	body->SetTexture("IdleBody0");
-	arm->SetTexture("IdleArm0");
+	{
+		arm = new AnimationCharacter;
+		arm->SetOriginPos(21, 35);
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetTexture("IdleArm0");
+			ani->SetTexture("IdleArm1");
+			ani->SetTexture("IdleArm2");
+			arm->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
+		}
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetTexture("WalkArm0");
+			ani->SetTexture("WalkArm1");
+			ani->SetTexture("WalkArm2");
+			ani->SetTexture("WalkArm3");
+			arm->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
+		}
+	}
 
-	AddChild("head", head);
+	{
+		weapon = new AnimationCharacter;
+		weapon->SetOriginPos(-8, 48);
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetTexture("IdleWeapon0");
+			weapon->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
+		}
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetTexture("WalkWeapon0");
+			ani->SetTexture("WalkWeapon1");
+			ani->SetTexture("WalkWeapon2");
+			ani->SetTexture("WalkWeapon3");
+			weapon->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
+		}
+
+	}
+
 	AddChild("body", body);
+	AddChild("head", head);
+	AddChild("weapon", weapon);
 	AddChild("arm", arm);
 
 	Visible();
@@ -395,11 +471,29 @@ bool AnimationCharacter::Initialize(int x, int y)
 		obj.second->Visible();
 	}
 
+	//mMotion = ANIMATION_MONTION_TYPE::IDLE;
+	SetAnimationMotion(ANIMATION_MONTION_TYPE::WALK);
+
 	return true;
 }
 
 void AnimationCharacter::Update()
 {
+	// 보이는 것만 렌더
+	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
+	{
+		return;
+	}
+
+	if (mAnimations.size() > 0)
+	{
+		mAnimations[mMotion]->Update();
+	}
+
+	for (auto& obj : mRenderChildObjects)
+	{
+		obj->Update();
+	}
 }
 
 void AnimationCharacter::Render()
@@ -412,17 +506,19 @@ void AnimationCharacter::Render()
 
 	if (mParent != nullptr)
 	{
+		Texture* tex = mAnimations[mMotion]->GetTexture();
 		D2D1_RECT_F pos;
 		pos.left = mPos.first;
 		pos.top = mPos.second;
-		pos.right = pos.left + mTexture->GetSize().first;
-		pos.bottom = pos.top + mTexture->GetSize().second;
-		GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+		pos.right = pos.left + tex->GetSize().first;
+		pos.bottom = pos.top + tex->GetSize().second;
+		
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, pos);
 	}
 
-	for (auto& obj : mChildObjects)
+	for (auto& obj : mRenderChildObjects)
 	{
-		obj.second->Render();
+		obj->Render();
 	}
 }
 
@@ -441,14 +537,26 @@ void AnimationCharacter::SetPosition(int x, int y)
 		mPos.second = mOriginY + pos.second;
 	}
 
-	for (auto& child : mChildObjects)
+	for (auto& obj : mRenderChildObjects)
 	{
-		child.second->SetPosition(x, y);
+		obj->SetPosition(x, y);
 	}
 }
 
 void AnimationCharacter::AddChild(const std::string& name, AnimationCharacter* obj)
 {
 	mChildObjects.emplace(name, obj);
+	mRenderChildObjects.emplace_back(obj);
+
 	obj->mParent = this;
+}
+
+void AnimationCharacter::SetAnimationMotion(ANIMATION_MONTION_TYPE motion)
+{
+	mMotion = motion;
+
+	for (auto& obj : mRenderChildObjects)
+	{
+		obj->SetAnimationMotion(motion);
+	}
 }

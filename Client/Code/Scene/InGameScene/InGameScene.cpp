@@ -121,18 +121,16 @@ bool InGameScene::Initialize()
 	}
 	GET_INSTANCE(UIManager)->AddUI("ChattingBox", mChattingBox);
 
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < 1; ++i)
 	{
 		AnimationCharacter* npc = new AnimationCharacter;
 		if (npc->Initialize(0, 0) == false)
 		{
 			return false;
 		}
-		npc->SetPosition(50, i * 100);
+		npc->SetPosition(350, 350 * (i + 1));
 		mNPCs.emplace_back(npc);
 	}
-
-
 
 	mIsReady = true;
 
@@ -175,6 +173,11 @@ void InGameScene::Update()
 	for (auto& otherPlayer : mOtherPlayers)
 	{
 		otherPlayer.second->Update();
+	}
+
+	for (auto& npc : mNPCs)
+	{
+		npc->Update();
 	}
 
 	GET_INSTANCE(UIManager)->Update();
