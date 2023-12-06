@@ -1,0 +1,16 @@
+IdleBody0
+origin : (16, 31)
+neck : (-4, -32)
+navel : (-8, -21)
+
+IdleBody1
+origin : (17, 31)
+neck : (-4, -32)
+navel : (-7, -20)
+
+IdleBody2
+origin : (18, 31)
+neck : (-4, -32)
+navel : (-6, -21)
+
+

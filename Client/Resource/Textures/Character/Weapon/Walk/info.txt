@@ -1,0 +1,7 @@
+Walk0
+origin : (25, 7)
+hand : (8, -2)
+
+Walk3
+origin : (25, 7)
+hand : (8, -1)

@@ -1,0 +1,16 @@
+IdleArm0
+origin : (5, 9)
+navel : (-13, -1)
+hand : (-1, 5)
+
+IdleArm1
+origin : (5, 9)
+navel : (-13, 0)
+hand : (-1, 5)
+
+IdleArm2
+origin : (6, 9)
+navel : (-13, -1)
+hand : (-1, 5)
+
+

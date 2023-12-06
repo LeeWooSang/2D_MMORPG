@@ -1,0 +1,3 @@
+Idle0
+origin : (25, 7)
+hand : (6, -5)
