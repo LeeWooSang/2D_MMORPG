@@ -121,14 +121,14 @@ bool InGameScene::Initialize()
 	}
 	GET_INSTANCE(UIManager)->AddUI("ChattingBox", mChattingBox);
 
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
 		AnimationCharacter* npc = new AnimationCharacter;
 		if (npc->Initialize(0, 0) == false)
 		{
 			return false;
 		}
-		npc->SetPosition(350, 350 * (i + 1));
+		npc->SetPosition(i, i);
 		mNPCs.emplace_back(npc);
 	}
 

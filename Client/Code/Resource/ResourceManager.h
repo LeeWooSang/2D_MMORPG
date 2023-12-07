@@ -31,6 +31,7 @@ public:
 private:
 	bool idleTexture();
 	bool walkTexture();
+	bool jumpTexture();
 
 private:
 	// 폰트, 폰트사이즈, 문자, 텍스트 크기

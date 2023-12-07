@@ -8,6 +8,9 @@ Texture::Texture()
 	//int bpp;      
 	mWidth = 0;
 	mHeight = 0;
+
+	mOrigin = std::make_pair(0, 0);
+
 	mNumBytes = 0;
 	mBuffer = nullptr;
 

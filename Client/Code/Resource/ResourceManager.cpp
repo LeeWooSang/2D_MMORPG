@@ -173,6 +173,11 @@ bool ResourceManager::Initialize()
 		return false;
 	}
 
+	if (jumpTexture() == false)
+	{
+		return false;
+	}
+
 	if (LoadJsonFile() == false)
 	{
 		return false;
@@ -230,6 +235,7 @@ bool ResourceManager::idleTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(0, 0);
 		mTextureList.emplace("FrontHead0", texture);
 	}
 	{
@@ -240,6 +246,7 @@ bool ResourceManager::idleTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(5, 34);
 		mTextureList.emplace("IdleBody0", texture);
 	}
 	{
@@ -250,6 +257,7 @@ bool ResourceManager::idleTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(4, 34);
 		mTextureList.emplace("IdleBody1", texture);
 	}
 	{
@@ -260,6 +268,7 @@ bool ResourceManager::idleTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(3, 34);
 		mTextureList.emplace("IdleBody2", texture);
 	}
 
@@ -271,6 +280,7 @@ bool ResourceManager::idleTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(21, 35);
 		mTextureList.emplace("IdleArm0", texture);
 	}
 	{
@@ -281,6 +291,7 @@ bool ResourceManager::idleTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(21, 35);
 		mTextureList.emplace("IdleArm1", texture);
 	}
 	{
@@ -291,6 +302,7 @@ bool ResourceManager::idleTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(21, 35);
 		mTextureList.emplace("IdleArm2", texture);
 	}
 
@@ -302,7 +314,30 @@ bool ResourceManager::idleTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(-8, 47);
 		mTextureList.emplace("IdleWeapon0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(41, 13);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Idle/IdleWeapon0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(-7, 48);
+		mTextureList.emplace("IdleWeapon1", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(41, 13);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Idle/IdleWeapon0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(-6, 48);
+		mTextureList.emplace("IdleWeapon2", texture);
 	}
 
 	return true;
@@ -318,6 +353,7 @@ bool ResourceManager::walkTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(2, 33);
 		mTextureList.emplace("WalkBody0", texture);
 	}
 	{
@@ -328,6 +364,7 @@ bool ResourceManager::walkTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(5, 32);
 		mTextureList.emplace("WalkBody1", texture);
 	}
 	{
@@ -338,6 +375,7 @@ bool ResourceManager::walkTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(2, 33);
 		mTextureList.emplace("WalkBody2", texture);
 	}
 	{
@@ -348,6 +386,7 @@ bool ResourceManager::walkTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(1, 33);
 		mTextureList.emplace("WalkBody3", texture);
 	}
 
@@ -359,6 +398,7 @@ bool ResourceManager::walkTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(22, 35);
 		mTextureList.emplace("WalkArm0", texture);
 	}
 	{
@@ -369,6 +409,7 @@ bool ResourceManager::walkTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(15, 36);
 		mTextureList.emplace("WalkArm1", texture);
 	}
 	{
@@ -379,16 +420,18 @@ bool ResourceManager::walkTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(22, 35);
 		mTextureList.emplace("WalkArm2", texture);
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(14, 15);
-		if (texture->LoadTexture(L"../Resource/Textures/Character/Arm/Walk/WalkArm0.png") == false)
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Arm/Walk/WalkArm3.png") == false)
 		{
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(22, 35);
 		mTextureList.emplace("WalkArm3", texture);
 	}
 	{
@@ -399,6 +442,7 @@ bool ResourceManager::walkTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(-6, 45);
 		mTextureList.emplace("WalkWeapon0", texture);
 	}
 	{
@@ -409,6 +453,7 @@ bool ResourceManager::walkTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(-14, 39);
 		mTextureList.emplace("WalkWeapon1", texture);
 	}
 	{
@@ -419,6 +464,7 @@ bool ResourceManager::walkTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(-6, 45);
 		mTextureList.emplace("WalkWeapon2", texture);
 	}
 	{
@@ -429,7 +475,70 @@ bool ResourceManager::walkTexture()
 			texture.reset();
 			return false;
 		}
+		texture->SetOrigin(-2, 43);
 		mTextureList.emplace("WalkWeapon3", texture);
+	}
+
+	return true;
+}
+
+bool ResourceManager::jumpTexture()
+{
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(35, 30);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Body/Jump/JumpBody0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(-2, 34);
+		mTextureList.emplace("JumpBody0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(13, 11);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Arm/Jump/JumpArm0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(15, 35);
+		mTextureList.emplace("JumpArm0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(8, 9);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Hand/Jump/JumpLeftHand0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(4, 43);
+		mTextureList.emplace("JumpLeftHand0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(9, 9);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Hand/Jump/JumpRightHand0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(0, 47);
+		mTextureList.emplace("JumpRightHand0", texture);
+	}
+
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(41, 13);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Idle/IdleWeapon0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		//texture->SetOrigin(-8, 47);
+		mTextureList.emplace("JumpWeapon0", texture);
 	}
 
 	return true;

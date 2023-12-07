@@ -24,19 +24,23 @@ public:
 	std::pair<int, int> GetSize() const { return std::make_pair(mWidth, mHeight); };
 	void SetSize(int width, int height) { mWidth = width; mHeight = height; }
 
+	std::pair<int, int> GetOrigin()	const { return mOrigin; }
+	void SetOrigin(int x, int y) { mOrigin = std::make_pair(x, y); }
+
 	LPDIRECT3DTEXTURE9 GetBuffer() { return mBuffer; }
 
 	bool InitializeSprite();
 	LPD3DXSPRITE GetSprite() { return mSprite; }
 
-	bool Init(const wchar_t* path);
 	ID2D1Bitmap* GetImage() { return mImage; }
 
 protected:
 	//int bpp;            // bits per pixel
 	std::vector<std::pair<int, int>> mTexPositions;
 	int mWidth;
-	int mHeight;  
+	int mHeight;
+	std::pair<int, int> mOrigin;
+
 	int mNumBytes;								// total bytes of bitmap
 	LPDIRECT3DTEXTURE9 mBuffer;      // pixels of bitmap
 

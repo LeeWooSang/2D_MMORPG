@@ -32,8 +32,41 @@ protected:
 	CHARACTER_STATE_TYPE mState;
 };
 
+enum class ANIMATION_MONTION_TYPE
+{
+	IDLE,
+	WALK,
+	JUMP
+};
+
+class Animation;
+class AnimationCharacter : public GameObject
+{
+public:
+	AnimationCharacter();
+	virtual ~AnimationCharacter();
+	virtual bool Initialize(int x, int y);
+	virtual void Update();
+	virtual void Render();
+
+	virtual void SetPosition(int x, int y);
+
+	void AddChild(const std::string& name, AnimationCharacter* obj);
+	void AddAnimation(ANIMATION_MONTION_TYPE motion, Animation* animation)		{ mAnimations.emplace(motion, animation); }
+	void SetAnimationMotion(ANIMATION_MONTION_TYPE motion);
+
+protected:
+	std::unordered_map<std::string, AnimationCharacter*> mChildObjects;
+	std::list<AnimationCharacter*> mRenderChildObjects;
+
+	AnimationCharacter* mParent;
+
+	ANIMATION_MONTION_TYPE mMotion;
+	std::unordered_map<ANIMATION_MONTION_TYPE, Animation*> mAnimations;
+};
+
 class Inventory;
-class Player : public Character
+class Player : public AnimationCharacter
 {
 public:
 	Player();
@@ -49,42 +82,12 @@ public:
 	void Move(char dir);
 	void AddItem();
 
+	int GetId()	const { return mId; }
+	void SetId(int id) { mId = id; }
+
 private:
+	int mId;
+
 	float mElapsedTime;
 	bool mFlag;
-};
-
-enum class ANIMATION_MONTION_TYPE
-{
-	IDLE,
-	WALK
-};
-
-class Animation;
-class AnimationCharacter : public GameObject
-{
-public:
-	AnimationCharacter();
-	virtual ~AnimationCharacter();
-	virtual bool Initialize(int x, int y);
-	virtual void Update();
-	virtual void Render();
-
-	virtual void SetPosition(int x, int y);
-	void SetOriginPos(int x, int y) { mOriginX = x; mOriginY = y; }
-
-	void AddChild(const std::string& name, AnimationCharacter* obj);
-	void AddAnimation(ANIMATION_MONTION_TYPE motion, Animation* animation)		{ mAnimations.emplace(motion, animation); }
-	void SetAnimationMotion(ANIMATION_MONTION_TYPE motion);
-
-private:
-	std::unordered_map<std::string, AnimationCharacter*> mChildObjects;
-	std::list<AnimationCharacter*> mRenderChildObjects;
-
-	AnimationCharacter* mParent;
-	int mOriginX;
-	int mOriginY;
-
-	ANIMATION_MONTION_TYPE mMotion;
-	std::unordered_map<ANIMATION_MONTION_TYPE, Animation*> mAnimations;
 };
