@@ -14,7 +14,7 @@ Object::~Object()
 
 
 GameObject::GameObject()
-    : mPos(std::make_pair(0, 0)), mDir(0)
+    : mPos(std::make_pair(0, 0)), mDir(1)
 {
     mAttr = ATTR_STATE_TYPE::DEFAULT;
     mTexture = nullptr;

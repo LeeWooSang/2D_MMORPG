@@ -52,7 +52,7 @@ void Character::Render()
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 	std::wstring text = L"Id (" + std::to_wstring(mId) + L")";
-	GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top), "메이플", "검은색");
+	GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top + 60), "메이플", "검은색");
 }
 
 void Character::Reset()
@@ -106,22 +106,51 @@ bool AnimationCharacter::Initialize(int x, int y)
 {
 	GameObject::Initialize(x, y);
 
+	AnimationCharacter* hair = nullptr;
 	AnimationCharacter* head = nullptr;
+	AnimationCharacter* face = nullptr;
 	AnimationCharacter* body = nullptr;
 	AnimationCharacter* arm = nullptr;
 	AnimationCharacter* leftHand = nullptr;
 	AnimationCharacter* rightHand = nullptr;
 	AnimationCharacter* weapon = nullptr;
+	AnimationCharacter* equipBody = nullptr;
+	AnimationCharacter* equipArm = nullptr;
 
+	{
+		hair = new AnimationCharacter;
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetName("Hair");
+			ani->SetTexture("Hair", "Hair0");
+			hair->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
+			hair->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
+			hair->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
+		}
+	}
 	{
 		head = new AnimationCharacter;
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("FrontHead0");
+			ani->SetName("FrontHead");
+			ani->SetTexture("FrontHead", "FrontHead0");
 			head->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
 			head->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
 			head->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
+		}
+	}
+	{
+		face = new AnimationCharacter;
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetName("Face");
+			ani->SetTexture("Face", "Face1");
+			face->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
+			face->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
+			face->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
 		}
 	}
 	{
@@ -129,24 +158,28 @@ bool AnimationCharacter::Initialize(int x, int y)
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("IdleBody0");
-			ani->SetTexture("IdleBody1");
-			ani->SetTexture("IdleBody2");
+			ani->IsRepeat();
+			ani->SetName("IdleBody");
+			ani->SetTexture("IdleBody", "IdleBody0");
+			ani->SetTexture("IdleBody", "IdleBody1");
+			ani->SetTexture("IdleBody", "IdleBody2");
 			body->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
 		}
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("WalkBody0");
-			ani->SetTexture("WalkBody1");
-			ani->SetTexture("WalkBody2");
-			ani->SetTexture("WalkBody3");
+			ani->SetName("WalkBody");
+			ani->SetTexture("WalkBody", "WalkBody0");
+			ani->SetTexture("WalkBody", "WalkBody1");
+			ani->SetTexture("WalkBody", "WalkBody2");
+			ani->SetTexture("WalkBody", "WalkBody3");
 			body->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
 		}
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("JumpBody0");
+			ani->SetName("JumpBody");
+			ani->SetTexture("JumpBody", "JumpBody0");
 			body->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
 		}
 	}
@@ -156,24 +189,28 @@ bool AnimationCharacter::Initialize(int x, int y)
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("IdleArm0");
-			ani->SetTexture("IdleArm1");
-			ani->SetTexture("IdleArm2");
+			ani->IsRepeat();
+			ani->SetName("IdleArm");
+			ani->SetTexture("IdleArm", "IdleArm0");
+			ani->SetTexture("IdleArm", "IdleArm1");
+			ani->SetTexture("IdleArm", "IdleArm2");
 			arm->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
 		}
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("WalkArm0");
-			ani->SetTexture("WalkArm1");
-			ani->SetTexture("WalkArm2");
-			ani->SetTexture("WalkArm3");
+			ani->SetName("WalkArm");
+			ani->SetTexture("WalkArm", "WalkArm0");
+			ani->SetTexture("WalkArm", "WalkArm1");
+			ani->SetTexture("WalkArm", "WalkArm2");
+			ani->SetTexture("WalkArm", "WalkArm3");
 			arm->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
 		}
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("JumpArm0");
+			ani->SetName("JumpArm");
+			ani->SetTexture("JumpArm", "JumpArm0");
 			arm->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
 		}
 	}
@@ -183,7 +220,8 @@ bool AnimationCharacter::Initialize(int x, int y)
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("JumpLeftHand0");
+			ani->SetName("JumpArm");
+			ani->SetTexture("JumpLeftHand", "JumpLeftHand0");
 			leftHand->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
 		}
 	}
@@ -202,50 +240,125 @@ bool AnimationCharacter::Initialize(int x, int y)
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("IdleWeapon0");
-			ani->SetTexture("IdleWeapon1");
-			ani->SetTexture("IdleWeapon2");
+			ani->IsRepeat();
+			ani->SetName("IdleWeapon");
+			ani->SetTexture("IdleWeapon", "IdleWeapon0");
+			ani->SetTexture("IdleWeapon", "IdleWeapon1");
+			ani->SetTexture("IdleWeapon", "IdleWeapon2");
+
+			ani->SetTexture("IdleWeaponClub", "IdleWeaponClub0");
+			ani->SetTexture("IdleWeaponClub", "IdleWeaponClub1");
+			ani->SetTexture("IdleWeaponClub", "IdleWeaponClub2");
+
 			weapon->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
 		}
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("WalkWeapon0");
-			ani->SetTexture("WalkWeapon1");
-			ani->SetTexture("WalkWeapon2");
-			ani->SetTexture("WalkWeapon3");
+			ani->SetName("WalkWeapon");
+			ani->SetTexture("WalkWeapon", "WalkWeapon0");
+			ani->SetTexture("WalkWeapon", "WalkWeapon1");
+			ani->SetTexture("WalkWeapon", "WalkWeapon2");
+			ani->SetTexture("WalkWeapon", "WalkWeapon3");
+
+			ani->SetTexture("WalkWeaponClub", "WalkWeaponClub0");
+			ani->SetTexture("WalkWeaponClub", "WalkWeaponClub1");
+			ani->SetTexture("WalkWeaponClub", "WalkWeaponClub2");
+			ani->SetTexture("WalkWeaponClub", "WalkWeaponClub3");
+
 			weapon->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
 		}
-		//{
-		//	Animation* ani = new Animation;
-		//	ani->Initialize();
-		//	ani->SetTexture("JumpWeapon0");
-		//	weapon->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
-		//}
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetName("JumpWeapon");
+			ani->SetTexture("JumpWeapon", "JumpWeapon0");
+			ani->SetTexture("JumpWeaponClub", "JumpWeaponClub0");
+
+			weapon->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
+		}
 	}
 
-	
+	{
+		equipBody = new AnimationCharacter;
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->IsRepeat();
+			ani->SetName("EquipBodyIdleDreamOfDoll");
+			ani->SetTexture("EquipBodyIdleDreamOfDoll", "EquipBodyIdleDreamOfDoll0");
+			ani->SetTexture("EquipBodyIdleDreamOfDoll", "EquipBodyIdleDreamOfDoll1");
+			ani->SetTexture("EquipBodyIdleDreamOfDoll", "EquipBodyIdleDreamOfDoll2");
+			equipBody->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
+		}
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetName("EquipBodyWalkDreamOfDoll");
+			ani->SetTexture("EquipBodyWalkDreamOfDoll", "EquipBodyWalkDreamOfDoll0");
+			ani->SetTexture("EquipBodyWalkDreamOfDoll", "EquipBodyWalkDreamOfDoll1");
+			ani->SetTexture("EquipBodyWalkDreamOfDoll", "EquipBodyWalkDreamOfDoll2");
+			ani->SetTexture("EquipBodyWalkDreamOfDoll", "EquipBodyWalkDreamOfDoll3");
+			equipBody->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
+		}
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetName("EquipBodyJumpDreamOfDoll");
+			ani->SetTexture("EquipBodyJumpDreamOfDoll", "EquipBodyJumpDreamOfDoll0");
+			equipBody->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
+		}
+	}
+	{
+		equipArm = new AnimationCharacter;
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->IsRepeat();
+			ani->SetName("EquipArmIdleDreamOfDoll");
+			ani->SetTexture("EquipArmIdleDreamOfDoll", "EquipArmIdleDreamOfDoll0");
+			ani->SetTexture("EquipArmIdleDreamOfDoll", "EquipArmIdleDreamOfDoll1");
+			ani->SetTexture("EquipArmIdleDreamOfDoll", "EquipArmIdleDreamOfDoll2");
+			equipArm->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
+		}
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetName("EquipArmWalkDreamOfDoll");
+			ani->SetTexture("EquipArmWalkDreamOfDoll", "EquipArmWalkDreamOfDoll0");
+			ani->SetTexture("EquipArmWalkDreamOfDoll", "EquipArmWalkDreamOfDoll1");
+			ani->SetTexture("EquipArmWalkDreamOfDoll", "EquipArmWalkDreamOfDoll2");
+			ani->SetTexture("EquipArmWalkDreamOfDoll", "EquipArmWalkDreamOfDoll3");
+			equipArm->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
+		}
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->SetName("EquipArmJumpDreamOfDoll");
+			ani->SetTexture("EquipArmJumpDreamOfDoll", "EquipArmJumpDreamOfDoll0");
+			equipArm->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
+		}
+
+	}
+
 	AddChild("body", body);
+	AddChild("longCoat", equipBody);
 	AddChild("leftHand", leftHand);
 	AddChild("head", head);
+	AddChild("face", face);
+	AddChild("hair", hair);
 	AddChild("weapon", weapon);
-	AddChild("arm", arm);	
+	AddChild("arm", arm);
+	AddChild("equipArm", equipArm);
 	AddChild("rightHand", rightHand);
 
-
 	Visible();
-	for (auto& obj : mChildObjects)
-	{
-		obj.second->Visible();
-	}
 
 	std::random_device rd;
 	std::default_random_engine dre(rd());
 	std::uniform_int_distribution<int> uid(0, 2);
 	ANIMATION_MONTION_TYPE motion = static_cast<ANIMATION_MONTION_TYPE>(uid(dre));
 	SetAnimationMotion(motion);
-	//SetAnimationMotion(ANIMATION_MONTION_TYPE::WALK);
-	//SetAnimationMotion(ANIMATION_MONTION_TYPE::JUMP);
 
 	return true;
 }
@@ -283,18 +396,38 @@ void AnimationCharacter::Render()
 		{
 			std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
 			Texture* tex = mAnimations[mMotion]->GetTexture();
-			D2D1_RECT_F pos;
-			//pos.left = mAnimations[mMotion]->GetPosition().first;
-			//pos.top = mAnimations[mMotion]->GetPosition().second;
+
+			//D2D1_RECT_F pos;
+			//pos.left = (mPos.first - cameraPos.first) * 65.0 + mAnimations[mMotion]->GetPosition().first+ 23.0;
+			//pos.top = (mPos.second - cameraPos.second) * 65.0 + mAnimations[mMotion]->GetPosition().second + 8.0;
 			//pos.right = pos.left + tex->GetSize().first;
 			//pos.bottom = pos.top + tex->GetSize().second;
+			//GET_INSTANCE(GraphicEngine)->RenderTexture(tex, pos);
 
-			pos.left = (mPos.first - cameraPos.first) * 65.0 + mAnimations[mMotion]->GetPosition().first+ 23.0;
-			pos.top = (mPos.second - cameraPos.second) * 65.0 + mAnimations[mMotion]->GetPosition().second + 8.0;
-			pos.right = pos.left + tex->GetSize().first;
-			pos.bottom = pos.top + tex->GetSize().second;
+			D2D1_RECT_F rect;
+			rect.left = 0;
+			rect.top = 0;
+			rect.right = rect.left + tex->GetSize().first;
+			rect.bottom = rect.top + tex->GetSize().second;
 
-			GET_INSTANCE(GraphicEngine)->RenderTexture(tex, pos);
+			D2D1_MATRIX_3X2_F mat = D2D1::Matrix3x2F::Identity();
+			mat._11 *= mDir;
+			mat._32 = (mPos.second - cameraPos.second) * 65.0 + 8.0 + mAnimations[mMotion]->GetPosition().second;
+			if (mDir == 1)
+			{
+				mat._31 = (mPos.first - cameraPos.first) * 65.0 + 23.0 + mAnimations[mMotion]->GetPosition().first * mDir;
+			}
+			else
+			{
+				mat._31 = (mPos.first - cameraPos.first) * 65.0 + 60.0 + mAnimations[mMotion]->GetPosition().first * mDir;
+			}
+
+			GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
+
+			GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+
+			mat = D2D1::Matrix3x2F::Identity();
+			GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
 		}
 	}
 
@@ -322,6 +455,44 @@ void AnimationCharacter::SetPosition(int x, int y)
 	for (auto& obj : mRenderChildObjects)
 	{
 		obj->SetPosition(x, y);
+	}
+}
+
+void AnimationCharacter::SetDirection(char dir)
+{
+	mDir = dir;
+	for (auto& obj : mRenderChildObjects)
+	{
+		if (obj != nullptr)
+		{
+			obj->SetDirection(dir);
+		}
+	}
+}
+
+void AnimationCharacter::Visible()
+{
+	mAttr |= ATTR_STATE_TYPE::VISIBLE;
+
+	for (auto& obj : mRenderChildObjects)
+	{
+		if (obj != nullptr)
+		{
+			obj->Visible();
+		}
+	}
+}
+
+void AnimationCharacter::NotVisible()
+{
+	mAttr &= ~ATTR_STATE_TYPE::VISIBLE;
+
+	for (auto& obj : mRenderChildObjects)
+	{
+		if (obj != nullptr)
+		{
+			obj->Visible();
+		}
 	}
 }
 
@@ -417,7 +588,7 @@ void Player::Render()
 		pos.bottom = pos.top + 65;
 
 		std::wstring text = L"MyId (" + std::to_wstring(mId) + L")";
-		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top), "메이플", "검은색");
+		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top + 60), "메이플", "검은색");
 
 		text = L"MY POSITION (" + std::to_wstring(mPos.first) + L", " + std::to_wstring(mPos.second) + L")";
 		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), 0, 0, "메이플", "파란색");
@@ -468,10 +639,12 @@ void Player::ProcessKeyboardMessage()
 #ifdef SERVER_CONNECT
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::LEFT_KEY) == true)
 	{
+		SetDirection(1);
 		GET_INSTANCE(Network)->SendMovePacket(DIRECTION_TYPE::LEFT);
 	}
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::RIGHT_KEY) == true)
 	{
+		SetDirection(-1);
 		GET_INSTANCE(Network)->SendMovePacket(DIRECTION_TYPE::RIGHT);
 	}
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::UP_KEY) == true)
@@ -503,10 +676,12 @@ void Player::ProcessKeyboardMessage()
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::LEFT_KEY) == true)
 	{
 		Move(DIRECTION_TYPE::LEFT);
+		SetDirection(1);
 	}
 	else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::RIGHT_KEY) == true)
 	{
 		Move(DIRECTION_TYPE::RIGHT);
+		SetDirection(-1);
 	}
 	else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::UP_KEY) == true)
 	{
@@ -516,21 +691,21 @@ void Player::ProcessKeyboardMessage()
 	{
 		Move(DIRECTION_TYPE::DOWN);
 	}
-	//else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::CONTROL_KEY) == true)
-	//{
-	//	SetAnimationMotion(ANIMATION_MONTION_TYPE::JUMP);
-	//}
+#endif
+	if (GET_INSTANCE(Input)->GetKeyState(KEY_TYPE::LEFT_KEY) == KEY_STATE::HOLD
+		|| GET_INSTANCE(Input)->GetKeyState(KEY_TYPE::RIGHT_KEY) == KEY_STATE::HOLD)
+	{
+		SetAnimationMotion(ANIMATION_MONTION_TYPE::WALK);
+	}
+	else if (GET_INSTANCE(Input)->GetKeyState(KEY_TYPE::ALT_KEY) == KEY_STATE::HOLD)
+	{
+		SetAnimationMotion(ANIMATION_MONTION_TYPE::JUMP);
+	}
 	else
 	{
 		SetAnimationMotion(ANIMATION_MONTION_TYPE::IDLE);
 	}
 
-	if (GET_INSTANCE(Input)->GetKeyState(KEY_TYPE::ALT_KEY) == KEY_STATE::HOLD)
-	{
-		std::cout << "누르는 중" << std::endl;
-		//SetAnimationMotion(ANIMATION_MONTION_TYPE::JUMP);
-	}
-#endif
 }
 
 void Player::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)
@@ -579,8 +754,6 @@ void Player::Move(char dir)
 	{
 		SetPosition(x, y);
 	}
-
-	SetAnimationMotion(ANIMATION_MONTION_TYPE::WALK);
 }
 
 void Player::AddItem()
@@ -610,4 +783,123 @@ void Player::AddItem()
 	}
 
 	static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->AddItem(itemName);
+}
+
+Monster::Monster()
+	: AnimationCharacter()
+{
+	mId = -1;
+	mElapsedTime = 0.0;
+}
+
+Monster::~Monster()
+{
+}
+
+bool Monster::Initialize(int x, int y)
+{
+	GameObject::Initialize(x, y);
+
+	Monster* monster = nullptr;
+	
+	{
+		monster = new Monster;
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->IsRepeat();
+			ani->SetName("IdleOrangeMushroom");
+			ani->SetTexture("IdleOrangeMushroom", "IdleOrangeMushroom0");
+			ani->SetTexture("IdleOrangeMushroom", "IdleOrangeMushroom1");
+			monster->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
+		}
+		{
+			Animation* ani = new Animation;
+			ani->Initialize();
+			ani->IsRepeat();
+			ani->SetName("JumpOrangeMushroom");
+			ani->SetTexture("JumpOrangeMushroom", "JumpOrangeMushroom0");
+			ani->SetTexture("JumpOrangeMushroom", "JumpOrangeMushroom1");
+			monster->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
+		}
+	}
+
+	AddChild("monster", monster);
+
+	//Visible();
+
+	std::random_device rd;
+	std::default_random_engine dre(rd());
+	std::uniform_int_distribution<int> uid(0, 2);
+	ANIMATION_MONTION_TYPE motion = static_cast<ANIMATION_MONTION_TYPE>(uid(dre));
+	SetAnimationMotion(motion);
+
+	SetDirection(1);
+
+	return true;
+}
+
+void Monster::Update()
+{
+	AnimationCharacter::Update();
+}
+
+void Monster::Render()
+{
+	// 보이는 것만 렌더
+	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
+	{
+		return;
+	}
+
+	if (mParent != nullptr)
+	{
+		if (mAnimations.count(mMotion) == true)
+		{
+			std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
+			Texture* tex = mAnimations[mMotion]->GetTexture();
+
+			D2D1_RECT_F rect;
+			rect.left = 0;
+			rect.top = 0;
+			rect.right = rect.left + tex->GetSize().first;
+			rect.bottom = rect.top + tex->GetSize().second;
+
+			D2D1_MATRIX_3X2_F mat = D2D1::Matrix3x2F::Identity();
+			mat._11 *= mDir;
+			mat._32 = (mPos.second - cameraPos.second) * 65.0 + 8.0 + mAnimations[mMotion]->GetPosition().second;
+			if (mDir == 1)
+			{
+				mat._31 = (mPos.first - cameraPos.first) * 65.0 + 10.0 + mAnimations[mMotion]->GetPosition().first * mDir;
+			}
+			else
+			{
+				mat._31 = (mPos.first - cameraPos.first) * 65.0 + 70.0 + mAnimations[mMotion]->GetPosition().first * mDir;
+			}
+
+			GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
+
+			GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+
+			mat = D2D1::Matrix3x2F::Identity();
+			GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
+		}
+	}
+	//else
+	//{
+	//	std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
+
+	//	// 이미지 위치
+	//	D2D1_RECT_F pos;
+	//	pos.left = (mPos.first - cameraPos.first) * 65.0 + 8.0;
+	//	pos.top = (mPos.second - cameraPos.second) * 65.0 + 8.0;
+
+	//	std::wstring text = L"Id (" + std::to_wstring(mId) + L")";
+	//	GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top + 60), "메이플", "검은색");
+	//}
+
+	for (auto& obj : mRenderChildObjects)
+	{
+		obj->Render();
+	}
 }

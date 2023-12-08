@@ -30,10 +30,17 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 			return 0;
 		}
 
+	case WM_SYSKEYDOWN:
+	case WM_SYSKEYUP:
+		{
+			return 0;
+		}
+
 	default:
 		break;
 	} 
 
+	//return 0;
 	return (DefWindowProc(hwnd, msg, wparam, lparam));
 } 
 

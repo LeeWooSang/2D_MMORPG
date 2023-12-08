@@ -113,8 +113,7 @@ bool Texture::LoadTexture(const wchar_t* path)
 	//if (result != S_OK)
 	//	return false;
 
-	//result = flipRotator->Initialize(wicSource, WICBitmapTransformRotate180);
-	////result = flipRotator->Initialize(wicSource, WICBitmapTransformFlipVertical);
+	//result = flipRotator->Initialize(wicSource, WICBitmapTransformFlipHorizontal);
 	//if (result != S_OK)
 	//	return false;
 	//wicSource = flipRotator;

@@ -50,6 +50,10 @@ public:
 	virtual void Render();
 
 	virtual void SetPosition(int x, int y);
+	virtual void SetDirection(char dir);
+
+	virtual void Visible();
+	virtual void NotVisible();
 
 	void AddChild(const std::string& name, AnimationCharacter* obj);
 	void AddAnimation(ANIMATION_MONTION_TYPE motion, Animation* animation)		{ mAnimations.emplace(motion, animation); }
@@ -90,4 +94,22 @@ private:
 
 	float mElapsedTime;
 	bool mFlag;
+};
+
+class Monster : public AnimationCharacter
+{
+public:
+	Monster();
+	virtual ~Monster();
+
+	virtual bool Initialize(int x, int y);
+	virtual void Update();
+	virtual void Render();
+
+	int GetId()	const { return mId; }
+	void SetId(int id) { mId = id; }
+
+private:
+	int mId;
+	float mElapsedTime;
 };

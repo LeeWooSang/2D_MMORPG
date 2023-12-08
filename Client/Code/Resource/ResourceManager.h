@@ -33,6 +33,9 @@ private:
 	bool walkTexture();
 	bool jumpTexture();
 
+	bool monsterIdleTexture();
+	bool monsterJumpTexture();
+
 private:
 	// 폰트, 폰트사이즈, 문자, 텍스트 크기
 	std::unordered_map<std::string, std::unordered_map<int, std::unordered_map<wchar_t, TextInfo>>> mTextInfos;

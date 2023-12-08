@@ -61,17 +61,6 @@ bool ResourceManager::Initialize()
 	}	
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(65, 65);
-		if (texture->LoadTexture(L"../Resource/Textures/OrangeMushroom.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		//texture->SetSize(63, 55);
-		mTextureList.emplace("Monster", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(330, 453);
 		if (texture->LoadTexture(L"../Resource/Textures/InventoryBackground.png") == false)
 		{
@@ -178,6 +167,16 @@ bool ResourceManager::Initialize()
 		return false;
 	}
 
+	if (monsterIdleTexture() == false)
+	{
+		return false;
+	}
+
+	if (monsterJumpTexture() == false)
+	{
+		return false;
+	}
+
 	if (LoadJsonFile() == false)
 	{
 		return false;
@@ -229,6 +228,17 @@ bool ResourceManager::idleTexture()
 {
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(49, 37);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Hair/Hair0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(-6, -11);
+		mTextureList.emplace("Hair0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(39, 35);
 		if (texture->LoadTexture(L"../Resource/Textures/Character/Head/FrontHead0.png") == false)
 		{
@@ -237,6 +247,39 @@ bool ResourceManager::idleTexture()
 		}
 		texture->SetOrigin(0, 0);
 		mTextureList.emplace("FrontHead0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(29, 15);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Face/Face0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(2, 16);
+		mTextureList.emplace("Face0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(23, 17);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Face/Face1.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(4, 16);
+		mTextureList.emplace("Face1", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(23, 17);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Face/Face2.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(4, 16);
+		mTextureList.emplace("Face2", texture);
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
@@ -305,7 +348,72 @@ bool ResourceManager::idleTexture()
 		texture->SetOrigin(21, 35);
 		mTextureList.emplace("IdleArm2", texture);
 	}
-
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(24, 22);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Longcoat/Idle/DreamOfDoll0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(5, 35);
+		mTextureList.emplace("EquipBodyIdleDreamOfDoll0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(25, 23);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Longcoat/Idle/DreamOfDoll1.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(3, 36);
+		mTextureList.emplace("EquipBodyIdleDreamOfDoll1", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(25, 23);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Longcoat/Idle/DreamOfDoll2.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(3, 36);
+		mTextureList.emplace("EquipBodyIdleDreamOfDoll2", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(11, 20);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Arm/Idle/Equip/DreamOfDoll0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(21, 37);
+		mTextureList.emplace("EquipArmIdleDreamOfDoll0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(11, 20);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Arm/Idle/Equip/DreamOfDoll1.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(21, 37);
+		mTextureList.emplace("EquipArmIdleDreamOfDoll1", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(12, 20);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Arm/Idle/Equip/DreamOfDoll2.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(21, 37);
+		mTextureList.emplace("EquipArmIdleDreamOfDoll2", texture);
+	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(41, 13);
@@ -314,7 +422,7 @@ bool ResourceManager::idleTexture()
 			texture.reset();
 			return false;
 		}
-		texture->SetOrigin(-8, 47);
+		texture->SetOrigin(-7, 47);
 		mTextureList.emplace("IdleWeapon0", texture);
 	}
 	{
@@ -325,7 +433,7 @@ bool ResourceManager::idleTexture()
 			texture.reset();
 			return false;
 		}
-		texture->SetOrigin(-7, 48);
+		texture->SetOrigin(-7, 47);
 		mTextureList.emplace("IdleWeapon1", texture);
 	}
 	{
@@ -336,8 +444,41 @@ bool ResourceManager::idleTexture()
 			texture.reset();
 			return false;
 		}
-		texture->SetOrigin(-6, 48);
+		texture->SetOrigin(-6, 47);
 		mTextureList.emplace("IdleWeapon2", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(39, 15);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Idle/IdleWeaponClub0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(-7, 47);
+		mTextureList.emplace("IdleWeaponClub0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(39, 15);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Idle/IdleWeaponClub0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(-7, 47);
+		mTextureList.emplace("IdleWeaponClub1", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(39, 15);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Idle/IdleWeaponClub0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(-6, 47);
+		mTextureList.emplace("IdleWeaponClub2", texture);
 	}
 
 	return true;
@@ -436,6 +577,94 @@ bool ResourceManager::walkTexture()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(28, 23);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Longcoat/Walk/DreamOfDoll0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(3, 35);
+		mTextureList.emplace("EquipBodyWalkDreamOfDoll0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(23, 24);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Longcoat/Walk/DreamOfDoll1.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(8, 35);
+		mTextureList.emplace("EquipBodyWalkDreamOfDoll1", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(28, 24);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Longcoat/Walk/DreamOfDoll2.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(3, 35);
+		mTextureList.emplace("EquipBodyWalkDreamOfDoll2", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(30, 24);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Longcoat/Walk/DreamOfDoll3.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(2, 35);
+		mTextureList.emplace("EquipBodyWalkDreamOfDoll3", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(14, 13);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Arm/Walk/Equip/DreamOfDoll0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(21, 36);
+		mTextureList.emplace("EquipArmWalkDreamOfDoll0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(10, 18);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Arm/Walk/Equip/DreamOfDoll1.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(18, 37);
+		mTextureList.emplace("EquipArmWalkDreamOfDoll1", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(13, 13);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Arm/Walk/Equip/DreamOfDoll2.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(22, 36);
+		mTextureList.emplace("EquipArmWalkDreamOfDoll2", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(16, 12);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Arm/Walk/Equip/DreamOfDoll3.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(22, 35);
+		mTextureList.emplace("EquipArmWalkDreamOfDoll3", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 		texture->CreateTexture(43, 8);
 		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Walk/WalkWeapon0.png") == false)
 		{
@@ -478,6 +707,51 @@ bool ResourceManager::walkTexture()
 		texture->SetOrigin(-2, 43);
 		mTextureList.emplace("WalkWeapon3", texture);
 	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(40, 9);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Walk/WalkWeaponClub0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(-6, 45);
+		mTextureList.emplace("WalkWeaponClub0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(41, 16);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Walk/WalkWeaponClub1.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(-14, 39);
+		mTextureList.emplace("WalkWeaponClub1", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(40, 9);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Walk/WalkWeaponClub2.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(-6, 45);
+		mTextureList.emplace("WalkWeaponClub2", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(39, 15);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Walk/WalkWeaponClub3.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(-2, 43);
+		mTextureList.emplace("WalkWeaponClub3", texture);
+	}
+
 
 	return true;
 }
@@ -531,14 +805,106 @@ bool ResourceManager::jumpTexture()
 
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(41, 13);
-		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Idle/IdleWeapon0.png") == false)
+		texture->CreateTexture(22, 23);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/LongCoat/Jump/DreamOfDoll0.png") == false)
 		{
 			texture.reset();
 			return false;
 		}
-		//texture->SetOrigin(-8, 47);
+		texture->SetOrigin(7, 35);
+		mTextureList.emplace("EquipBodyJumpDreamOfDoll0", texture);
+	}
+
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(9, 11);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Arm/Jump/Equip/DreamOfDoll0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(19, 36);
+		mTextureList.emplace("EquipArmJumpDreamOfDoll0", texture);
+	}
+
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(32, 30);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Jump/JumpWeapon0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(13, 16);
 		mTextureList.emplace("JumpWeapon0", texture);
+	}
+
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(16, 40);
+		if (texture->LoadTexture(L"../Resource/Textures/Character/Weapon/Jump/JumpWeaponClub0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(16, 7);
+		mTextureList.emplace("JumpWeaponClub0", texture);
+	}
+
+	return true;
+}
+
+bool ResourceManager::monsterIdleTexture()
+{
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(63, 58);
+		if (texture->LoadTexture(L"../Resource/Textures/Monster/OrangeMushroom/Idle/IdleOrangeMushroom0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(0, 0);
+		mTextureList.emplace("IdleOrangeMushroom0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(63, 55);
+		if (texture->LoadTexture(L"../Resource/Textures/Monster/OrangeMushroom/Idle/IdleOrangeMushroom1.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(0, 2);
+		mTextureList.emplace("IdleOrangeMushroom1", texture);
+	}
+
+	return true;
+}
+
+bool ResourceManager::monsterJumpTexture()
+{
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(62, 64);
+		if (texture->LoadTexture(L"../Resource/Textures/Monster/OrangeMushroom/Jump/JumpOrangeMushroom0.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(0, 0);
+		mTextureList.emplace("JumpOrangeMushroom0", texture);
+	}
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(63, 55);
+		if (texture->LoadTexture(L"../Resource/Textures/Monster/OrangeMushroom/Jump/JumpOrangeMushroom1.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		texture->SetOrigin(0, 2);
+		mTextureList.emplace("JumpOrangeMushroom1", texture);
 	}
 
 	return true;

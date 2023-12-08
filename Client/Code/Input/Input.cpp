@@ -7,7 +7,6 @@
 //#pragma comment(lib,"imm32.lib")
 
 INIT_INSTACNE(Input)
-//std::array<KeyState, MAX_KEY_TYPE> Input::mKeyStateList;
 std::pair<int, int> Input::mMousePos = std::make_pair(0, 0);
 Input::Input()
 {
@@ -107,11 +106,9 @@ void Input::ProcessWindowMessage(unsigned int msg, unsigned long long wParam, lo
 	{
 		case WM_IME_COMPOSITION:
 		case WM_IME_NOTIFY:		
-		case WM_CHAR:				
+		case WM_CHAR:
 		case WM_KEYDOWN:
 		case WM_KEYUP:
-		case WM_SYSKEYDOWN:
-		case WM_SYSKEYUP:
 			ProcessKeyboardMessage(msg, wParam, lParam);
 			break;
 
@@ -140,7 +137,7 @@ void Input::ProcessKeyboardMessage(unsigned int msg, unsigned long long wParam, 
 			return;
 		}
 		
-		std::cout << wParam << std::endl;	
+		//std::cout << wParam << std::endl;	
 	}
 }
 

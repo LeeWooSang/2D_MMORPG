@@ -6,8 +6,9 @@
 
 class Map;
 class Character;
-class Player;
 class AnimationCharacter;
+class Player;
+class Monster;
 class InGameScene : public Scene
 {
 public:
@@ -26,7 +27,15 @@ public:
 
 	Player* GetPlayer() { return mPlayer; }
 	Character* GetOtherPlayer(int id) { return mOtherPlayers[id].get(); }
-	Character* GetMonster(int id) { return mMonsters[id].get(); }
+	Monster* GetMonster(int id) { return mMonsters[id].get(); }
+
+	void SetAvatarPose0(int x, int y);
+	void SetAvatarPose1(int x, int y);
+	void SetAvatarPose2(int x, int y);
+	void SetAvatarPose3(int x, int y);
+
+	void SetMonsterPose0(int x, int y);
+	void SetMonsterPose1(int x, int y);
 
 private:
 	bool checkRange(int x, int y);
@@ -37,8 +46,11 @@ private:
 	std::vector<std::vector<Map*>> mTiles;
 
 	std::unordered_map<int, std::shared_ptr<Character>> mOtherPlayers;
-	std::unordered_map<int, std::shared_ptr<Character>> mMonsters;
+	std::unordered_map<int, std::shared_ptr<Monster>> mMonsters;
+
 	Player* mPlayer;
 
 	std::vector<AnimationCharacter*> mNPCs;
+	//std::vector<AnimationCharacter*> mMobs;
+
 };
