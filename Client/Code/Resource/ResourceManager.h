@@ -29,6 +29,7 @@ public:
 	bool LoadJsonFile();
 
 private:
+	bool loginTexture();
 	bool idleTexture();
 	bool walkTexture();
 	bool jumpTexture();

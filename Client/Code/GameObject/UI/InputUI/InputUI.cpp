@@ -214,6 +214,7 @@ void InputUI::setCarrotPos()
 		&layout);
 
 	mCarrotPos.first = mPos.first;
+	mCarrotPos.second = mPos.second;
 	for (int i = 0; i < text.length(); ++i)
 	{
 		float x;
