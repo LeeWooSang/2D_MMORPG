@@ -34,16 +34,22 @@ void SceneManager::AddScene(SCENE_TYPE type)
 	if (type == SCENE_TYPE::LOGIN_SCENE)
 	{
 		Scene* scene = new LoginScene;
-		scene->Initialize();
 		mSceneMap.emplace(type, scene);
+		scene->Initialize();
 	}
 
 	else if (type == SCENE_TYPE::INGAME_SCENE)
 	{
 		Scene* scene = new InGameScene;
-		scene->Initialize();
 		mSceneMap.emplace(type, scene);
+		scene->Initialize();
 	}
+}
+
+Scene* SceneManager::GetCurScene()
+{
+	return mSceneMap[mSceneType];
+	//return nullptr;
 }
 
 Scene* SceneManager::FindScene(SCENE_TYPE type)

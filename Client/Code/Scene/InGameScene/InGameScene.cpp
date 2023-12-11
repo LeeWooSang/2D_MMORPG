@@ -125,7 +125,8 @@ bool InGameScene::Initialize()
 	{
 		return false;
 	}
-	GET_INSTANCE(UIManager)->AddUI("ChattingBox", mChattingBox);
+	//GET_INSTANCE(UIManager)->AddUI("ChattingBox", mChattingBox);
+	AddSceneUI("ChattingBox", mChattingBox);
 
 	for (int i = 0; i < 10; ++i)
 	{
@@ -280,7 +281,8 @@ void InGameScene::Render()
 
 void InGameScene::processKeyboardMessage()
 {
-	ChattingBox* chattingBoxUI = static_cast<ChattingBox*>(GET_INSTANCE(UIManager)->FindUI("ChattingBox"));
+	ChattingBox* chattingBoxUI = static_cast<ChattingBox*>(FindUI("ChattingBox"));
+	//ChattingBox* chattingBoxUI = static_cast<ChattingBox*>(GET_INSTANCE(UIManager)->FindUI("ChattingBox"));
 	if (chattingBoxUI == nullptr)
 	{
 		return;

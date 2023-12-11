@@ -75,6 +75,12 @@
     <Filter Include="Code\Animation">
       <UniqueIdentifier>{f8beb07d-01ae-40b8-9cbb-634486b1c50e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Layer">
+      <UniqueIdentifier>{6455f999-d739-4d39-9778-0171a11e79d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Layer\LoginLayer">
+      <UniqueIdentifier>{ff428685-07eb-4cbb-a708-769578271e94}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -151,6 +157,12 @@
     </ClCompile>
     <ClCompile Include="..\Code\Animation\Animation.cpp">
       <Filter>Code\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Layer\Layer.cpp">
+      <Filter>Code\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Layer\LoginLayer\LoginLayer.cpp">
+      <Filter>Code\Layer\LoginLayer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -234,6 +246,12 @@
     </ClInclude>
     <ClInclude Include="..\Code\Animation\Animation.h">
       <Filter>Code\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Layer\Layer.h">
+      <Filter>Code\Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Layer\LoginLayer\LoginLayer.h">
+      <Filter>Code\Layer\LoginLayer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -12,6 +12,10 @@ public:
 	virtual void processKeyboardMessage() = 0;
 };
 
+#include <list>
+#include <unordered_map>
+#include <string>
+class UI;
 class Scene : public SceneBase
 {
 public:
@@ -25,7 +29,13 @@ public:
 	virtual void processKeyboardMessage();
 
 	bool GetIsReady()	const { return mIsReady; }
+	void AddSceneUI(const std::string& name, UI* ui);
+	
+	UI* FindUI(const std::string& name);
+	std::list<UI*>& GetSceneUIs();
 
 protected:
 	bool mIsReady;
+	std::list<UI*> mUIs;
+	std::unordered_map<std::string, UI*> mUIsMap;
 };

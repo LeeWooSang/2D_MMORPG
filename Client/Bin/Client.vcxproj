@@ -154,6 +154,8 @@
     <ClCompile Include="..\Code\GameTimer\GameTimer.cpp" />
     <ClCompile Include="..\Code\GraphicEngine\GraphicEngine.cpp" />
     <ClCompile Include="..\Code\Input\Input.cpp" />
+    <ClCompile Include="..\Code\Layer\Layer.cpp" />
+    <ClCompile Include="..\Code\Layer\LoginLayer\LoginLayer.cpp" />
     <ClCompile Include="..\Code\Main.cpp" />
     <ClCompile Include="..\Code\Network\Network.cpp" />
     <ClCompile Include="..\Code\Resource\ResourceManager.cpp" />
@@ -184,6 +186,8 @@
     <ClInclude Include="..\Code\GameTimer\GameTimer.h" />
     <ClInclude Include="..\Code\GraphicEngine\GraphicEngine.h" />
     <ClInclude Include="..\Code\Input\Input.h" />
+    <ClInclude Include="..\Code\Layer\Layer.h" />
+    <ClInclude Include="..\Code\Layer\LoginLayer\LoginLayer.h" />
     <ClInclude Include="..\Code\Network\Network.h" />
     <ClInclude Include="..\Code\Resource\ResourceManager.h" />
     <ClInclude Include="..\Code\Resource\Texture\Texture.h" />

@@ -193,3 +193,29 @@ void UI::AddChildUI(std::string key, UI* ui)
 	}
 	ui->mParentUI = this;
 }
+
+std::unordered_map<std::string, std::vector<UI*>>& UI::GetChildUIs()
+{
+	return mChildUIs; 
+	// TODO: 여기에 return 문을 삽입합니다.
+}
+
+bool UI::GetMouseOver()	const
+{
+	return mMouseOver;
+}
+
+void UI::SetMouseOver(bool mouseOver)
+{
+	mMouseOver = mouseOver; 
+}
+
+bool UI::GetMouseLButtonDown() const
+{
+	return mMouseLButtonDown; 
+}
+
+void UI::SetMouseLButtonDown(bool lButtonDown)
+{
+	mMouseLButtonDown = lButtonDown;
+}

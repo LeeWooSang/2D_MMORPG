@@ -5,6 +5,7 @@
 #include <mutex>
 #include <queue>
 
+#include "Scene.h"
 enum SCENE_TYPE
 {
 	LOGIN_SCENE,
@@ -41,7 +42,8 @@ public:
 	void AddScene(SCENE_TYPE type, Scene* scene) { mSceneMap.emplace(type, scene); }
 
 	SCENE_TYPE GetCurSceneType()	const { return mSceneType; }
-	Scene* GetCurScene() { return mSceneMap[mSceneType]; }
+	//Scene* GetCurScene() { return mSceneMap[mSceneType]; }
+	Scene* GetCurScene();
 	Scene* FindScene(SCENE_TYPE type);
 
 	void AddPacketEvent(SCENE_TYPE sceneType, InGamePacket packet) { mEventQueue.push(PacketEvent(sceneType, packet)); }

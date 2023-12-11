@@ -31,13 +31,13 @@ public:
 	UI* GetParentUI() { return mParentUI; }
 	void AddChildUI(std::string key, UI* ui);
 	std::vector<UI*>& FindChildUIs(const std::string& key) { return mChildUIs[key]; }
-	std::unordered_map<std::string, std::vector<UI*>>& GetChildUIs() { return mChildUIs; }
+	std::unordered_map<std::string, std::vector<UI*>>& GetChildUIs();
 
-	bool GetMouseOver()	const { return mMouseOver; }
-	void SetMouseOver(bool mouseOver) { mMouseOver = mouseOver; }
+	bool GetMouseOver()	const;
+	void SetMouseOver(bool mouseOver);
 
-	bool GetMouseLButtonDown()	const { return mMouseLButtonDown; }
-	void SetMouseLButtonDown(bool lButtonDown) { mMouseLButtonDown = lButtonDown; }
+	bool GetMouseLButtonDown()	const;
+	void SetMouseLButtonDown(bool lButtonDown);
 
 protected:
 	UI* mParentUI;

@@ -1,8 +1,10 @@
 #include "ButtonUI.h"
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../../../Input/Input.h"
-#include "../UIManager.h"
+
 #include "../Inventory/Inventory.h"
+//#include "../../../Scene/SceneManager.h"
+//#include "../../../Scene/Scene.h"
 
 ButtonUI::ButtonUI()
 	: UI()
@@ -88,5 +90,6 @@ void ButtonUI::MouseLButtonUp()
 
 void ButtonUI::MouseLButtonClick()
 {
-	static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->OpenInventory();
+	std::cout << "버튼 유아이 클릭" << std::endl;
+	//static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"))->OpenInventory();
 }

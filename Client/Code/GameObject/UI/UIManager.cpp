@@ -1,10 +1,8 @@
 #include "UIManager.h"
-#include "../../Core/Core.h"
-#include "../Character/Character.h"
-#include "UI.h"
-#include  "Inventory/Inventory.h"
-#include "ChattingBox/ChattingBox.h"
 #include "../../Scene/SceneManager.h"
+#include "../../Scene/Scene.h"
+
+#include "UI.h"
 #include "../../Input/Input.h"
 #include <queue>
 #include <list>
@@ -17,10 +15,10 @@ UIManager::UIManager()
 
 UIManager::~UIManager()
 {
-	for (auto& ui : mUIs)
-	{
-		delete ui;
-	}
+	//for (auto& ui : mUIs)
+	//{
+	//	delete ui;
+	//}
 	
 	mUIs.clear();
 	mUIsMap.clear();
@@ -28,9 +26,12 @@ UIManager::~UIManager()
 
 void UIManager::Render()
 {
-	for (auto ui : mUIs)
+	for (auto ui : GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs())
 	{
-		ui->Render();
+		if (ui->IsVisible() == true)
+		{
+			ui->Render();
+		}
 	}
 }
 
@@ -42,7 +43,7 @@ void UIManager::Update()
 		return;
 	}
 
-	for (auto ui : mUIs)
+	for (auto ui : GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs())
 	{
 		if (ui->IsVisible() == true)
 		{
@@ -50,27 +51,32 @@ void UIManager::Update()
 		}
 	}
 
+	//for (auto ui : mUIs)
+	//{
+	//	if (ui->IsVisible() == true)
+	//	{
+	//		ui->Update();
+	//	}
+	//}
+
 	mFocusUI = getFocusUI();
 	if (mFocusUI == nullptr)
 	{
 		return;
 	}
 
-	//UI* targetUI = getTargetUI(mUIs.front());
 	UI* targetUI = getTargetUI(mFocusUI);
 	if (targetUI != nullptr)
 	{
 		targetUI->MouseOver();
 
 		// 키를 누른 순간
-		//if (GET_INSTANCE(Input)->GetIsPushed(KEY_TYPE::MOUSE_LBUTTON) == true)
 		if (GET_INSTANCE(Input)->GetKeyState(KEY_TYPE::MOUSE_LBUTTON) == KEY_STATE::TAP)
 		{
 			targetUI->MouseLButtonDown();
 			targetUI->SetMouseLButtonDown(true);
 		}
 		// 키를 뗀 순간
-		//else if (GET_INSTANCE(Input)->GetIsPop(KEY_TYPE::MOUSE_LBUTTON) == true)
 		else if (GET_INSTANCE(Input)->GetKeyState(KEY_TYPE::MOUSE_LBUTTON) == KEY_STATE::AWAY)
 		{
 			targetUI->MouseLButtonUp();
@@ -109,8 +115,20 @@ void UIManager::SetFocusUI(UI* ui)
 	}
 	mFocusUI = ui;
 
-	std::list<UI*>::iterator targetIter = mUIs.end();
-	for (auto iter = mUIs.begin(); iter != mUIs.end(); ++iter)
+	//std::list<UI*>::iterator targetIter = mUIs.end();
+	//for (auto iter = mUIs.begin(); iter != mUIs.end(); ++iter)
+	//{
+	//	if (mFocusUI == (*iter))
+	//	{
+	//		break;
+	//	}
+	//}
+
+	//mUIs.erase(targetIter);
+	//mUIs.emplace_back(mFocusUI);
+	std::list<UI*> sceneUIs = GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs();
+	std::list<UI*>::iterator targetIter = sceneUIs.end();
+	for (auto iter = sceneUIs.begin(); iter != sceneUIs.end(); ++iter)
 	{
 		if (mFocusUI == (*iter))
 		{
@@ -118,8 +136,8 @@ void UIManager::SetFocusUI(UI* ui)
 		}
 	}
 
-	mUIs.erase(targetIter);
-	mUIs.emplace_back(mFocusUI);
+	sceneUIs.erase(targetIter);
+	sceneUIs.emplace_back(mFocusUI);
 }
 
 UI* UIManager::getTargetUI(UI* parentUI)
@@ -161,7 +179,6 @@ UI* UIManager::getTargetUI(UI* parentUI)
 	}
 
 	if (GET_INSTANCE(Input)->GetKeyState(KEY_TYPE::MOUSE_LBUTTON) == KEY_STATE::AWAY)
-	//if (GET_INSTANCE(Input)->GetIsPop(KEY_TYPE::MOUSE_LBUTTON) == true)
 	{
 		for (auto& ui : noneTargetUIs)
 		{
@@ -177,14 +194,33 @@ UI* UIManager::getFocusUI()
 	// 기존 포커스된 UI와 새로운 포커스된 UI 비교용도
 	UI* focusUI = mFocusUI;
 	// 키를 누른 순간
-	//if (GET_INSTANCE(Input)->GetIsPushed(KEY_TYPE::MOUSE_LBUTTON) == false)
 	if (GET_INSTANCE(Input)->GetKeyState(KEY_TYPE::MOUSE_LBUTTON) != KEY_STATE::TAP)
 	{
 		return focusUI;
 	}
 
-	std::list<UI*>::iterator targetIter = mUIs.end();
-	for (auto iter = mUIs.begin(); iter != mUIs.end(); ++iter)
+	//std::list<UI*>::iterator targetIter = mUIs.end();
+	//for (auto iter = mUIs.begin(); iter != mUIs.end(); ++iter)
+	//{
+	//	if ((*iter)->GetMouseOver() == true)
+	//	{
+	//		targetIter = iter;
+	//	}
+	//}
+
+	//if (targetIter == mUIs.end())
+	//{
+	//	return nullptr;
+	//}
+
+	//focusUI = (*targetIter);
+	//mUIs.erase(targetIter);
+	//mUIs.emplace_back(focusUI);
+
+	std::list<UI*> sceneUIs = GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs();
+	//std::list<UI*> sceneUIs = GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs();
+	std::list<UI*>::iterator targetIter = sceneUIs.end();
+	for (auto iter = sceneUIs.begin(); iter != sceneUIs.end(); ++iter)
 	{
 		if ((*iter)->GetMouseOver() == true)
 		{
@@ -192,14 +228,14 @@ UI* UIManager::getFocusUI()
 		}
 	}
 
-	if (targetIter == mUIs.end())
+	if (targetIter == sceneUIs.end())
 	{
 		return nullptr;
 	}
 
 	focusUI = (*targetIter);
-	mUIs.erase(targetIter);
-	mUIs.emplace_back(focusUI);
+	sceneUIs.erase(targetIter);
+	sceneUIs.emplace_back(focusUI);
 
 	return focusUI;
 }

@@ -7,7 +7,10 @@
 #include "../../GameTimer/GameTimer.h"
 #include <string>
 #include <random>
-#include "../UI/UIManager.h"
+
+#include "../../Scene/SceneManager.h"
+#include "../../Scene/Scene.h"
+
 #include "../../Animation/Animation.h"
 
 Character::Character()
@@ -542,7 +545,8 @@ bool Player::Initialize(int x, int y)
 			return false;
 		}
 
-		GET_INSTANCE(UIManager)->AddUI("Inventory", inventory);
+		//GET_INSTANCE(UIManager)->AddUI("Inventory", inventory);
+		GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->AddSceneUI("Inventory", inventory);
 	}
 
 	SetAnimationMotion(ANIMATION_MONTION_TYPE::WALK);
@@ -620,7 +624,8 @@ void Player::ProcessKeyboardMessage()
 {
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true)
 	{
-		static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->OpenInventory();
+		static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"))->OpenInventory();
+		//static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->OpenInventory();
 	}
 
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::Z_KEY) == true)
@@ -710,7 +715,8 @@ void Player::ProcessKeyboardMessage()
 
 void Player::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)
 {
-	Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"));
+	Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"));
+	//Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"));
 	if (inventory != nullptr && inventory->IsVisible() == true)
 	{
 		inventory->ProcessMouseWheelEvent(wParam);
@@ -782,7 +788,8 @@ void Player::AddItem()
 		break;
 	}
 
-	static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->AddItem(itemName);
+	static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"))->AddItem(itemName);
+	//static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->AddItem(itemName);
 }
 
 Monster::Monster()
