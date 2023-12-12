@@ -22,112 +22,112 @@ bool LoginLayer::Initialize()
 {
 	UI* loginUI = new UI;
 	{
-		if (loginUI->Initialize(0, 0) == false)
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginInputBackground");
+		if (loginUI->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		loginUI->SetTexture("LoginInputBackground");
+		loginUI->SetTexture(data.name);
 		loginUI->Visible();
 	}
 	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginGameGuide");
 		UI* ui = new UI;
-		if (ui->Initialize(485, -259) == false)
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		ui->SetTexture("LoginGameGuide");
+		ui->SetTexture(data.name);
 		ui->Visible();
-		loginUI->AddChildUI("LoginGameGuide", ui);
+		loginUI->AddChildUI(data.name, ui);
 	}
 	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginTab0");
 		UI* ui = new UI;
-		if (ui->Initialize(27, 37) == false)
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		ui->SetTexture("LoginTab0");
+		ui->SetTexture(data.name);
 		ui->Visible();
-		loginUI->AddChildUI("LoginTab0", ui);
+		loginUI->AddChildUI(data.name, ui);
 	}
 	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginTab1");
 		UI* ui = new UI;
-		if (ui->Initialize(166, 37) == false)
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		ui->SetTexture("LoginTab1");
+		ui->SetTexture(data.name);
 		ui->Visible();
-		loginUI->AddChildUI("LoginTab1", ui);
+		loginUI->AddChildUI(data.name, ui);
 	}
 	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("IdInput0");
 		UI* ui = new UI;
-		if (ui->Initialize(27, 69) == false)
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		ui->SetTexture("IdInput0");
+		ui->SetTexture(data.name);
 		ui->Visible();
-		loginUI->AddChildUI("IdInput0", ui);
+		loginUI->AddChildUI(data.name, ui);
 	}
 	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("IdRadioButton1");
 		UI* ui = new ButtonUI;
-		if (ui->Initialize(228, 69) == false)
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		ui->SetTexture("IdRadioButton1");
+		ui->SetTexture(data.name);
 		ui->Visible();
-		loginUI->AddChildUI("IdRadioButton1", ui);
+		loginUI->AddChildUI(data.name, ui);
 	}
 	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("IdInput1");
 		UI* ui = new UI;
-		if (ui->Initialize(250, 69) == false)
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		ui->SetTexture("IdInput1");
+		ui->SetTexture(data.name);
 		ui->Visible();
-		loginUI->AddChildUI("IdInput1", ui);
+		loginUI->AddChildUI(data.name, ui);
 	}
 	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("PWInput");
 		UI* ui = new UI;
-		if (ui->Initialize(27, 115) == false)
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		ui->SetTexture("PWInput");
+		ui->SetTexture(data.name);
 		ui->Visible();
-		loginUI->AddChildUI("PWInput", ui);
+		loginUI->AddChildUI(data.name, ui);
 	}
 	{
-		UI* ui = new UI;
-		if (ui->Initialize(27, 115) == false)
-		{
-			return false;
-		}
-		ui->SetTexture("PWInput");
-		ui->Visible();
-		loginUI->AddChildUI("PWInput", ui);
-	}
-	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginButton");
 		UI* ui = new ButtonUI;
-		if (ui->Initialize(27, 171) == false)
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		ui->SetTexture("LoginButton");
+		ui->SetTexture(data.name);
 		ui->Visible();
-		loginUI->AddChildUI("LoginButton", ui);
+		loginUI->AddChildUI(data.name, ui);
 	}
 	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginQuitButton");
 		UI* ui = new ButtonUI;
-		if (ui->Initialize(266, 231) == false)
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		ui->SetTexture("LoginQuitButton");
+		ui->SetTexture(data.name);
 		ui->Visible();
-		loginUI->AddChildUI("LoginQuitButton", ui);
+		loginUI->AddChildUI(data.name, ui);
 	}
 
 	loginUI->SetPosition(234, 259);

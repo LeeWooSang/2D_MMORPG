@@ -58,6 +58,7 @@ public:
 	void AddChild(const std::string& name, AnimationCharacter* obj);
 	void AddAnimation(ANIMATION_MONTION_TYPE motion, Animation* animation)		{ mAnimations.emplace(motion, animation); }
 	void SetAnimationMotion(ANIMATION_MONTION_TYPE motion);
+	void SetAvatar(const std::string& parts, ANIMATION_MONTION_TYPE motion, const std::string& objName, int count);
 
 protected:
 	std::unordered_map<std::string, AnimationCharacter*> mChildObjects;

@@ -244,11 +244,7 @@ bool AnimationCharacter::Initialize(int x, int y)
 			Animation* ani = new Animation;
 			ani->Initialize();
 			ani->IsRepeat();
-			ani->SetName("IdleWeapon");
-			ani->SetTexture("IdleWeapon", "IdleWeapon0");
-			ani->SetTexture("IdleWeapon", "IdleWeapon1");
-			ani->SetTexture("IdleWeapon", "IdleWeapon2");
-
+			ani->SetName("IdleWeaponClub");
 			ani->SetTexture("IdleWeaponClub", "IdleWeaponClub0");
 			ani->SetTexture("IdleWeaponClub", "IdleWeaponClub1");
 			ani->SetTexture("IdleWeaponClub", "IdleWeaponClub2");
@@ -258,24 +254,19 @@ bool AnimationCharacter::Initialize(int x, int y)
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetName("WalkWeapon");
-			ani->SetTexture("WalkWeapon", "WalkWeapon0");
-			ani->SetTexture("WalkWeapon", "WalkWeapon1");
-			ani->SetTexture("WalkWeapon", "WalkWeapon2");
-			ani->SetTexture("WalkWeapon", "WalkWeapon3");
-
+			ani->SetName("WalkWeaponClub");
 			ani->SetTexture("WalkWeaponClub", "WalkWeaponClub0");
 			ani->SetTexture("WalkWeaponClub", "WalkWeaponClub1");
 			ani->SetTexture("WalkWeaponClub", "WalkWeaponClub2");
 			ani->SetTexture("WalkWeaponClub", "WalkWeaponClub3");
 
 			weapon->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
+
 		}
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetName("JumpWeapon");
-			ani->SetTexture("JumpWeapon", "JumpWeapon0");
+			ani->SetName("JumpWeaponClub");
 			ani->SetTexture("JumpWeaponClub", "JumpWeaponClub0");
 
 			weapon->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
@@ -507,6 +498,19 @@ void AnimationCharacter::AddChild(const std::string& name, AnimationCharacter* o
 	obj->mParent = this;
 }
 
+void AnimationCharacter::SetAvatar(const std::string& parts, ANIMATION_MONTION_TYPE motion, const std::string& partsName, int count)
+{
+	if (mChildObjects.count(parts) == false)
+	{
+		return;
+	}
+
+	for (int i = 0; i < count; ++i)
+	{
+		mChildObjects[parts]->mAnimations[motion]->SetTexture(partsName, partsName + std::to_string(i));
+	}
+}
+
 void AnimationCharacter::SetAnimationMotion(ANIMATION_MONTION_TYPE motion)
 {
 	mMotion = motion;
@@ -532,6 +536,10 @@ Player::~Player()
 bool Player::Initialize(int x, int y)
 {
 	AnimationCharacter::Initialize(x, y);
+
+	SetAvatar("weapon", ANIMATION_MONTION_TYPE::IDLE, "IdleWeaponSword", 3);
+	SetAvatar("weapon", ANIMATION_MONTION_TYPE::WALK, "WalkWeaponSword", 4);
+	SetAvatar("weapon", ANIMATION_MONTION_TYPE::JUMP, "JumpWeaponSword", 1);
 
 	// ºÎ¸ð ui
 	{
