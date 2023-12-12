@@ -20,6 +20,12 @@ bool LoginScene::Initialize()
 {
 	mIsReady = true;
 
+	mLayer = new LoginLayer;
+	if (mLayer->Initialize() == false)
+	{
+		return false;
+	}
+
 	mInputUI = new InputUI;
 	if (mInputUI->Initialize(0, 0) == false)
 	{
@@ -28,11 +34,6 @@ bool LoginScene::Initialize()
 	mInputUI->SetPosition(261, 328);
 	static_cast<InputUI*>(mInputUI)->SetText(L"127.0.0.1");
 
-	mLayer = new LoginLayer;
-	if (mLayer->Initialize() == false)
-	{
-		return false;
-	}
 
 	return true;
 }

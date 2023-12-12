@@ -14,12 +14,7 @@ UIManager::UIManager()
 }
 
 UIManager::~UIManager()
-{
-	//for (auto& ui : mUIs)
-	//{
-	//	delete ui;
-	//}
-	
+{	
 	mUIs.clear();
 	mUIsMap.clear();
 }

@@ -1,10 +1,8 @@
 #include "ButtonUI.h"
+#include "../../../Resource/Texture/Texture.h"
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../../../Input/Input.h"
-
 #include "../Inventory/Inventory.h"
-//#include "../../../Scene/SceneManager.h"
-//#include "../../../Scene/Scene.h"
 
 ButtonUI::ButtonUI()
 	: UI()
@@ -52,8 +50,8 @@ void ButtonUI::Render()
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
-	pos.right = pos.left + 30;
-	pos.bottom = pos.top + 30;
+	pos.right = pos.left + mTexture->GetSize().first;
+	pos.bottom = pos.top + mTexture->GetSize().second;
 
 	if (mMouseLButtonDown)
 	{
