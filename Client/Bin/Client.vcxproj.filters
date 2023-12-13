@@ -81,6 +81,9 @@
     <Filter Include="Code\Layer\LoginLayer">
       <UniqueIdentifier>{ff428685-07eb-4cbb-a708-769578271e94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\GameObject\UI\EquipUI">
+      <UniqueIdentifier>{c1727746-2541-489a-b418-8fa027772c28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -163,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Layer\LoginLayer\LoginLayer.cpp">
       <Filter>Code\Layer\LoginLayer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\UI\EquipUI\EquipUI.cpp">
+      <Filter>Code\GameObject\UI\EquipUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -252,6 +258,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\Layer\LoginLayer\LoginLayer.h">
       <Filter>Code\Layer\LoginLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\UI\EquipUI\EquipUI.h">
+      <Filter>Code\GameObject\UI\EquipUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

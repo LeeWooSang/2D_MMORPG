@@ -10,6 +10,8 @@ ResourceManager::ResourceManager()
 ResourceManager::~ResourceManager()
 {
 	mTextInfos.clear();
+	mTextureDatas.clear();
+	mTextureList.clear();
 	GET_INSTANCE(JsonFormat)->Release();
 }
 
@@ -146,11 +148,6 @@ bool ResourceManager::Initialize()
 		return false;
 	}
 
-	//if (loginTexture() == false)
-	//{
-	//	return false;
-	//}
-
 	//if (LoadJsonFile() == false)
 	//{
 	//	return false;
@@ -201,144 +198,6 @@ bool ResourceManager::LoadJsonFile()
 TextureData& ResourceManager::GetTextureData(const std::string name)
 {
 	return mTextureDatas[name];
-}
-
-bool ResourceManager::loginTexture()
-{
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(800, 800);
-		if (texture->LoadTexture(L"../Resource/Textures/Login/LoginBackground.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("LoginBackground", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(65, 75);
-		if (texture->LoadTexture(L"../Resource/Textures/Login/LoginGameGuide.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("LoginGameGuide", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(332, 282);
-		if (texture->LoadTexture(L"../Resource/Textures/Login/LoginInputBackground.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("LoginInputBackground", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(139, 32);
-		if (texture->LoadTexture(L"../Resource/Textures/Login/LoginTab0.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("LoginTab0", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(139, 32);
-		if (texture->LoadTexture(L"../Resource/Textures/Login/LoginTab1.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("LoginTab1", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(201, 45);
-		if (texture->LoadTexture(L"../Resource/Textures/Login/IdInput0.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("IdInput0", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(55, 45);
-		if (texture->LoadTexture(L"../Resource/Textures/Login/IdInput1.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("IdInput1", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(22, 45);
-		if (texture->LoadTexture(L"../Resource/Textures/Login/IdRadioButton0.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("IdRadioButton0", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(22, 45);
-		if (texture->LoadTexture(L"../Resource/Textures/Login/IdRadioButton1.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("IdRadioButton1", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(278, 44);
-		if (texture->LoadTexture(L"../Resource/Textures/Login/PWInput.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("PWInput", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(278, 53);
-		if (texture->LoadTexture(L"../Resource/Textures/Login/LoginButton.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("LoginButton", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(44, 21);
-		if (texture->LoadTexture(L"../Resource/Textures/Login/LoginQuitButton.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("LoginQuitButton", texture);
-	}
-
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		//texture->CreateTexture(1920, 1080);
-		texture->CreateTexture(800, 800);
-		if (texture->LoadTexture(L"../Resource/Textures/LoginScene.jpg") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("LoginScene", texture);
-	}
-
-	return true;
 }
 
 bool ResourceManager::loadTextureDatas()

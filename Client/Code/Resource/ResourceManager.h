@@ -45,7 +45,6 @@ public:
 	TextureData& GetTextureData(const std::string name);
 
 private:
-	bool loginTexture();
 	bool loadTextureDatas();
 
 private:

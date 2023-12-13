@@ -15,8 +15,6 @@ UIManager::UIManager()
 
 UIManager::~UIManager()
 {	
-	mUIs.clear();
-	mUIsMap.clear();
 }
 
 void UIManager::Render()
@@ -45,14 +43,6 @@ void UIManager::Update()
 			ui->Update();
 		}
 	}
-
-	//for (auto ui : mUIs)
-	//{
-	//	if (ui->IsVisible() == true)
-	//	{
-	//		ui->Update();
-	//	}
-	//}
 
 	mFocusUI = getFocusUI();
 	if (mFocusUI == nullptr)
@@ -85,22 +75,6 @@ void UIManager::Update()
 	}
 }
 
-UI* UIManager::FindUI(const std::string& name)
-{
-	if (mUIsMap.count(name) == false)
-	{
-		return nullptr;
-	}
-
-	return mUIsMap[name];
-}
-
-void UIManager::AddUI(const std::string& name, UI* ui)
-{
-	mUIs.emplace_back(ui);
-	mUIsMap.emplace(name, ui);
-}
-
 void UIManager::SetFocusUI(UI* ui)
 {
 	if (mFocusUI == ui || ui == nullptr)
@@ -110,25 +84,20 @@ void UIManager::SetFocusUI(UI* ui)
 	}
 	mFocusUI = ui;
 
-	//std::list<UI*>::iterator targetIter = mUIs.end();
-	//for (auto iter = mUIs.begin(); iter != mUIs.end(); ++iter)
-	//{
-	//	if (mFocusUI == (*iter))
-	//	{
-	//		break;
-	//	}
-	//}
-
-	//mUIs.erase(targetIter);
-	//mUIs.emplace_back(mFocusUI);
-	std::list<UI*> sceneUIs = GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs();
+	std::list<UI*>& sceneUIs = GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs();
 	std::list<UI*>::iterator targetIter = sceneUIs.end();
 	for (auto iter = sceneUIs.begin(); iter != sceneUIs.end(); ++iter)
 	{
 		if (mFocusUI == (*iter))
 		{
+			targetIter = iter;
 			break;
 		}
+	}
+
+	if (targetIter == sceneUIs.end())
+	{
+		return;
 	}
 
 	sceneUIs.erase(targetIter);
@@ -194,26 +163,7 @@ UI* UIManager::getFocusUI()
 		return focusUI;
 	}
 
-	//std::list<UI*>::iterator targetIter = mUIs.end();
-	//for (auto iter = mUIs.begin(); iter != mUIs.end(); ++iter)
-	//{
-	//	if ((*iter)->GetMouseOver() == true)
-	//	{
-	//		targetIter = iter;
-	//	}
-	//}
-
-	//if (targetIter == mUIs.end())
-	//{
-	//	return nullptr;
-	//}
-
-	//focusUI = (*targetIter);
-	//mUIs.erase(targetIter);
-	//mUIs.emplace_back(focusUI);
-
-	std::list<UI*> sceneUIs = GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs();
-	//std::list<UI*> sceneUIs = GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs();
+	std::list<UI*>& sceneUIs = GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs();
 	std::list<UI*>::iterator targetIter = sceneUIs.end();
 	for (auto iter = sceneUIs.begin(); iter != sceneUIs.end(); ++iter)
 	{

@@ -23,6 +23,8 @@ public:
 	void SetSlotNum(int num) { mSlotNum = num; }
 
 	void AddItem(const std::string& name);
+	void AddItem(InventoryItem* item);
+
 	InventoryItem* GetItem() { return mItem; }
 
 
@@ -56,6 +58,7 @@ public:
 
 	void AddItem(const std::string& name);
 	void AddItem(int slot, const std::string& name);
+	void AddItem(InventoryItem* item);
 
 	void OpenInventory();
 
@@ -82,4 +85,9 @@ public:
 	virtual void Update();
 	virtual void Render();
 
+	const std::string& GetItemName()	const { return mItemName; }
+	void SetItemName(const std::string& name) { mItemName = name; }
+
+private:
+	std::string mItemName;
 };

@@ -511,6 +511,31 @@ void AnimationCharacter::SetAvatar(const std::string& parts, ANIMATION_MONTION_T
 	}
 }
 
+void AnimationCharacter::SetWeaponAvatar(const std::string& itemName)
+{
+	std::string parts = "weapon";
+	if (mChildObjects.count(parts) == false)
+	{
+		return;
+	}
+
+	for (int i = 0; i < 3; ++i)
+	{
+		std::string partsName = "IdleWeapon" + itemName;
+		mChildObjects[parts]->mAnimations[ANIMATION_MONTION_TYPE::IDLE]->SetTexture(partsName, partsName + std::to_string(i));
+	}
+	for (int i = 0; i < 4; ++i)
+	{
+		std::string partsName = "WalkWeapon" + itemName;
+		mChildObjects[parts]->mAnimations[ANIMATION_MONTION_TYPE::WALK]->SetTexture(partsName, partsName + std::to_string(i));
+	}
+	for (int i = 0; i < 1; ++i)
+	{
+		std::string partsName = "JumpWeapon" + itemName;
+		mChildObjects[parts]->mAnimations[ANIMATION_MONTION_TYPE::JUMP]->SetTexture(partsName, partsName + std::to_string(i));
+	}
+}
+
 void AnimationCharacter::SetAnimationMotion(ANIMATION_MONTION_TYPE motion)
 {
 	mMotion = motion;
@@ -553,7 +578,6 @@ bool Player::Initialize(int x, int y)
 			return false;
 		}
 
-		//GET_INSTANCE(UIManager)->AddUI("Inventory", inventory);
 		GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->AddSceneUI("Inventory", inventory);
 	}
 
@@ -630,17 +654,6 @@ void Player::Render()
 
 void Player::ProcessKeyboardMessage()
 {
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true)
-	{
-		static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"))->OpenInventory();
-		//static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->OpenInventory();
-	}
-
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::Z_KEY) == true)
-	{
-		AddItem();
-	}
-
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::CONTROL_KEY) == true)
 	{
 		mFlag = true;

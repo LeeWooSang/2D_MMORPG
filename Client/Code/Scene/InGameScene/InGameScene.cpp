@@ -4,8 +4,11 @@
 #include "../../GameObject/Map/Map.h"
 #include "../../GraphicEngine/GraphicEngine.h"
 #include "../../GameObject/Character/Character.h"
+
 #include "../../GameObject/UI/ChattingBox/ChattingBox.h"
 #include "../../GameObject/UI/InputUI/ChattingInputUI/ChattingInputUI.h"
+#include "../../GameObject/UI/Inventory/Inventory.h"
+#include "../../GameObject/UI/EquipUI/EquipUI.h"
 
 #include "../../GameObject/UI/UIManager.h"
 #include "../../../../Server/Code/Common/Protocol.h"
@@ -125,8 +128,14 @@ bool InGameScene::Initialize()
 	{
 		return false;
 	}
-	//GET_INSTANCE(UIManager)->AddUI("ChattingBox", mChattingBox);
 	AddSceneUI("ChattingBox", mChattingBox);
+
+	EquipUI* equipUI = new EquipUI;
+	if (equipUI->Initialize(0, 0) == false)
+	{
+		return false;
+	}
+	AddSceneUI("EquipUI", equipUI);
 
 	for (int i = 0; i < 10; ++i)
 	{
@@ -282,7 +291,6 @@ void InGameScene::Render()
 void InGameScene::processKeyboardMessage()
 {
 	ChattingBox* chattingBoxUI = static_cast<ChattingBox*>(FindUI("ChattingBox"));
-	//ChattingBox* chattingBoxUI = static_cast<ChattingBox*>(GET_INSTANCE(UIManager)->FindUI("ChattingBox"));
 	if (chattingBoxUI == nullptr)
 	{
 		return;
@@ -294,9 +302,29 @@ void InGameScene::processKeyboardMessage()
 	}
 	else
 	{
+		// 채팅상태가 아닐 때
 		if (static_cast<ChattingInputUI*>(chattingBoxUI->FindChildUIs("ChattingInputUI").front())->IsVisible() == false)
-		{
-			mPlayer->ProcessKeyboardMessage();
+		{			
+			if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true)
+			{
+				Inventory* inventory = static_cast<Inventory*>(FindUI("Inventory"));
+				inventory->OpenInventory();
+				GET_INSTANCE(UIManager)->SetFocusUI(inventory);
+			}
+			else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::Z_KEY) == true)
+			{
+				mPlayer->AddItem();
+			}
+			else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::E_KEY) == true)
+			{
+				EquipUI* equipUI = static_cast<EquipUI*>(FindUI("EquipUI"));
+				equipUI->OpenEquipUI();
+				GET_INSTANCE(UIManager)->SetFocusUI(equipUI);
+			}
+			else
+			{
+				mPlayer->ProcessKeyboardMessage();
+			}
 		}
 	}
 }
@@ -356,6 +384,21 @@ void InGameScene::RemoveObject(int id)
 	{
 		mMonsters[id]->NotVisible();
 	}
+}
+
+Player* InGameScene::GetPlayer()
+{
+	return mPlayer;
+}
+
+Character* InGameScene::GetOtherPlayer(int id)
+{
+	return mOtherPlayers[id].get();
+}
+
+Monster* InGameScene::GetMonster(int id)
+{
+	return mMonsters[id].get();
 }
 
 void InGameScene::SetAvatarPose0(int x, int y)

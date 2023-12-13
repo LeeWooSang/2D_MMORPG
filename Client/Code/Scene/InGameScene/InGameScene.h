@@ -25,9 +25,9 @@ public:
 	void UpdateObjectPosition(int id, int x, int y);
 	void RemoveObject(int id);
 
-	Player* GetPlayer() { return mPlayer; }
-	Character* GetOtherPlayer(int id) { return mOtherPlayers[id].get(); }
-	Monster* GetMonster(int id) { return mMonsters[id].get(); }
+	Player* GetPlayer();
+	Character* GetOtherPlayer(int id);
+	Monster* GetMonster(int id);
 
 	void SetAvatarPose0(int x, int y);
 	void SetAvatarPose1(int x, int y);

@@ -78,7 +78,7 @@ void Animation::SetTexture(const std::string& objName, const std::string& texNam
 	{
 		mTextures.clear();
 		mPositions.clear();
-		mCurrentNum = 0;
+		//mCurrentNum = 0;
 		mName = objName;
 	}
 

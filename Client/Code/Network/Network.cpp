@@ -213,7 +213,7 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_CHAT:
 		{
 			SCChatPacket* packet = reinterpret_cast<SCChatPacket*>(mPacketBuffer);
-			ChattingBox* ui = static_cast<ChattingBox*>(GET_INSTANCE(UIManager)->FindUI("ChattingBox"));
+			ChattingBox* ui = static_cast<ChattingBox*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("ChattingBox"));
 			if (ui != nullptr)
 			{
 				ui->AddChattingLog(packet->id, packet->chat);

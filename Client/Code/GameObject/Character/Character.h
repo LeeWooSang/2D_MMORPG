@@ -60,6 +60,8 @@ public:
 	void SetAnimationMotion(ANIMATION_MONTION_TYPE motion);
 	void SetAvatar(const std::string& parts, ANIMATION_MONTION_TYPE motion, const std::string& objName, int count);
 
+	void SetWeaponAvatar(const std::string& itemName);
+
 protected:
 	std::unordered_map<std::string, AnimationCharacter*> mChildObjects;
 	std::list<AnimationCharacter*> mRenderChildObjects;

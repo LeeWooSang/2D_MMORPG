@@ -1,10 +1,20 @@
 #include "Inventory.h"
+#include "../../../Scene/SceneManager.h"
+#include "../../../Scene/Scene.h"
+#include "../../../Scene/InGameScene/InGameScene.h"
+
 #include "../../../GraphicEngine/GraphicEngine.h"
+
 #include "../Scroll/Scroll.h"
 #include "../ButtonUI/ButtonUI.h"
 #include "../../../Resource/ResourceManager.h"
 #include "../../../Resource/Texture/Texture.h"
 #include "../../../Input/Input.h"
+
+//#include "../../../Scene/SceneManager.h"
+//#include "../../../Scene/Scene.h"
+#include "../EquipUI/EquipUI.h"
+#include "../../Character/Character.h"
 
 InventorySlot::InventorySlot()
 	: UI()
@@ -104,8 +114,22 @@ void InventorySlot::MouseLButtonUp()
 
 void InventorySlot::MouseLButtonClick()
 {
-	std::cout << mSlotNum << "번호 슬롯 마우스 클릭" << std::endl;
-	UI::MouseLButtonClick();
+	if (mItem == nullptr)
+	{
+		return;
+	}
+
+	// 아바타 장착
+	Player* player = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE))->GetPlayer();
+	//player->SetAvatar("weapon", ANIMATION_MONTION_TYPE::IDLE, "IdleWeaponClub", 3);
+	//player->SetAvatar("weapon", ANIMATION_MONTION_TYPE::WALK, "WalkWeaponClub", 4);
+	//player->SetAvatar("weapon", ANIMATION_MONTION_TYPE::JUMP, "JumpWeaponClub", 1);
+	player->SetWeaponAvatar(mItem->GetItemName());
+
+	// 아이템 장착
+	EquipUI* ui = static_cast<EquipUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("EquipUI"));
+	InventoryItem* oldItem = ui->AddEquipItem("weapon", mItem);
+	AddItem(oldItem);
 }
 
 void InventorySlot::SetPosition(int x, int y)
@@ -122,10 +146,24 @@ void InventorySlot::AddItem(const std::string& name)
 {
 	// 아이템 추가
 	mItem = new InventoryItem;
-	mItem->SetPosition(mPos.first, mPos.second);
+	mItem->SetItemName(name);
 	// 텍스쳐 추가
 	mItem->SetTexture(name);
 	mItem->Visible();
+	mItem->SetPosition(mPos.first, mPos.second);
+}
+
+void InventorySlot::AddItem(InventoryItem* oldItem)
+{
+	if (oldItem == nullptr)
+	{
+		mItem = nullptr;
+	}
+	else
+	{
+		mItem = oldItem;
+		mItem->SetPosition(mPos.first, mPos.second);
+	}
 }
 
 Inventory::Inventory()
@@ -469,6 +507,20 @@ void Inventory::AddItem(int slotNum, const std::string& name)
 	if (slot->GetItem() == nullptr)
 	{
 		slot->AddItem(name);
+	}
+}
+
+void Inventory::AddItem(InventoryItem* item)
+{
+	for (auto& inventorySlot : mChildUIs["Slot"])
+	{
+		InventorySlot* slot = static_cast<InventorySlot*>(inventorySlot);
+		// 비어있는 슬롯에 추가
+		if (slot->GetItem() == nullptr)
+		{
+			slot->AddItem(item);
+			break;
+		}
 	}
 }
 
