@@ -15,10 +15,16 @@ public:
 	//void AddTexture(const std::string& name);
 	void SetName(const std::string& objName) { mName = objName; }
 	void SetTexture(const std::string& objName, const std::string& texName);
+	void SetTexture(const std::string& objName, int count);
+
 	Texture* GetTexture() { return mTextures[mCurrentNum]; }
 
 	std::pair<int, int> GetPosition()	const { return mPositions[mCurrentNum]; };
 	void IsRepeat() { mRepeat = true; }
+	bool IsVisible();
+
+	void ResetCurrentNum();
+	int GetCurrentNum()		const { return mCurrentNum; }
 
 private:
 	std::string mName;

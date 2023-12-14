@@ -65,8 +65,10 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline
 		return(0);
 
 	if (!(hwnd = CreateWindow(WINDOW_CLASS_NAME, // class
-		L"Client",	 // title
-		WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+		// title
+		L"Client",
+		// 윈도우 기본스타일 | 최소화 버튼 | X 버튼 | 바로 출력되도록 
+		WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_VISIBLE,
 		0, 0,	   // x,y
 		WINDOW_WIDTH,  // width
 		WINDOW_HEIGHT, // height

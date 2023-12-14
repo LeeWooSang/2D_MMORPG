@@ -30,7 +30,8 @@ bool Animation::Initialize()
 
 void Animation::Update()
 {
-	mElapsedTime += GET_INSTANCE(GameTimer)->GetElapsedTime();
+	float playSpeed = 1.0;
+	mElapsedTime += GET_INSTANCE(GameTimer)->GetElapsedTime() * playSpeed;
 	if (mRepeat == false)
 	{
 		if (mElapsedTime > 0.2)
@@ -54,7 +55,8 @@ void Animation::Update()
 				++mCurrentNum;
 				if (mCurrentNum >= mTextures.size())
 				{
-					mCurrentNum = mTextures.size() - 1;
+					int currentNum = mTextures.size() - 1;
+					mCurrentNum = currentNum <= 0 ? 0 : currentNum;
 					mFlag = true;
 				}
 			}
@@ -86,4 +88,38 @@ void Animation::SetTexture(const std::string& objName, const std::string& texNam
 	Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture(texName);
 	mTextures.emplace_back(tex);
 	mPositions.emplace_back(tex->GetOrigin());
+}
+
+void Animation::SetTexture(const std::string& objName, int count)
+{
+	mTextures.clear();
+	mPositions.clear();
+	mName = objName;
+
+	for (int i = 0; i < count; ++i)
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture(objName + std::to_string(i));
+		if (tex == nullptr)
+		{
+			continue;
+		}
+		mTextures.emplace_back(tex);
+		mPositions.emplace_back(tex->GetOrigin());
+	}
+}
+
+bool Animation::IsVisible()
+{
+	if (mTextures.size() > 0)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void Animation::ResetCurrentNum()
+{
+	mElapsedTime = 0.0;
+	mCurrentNum = 0;
 }

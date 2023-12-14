@@ -30,8 +30,6 @@ bool ChattingBox::Initialize(int x, int y)
 
 	AddChildUI("ChattingInputUI", ui);
 
-	SetPosition(0, 500);
-
 	return true;
 }
 

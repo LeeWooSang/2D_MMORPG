@@ -121,9 +121,6 @@ void InventorySlot::MouseLButtonClick()
 
 	// 아바타 장착
 	Player* player = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE))->GetPlayer();
-	//player->SetAvatar("weapon", ANIMATION_MONTION_TYPE::IDLE, "IdleWeaponClub", 3);
-	//player->SetAvatar("weapon", ANIMATION_MONTION_TYPE::WALK, "WalkWeaponClub", 4);
-	//player->SetAvatar("weapon", ANIMATION_MONTION_TYPE::JUMP, "JumpWeaponClub", 1);
 	player->SetWeaponAvatar(mItem->GetItemName());
 
 	// 아이템 장착

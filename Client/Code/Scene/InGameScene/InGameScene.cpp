@@ -128,6 +128,7 @@ bool InGameScene::Initialize()
 	{
 		return false;
 	}
+	mChattingBox->SetPosition(0, 420);
 	AddSceneUI("ChattingBox", mChattingBox);
 
 	EquipUI* equipUI = new EquipUI;
