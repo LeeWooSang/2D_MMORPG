@@ -8,10 +8,15 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	for (auto& ui : mUIs)
-	{
-		delete ui;
-	}
+	//for (auto iter = mUIs.begin(); iter != mUIs.end(); )
+	//{
+	//	if ((*iter) != nullptr)
+	//	{
+	//		delete (*iter);
+	//		(*iter) = nullptr;
+	//	}
+	//	mUIs.erase(iter);
+	//}
 	mUIs.clear();
 	mUIsMap.clear();
 }

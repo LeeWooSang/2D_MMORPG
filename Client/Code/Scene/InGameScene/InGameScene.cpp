@@ -67,6 +67,7 @@ bool InGameScene::Initialize()
 			v.emplace_back(tile);
 		}
 		mTiles.emplace_back(v);
+		v.clear();
 	}
 
 	mPlayer = new Player;
@@ -278,9 +279,8 @@ void InGameScene::Render()
 
 	GET_INSTANCE(UIManager)->Render();
 
-	int x = 50;
-	int y = 300;
-
+	//int x = 50;
+	//int y = 300;
 	//SetAvatarPose0(x, y);
 	//SetAvatarPose1(x + 50, y);
 	//SetAvatarPose2(x + 100, y);

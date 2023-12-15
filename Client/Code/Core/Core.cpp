@@ -19,11 +19,12 @@ Core::Core()
 
 Core::~Core()
 {
+	GET_INSTANCE(Input)->Release();
 	GET_INSTANCE(Camera)->Release();
 	GET_INSTANCE(Network)->Release();
-	GET_INSTANCE(Input)->Release();
 	GET_INSTANCE(ResourceManager)->Release();
 	GET_INSTANCE(GameTimer)->Release();
+	GET_INSTANCE(SceneManager)->Release();
 	GET_INSTANCE(GraphicEngine)->Release();
 }
 

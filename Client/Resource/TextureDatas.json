@@ -566,5 +566,246 @@
     "Height": 21,
     "OriginX": 266,
     "OriginY": 231
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIBackground0.png",
+    "Name": "EquipUIBackground0",
+    "Width": 232,
+    "Height": 354,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIBackground1.png",
+    "Name": "EquipUIBackground1",
+    "Width": 214,
+    "Height": 256,
+    "OriginX": 9,
+    "OriginY": 44
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIBackground2.png",
+    "Name": "EquipUIBackground2",
+    "Width": 127,
+    "Height": 209,
+    "OriginX": 56,
+    "OriginY": 68
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIBackground3.png",
+    "Name": "EquipUIBackground3",
+    "Width": 218,
+    "Height": 4,
+    "OriginX": 7,
+    "OriginY": 41
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIBackground4.png",
+    "Name": "EquipUIBackground4",
+    "Width": 212,
+    "Height": 18,
+    "OriginX": 10,
+    "OriginY": 326
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUITab00.png",
+    "Name": "EquipUITab00",
+    "Width": 42,
+    "Height": 22,
+    "OriginX": 9,
+    "OriginY": 21
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUITab11.png",
+    "Name": "EquipUITab11",
+    "Width": 42,
+    "Height": 20,
+    "OriginX": 52,
+    "OriginY": 23
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIButton0.png",
+    "Name": "EquipUIButton0",
+    "Width": 55,
+    "Height": 13,
+    "OriginX": 118,
+    "OriginY": 309
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIButton1.png",
+    "Name": "EquipUIButton1",
+    "Width": 47,
+    "Height": 13,
+    "OriginX": 175,
+    "OriginY": 309
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot0.png",
+    "Name": "EquipUISlot0",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 14,
+    "OriginY": 49
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot1.png",
+    "Name": "EquipUISlot1",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 14,
+    "OriginY": 213
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot2.png",
+    "Name": "EquipUISlot2",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 55,
+    "OriginY": 90
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot3.png",
+    "Name": "EquipUISlot3",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 55,
+    "OriginY": 172
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot4.png",
+    "Name": "EquipUISlot4",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 55,
+    "OriginY": 213
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot5.png",
+    "Name": "EquipUISlot5",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 96,
+    "OriginY": 49
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot6.png",
+    "Name": "EquipUISlot6",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 96,
+    "OriginY": 90
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot7.png",
+    "Name": "EquipUISlot7",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 96,
+    "OriginY": 131
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot8.png",
+    "Name": "EquipUISlot8",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 96,
+    "OriginY": 172
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot9.png",
+    "Name": "EquipUISlot9",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 96,
+    "OriginY": 213
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot10.png",
+    "Name": "EquipUISlot10",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 96,
+    "OriginY": 254
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot11.png",
+    "Name": "EquipUISlot11",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 137,
+    "OriginY": 131
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot12.png",
+    "Name": "EquipUISlot12",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 137,
+    "OriginY": 172
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot13.png",
+    "Name": "EquipUISlot13",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 137,
+    "OriginY": 213
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot14.png",
+    "Name": "EquipUISlot14",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 137,
+    "OriginY": 254
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot15.png",
+    "Name": "EquipUISlot15",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 178,
+    "OriginY": 49
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot16.png",
+    "Name": "EquipUISlot16",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 178,
+    "OriginY": 90
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot17.png",
+    "Name": "EquipUISlot17",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 178,
+    "OriginY": 131
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot18.png",
+    "Name": "EquipUISlot18",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 178,
+    "OriginY": 172
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot19.png",
+    "Name": "EquipUISlot19",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 178,
+    "OriginY": 213
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot20.png",
+    "Name": "EquipUISlot20",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 178,
+    "OriginY": 254
   }
+
 ]

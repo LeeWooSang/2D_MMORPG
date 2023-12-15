@@ -1,6 +1,10 @@
 #include "EquipUI.h"
+#include "../ButtonUI/ButtonUI.h"
 #include "../../../Scene/SceneManager.h"
 #include "../../../Scene/Scene.h"
+
+#include "../../../Resource/ResourceManager.h"
+#include "../../../Resource/Texture/Texture.h"
 
 #include "../../../Input/Input.h"
 #include "../../../GraphicEngine/GraphicEngine.h"
@@ -21,25 +25,159 @@ bool EquipUI::Initialize(int x, int y)
 {
 	UI::Initialize(x, y);
 
-	std::vector<std::pair<std::string, EQUIP_SLOT_TYPE>> v
-	{ 
-		{"head", EQUIP_SLOT_TYPE::HEAD},
-		{"topBody", EQUIP_SLOT_TYPE::TOP_BODY},
-		{"bottomBody", EQUIP_SLOT_TYPE::BOTTOM_BODY},
-		{"hand", EQUIP_SLOT_TYPE::HAND},
-		{"weapon", EQUIP_SLOT_TYPE::WEAPON}
-	};
-
-	for (int i = 0; i <= static_cast<int>(EQUIP_SLOT_TYPE::WEAPON); ++i)
 	{
-		EquipSlotUI* slotUI = new EquipSlotUI;
-		if (slotUI->Initialize(i * 75, 10) == false)
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("EquipUIBackground0");
+		SetTexture(data.name);
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("EquipUIBackground1");
+		UI* ui = new UI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		slotUI->SetSlotType(v[i].second);
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI(data.name, ui);
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("EquipUIBackground2");
+		UI* ui = new UI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI(data.name, ui);
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("EquipUIBackground3");
+		UI* ui = new UI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI(data.name, ui);
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("EquipUIBackground4");
+		UI* ui = new UI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI(data.name, ui);
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("EquipUITab00");
+		UI* ui = new ButtonUI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI(data.name, ui);
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("EquipUITab11");
+		UI* ui = new ButtonUI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI(data.name, ui);
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("EquipUIButton0");
+		UI* ui = new ButtonUI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI(data.name, ui);
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("EquipUIButton1");
+		UI* ui = new ButtonUI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI(data.name, ui);
+	}
+
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("EquipUISlot0");
+		for (int i = 0; i < 4; ++i)
+		{
+			std::pair<int, int> origin = data.origin;
+			origin.second += (41 * i);
+
+			EquipSlotUI* slotUI = new EquipSlotUI;
+			if (slotUI->Initialize(origin.first, origin.second) == false)
+			{
+				return false;
+			}
+			slotUI->SetTexture(data.name);
+			slotUI->SetSlotType(EQUIP_SLOT_TYPE::RING);
+			slotUI->Visible();
+			AddChildUI("Slot", slotUI);
+		}
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("EquipUISlot1");
+		EquipSlotUI* slotUI = new EquipSlotUI;
+		if (slotUI->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		slotUI->SetTexture(data.name);
+		slotUI->SetSlotType(EQUIP_SLOT_TYPE::POCKET);
 		slotUI->Visible();
-		AddChildUI(v[i].first, slotUI);
+		AddChildUI("Slot", slotUI);
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("EquipUISlot2");
+		for (int i = 0; i < 2; ++i)
+		{
+			std::pair<int, int> origin = data.origin;
+			origin.second += (41 * i);
+
+			EquipSlotUI* slotUI = new EquipSlotUI;
+			if (slotUI->Initialize(origin.first, origin.second) == false)
+			{
+				return false;
+			}
+			slotUI->SetTexture(data.name);
+			slotUI->SetSlotType(EQUIP_SLOT_TYPE::PENDANT);
+			slotUI->Visible();
+			AddChildUI("Slot", slotUI);
+		}
+	}
+	for (int i = static_cast<int>(EQUIP_SLOT_TYPE::WEAPON); i <= static_cast<int>(EQUIP_SLOT_TYPE::HEART); ++i)
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("EquipUISlot" + std::to_string(i));
+		EquipSlotUI* slotUI = new EquipSlotUI;
+		if (slotUI->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		slotUI->SetTexture(data.name);
+		slotUI->SetSlotType(static_cast<EQUIP_SLOT_TYPE>(i));
+		slotUI->Visible();
+		AddChildUI("Slot", slotUI);
 	}
 
 	SetPosition(100, 100);
@@ -56,6 +194,10 @@ void EquipUI::Update()
 
 	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
 	MouseOverCollision(mousePos.first, mousePos.second);
+	if (mMouseLButtonDown == true)
+	{
+		Move(mousePos.first, mousePos.second);
+	}
 
 	for (auto& child : mChildUIs)
 	{
@@ -77,13 +219,10 @@ void EquipUI::Render()
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
-	//pos.right = pos.left + mTexture->GetSize().first;
-	//pos.bottom = pos.top + mTexture->GetSize().second;
-	pos.right = pos.left + 400;
-	pos.bottom = pos.top + 400;
+	pos.right = pos.left + mTexture->GetSize().first;
+	pos.bottom = pos.top + mTexture->GetSize().second;
 
-	GET_INSTANCE(GraphicEngine)->RenderFillRectangle(pos, "흰색");
-	//GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 	if (mMouseLButtonDown)
 	{
@@ -108,9 +247,9 @@ void EquipUI::MouseOverCollision(int x, int y)
 	// ui의 rect와 닿았는가?
 	RECT collisionBox;
 	collisionBox.left = mPos.first;
-	collisionBox.right = mPos.first + 400;
+	collisionBox.right = mPos.first + mTexture->GetSize().first;
 	collisionBox.top = mPos.second;
-	collisionBox.bottom = mPos.second + 400;
+	collisionBox.bottom = mPos.second + mTexture->GetSize().second;
 
 	if (x >= collisionBox.left && x <= collisionBox.right && y >= collisionBox.top && y <= collisionBox.bottom)
 	{
@@ -163,7 +302,7 @@ InventoryItem* EquipUI::AddEquipItem(const std::string& key, InventoryItem* item
 EquipSlotUI::EquipSlotUI()
 	: UI()
 {
-	mType = EQUIP_SLOT_TYPE::HEAD;
+	mType = EQUIP_SLOT_TYPE::CAP;
 	mItem = nullptr;
 }
 
@@ -219,13 +358,10 @@ void EquipSlotUI::Render()
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
-	//pos.right = pos.left + mTexture->GetSize().first;
-	//pos.bottom = pos.top + mTexture->GetSize().second;
-	pos.right = pos.left + 65;
-	pos.bottom = pos.top + 65;
+	pos.right = pos.left + mTexture->GetSize().first;
+	pos.bottom = pos.top + mTexture->GetSize().second;
 
-	GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "검은색");
-	//GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 	if (mMouseLButtonDown)
 	{
@@ -250,9 +386,9 @@ void EquipSlotUI::MouseOverCollision(int x, int y)
 	// ui의 rect와 닿았는가?
 	RECT collisionBox;
 	collisionBox.left = mPos.first;
-	collisionBox.right = mPos.first + 65;
+	collisionBox.right = mPos.first + mTexture->GetSize().first;
 	collisionBox.top = mPos.second;
-	collisionBox.bottom = mPos.second + 65;
+	collisionBox.bottom = mPos.second + mTexture->GetSize().second;
 
 	if (x >= collisionBox.left && x <= collisionBox.right && y >= collisionBox.top && y <= collisionBox.bottom)
 	{

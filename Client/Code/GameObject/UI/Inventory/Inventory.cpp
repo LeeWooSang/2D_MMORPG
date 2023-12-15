@@ -11,8 +11,6 @@
 #include "../../../Resource/Texture/Texture.h"
 #include "../../../Input/Input.h"
 
-//#include "../../../Scene/SceneManager.h"
-//#include "../../../Scene/Scene.h"
 #include "../EquipUI/EquipUI.h"
 #include "../../Character/Character.h"
 
@@ -171,8 +169,6 @@ Inventory::Inventory()
 	mSlotHeight = 0;
 
 	mOpen = false;
-
-	mDragStartPos = std::make_pair(0, 0);
 }
 
 Inventory::~Inventory()
@@ -328,7 +324,7 @@ void Inventory::MouseOver()
 
 void Inventory::MouseLButtonDown()
 {
-	mDragStartPos = GET_INSTANCE(Input)->GetMousePos();
+	UI::MouseLButtonDown();
 }
 
 void Inventory::MouseLButtonUp()
@@ -339,25 +335,6 @@ void Inventory::MouseLButtonUp()
 void Inventory::MouseLButtonClick()
 {
 	UI::MouseLButtonClick();
-}
-
-void Inventory::Move(int mouseX, int mouseY)
-{
-	int x = mouseX - mDragStartPos.first;
-	int y = mouseY - mDragStartPos.second;
-
-	mPos.first += x;
-	mPos.second += y;
-
-	mDragStartPos = GET_INSTANCE(Input)->GetMousePos();
-
-	for (auto& child : mChildUIs)
-	{
-		for (int i = 0; i < child.second.size(); ++i)
-		{
-			child.second[i]->SetPosition(x, y);
-		}
-	}
 }
 
 void Inventory::ProcessMouseWheelEvent(unsigned long long wParam)

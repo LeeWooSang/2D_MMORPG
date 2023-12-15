@@ -3,6 +3,7 @@
 #include "LoginScene/LoginScene.h"
 #include "InGameScene/InGameScene.h"
 #include "../GameObject/Character/Character.h"
+#include "../GameObject/UI/UIManager.h"
 
 INIT_INSTACNE(SceneManager)
 std::queue<PacketEvent> SceneManager::mEventQueue;
@@ -14,6 +15,8 @@ SceneManager::SceneManager()
 
 SceneManager::~SceneManager()
 {
+	GET_INSTANCE(UIManager)->Release();
+
 	for (auto& scene : mSceneMap)
 	{
 		delete scene.second;

@@ -34,7 +34,6 @@ bool LoginScene::Initialize()
 	mInputUI->SetPosition(261, 328);
 	static_cast<InputUI*>(mInputUI)->SetText(L"127.0.0.1");
 
-
 	return true;
 }
 

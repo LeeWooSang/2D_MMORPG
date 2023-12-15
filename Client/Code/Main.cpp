@@ -20,8 +20,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 		return 0; 
 
 	case WM_PAINT:
-		hdc = BeginPaint(hwnd, &ps);
-		EndPaint(hwnd, &ps);
+		//hdc = BeginPaint(hwnd, &ps);
+		//EndPaint(hwnd, &ps);
 		return 0;
 	
 	case WM_DESTROY:

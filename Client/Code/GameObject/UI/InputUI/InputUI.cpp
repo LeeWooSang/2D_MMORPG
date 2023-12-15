@@ -204,7 +204,7 @@ void InputUI::setCarrotPos()
 		text += mText[i];
 	}
 
-	IDWriteTextLayout* layout;
+	IDWriteTextLayout* layout = nullptr;
 
 	HRESULT result = GET_INSTANCE(GraphicEngine)->GetWriteFactory()->CreateTextLayout(
 		text.c_str(),
@@ -217,10 +217,10 @@ void InputUI::setCarrotPos()
 	mCarrotPos.second = mPos.second;
 	for (int i = 0; i < text.length(); ++i)
 	{
-		float x;
-		float y;
-		DWRITE_HIT_TEST_METRICS metrics;
-		layout->HitTestTextPosition(i, false, &x, &y, &metrics);
+		float x = 0.0;
+		float y = 0.0;
+		DWRITE_HIT_TEST_METRICS metrics = { 0 };
+		result =layout->HitTestTextPosition(i, false, &x, &y, &metrics);
 		mCarrotPos.first += metrics.width;
 		//mCarrotPos.second = mPos.second + metrics.height;
 	}

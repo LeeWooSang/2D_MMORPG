@@ -17,6 +17,7 @@ public:
 	virtual void MouseLButtonDown();
 	virtual void MouseLButtonUp();
 	virtual void MouseLButtonClick();
+	virtual void Move(int mouseX, int mouseY);
 
 	std::pair<int, int> GetOriginPosition()	const { return std::make_pair(mOriginX, mOriginY); }
 	void SetOriginPosition(int x, int y) { mOriginX = x;	mOriginY = y; }
@@ -49,4 +50,5 @@ protected:
 
 	bool mMouseOver;
 	bool mMouseLButtonDown;
+	std::pair<int, int> mDragStartPos;
 };
