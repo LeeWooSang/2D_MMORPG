@@ -1,36 +1,35 @@
-#include "LoginScene.h"
-#include "../../GameObject/UI/UI.h"
-#include "../../GameObject/UI/InputUI/InputUI.h"
-#include "../../GameObject/UI/ButtonUI/ButtonUI.h"
-#include "../../Resource/ResourceManager.h"
-#include "../../Resource/Texture/Texture.h"
-#include "../../Input/Input.h"
-#include "../../GameObject/UI/UIManager.h"
-#include "../../GraphicEngine/GraphicEngine.h"
+#include "Test2.h"
+#include "../Resource/ResourceManager.h"
+#include "../GameObject/UI/InputUI/InputUI.h"
+#include "../GameObject/UI/ButtonUI/ButtonUI.h"
+#include "../Layer/LoginLayer/LoginLayer.h"
 
-#include "../SceneManager2.h"
-
-LoginScene::LoginScene()
-	: Scene()
+Test22::~Test22()
 {
-}
-
-LoginScene::~LoginScene()
-{
-	delete mInputUI;
-}
-
-bool LoginScene::Initialize()
-{
-	mIsReady = true;
-
-	mInputUI = new InputUI;
-	if (mInputUI->Initialize(0, 0) == false)
+	for (auto& ui : mUIs)
 	{
-		return false;
+		delete ui.second;
+		ui.second = nullptr;
 	}
-	mInputUI->SetPosition(261, 328);
-	static_cast<InputUI*>(mInputUI)->SetText(L"127.0.0.1");
+	mUIs.clear();
+}
+
+Test2::~Test2()
+{
+}
+
+bool Test2::Initialize()
+{
+	{
+		InputUI* mInputUI = new InputUI;
+		if (mInputUI->Initialize(0, 0) == false)
+		{
+			return false;
+		}
+		mInputUI->SetPosition(261, 328);
+		static_cast<InputUI*>(mInputUI)->SetText(L"127.0.0.1");
+		Add("InputUI", mInputUI);
+	}
 
 	UI* loginUI = new UI;
 	{
@@ -143,39 +142,19 @@ bool LoginScene::Initialize()
 	}
 
 	loginUI->SetPosition(234, 259);
-	AddSceneUI("LoginUI", loginUI);
+	Add("LoginUI", loginUI);
 
 	return true;
 }
 
-void LoginScene::Update()
+void Test2::Update()
 {
-	GET_INSTANCE(UIManager)->Update();
-	mInputUI->Update();
 }
 
-void LoginScene::Render()
+void Test2::Render()
 {
-	{
-		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("LoginBackground");
-		D2D1_RECT_F rect;
-		rect.left = 0;
-		rect.top = 0;
-		rect.right = rect.left + tex->GetSize().first;
-		rect.bottom = rect.top + tex->GetSize().second;
-		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
-	}
-
-	GET_INSTANCE(UIManager)->Render();
-	mInputUI->Render();
-
-	processKeyboardMessage();
 }
 
-void LoginScene::processKeyboardMessage()
+void Test2::processKeyboardMessage()
 {
-	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
-	{
-		GET_INSTANCE(SceneManager2)->ChangeScene(SCENE_TYPE2::INGAME_SCENE);
-	}
 }

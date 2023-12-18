@@ -2,7 +2,6 @@
 #include "../Scene.h"
 
 class UI;
-class Layer;
 class LoginScene : public Scene
 {
 public:
@@ -17,5 +16,4 @@ public:
 
 private:
 	UI* mInputUI;
-	Layer* mLayer;
 };

@@ -12,10 +12,15 @@
 
 LoginLayer::LoginLayer()
 {
+	mUI = nullptr;
 }
 
 LoginLayer::~LoginLayer()
 {
+	if (mUI != nullptr)
+	{
+		delete mUI;
+	}
 }
 
 bool LoginLayer::Initialize()
@@ -131,7 +136,8 @@ bool LoginLayer::Initialize()
 	}
 
 	loginUI->SetPosition(234, 259);
-	GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::LOGIN_SCENE)->AddSceneUI("LoginUI", loginUI);
+	//GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::LOGIN_SCENE)->AddSceneUI("LoginUI", loginUI);
+	mUI = loginUI;
 
 	return true;
 }

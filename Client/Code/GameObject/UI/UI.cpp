@@ -23,7 +23,9 @@ UI::~UI()
 		for (int i = 0; i < child.second.size(); ++i)
 		{
 			delete child.second[i];
+			child.second[i] = nullptr;
 		}
+		child.second.clear();
 	}
 
 	mChildUIs.clear();

@@ -20,8 +20,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 		return 0; 
 
 	case WM_PAINT:
-		//hdc = BeginPaint(hwnd, &ps);
-		//EndPaint(hwnd, &ps);
+		hdc = BeginPaint(hwnd, &ps);
+		EndPaint(hwnd, &ps);
 		return 0;
 	
 	case WM_DESTROY:
@@ -86,7 +86,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline
 	int width = rect.right - rect.left;
 	int height = rect.bottom - rect.top;
 
-	// 게임 초기화
+	// 초기화
 	if (GET_INSTANCE(Core)->Initialize(hwnd, width, height) == false)
 	{
 		GET_INSTANCE(Core)->Release();

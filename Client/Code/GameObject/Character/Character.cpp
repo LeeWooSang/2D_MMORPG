@@ -8,7 +8,7 @@
 #include <string>
 #include <random>
 
-#include "../../Scene/SceneManager.h"
+#include "../../Scene/SceneManager2.h"
 #include "../../Scene/Scene.h"
 
 #include "../../Animation/Animation.h"
@@ -100,7 +100,11 @@ AnimationCharacter::~AnimationCharacter()
 
 	for (auto& ani : mAnimations)
 	{
-		delete ani.second;
+		if (ani.second != nullptr)
+		{
+			delete ani.second;
+			ani.second = nullptr;
+		}
 	}
 	mAnimations.clear();
 }
@@ -123,35 +127,70 @@ bool AnimationCharacter::Initialize(int x, int y)
 	{
 		hair = new AnimationCharacter;
 		{
-			Animation* ani = new Animation;
-			ani->Initialize();
-			ani->SetName("Hair");
-			ani->SetTexture("Hair", "Hair0");
-			hair->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
-			hair->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
-			hair->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
+			{
+				Animation* ani = new Animation;
+				ani->Initialize();
+				ani->SetTexture("Hair", 1);
+				hair->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
+			}
+			{
+				Animation* ani = new Animation;
+				ani->Initialize();
+				ani->SetTexture("Hair", 1);
+				hair->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
+			}
+			{
+				Animation* ani = new Animation;
+				ani->Initialize();
+				ani->SetTexture("Hair", 1);
+				hair->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
+			}
 		}
 	}
 	{
 		head = new AnimationCharacter;
 		{
-			Animation* ani = new Animation;
-			ani->Initialize();
-			ani->SetTexture("FrontHead", 1);
-			head->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
-			head->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
-			head->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
+			{
+				Animation* ani = new Animation;
+				ani->Initialize();
+				ani->SetTexture("FrontHead", 1);
+				head->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
+			}
+			{
+				Animation* ani = new Animation;
+				ani->Initialize();
+				ani->SetTexture("FrontHead", 1);
+				head->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
+			}
+			{
+				Animation* ani = new Animation;
+				ani->Initialize();
+				ani->SetTexture("FrontHead", 1);
+				head->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
+			}
 		}
 	}
 	{
 		face = new AnimationCharacter;
 		{
-			Animation* ani = new Animation;
-			ani->Initialize();
-			ani->SetTexture("Face", 1);
-			face->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
-			face->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
-			face->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
+			{
+				Animation* ani = new Animation;
+				ani->Initialize();
+				ani->SetTexture("Face", 1);
+				face->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
+			}
+			{
+				Animation* ani = new Animation;
+				ani->Initialize();
+				ani->SetTexture("Face", 1);
+				face->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
+			}
+			{
+				Animation* ani = new Animation;
+				ani->Initialize();
+				ani->SetTexture("Face", 1);
+				face->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
+			}
 		}
 	}
 	{
@@ -525,21 +564,6 @@ bool Player::Initialize(int x, int y)
 {
 	AnimationCharacter::Initialize(x, y);
 
-	// ºÎ¸ð ui
-	{
-		UI* inventory = new Inventory;
-		if (inventory->Initialize(0, 0) == false)
-		{
-			return false;
-		}
-		if (inventory->SetTexture("Inventory") == false)
-		{
-			return false;
-		}
-
-		GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->AddSceneUI("Inventory", inventory);
-	}
-
 	SetAnimationMotion(ANIMATION_MONTION_TYPE::IDLE);
 
 	return true;
@@ -695,7 +719,7 @@ void Player::ProcessKeyboardMessage()
 
 void Player::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)
 {
-	Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"));
+	Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(SceneManager2)->FindScene(SCENE_TYPE2::INGAME_SCENE)->FindUI("Inventory"));
 	//Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"));
 	if (inventory != nullptr && inventory->IsVisible() == true)
 	{
@@ -768,7 +792,7 @@ void Player::AddItem()
 		break;
 	}
 
-	static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"))->AddItem(itemName);
+	static_cast<Inventory*>(GET_INSTANCE(SceneManager2)->FindScene(SCENE_TYPE2::INGAME_SCENE)->FindUI("Inventory"))->AddItem(itemName);
 	//static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->AddItem(itemName);
 }
 

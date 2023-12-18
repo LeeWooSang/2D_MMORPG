@@ -46,6 +46,8 @@ InGameScene::~InGameScene()
 	}
 
 	delete mPlayer;
+
+
 }
 
 bool InGameScene::Initialize()
@@ -138,6 +140,17 @@ bool InGameScene::Initialize()
 		return false;
 	}
 	AddSceneUI("EquipUI", equipUI);
+
+	UI* inventory = new Inventory;
+	if (inventory->Initialize(0, 0) == false)
+	{
+		return false;
+	}
+	if (inventory->SetTexture("Inventory") == false)
+	{
+		return false;
+	}
+	AddSceneUI("Inventory", inventory);
 
 	for (int i = 0; i < 10; ++i)
 	{

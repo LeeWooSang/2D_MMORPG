@@ -1,6 +1,7 @@
 #pragma once
 #include "../Layer.h"
 
+class UI;
 class LoginLayer : public Layer
 {
 public:
@@ -11,4 +12,6 @@ public:
 	virtual void Update();
 	virtual void Render();
 
+private:
+	UI* mUI;
 };

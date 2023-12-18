@@ -23,10 +23,10 @@ InventorySlot::InventorySlot()
 
 InventorySlot::~InventorySlot()
 {
-	if (mItem != nullptr)
-	{
-		delete mItem;
-	}
+	//if (mItem != nullptr)
+	//{
+	//	delete mItem;
+	//}
 }
 
 bool InventorySlot::Initialize(int x, int y)

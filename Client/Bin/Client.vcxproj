@@ -165,6 +165,8 @@
     <ClCompile Include="..\Code\Scene\LoginScene\LoginScene.cpp" />
     <ClCompile Include="..\Code\Scene\Scene.cpp" />
     <ClCompile Include="..\Code\Scene\SceneManager.cpp" />
+    <ClCompile Include="..\Code\Scene\SceneManager2.cpp" />
+    <ClCompile Include="..\Code\Scene\Test2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Server\Code\Common\Protocol.h" />
@@ -197,6 +199,8 @@
     <ClInclude Include="..\Code\Scene\LoginScene\LoginScene.h" />
     <ClInclude Include="..\Code\Scene\Scene.h" />
     <ClInclude Include="..\Code\Scene\SceneManager.h" />
+    <ClInclude Include="..\Code\Scene\SceneManager2.h" />
+    <ClInclude Include="..\Code\Scene\Test2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

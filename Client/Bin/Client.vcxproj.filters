@@ -170,6 +170,12 @@
     <ClCompile Include="..\Code\GameObject\UI\EquipUI\EquipUI.cpp">
       <Filter>Code\GameObject\UI\EquipUI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Scene\SceneManager2.cpp">
+      <Filter>Code\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Scene\Test2.cpp">
+      <Filter>Code\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Code\GameObject\GameObject.h">
@@ -261,6 +267,12 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameObject\UI\EquipUI\EquipUI.h">
       <Filter>Code\GameObject\UI\EquipUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Scene\SceneManager2.h">
+      <Filter>Code\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Scene\Test2.h">
+      <Filter>Code\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

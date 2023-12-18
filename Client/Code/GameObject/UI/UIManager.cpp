@@ -1,5 +1,6 @@
 #include "UIManager.h"
-#include "../../Scene/SceneManager.h"
+#include <Windows.h>
+#include "../../Scene/SceneManager2.h"
 #include "../../Scene/Scene.h"
 
 #include "UI.h"
@@ -19,7 +20,7 @@ UIManager::~UIManager()
 
 void UIManager::Render()
 {
-	for (auto ui : GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs())
+	for (auto ui : GET_INSTANCE(SceneManager2)->GetCurScene()->GetSceneUIs())
 	{
 		if (ui->IsVisible() == true)
 		{
@@ -36,7 +37,7 @@ void UIManager::Update()
 		return;
 	}
 
-	for (auto ui : GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs())
+	for (auto ui : GET_INSTANCE(SceneManager2)->GetCurScene()->GetSceneUIs())
 	{
 		if (ui->IsVisible() == true)
 		{
@@ -84,7 +85,7 @@ void UIManager::SetFocusUI(UI* ui)
 	}
 	mFocusUI = ui;
 
-	std::list<UI*>& sceneUIs = GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs();
+	std::list<UI*>& sceneUIs = GET_INSTANCE(SceneManager2)->GetCurScene()->GetSceneUIs();
 	std::list<UI*>::iterator targetIter = sceneUIs.end();
 	for (auto iter = sceneUIs.begin(); iter != sceneUIs.end(); ++iter)
 	{
@@ -163,7 +164,7 @@ UI* UIManager::getFocusUI()
 		return focusUI;
 	}
 
-	std::list<UI*>& sceneUIs = GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs();
+	std::list<UI*>& sceneUIs = GET_INSTANCE(SceneManager2)->GetCurScene()->GetSceneUIs();
 	std::list<UI*>::iterator targetIter = sceneUIs.end();
 	for (auto iter = sceneUIs.begin(); iter != sceneUIs.end(); ++iter)
 	{
