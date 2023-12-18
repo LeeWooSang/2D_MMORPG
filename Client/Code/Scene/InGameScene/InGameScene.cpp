@@ -136,7 +136,6 @@ bool InGameScene::Initialize()
 	{
 		return false;
 	}
-	mChattingBox->SetPosition(0, 420);
 	AddSceneUI("ChattingBox", mChattingBox);
 
 	EquipUI* equipUI = new EquipUI;
@@ -147,7 +146,6 @@ bool InGameScene::Initialize()
 	AddSceneUI("EquipUI", equipUI);
 
 	Inventory* inventory = new Inventory;
-	//inventory = new Inventory;
 	if (inventory->Initialize(0, 0) == false)
 	{
 		return false;

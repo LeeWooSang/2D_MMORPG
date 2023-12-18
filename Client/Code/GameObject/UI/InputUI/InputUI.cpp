@@ -103,7 +103,7 @@ void InputUI::SetText(const std::wstring& text)
 {
 	mText = text;
 	mCarrotIndex = mText.length();
-	setCarrotPos();
+	SetCarrotPos();
 }
 
 void InputUI::processInput()
@@ -192,11 +192,11 @@ void InputUI::processInput()
 			}
 		}
 
-		setCarrotPos();
+		SetCarrotPos();
 	}
 }
 
-void InputUI::setCarrotPos()
+void InputUI::SetCarrotPos()
 {
 	std::wstring text = L"";
 	for (int i = 0; i < mCarrotIndex; ++i)

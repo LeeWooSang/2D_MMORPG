@@ -354,12 +354,6 @@ void EquipSlotUI::Render()
 		return;
 	}
 
-	if (mItem != nullptr)
-	{
-		mItem->Render();
-		return;
-	}
-
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
@@ -375,6 +369,11 @@ void EquipSlotUI::Render()
 	else if (mMouseOver)
 	{
 		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+	}
+
+	if (mItem != nullptr)
+	{
+		mItem->Render();
 	}
 
 	for (auto& child : mChildUIs)

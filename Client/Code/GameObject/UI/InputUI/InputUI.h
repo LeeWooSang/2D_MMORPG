@@ -17,10 +17,10 @@ public:
 	virtual void MouseLButtonClick();
 
 	void SetText(const std::wstring& text);
+	void SetCarrotPos();
 
 protected:
 	virtual void processInput();
-	void setCarrotPos();
 
 protected:
 	std::wstring mText;

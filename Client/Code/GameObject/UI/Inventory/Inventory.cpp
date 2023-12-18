@@ -173,7 +173,6 @@ Inventory::Inventory()
 
 Inventory::~Inventory()
 {
-	std::cout << "inven ¼Ò¸ê" << std::endl;
 }
 
 bool Inventory::Initialize(int x, int y)

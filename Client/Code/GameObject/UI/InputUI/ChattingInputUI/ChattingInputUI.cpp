@@ -208,7 +208,7 @@ void ChattingInputUI::processInput()
 #endif 
 			}
 		}
-		setCarrotPos();
+		SetCarrotPos();
 	}
 	else
 	{
