@@ -1,5 +1,4 @@
 #define WIN32_LEAN_AND_MEAN  
-#define INITGUID
 
 #include "./Common/Defines.h"
 #include "Core/Core.h"
@@ -46,10 +45,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline, int ncmdshow)
 {
-	WNDCLASS winclass;	
-	HWND	 hwnd;		
-	MSG		 msg;		
-
+	WNDCLASS winclass;
 	winclass.style = CS_DBLCLKS | CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
 	winclass.lpfnWndProc = WindowProc;
 	winclass.cbClsExtra = 0;
@@ -64,22 +60,20 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline
 	if (!RegisterClass(&winclass))
 		return(0);
 
-	if (!(hwnd = CreateWindow(WINDOW_CLASS_NAME, // class
-		// title
+	// 윈도우 기본스타일 | 최소화 버튼 | X 버튼 | 바로 출력되도록 
+	DWORD dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_VISIBLE;
+	HWND hwnd = CreateWindow(
+		WINDOW_CLASS_NAME,
 		L"Client",
-		// 윈도우 기본스타일 | 최소화 버튼 | X 버튼 | 바로 출력되도록 
-		WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_VISIBLE,
-		0, 0,	   // x,y
+		dwStyle,
+		0,
+		0,
 		WINDOW_WIDTH,  // width
 		WINDOW_HEIGHT, // height
 		nullptr,	   // handle to parent 
 		nullptr,	   // handle to menu
 		hinstance,// instance
-		nullptr)))	// creation parms
-		return(0);
-
-	//main_window_handle = hwnd;
-	//main_instance = hinstance;
+		nullptr);
 
 	RECT rect;
 	GetClientRect(hwnd, &rect);
@@ -93,6 +87,7 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline
 		return false;
 	}
 
+	MSG msg;
 	while (true)
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))

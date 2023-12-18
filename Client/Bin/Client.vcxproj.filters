@@ -84,6 +84,18 @@
     <Filter Include="Code\GameObject\UI\EquipUI">
       <UniqueIdentifier>{c1727746-2541-489a-b418-8fa027772c28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Manager">
+      <UniqueIdentifier>{1cf77542-20d9-4e01-8f19-cd67d7904551}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Manager\EventManager">
+      <UniqueIdentifier>{7827b4f0-2d6c-4257-984a-b6b257f93cf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Manager\UIManager">
+      <UniqueIdentifier>{3fb67cc2-6e31-4523-855d-e452f18685cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Manager\SceneManager">
+      <UniqueIdentifier>{d393da9a-6b7f-4ebf-a0bf-8942ea037c69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -128,9 +140,6 @@
     <ClCompile Include="..\Code\GameTimer\GameTimer.cpp">
       <Filter>Code\GameTimer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\GameObject\UI\UIManager.cpp">
-      <Filter>Code\GameObject\UI</Filter>
-    </ClCompile>
     <ClCompile Include="..\Code\GameObject\UI\ChattingBox\ChattingBox.cpp">
       <Filter>Code\GameObject\UI\ChattingBox</Filter>
     </ClCompile>
@@ -142,9 +151,6 @@
     </ClCompile>
     <ClCompile Include="..\Code\Scene\InGameScene\InGameScene.cpp">
       <Filter>Code\Scene\InGameScene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Code\Scene\SceneManager.cpp">
-      <Filter>Code\Scene</Filter>
     </ClCompile>
     <ClCompile Include="..\Code\Scene\LoginScene\LoginScene.cpp">
       <Filter>Code\Scene\LoginScene</Filter>
@@ -170,11 +176,14 @@
     <ClCompile Include="..\Code\GameObject\UI\EquipUI\EquipUI.cpp">
       <Filter>Code\GameObject\UI\EquipUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Scene\SceneManager2.cpp">
-      <Filter>Code\Scene</Filter>
+    <ClCompile Include="..\Code\Manager\EventManager\EventManager.cpp">
+      <Filter>Code\Manager\EventManager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Code\Scene\Test2.cpp">
-      <Filter>Code\Scene</Filter>
+    <ClCompile Include="..\Code\Manager\UIManager\UIManager.cpp">
+      <Filter>Code\Manager\UIManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Manager\SceneMangaer\SceneManager.cpp">
+      <Filter>Code\Manager\SceneManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,9 +235,6 @@
     <ClInclude Include="..\Code\GameTimer\GameTimer.h">
       <Filter>Code\GameTimer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\GameObject\UI\UIManager.h">
-      <Filter>Code\GameObject\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\Code\GameObject\UI\ChattingBox\ChattingBox.h">
       <Filter>Code\GameObject\UI\ChattingBox</Filter>
     </ClInclude>
@@ -240,9 +246,6 @@
     </ClInclude>
     <ClInclude Include="..\Code\Scene\InGameScene\InGameScene.h">
       <Filter>Code\Scene\InGameScene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\Scene\SceneManager.h">
-      <Filter>Code\Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\Code\Scene\LoginScene\LoginScene.h">
       <Filter>Code\Scene\LoginScene</Filter>
@@ -268,11 +271,14 @@
     <ClInclude Include="..\Code\GameObject\UI\EquipUI\EquipUI.h">
       <Filter>Code\GameObject\UI\EquipUI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Scene\SceneManager2.h">
-      <Filter>Code\Scene</Filter>
+    <ClInclude Include="..\Code\Manager\EventManager\EventManager.h">
+      <Filter>Code\Manager\EventManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Scene\Test2.h">
-      <Filter>Code\Scene</Filter>
+    <ClInclude Include="..\Code\Manager\UIManager\UIManager.h">
+      <Filter>Code\Manager\UIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Manager\SceneMangaer\SceneManager.h">
+      <Filter>Code\Manager\SceneManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

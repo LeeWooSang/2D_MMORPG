@@ -44,7 +44,7 @@ public:
 	virtual void MouseLButtonClick();
 
 	void OpenEquipUI();
-	InventoryItem* AddEquipItem(const std::string& key, InventoryItem* item);
+	InventoryItem* AddEquipItem(EQUIP_SLOT_TYPE slotType, InventoryItem* item);
 
 private:
 	bool mOpen;

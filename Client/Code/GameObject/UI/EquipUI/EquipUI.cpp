@@ -1,6 +1,6 @@
 #include "EquipUI.h"
 #include "../ButtonUI/ButtonUI.h"
-#include "../../../Scene/SceneManager.h"
+#include "../../../Manager/SceneMangaer/SceneManager.h"
 #include "../../../Scene/Scene.h"
 
 #include "../../../Resource/ResourceManager.h"
@@ -133,7 +133,8 @@ bool EquipUI::Initialize(int x, int y)
 			slotUI->SetTexture(data.name);
 			slotUI->SetSlotType(EQUIP_SLOT_TYPE::RING);
 			slotUI->Visible();
-			AddChildUI("Slot", slotUI);
+			//AddChildUI("Slot", slotUI);
+			AddChildUI(data.name, slotUI);
 		}
 	}
 	{
@@ -267,14 +268,17 @@ void EquipUI::MouseOver()
 
 void EquipUI::MouseLButtonDown()
 {
+	UI::MouseLButtonDown();
 }
 
 void EquipUI::MouseLButtonUp()
 {
+	UI::MouseLButtonUp();
 }
 
 void EquipUI::MouseLButtonClick()
 {
+	UI::MouseLButtonClick();
 }
 
 void EquipUI::OpenEquipUI()
@@ -293,9 +297,10 @@ void EquipUI::OpenEquipUI()
 	}
 }
 
-InventoryItem* EquipUI::AddEquipItem(const std::string& key, InventoryItem* item)
+InventoryItem* EquipUI::AddEquipItem(EQUIP_SLOT_TYPE slotType, InventoryItem* item)
 {
-	EquipSlotUI* slotUI = static_cast<EquipSlotUI*>(FindChildUIs(key).front());
+	int type = static_cast<int>(slotType);
+	EquipSlotUI* slotUI = static_cast<EquipSlotUI*>(FindChildUIs("Slot")[type]);
 	return slotUI->AddItem(item);
 }
 

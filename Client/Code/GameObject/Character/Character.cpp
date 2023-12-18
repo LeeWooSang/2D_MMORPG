@@ -8,9 +8,8 @@
 #include <string>
 #include <random>
 
-#include "../../Scene/SceneManager2.h"
+#include "../../Manager/SceneMangaer/SceneManager.h"
 #include "../../Scene/Scene.h"
-
 #include "../../Animation/Animation.h"
 
 Character::Character()
@@ -719,7 +718,7 @@ void Player::ProcessKeyboardMessage()
 
 void Player::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)
 {
-	Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(SceneManager2)->FindScene(SCENE_TYPE2::INGAME_SCENE)->FindUI("Inventory"));
+	Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"));
 	//Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"));
 	if (inventory != nullptr && inventory->IsVisible() == true)
 	{
@@ -792,7 +791,7 @@ void Player::AddItem()
 		break;
 	}
 
-	static_cast<Inventory*>(GET_INSTANCE(SceneManager2)->FindScene(SCENE_TYPE2::INGAME_SCENE)->FindUI("Inventory"))->AddItem(itemName);
+	static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"))->AddItem(itemName);
 	//static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->AddItem(itemName);
 }
 

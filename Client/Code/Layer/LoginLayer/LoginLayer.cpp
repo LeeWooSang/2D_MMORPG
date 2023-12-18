@@ -1,8 +1,7 @@
 #include "LoginLayer.h"
-
 #include "../../Scene/Scene.h"
-#include "../../Scene/SceneManager.h"
-#include "../../GameObject/UI/UIManager.h"
+#include "../../Manager/SceneMangaer/SceneManager.h"
+#include "../../Manager/UIManager/UIManager.h"
 #include "../../GameObject/UI/UI.h"
 #include "../../GameObject/UI/ButtonUI/ButtonUI.h"
 

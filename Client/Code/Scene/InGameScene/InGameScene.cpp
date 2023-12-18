@@ -5,12 +5,12 @@
 #include "../../GraphicEngine/GraphicEngine.h"
 #include "../../GameObject/Character/Character.h"
 
+#include "../../Manager/UIManager/UIManager.h"
 #include "../../GameObject/UI/ChattingBox/ChattingBox.h"
 #include "../../GameObject/UI/InputUI/ChattingInputUI/ChattingInputUI.h"
 #include "../../GameObject/UI/Inventory/Inventory.h"
 #include "../../GameObject/UI/EquipUI/EquipUI.h"
 
-#include "../../GameObject/UI/UIManager.h"
 #include "../../../../Server/Code/Common/Protocol.h"
 
 #include "../../Resource/ResourceManager.h"
@@ -29,6 +29,13 @@ InGameScene::InGameScene()
 
 InGameScene::~InGameScene()
 {
+	for (auto& ui : mUIs)
+	{
+		delete ui;
+	}
+	mUIs.clear();
+	mUIsMap.clear();
+
 	mOtherPlayers.clear();
 	mMonsters.clear();
 
@@ -46,8 +53,6 @@ InGameScene::~InGameScene()
 	}
 
 	delete mPlayer;
-
-
 }
 
 bool InGameScene::Initialize()
@@ -141,7 +146,8 @@ bool InGameScene::Initialize()
 	}
 	AddSceneUI("EquipUI", equipUI);
 
-	UI* inventory = new Inventory;
+	Inventory* inventory = new Inventory;
+	//inventory = new Inventory;
 	if (inventory->Initialize(0, 0) == false)
 	{
 		return false;

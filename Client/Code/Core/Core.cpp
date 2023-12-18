@@ -4,11 +4,8 @@
 #include "../GameTimer/GameTimer.h"
 #include "../Resource/ResourceManager.h"
 #include "../Input/Input.h"
-#include "../Scene/SceneManager.h"
-#include "../Scene/LoginScene/LoginScene.h"
-#include "../Scene/InGameScene/InGameScene.h"
-#include "../GameObject/UI/UI.h"
-#include "../Scene/SceneManager2.h"
+#include "../Manager/EventManager/EventManager.h"
+#include "../Manager/SceneMangaer/SceneManager.h"
 
 #define	 WM_SOCKET WM_USER + 1
 
@@ -16,18 +13,22 @@ INIT_INSTACNE(Core)
 bool Collision(const D2D1_RECT_F& rect1, const D2D1_RECT_F& rect2);
 Core::Core()
 {
+#ifdef _DEBUG
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetBreakAlloc(784275);
+#endif
 	mHandle = nullptr;
 }
 
 Core::~Core()
 {
-	GET_INSTANCE(SceneManager2)->Release();
-	//GET_INSTANCE(SceneManager)->Release();
-	GET_INSTANCE(Input)->Release();
+	GET_INSTANCE(GameTimer)->Release();
+	GET_INSTANCE(EventManager)->Release();
+	GET_INSTANCE(SceneManager)->Release();
 	GET_INSTANCE(Camera)->Release();
+	GET_INSTANCE(Input)->Release();
 	GET_INSTANCE(Network)->Release();
 	GET_INSTANCE(ResourceManager)->Release();
-	GET_INSTANCE(GameTimer)->Release();	
 	GET_INSTANCE(GraphicEngine)->Release();
 }
 
@@ -60,11 +61,8 @@ bool Core::Initialize(HWND handle, int width, int height)
 	GET_INSTANCE(Network)->SendLoginPacket(loginId, loginPassword);
 #endif
 	{
-		//GET_INSTANCE(SceneManager)->AddScene(SCENE_TYPE::LOGIN_SCENE);
-		//GET_INSTANCE(SceneManager)->AddScene(SCENE_TYPE::INGAME_SCENE);
-		//GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::LOGIN_SCENE);
-		GET_INSTANCE(SceneManager2)->AddScene(SCENE_TYPE2::LOGIN_SCENE);
-		GET_INSTANCE(SceneManager2)->AddScene(SCENE_TYPE2::INGAME_SCENE);
+		GET_INSTANCE(SceneManager)->AddScene(SCENE_TYPE::LOGIN_SCENE);
+		GET_INSTANCE(SceneManager)->AddScene(SCENE_TYPE::INGAME_SCENE);
 	}
 	GET_INSTANCE(GameTimer)->Reset();
 
@@ -78,13 +76,12 @@ void Core::Run()
 
 	GET_INSTANCE(Input)->ProcessKeyEvent();
 
-	GET_INSTANCE(SceneManager2)->Update();
+	GET_INSTANCE(EventManager)->Update();
+	GET_INSTANCE(SceneManager)->Update();
 
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->BeginDraw();
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::Black));
-
-	GET_INSTANCE(SceneManager2)->Render();
-
+	GET_INSTANCE(SceneManager)->Render();
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->EndDraw();
 
 	std::wstring title = L"MapleStory " + std::to_wstring(GET_INSTANCE(GameTimer)->GetFrameRate()) + L" FPS";

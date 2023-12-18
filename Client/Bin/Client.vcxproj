@@ -151,22 +151,21 @@
     <ClCompile Include="..\Code\GameObject\UI\Inventory\Inventory.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\Scroll\Scroll.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\UI.cpp" />
-    <ClCompile Include="..\Code\GameObject\UI\UIManager.cpp" />
     <ClCompile Include="..\Code\GameTimer\GameTimer.cpp" />
     <ClCompile Include="..\Code\GraphicEngine\GraphicEngine.cpp" />
     <ClCompile Include="..\Code\Input\Input.cpp" />
     <ClCompile Include="..\Code\Layer\Layer.cpp" />
     <ClCompile Include="..\Code\Layer\LoginLayer\LoginLayer.cpp" />
     <ClCompile Include="..\Code\Main.cpp" />
+    <ClCompile Include="..\Code\Manager\EventManager\EventManager.cpp" />
+    <ClCompile Include="..\Code\Manager\SceneMangaer\SceneManager.cpp" />
+    <ClCompile Include="..\Code\Manager\UIManager\UIManager.cpp" />
     <ClCompile Include="..\Code\Network\Network.cpp" />
     <ClCompile Include="..\Code\Resource\ResourceManager.cpp" />
     <ClCompile Include="..\Code\Resource\Texture\Texture.cpp" />
     <ClCompile Include="..\Code\Scene\InGameScene\InGameScene.cpp" />
     <ClCompile Include="..\Code\Scene\LoginScene\LoginScene.cpp" />
     <ClCompile Include="..\Code\Scene\Scene.cpp" />
-    <ClCompile Include="..\Code\Scene\SceneManager.cpp" />
-    <ClCompile Include="..\Code\Scene\SceneManager2.cpp" />
-    <ClCompile Include="..\Code\Scene\Test2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Server\Code\Common\Protocol.h" />
@@ -186,21 +185,20 @@
     <ClInclude Include="..\Code\GameObject\UI\Inventory\Inventory.h" />
     <ClInclude Include="..\Code\GameObject\UI\Scroll\Scroll.h" />
     <ClInclude Include="..\Code\GameObject\UI\UI.h" />
-    <ClInclude Include="..\Code\GameObject\UI\UIManager.h" />
     <ClInclude Include="..\Code\GameTimer\GameTimer.h" />
     <ClInclude Include="..\Code\GraphicEngine\GraphicEngine.h" />
     <ClInclude Include="..\Code\Input\Input.h" />
     <ClInclude Include="..\Code\Layer\Layer.h" />
     <ClInclude Include="..\Code\Layer\LoginLayer\LoginLayer.h" />
+    <ClInclude Include="..\Code\Manager\EventManager\EventManager.h" />
+    <ClInclude Include="..\Code\Manager\SceneMangaer\SceneManager.h" />
+    <ClInclude Include="..\Code\Manager\UIManager\UIManager.h" />
     <ClInclude Include="..\Code\Network\Network.h" />
     <ClInclude Include="..\Code\Resource\ResourceManager.h" />
     <ClInclude Include="..\Code\Resource\Texture\Texture.h" />
     <ClInclude Include="..\Code\Scene\InGameScene\InGameScene.h" />
     <ClInclude Include="..\Code\Scene\LoginScene\LoginScene.h" />
     <ClInclude Include="..\Code\Scene\Scene.h" />
-    <ClInclude Include="..\Code\Scene\SceneManager.h" />
-    <ClInclude Include="..\Code\Scene\SceneManager2.h" />
-    <ClInclude Include="..\Code\Scene\Test2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

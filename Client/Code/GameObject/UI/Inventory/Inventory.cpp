@@ -1,5 +1,5 @@
 #include "Inventory.h"
-#include "../../../Scene/SceneManager.h"
+#include "../../../Manager/SceneMangaer/SceneManager.h"
 #include "../../../Scene/Scene.h"
 #include "../../../Scene/InGameScene/InGameScene.h"
 
@@ -23,10 +23,10 @@ InventorySlot::InventorySlot()
 
 InventorySlot::~InventorySlot()
 {
-	//if (mItem != nullptr)
-	//{
-	//	delete mItem;
-	//}
+	if (mItem != nullptr)
+	{
+		delete mItem;
+	}
 }
 
 bool InventorySlot::Initialize(int x, int y)
@@ -123,7 +123,7 @@ void InventorySlot::MouseLButtonClick()
 
 	// æ∆¿Ã≈€ ¿Â¬¯
 	EquipUI* ui = static_cast<EquipUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("EquipUI"));
-	InventoryItem* oldItem = ui->AddEquipItem("weapon", mItem);
+	InventoryItem* oldItem = ui->AddEquipItem(EQUIP_SLOT_TYPE::WEAPON, mItem);
 	AddItem(oldItem);
 }
 
@@ -173,6 +173,7 @@ Inventory::Inventory()
 
 Inventory::~Inventory()
 {
+	std::cout << "inven º“∏Í" << std::endl;
 }
 
 bool Inventory::Initialize(int x, int y)

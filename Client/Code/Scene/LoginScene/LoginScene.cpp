@@ -1,22 +1,30 @@
 #include "LoginScene.h"
+
+#include "../../Manager/UIManager/UIManager.h"
 #include "../../GameObject/UI/UI.h"
 #include "../../GameObject/UI/InputUI/InputUI.h"
 #include "../../GameObject/UI/ButtonUI/ButtonUI.h"
 #include "../../Resource/ResourceManager.h"
 #include "../../Resource/Texture/Texture.h"
 #include "../../Input/Input.h"
-#include "../../GameObject/UI/UIManager.h"
 #include "../../GraphicEngine/GraphicEngine.h"
-
-#include "../SceneManager2.h"
+#include "../../Manager/SceneMangaer/SceneManager.h"
 
 LoginScene::LoginScene()
 	: Scene()
 {
+	mInputUI = nullptr;
 }
 
 LoginScene::~LoginScene()
 {
+	for (auto& ui : mUIs)
+	{
+		delete ui;
+	}
+	mUIs.clear();
+	mUIsMap.clear();
+
 	delete mInputUI;
 }
 
@@ -176,6 +184,6 @@ void LoginScene::processKeyboardMessage()
 {
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
 	{
-		GET_INSTANCE(SceneManager2)->ChangeScene(SCENE_TYPE2::INGAME_SCENE);
+		GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::INGAME_SCENE);
 	}
 }

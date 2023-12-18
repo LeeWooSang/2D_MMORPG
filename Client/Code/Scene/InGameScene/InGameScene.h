@@ -53,4 +53,6 @@ private:
 	std::vector<AnimationCharacter*> mNPCs;
 	//std::vector<AnimationCharacter*> mMobs;
 
+	//class Inventory* inventory;
+
 };

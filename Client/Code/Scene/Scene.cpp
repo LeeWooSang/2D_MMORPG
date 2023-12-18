@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include <iostream>
+#include "../GameObject/UI/Inventory/Inventory.h"
 
 Scene::Scene()
 {
@@ -8,12 +9,6 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	for (auto& ui : mUIs)
-	{
-		delete ui;
-	}
-	mUIs.clear();
-	mUIsMap.clear();
 }
 
 bool Scene::Initialize()

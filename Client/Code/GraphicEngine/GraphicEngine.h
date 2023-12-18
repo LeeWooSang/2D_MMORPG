@@ -1,5 +1,6 @@
 #pragma once
 #include "../Common/Macro.h"
+
 #include <d3d9.h>
 #include <d3dx9tex.h>
 #pragma comment (lib, "d3d9.lib")
@@ -17,11 +18,6 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-
-constexpr int MAX_TEXTURE = 16;
-constexpr int MAX_BOB_FRAMES = 64;   // maximum number of bob frames
-constexpr int MAX_BOB_ANIMATIONS = 16;   // maximum number of animation sequeces
-constexpr int BOB_ATTR_VISIBLE = 16;  // bob is visible
 
 constexpr int MAX_FONT_COUNT = 2;
 
@@ -47,12 +43,6 @@ class GraphicEngine
 
 public:
 	bool Initialize(HWND handle, int width, int height);
-	void Flip();
-	void FillSurface(D3DCOLOR color);
-
-	void RenderStart();
-	void RenderEnd();
-
 	void RenderRectangle(const D2D1_RECT_F& pos, const std::string& color = "說除儀");
 	void RenderFillRectangle(const D2D1_RECT_F& pos, const std::string& color = "說除儀");
 
@@ -62,9 +52,6 @@ public:
 
 	void createFont();
 	void createBrushColor();
-
-    const LPDIRECT3DDEVICE9 GetDevice() const { return mDevice; }
-    const LPD3DXSPRITE GetSprite() const { return mSprite; }
 
 	IWICImagingFactory* GetWICImagingFactory() { return mWICImagingFactory; }
 	ID2D1HwndRenderTarget* GetRenderTarget() { return mRenderTarget; }
@@ -76,12 +63,6 @@ public:
 private:
 	int mWidth;
 	int mHeight;
-
-	LPDIRECT3D9 mDirect3D;
-	LPDIRECT3DDEVICE9 mDevice;
-	LPD3DXSPRITE mSprite;
-	LPD3DXFONT mFont;
-	std::vector<LPDIRECT3DTEXTURE9> mTextures;
 
 	ID2D1Factory3* mFactory;
 	IWICImagingFactory* mWICImagingFactory;

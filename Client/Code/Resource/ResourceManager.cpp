@@ -104,8 +104,8 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(65, 65);
-		if (texture->LoadTexture(L"../Resource/Textures/Sword2.png") == false)
+		texture->CreateTexture(40, 39);
+		if (texture->LoadTexture(L"../Resource/Textures/Sword.png") == false)
 		{
 			texture.reset();
 			return false;
@@ -114,7 +114,7 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(65, 65);
+		texture->CreateTexture(40, 39);
 		if (texture->LoadTexture(L"../Resource/Textures/Ax.png") == false)
 		{
 			texture.reset();
@@ -124,7 +124,7 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(65, 65);
+		texture->CreateTexture(40, 39);
 		if (texture->LoadTexture(L"../Resource/Textures/Club.png") == false)
 		{
 			texture.reset();
@@ -134,7 +134,7 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(65, 65);
+		texture->CreateTexture(40, 39);
 		if (texture->LoadTexture(L"../Resource/Textures/Dagger.png") == false)
 		{
 			texture.reset();

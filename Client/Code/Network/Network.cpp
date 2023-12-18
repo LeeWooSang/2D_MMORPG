@@ -2,10 +2,11 @@
 #include <iostream>
 #include "../Core/Core.h"
 
-#include "../Scene/SceneManager.h"
+#include "../Manager/EventManager/EventManager.h"
+#include "../Manager/SceneMangaer/SceneManager.h"
 #include "../Scene/InGameScene/InGameScene.h"
 
-#include "../GameObject/UI/UIManager.h"
+#include "../Manager/UIManager/UIManager.h"
 #include "../GameObject/UI/ChattingBox/ChattingBox.h"
 
 #define	WM_SOCKET	WM_USER + 1
@@ -137,11 +138,7 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_LOGIN_OK:
 		{		
 			SCLoginOkPacket* packet = reinterpret_cast<SCLoginOkPacket*>(mPacketBuffer);
-			InGamePacket p;
-			p.packetType = SC_LOGIN_OK;
-			p.id = packet->id;
-		
-			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, p);
+			GET_INSTANCE(EventManager)->AddPacketEvent(PacketEvent(packet->type, packet->id, 0, 0));
 			break;
 		}
 
@@ -154,50 +151,28 @@ void Network::processPacket()
 
 		case SC_PACKET_TYPE::SC_POSITION:
 		{
-			SCPositionPacket* packet = reinterpret_cast<SCPositionPacket*>(mPacketBuffer);			
-			InGamePacket p;
-			p.packetType = SC_POSITION;
-			p.id = packet->id;
-			p.x = packet->x;
-			p.y = packet->y;
-
-			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, p);
+			SCPositionPacket* packet = reinterpret_cast<SCPositionPacket*>(mPacketBuffer);
+			GET_INSTANCE(EventManager)->AddPacketEvent(PacketEvent(packet->type, packet->id, packet->x, packet->y));
 			break;
 		}
 
 		case SC_PACKET_TYPE::SC_ADD_OBJECT:
 		{
 			SCAddObjectPacket* packet = reinterpret_cast<SCAddObjectPacket*>(mPacketBuffer);
-			InGamePacket p;
-			p.packetType = SC_ADD_OBJECT;
-			p.id = packet->id;
-			p.x = packet->x;
-			p.y = packet->y;
-
-			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, p);
+			GET_INSTANCE(EventManager)->AddPacketEvent(PacketEvent(packet->type, packet->id, packet->x, packet->y));
 			break;
 		}
 
 		case SC_PACKET_TYPE::SC_REMOVE_OBJECT:
 		{
 			SCRemoveObjectPacket* packet = reinterpret_cast<SCRemoveObjectPacket*>(mPacketBuffer);
-			InGamePacket p;
-			p.packetType = SC_REMOVE_OBJECT;
-			p.id = packet->id;
-
-			GET_INSTANCE(SceneManager)->AddPacketEvent(SCENE_TYPE::INGAME_SCENE, p);
+			GET_INSTANCE(EventManager)->AddPacketEvent(PacketEvent(packet->type, packet->id, 0, 0));
 			break;
 		}
 
 		case SC_PACKET_TYPE::SC_CHANGE_CHANNEL:
 		{
 			// 준비가 아직 안됬으면 걍 리턴
-			InGameScene* scene = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE));
-			if (scene->GetIsReady() == false)
-			{
-				break;
-			}
-
 			SCChangeChannelPacket* packet = reinterpret_cast<SCChangeChannelPacket*>(mPacketBuffer);
 			if (packet->result == true)
 			{
