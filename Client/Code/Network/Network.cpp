@@ -131,6 +131,19 @@ void Network::SendAttackPacket()
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 
+void Network::SendChangeAvatarPacket(char slotType, int texId)
+{
+	CSChangeAvatarPacket packet;
+	packet.size = sizeof(CSChangeAvatarPacket);
+	packet.type = CS_PACKET_TYPE::CS_CHANGE_AVATAR;
+	// 텍스쳐 아이디
+	// 아이템 타입
+	packet.slotType = slotType;
+	packet.texId = texId;
+
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
 void Network::processPacket()
 {
 	switch (mPacketBuffer[1])
@@ -193,6 +206,13 @@ void Network::processPacket()
 			{
 				ui->AddChattingLog(packet->id, packet->chat);
 			}
+			break;
+		}
+
+		case SC_PACKET_TYPE::SC_CHANGE_AVATAR:
+		{
+			SCChangeAvatarPacket* packet = reinterpret_cast<SCChangeAvatarPacket*>(mPacketBuffer);
+			GET_INSTANCE(EventManager)->AddPacketEvent(PacketEvent(packet->type, packet->id, 0, 0));
 			break;
 		}
 

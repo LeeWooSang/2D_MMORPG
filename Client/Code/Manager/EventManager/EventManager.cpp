@@ -45,6 +45,13 @@ void EventManager::processPacketEvent()
 				scene->UpdateObjectPosition(ev.id, ev.x, ev.y);
 				break;
 			}
+
+			case SC_CHANGE_AVATAR:
+			{
+				scene->UpdateObjectAvatar(ev.id, 0);
+				break;
+			}
+
 			default:
 				break;
 		}

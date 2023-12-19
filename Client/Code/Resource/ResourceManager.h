@@ -17,15 +17,21 @@ struct TextInfo
 struct TextureData
 {
 	TextureData()
-		: path(""), name(""), size(std::make_pair(0, 0)), origin(std::make_pair(0, 0)) {}
+		: path(""), name(""), size(std::make_pair(0, 0)), origin(std::make_pair(0, 0)), texId(0), icon(false), motion(-1) {}
 
-	TextureData(const std::string& _path, const std::string& _name, int width, int height, int originX, int originY)
-		: path(_path), name(_name), size(std::make_pair(width, height)), origin(std::make_pair(originX, originY)) {}
+	TextureData(const std::string& _path, const std::string& _name, int width, int height, int originX, int originY, int _texId, bool _icon, int _motion)
+		: path(_path), name(_name), size(std::make_pair(width, height)), origin(std::make_pair(originX, originY)),
+		texId(_texId), icon(_icon), motion(_motion)
+	{
+	}
 
 	std::string path;
 	std::string name;
 	std::pair<int, int> size;
 	std::pair<int, int> origin;
+	int texId;
+	bool icon;
+	int motion;
 };
 
 class Texture;
@@ -42,6 +48,8 @@ public:
 	bool LoadJsonFile();
 
 	TextureData& GetTextureData(const std::string name);
+	std::vector<TextureData>& GetTextureDatas(int texId) { return mTextureIds[texId]; }
+	TextureData& GetTextureDataIcon(int texId);
 
 private:
 	bool loadTextureDatas();
@@ -52,4 +60,6 @@ private:
 
 	std::unordered_map<std::string, std::shared_ptr<Texture>> mTextureList;
 	std::unordered_map<std::string, TextureData> mTextureDatas;
+	// 텍스쳐 아이디로 텍스쳐정보를 찾을 수 있어야함
+	std::unordered_map<int, std::vector<TextureData>> mTextureIds;
 };

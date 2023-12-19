@@ -55,14 +55,19 @@ public:
 	virtual void Visible();
 	virtual void NotVisible();
 
+	int GetId()	const { return mId; }
+	void SetId(int id) { mId = id; }
+
 	void AddChild(const std::string& name, AnimationCharacter* obj);
 	void AddAnimation(ANIMATION_MONTION_TYPE motion, Animation* animation)		{ mAnimations.emplace(motion, animation); }
 	void SetAnimationMotion(ANIMATION_MONTION_TYPE motion);
 	void SetAvatar(const std::string& parts, ANIMATION_MONTION_TYPE motion, const std::string& objName, int count);
 
 	void SetWeaponAvatar(const std::string& itemName);
+	void SetWeaponAvatar(int texId);
 
 protected:
+	int mId;
 	std::unordered_map<std::string, AnimationCharacter*> mChildObjects;
 	std::list<AnimationCharacter*> mRenderChildObjects;
 
@@ -72,7 +77,6 @@ protected:
 	std::unordered_map<ANIMATION_MONTION_TYPE, Animation*> mAnimations;
 };
 
-class Inventory;
 class Player : public AnimationCharacter
 {
 public:
@@ -89,12 +93,7 @@ public:
 	void Move(char dir);
 	void AddItem();
 
-	int GetId()	const { return mId; }
-	void SetId(int id) { mId = id; }
-
 private:
-	int mId;
-
 	float mElapsedTime;
 	bool mFlag;
 };
@@ -109,10 +108,6 @@ public:
 	virtual void Update();
 	virtual void Render();
 
-	int GetId()	const { return mId; }
-	void SetId(int id) { mId = id; }
-
 private:
-	int mId;
 	float mElapsedTime;
 };

@@ -136,54 +136,6 @@
     "OriginY": 37
   },
   {
-    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponSword0.png",
-    "Name": "IdleWeaponSword0",
-    "Width": 41,
-    "Height": 13,
-    "OriginX": -7,
-    "OriginY": 47
-  },
-  {
-    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponSword0.png",
-    "Name": "IdleWeaponSword1",
-    "Width": 41,
-    "Height": 13,
-    "OriginX": -7,
-    "OriginY": 47
-  },
-  {
-    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponSword0.png",
-    "Name": "IdleWeaponSword2",
-    "Width": 41,
-    "Height": 13,
-    "OriginX": -6,
-    "OriginY": 47
-  },
-  {
-    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponClub0.png",
-    "Name": "IdleWeaponClub0",
-    "Width": 39,
-    "Height": 15,
-    "OriginX": -7,
-    "OriginY": 47
-  },
-  {
-    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponClub0.png",
-    "Name": "IdleWeaponClub1",
-    "Width": 39,
-    "Height": 15,
-    "OriginX": -7,
-    "OriginY": 47
-  },
-  {
-    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponClub0.png",
-    "Name": "IdleWeaponClub2",
-    "Width": 39,
-    "Height": 15,
-    "OriginX": -6,
-    "OriginY": 47
-  },
-  {
     "Path": "../Resource/Textures/Character/Body/Walk/WalkBody0.png",
     "Name": "WalkBody0",
     "Width": 27,
@@ -312,12 +264,59 @@
     "OriginY": 35
   },
   {
+    "Path": "../Resource/Textures/Sword.png",
+    "Name": "Sword",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 0,
+    "OriginY": 0,
+    "TextureId": 10000,
+    "Icon": true,
+    "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponSword0.png",
+    "Name": "IdleWeaponSword0",
+    "Width": 41,
+    "Height": 13,
+    "OriginX": -7,
+    "OriginY": 47,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponSword0.png",
+    "Name": "IdleWeaponSword1",
+    "Width": 41,
+    "Height": 13,
+    "OriginX": -7,
+    "OriginY": 47,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponSword0.png",
+    "Name": "IdleWeaponSword2",
+    "Width": 41,
+    "Height": 13,
+    "OriginX": -6,
+    "OriginY": 47,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
     "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponSword0.png",
     "Name": "WalkWeaponSword0",
     "Width": 43,
     "Height": 8,
     "OriginX": -6,
-    "OriginY": 45
+    "OriginY": 45,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 1
   },
   {
     "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponSword1.png",
@@ -325,7 +324,10 @@
     "Width": 41,
     "Height": 14,
     "OriginX": -14,
-    "OriginY": 39
+    "OriginY": 39,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 1
   },
   {
     "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponSword2.png",
@@ -333,7 +335,10 @@
     "Width": 43,
     "Height": 8,
     "OriginX": -6,
-    "OriginY": 45
+    "OriginY": 45,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 1
   },
   {
     "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponSword3.png",
@@ -341,7 +346,65 @@
     "Width": 41,
     "Height": 13,
     "OriginX": -2,
-    "OriginY": 43
+    "OriginY": 43,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Jump/JumpWeaponSword0.png",
+    "Name": "JumpWeaponSword0",
+    "Width": 32,
+    "Height": 30,
+    "OriginX": 13,
+    "OriginY": 16,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 2
+  },
+  {
+    "Path": "../Resource/Textures/Club.png",
+    "Name": "Club",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 0,
+    "OriginY": 0,
+    "TextureId": 10001,
+    "Icon": true,
+    "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponClub0.png",
+    "Name": "IdleWeaponClub0",
+    "Width": 39,
+    "Height": 15,
+    "OriginX": -7,
+    "OriginY": 47,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponClub0.png",
+    "Name": "IdleWeaponClub1",
+    "Width": 39,
+    "Height": 15,
+    "OriginX": -7,
+    "OriginY": 47,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponClub0.png",
+    "Name": "IdleWeaponClub2",
+    "Width": 39,
+    "Height": 15,
+    "OriginX": -6,
+    "OriginY": 47,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 0
   },
   {
     "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponClub0.png",
@@ -349,7 +412,10 @@
     "Width": 40,
     "Height": 9,
     "OriginX": -6,
-    "OriginY": 45
+    "OriginY": 45,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 1
   },
   {
     "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponClub1.png",
@@ -357,7 +423,10 @@
     "Width": 41,
     "Height": 16,
     "OriginX": -14,
-    "OriginY": 39
+    "OriginY": 39,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 1
   },
   {
     "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponClub2.png",
@@ -365,7 +434,10 @@
     "Width": 40,
     "Height": 9,
     "OriginX": -6,
-    "OriginY": 45
+    "OriginY": 45,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 1
   },
   {
     "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponClub3.png",
@@ -373,7 +445,43 @@
     "Width": 39,
     "Height": 15,
     "OriginX": -2,
-    "OriginY": 43
+    "OriginY": 43,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Jump/JumpWeaponClub0.png",
+    "Name": "JumpWeaponClub0",
+    "Width": 16,
+    "Height": 40,
+    "OriginX": 16,
+    "OriginY": 7,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 2
+  },
+  {
+    "Path": "../Resource/Textures/Ax.png",
+    "Name": "Ax",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 0,
+    "OriginY": 0,
+    "TextureId": 10002,
+    "Icon": true,
+    "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Dagger.png",
+    "Name": "Dagger",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 0,
+    "OriginY": 0,
+    "TextureId": 10003,
+    "Icon": true,
+    "Motion": -1
   },
   {
     "Path": "../Resource/Textures/Character/Body/Jump/JumpBody0.png",
@@ -422,22 +530,6 @@
     "Height": 11,
     "OriginX": 19,
     "OriginY": 36
-  },
-  {
-    "Path": "../Resource/Textures/Character/Weapon/Jump/JumpWeaponSword0.png",
-    "Name": "JumpWeaponSword0",
-    "Width": 32,
-    "Height": 30,
-    "OriginX": 13,
-    "OriginY": 16
-  },
-  {
-    "Path": "../Resource/Textures/Character/Weapon/Jump/JumpWeaponClub0.png",
-    "Name": "JumpWeaponClub0",
-    "Width": 16,
-    "Height": 40,
-    "OriginX": 16,
-    "OriginY": 7
   },
   {
     "Path": "../Resource/Textures/Monster/OrangeMushroom/Idle/IdleOrangeMushroom0.png",

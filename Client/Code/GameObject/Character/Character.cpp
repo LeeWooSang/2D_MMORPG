@@ -8,6 +8,7 @@
 #include <string>
 #include <random>
 
+#include "../../Resource/ResourceManager.h"
 #include "../../Manager/SceneMangaer/SceneManager.h"
 #include "../../Scene/Scene.h"
 #include "../../Animation/Animation.h"
@@ -78,6 +79,7 @@ void Character::SetAnimationInfo(int frameSize)
 AnimationCharacter::AnimationCharacter()
 	: GameObject()
 {
+	mId = -1;
 	mParent = nullptr;
 	mChildObjects.clear();
 
@@ -537,6 +539,42 @@ void AnimationCharacter::SetWeaponAvatar(const std::string& itemName)
 	}
 }
 
+void AnimationCharacter::SetWeaponAvatar(int texId)
+{
+	std::string parts = "Weapon";
+	if (mChildObjects.count(parts) == false)
+	{
+		return;
+	}
+
+	// 해당 파트의 모든 모션을 리셋
+	for (auto& motion : mChildObjects[parts]->mAnimations)
+	{
+		motion.second->Reset();
+	}
+
+	std::vector<TextureData>& v = GET_INSTANCE(ResourceManager)->GetTextureDatas(texId);
+	for (int i = 0; i < v.size(); ++i)
+	{
+		if (v[i].icon == true)
+		{
+			continue;
+		}
+
+		ANIMATION_MONTION_TYPE motion = static_cast<ANIMATION_MONTION_TYPE>(v[i].motion);
+		mChildObjects[parts]->mAnimations[motion]->SetTexture(v[i].name);
+	}
+
+	// 모든 부위의 애니메이션 번호를 초기화
+	for (auto& obj : mRenderChildObjects)
+	{
+		for (auto& ani : obj->mAnimations)
+		{
+			ani.second->ResetCurrentNum();
+		}
+	}
+}
+
 void AnimationCharacter::SetAnimationMotion(ANIMATION_MONTION_TYPE motion)
 {
 	mMotion = motion;
@@ -768,6 +806,7 @@ void Player::Move(char dir)
 void Player::AddItem()
 {
 	std::string itemName = "";
+	int texId = 10000;
 
 	std::random_device rd;
 	std::default_random_engine dre(rd());
@@ -776,23 +815,26 @@ void Player::AddItem()
 	{
 	case 0:
 		itemName = "Ax";
+		texId = 10002;
 		break;
 
 	case 1:
 		itemName = "Sword";
+		texId = 10000;
 		break;
 
 	case 2:
 		itemName = "Dagger";
+		texId = 10003;
 		break;
 
 	default:
 		itemName = "Club";
+		texId = 10001;
 		break;
 	}
 
-	static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"))->AddItem(itemName);
-	//static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"))->AddItem(itemName);
+	static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"))->AddItem(texId);
 }
 
 Monster::Monster()

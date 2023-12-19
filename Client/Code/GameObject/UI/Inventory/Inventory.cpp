@@ -1,4 +1,5 @@
 #include "Inventory.h"
+#include "../../../Network/Network.h"
 #include "../../../Manager/SceneMangaer/SceneManager.h"
 #include "../../../Scene/Scene.h"
 #include "../../../Scene/InGameScene/InGameScene.h"
@@ -117,14 +118,21 @@ void InventorySlot::MouseLButtonClick()
 		return;
 	}
 
-	// 아바타 장착
+	// 아바타에 아이템 장착
 	Player* player = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE))->GetPlayer();
-	player->SetWeaponAvatar(mItem->GetItemName());
+	//player->SetWeaponAvatar(mItem->GetItemName());
+	player->SetWeaponAvatar(mItem->GetTexId());
 
-	// 아이템 장착
+	EQUIP_SLOT_TYPE slotType = EQUIP_SLOT_TYPE::WEAPON;
+	// 장비창에 아이템 장착
 	EquipUI* ui = static_cast<EquipUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("EquipUI"));
-	InventoryItem* oldItem = ui->AddEquipItem(EQUIP_SLOT_TYPE::WEAPON, mItem);
+	InventoryItem* oldItem = ui->AddEquipItem(slotType, mItem);
 	AddItem(oldItem);
+
+	// 서버에 아바타 바꿨다는 패킷 전송
+#ifdef SERVER_CONNECT
+	GET_INSTANCE(Network)->SendChangeAvatarPacket(static_cast<char>(slotType), 0);
+#endif
 }
 
 void InventorySlot::SetPosition(int x, int y)
@@ -135,6 +143,21 @@ void InventorySlot::SetPosition(int x, int y)
 	{
 		mItem->SetPosition(mPos.first, mPos.second);
 	}
+}
+
+void InventorySlot::AddItem(int texId)
+{
+	TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureDataIcon(texId);
+	// 벡터 가장 앞에있는 것이 아이콘
+
+	// 아이템 추가
+	mItem = new InventoryItem;	
+	mItem->SetTexId(data.texId);
+	mItem->SetItemName(data.name);
+	// 텍스쳐 추가
+	mItem->SetTexture(data.name);
+	mItem->Visible();
+	mItem->SetPosition(mPos.first, mPos.second);
 }
 
 void InventorySlot::AddItem(const std::string& name)
@@ -178,6 +201,16 @@ Inventory::~Inventory()
 bool Inventory::Initialize(int x, int y)
 {
 	UI::Initialize(x, y);
+
+	SetTexture("Inventory");
+
+	{
+		ButtonUI* button = new ButtonUI;
+		button->Initialize(300, 2);
+		button->SetTexture("XButton");
+		button->Visible();
+		AddChildUI("Button", button);
+	}
 
 	mSlotGap = 10;
 	
@@ -230,15 +263,6 @@ bool Inventory::Initialize(int x, int y)
 		scroll->Visible();
 		AddChildUI("Scroll", scroll);
 	}
-
-	{
-		ButtonUI* button = new ButtonUI;
-		button->Initialize(300, 2);
-		button->SetTexture("XButton");
-		button->Visible();
-		AddChildUI("Button", button);
-	}
-
 
 	SetPosition(x, y);
 
@@ -461,6 +485,20 @@ bool Inventory::CheckContain(int left, int top, int right, int bottom)
 	return true;
 }
 
+void Inventory::AddItem(int texId)
+{
+	for (auto& inventorySlot : mChildUIs["Slot"])
+	{
+		InventorySlot* slot = static_cast<InventorySlot*>(inventorySlot);
+		// 비어있는 슬롯에 추가
+		if (slot->GetItem() == nullptr)
+		{
+			slot->AddItem(texId);
+			break;
+		}
+	}
+}
+
 void Inventory::AddItem(const std::string& name)
 {
 	for (auto& inventorySlot : mChildUIs["Slot"])
@@ -517,10 +555,13 @@ void Inventory::OpenInventory()
 InventoryItem::InventoryItem()
 	: UI()
 {
+	mItemName.clear();
+	mTexId = -1;
 }
 
 InventoryItem::~InventoryItem()
 {
+	mItemName.clear();
 }
 
 bool InventoryItem::Initialize(int x, int y)

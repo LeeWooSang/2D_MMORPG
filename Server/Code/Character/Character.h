@@ -77,6 +77,9 @@ public:
 	void ProcessChangeChannelViewList(int oldChannel, int newChannel);
 	void ProcessChat(wchar_t* chat);
 	void ProcessAttack();
+	void ProcessChangeAvatar(int texId);
+
+	int GetTexId()	const { return mTexId; }
 
 private:
 	SOCKET mSocket;
@@ -84,6 +87,8 @@ private:
 	int	 mPrevSize;
 	int	 mSendBytes;
 	bool mConnect;
+
+	int mTexId;
 };
 
 enum class MONSTER_STATE

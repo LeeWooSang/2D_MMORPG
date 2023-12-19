@@ -12,10 +12,12 @@ public:
 	bool Initialize();
 	void Update();
 
+	void Reset();
 	//void AddTexture(const std::string& name);
 	void SetName(const std::string& objName) { mName = objName; }
 	void SetTexture(const std::string& objName, const std::string& texName);
 	void SetTexture(const std::string& objName, int count);
+	void SetTexture(const std::string& texName);
 
 	Texture* GetTexture() { return mTextures[mCurrentNum]; }
 

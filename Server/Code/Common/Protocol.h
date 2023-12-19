@@ -97,7 +97,8 @@ enum CS_PACKET_TYPE
 	CS_MOVE,
 	CS_CHANGE_CHANNEL,
 	CS_CHAT,
-	CS_ATTACK
+	CS_ATTACK,
+	CS_CHANGE_AVATAR
 };
 
 enum SC_PACKET_TYPE
@@ -108,7 +109,8 @@ enum SC_PACKET_TYPE
 	SC_ADD_OBJECT,
 	SC_REMOVE_OBJECT,
 	SC_CHANGE_CHANNEL,
-	SC_CHAT
+	SC_CHAT,
+	SC_CHANGE_AVATAR
 };
 
 #pragma pack(push, 1)
@@ -147,6 +149,14 @@ struct CSAttackPacket
 	char size;
 	char type;
 };
+struct CSChangeAvatarPacket
+{
+	char size;
+	char type;
+	// ½½·Ô¹øÈ£
+	char slotType;
+	int texId;	 
+};
 ///////////////////////////////////////////////////
 struct SCLoginOkPacket
 {
@@ -175,6 +185,7 @@ struct SCAddObjectPacket
 	int id;
 	int x;
 	int y;
+	int texId;
 };
 struct SCRemoveObjectPacket
 {
@@ -194,4 +205,11 @@ struct SCChatPacket
 	char type;
 	int id;
 	wchar_t chat[MAX_CHAT_LENGTH];
+};
+struct SCChangeAvatarPacket
+{
+	char size;
+	char type;
+	int id;
+	int texId;
 };

@@ -5,7 +5,6 @@
 #include <memory>
 
 class Map;
-class Character;
 class AnimationCharacter;
 class Player;
 class Monster;
@@ -24,9 +23,10 @@ public:
 	void AddObject(int id, int x, int y);
 	void UpdateObjectPosition(int id, int x, int y);
 	void RemoveObject(int id);
+	void UpdateObjectAvatar(int id, int texId);
 
 	Player* GetPlayer();
-	Character* GetOtherPlayer(int id);
+	AnimationCharacter* GetOtherPlayer(int id);
 	Monster* GetMonster(int id);
 
 	void SetAvatarPose0(int x, int y);
@@ -45,14 +45,8 @@ private:
 	std::pair<int, int> mTileMaxPos;
 	std::vector<std::vector<Map*>> mTiles;
 
-	std::unordered_map<int, std::shared_ptr<Character>> mOtherPlayers;
+	std::unordered_map<int, std::shared_ptr<AnimationCharacter>> mOtherPlayers;
 	std::unordered_map<int, std::shared_ptr<Monster>> mMonsters;
 
 	Player* mPlayer;
-
-	std::vector<AnimationCharacter*> mNPCs;
-	//std::vector<AnimationCharacter*> mMobs;
-
-	//class Inventory* inventory;
-
 };

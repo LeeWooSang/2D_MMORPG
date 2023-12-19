@@ -37,7 +37,7 @@ public:
 	void SendChangeChannelPacket(char channel);
 	void SendChatPacket(const std::wstring& chat);
 	void SendAttackPacket();
-
+	void SendChangeAvatarPacket(char slotType, int texId);
 private:
 	void processPacket();
 	void recvPacket();

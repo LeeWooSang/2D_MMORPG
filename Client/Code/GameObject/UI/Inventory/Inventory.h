@@ -22,6 +22,7 @@ public:
 	int GetSlotNum()	const { return mSlotNum; }
 	void SetSlotNum(int num) { mSlotNum = num; }
 
+	void AddItem(int texId);
 	void AddItem(const std::string& name);
 	void AddItem(InventoryItem* item);
 
@@ -54,6 +55,7 @@ public:
 	void ProcessMouseWheelEvent(unsigned long long wParam);
 	virtual bool CheckContain(int left, int top, int right, int bottom);
 
+	void AddItem(int texId);
 	void AddItem(const std::string& name);
 	void AddItem(int slot, const std::string& name);
 	void AddItem(InventoryItem* item);
@@ -84,6 +86,10 @@ public:
 	const std::string& GetItemName()	const { return mItemName; }
 	void SetItemName(const std::string& name) { mItemName = name; }
 
+	int GetTexId()	const { return mTexId; }
+	void SetTexId(int id) { mTexId = id; }
+
 private:
 	std::string mItemName;
+	int mTexId;
 };

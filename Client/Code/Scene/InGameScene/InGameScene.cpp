@@ -36,9 +36,6 @@ InGameScene::~InGameScene()
 	mUIs.clear();
 	mUIsMap.clear();
 
-	mOtherPlayers.clear();
-	mMonsters.clear();
-
 	for (int i = 0; i < mTiles.size(); ++i)
 	{
 		for (int j = 0; j < mTiles[i].size(); ++j)
@@ -47,11 +44,8 @@ InGameScene::~InGameScene()
 		}
 	}
 
-	for (auto& npc : mNPCs)
-	{
-		delete npc;
-	}
-
+	mOtherPlayers.clear();
+	mMonsters.clear();
 	delete mPlayer;
 }
 
@@ -88,30 +82,27 @@ bool InGameScene::Initialize()
 	mTileMinPos = std::make_pair(mPlayer->GetPosition().first - VIEW_DISTANCE, mPlayer->GetPosition().second - VIEW_DISTANCE);
 	mTileMaxPos = std::make_pair(mPlayer->GetPosition().first + VIEW_DISTANCE, mPlayer->GetPosition().second + VIEW_DISTANCE);
 
-	// 나를 제외한 나머지 유저 수
-	for (int i = 0; i < MAX_CHANNEL_USER; ++i)
-	{
-		//if (i == myId)
-		//{
-		//	continue;
-		//}
-
-		std::shared_ptr<Character> player = std::make_shared<Character>();
-		if (player->Initialize(0, 0) == false)
-		{
-			return false;
-		}
-		if (player->SetTexture("OtherPlayer") == false)
-		{
-			return false;
-		}
-		player->SetId(i);
-		mOtherPlayers.emplace(i, player);
-	}
-
 	std::random_device rd;
 	std::default_random_engine dre(rd());
 	std::uniform_int_distribution<int> uid(0, WIDTH - 1);
+
+	// 나를 제외한 나머지 유저 수
+	for (int i = 0; i < MAX_CHANNEL_USER; ++i)
+	{
+		std::shared_ptr<AnimationCharacter> otherPlayer = std::make_shared<AnimationCharacter>();
+		if (otherPlayer->Initialize(0, 0) == false)
+		{
+			return false;
+		}
+		otherPlayer->SetId(i);
+#ifdef SERVER_CONNECT
+		otherPlayer->NotVisible();
+#else
+		otherPlayer->Visible();
+		otherPlayer->SetPosition(uid(dre), uid(dre));
+#endif
+		mOtherPlayers.emplace(i, otherPlayer);
+	}
 
 	// 몬스터
 	for (int i = MONSTER_START_ID; i < MAX_OBJECT; ++i)
@@ -150,22 +141,7 @@ bool InGameScene::Initialize()
 	{
 		return false;
 	}
-	if (inventory->SetTexture("Inventory") == false)
-	{
-		return false;
-	}
 	AddSceneUI("Inventory", inventory);
-
-	for (int i = 0; i < 10; ++i)
-	{
-		AnimationCharacter* npc = new AnimationCharacter;
-		if (npc->Initialize(0, 0) == false)
-		{
-			return false;
-		}
-		npc->SetPosition(i, i);
-		mNPCs.emplace_back(npc);
-	}
 
 	mIsReady = true;
 
@@ -210,11 +186,6 @@ void InGameScene::Update()
 		otherPlayer.second->Update();
 	}
 
-	for (auto& npc : mNPCs)
-	{
-		npc->Update();
-	}
-
 	GET_INSTANCE(UIManager)->Update();
 }
 
@@ -245,11 +216,6 @@ void InGameScene::Render()
 	for (auto& player : mOtherPlayers)
 	{
 		player.second->Render();
-	}
-
-	for (auto& npc : mNPCs)
-	{
-		npc->Render();
 	}
 
 	mPlayer->Render();
@@ -358,13 +324,15 @@ void InGameScene::AddObject(int id, int x, int y)
 	int myId = mPlayer->GetId();
 	if (myId == id)
 	{
+		//mPlayer->SetWeaponAvatar("Sword");
 		GET_INSTANCE(Camera)->SetPosition(x, y);
 		mPlayer->SetPosition(x, y);
 	}
 	else if (id < MAX_USER)
 	{
+		//mOtherPlayers[id]->SetWeaponAvatar("Sword");
 		mOtherPlayers[id]->SetPosition(x, y);
-		mOtherPlayers[id]->Visible();
+		mOtherPlayers[id]->Visible();		
 	}
 	else
 	{
@@ -384,10 +352,12 @@ void InGameScene::UpdateObjectPosition(int id, int x, int y)
 	else if (id < MAX_USER)
 	{
 		mOtherPlayers[id]->SetPosition(x, y);
+		mOtherPlayers[id]->Visible();
 	}
 	else
 	{
 		mMonsters[id]->SetPosition(x, y);
+		mMonsters[id]->Visible();
 	}
 }
 
@@ -404,12 +374,18 @@ void InGameScene::RemoveObject(int id)
 	}
 }
 
+void InGameScene::UpdateObjectAvatar(int id, int texId)
+{
+	// texId를 이용하여 아이템 이름 구분
+	mOtherPlayers[id]->SetWeaponAvatar("Sword");
+}
+
 Player* InGameScene::GetPlayer()
 {
 	return mPlayer;
 }
 
-Character* InGameScene::GetOtherPlayer(int id)
+AnimationCharacter* InGameScene::GetOtherPlayer(int id)
 {
 	return mOtherPlayers[id].get();
 }

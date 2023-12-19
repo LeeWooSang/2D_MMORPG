@@ -211,6 +211,7 @@ Player::Player()
 	: Character(), mSocket(0), mPrevSize(0), mSendBytes(0), mConnect(false)
 {
 	memset(mPacketBuf, 0, sizeof(mPacketBuf));
+	mTexId = 0;
 }
 
 Player::~Player()
@@ -245,6 +246,7 @@ void Player::Reset()
 
 	mChannelIndex = -1;
 	mChannel = -1;
+	mTexId = 0;
 
 	closesocket(mSocket);
 }
@@ -280,6 +282,7 @@ bool Player::Inititalize(int id)
 
 	mChannelIndex = -1;
 	mChannel = -1;
+	mTexId = 0;
 
 	return true;
 }
@@ -750,6 +753,46 @@ void Player::ProcessAttack()
 		}
 	}
 
+}
+
+void Player::ProcessChangeAvatar(int texId)
+{
+	mTexId = texId;
+	int myId = mOver->myId;
+	Player* users = GET_INSTANCE(Core)->GetUsers();
+
+	std::unordered_set<int> newViewList;
+
+	// 검색해야할 유저 아이디 목록(같은 채널 + 같은 섹터)
+	std::vector<int> sectorUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetSectorUserIds(mX, mY);
+	// 나와 근처에 있는 오브젝트 아이디를 새로운 뷰리스트에 넣음
+	for (int i = 0; i < sectorUserIds.size(); ++i)
+	{
+		int id = sectorUserIds[i];
+		if (id == myId)
+		{
+			continue;
+		}
+
+		if (users[id].GetIsConnect() == false)
+		{
+			continue;
+		}
+
+		int x = users[id].GetX();
+		int y = users[id].GetY();
+		if (CheckDistance(x, y) == false)
+		{
+			continue;
+		}
+
+		newViewList.emplace(id);
+	}
+
+	for (auto& id : newViewList)
+	{
+		GET_INSTANCE(Core)->SendChangeAvatarPacket(id, myId, texId);
+	}
 }
 
 Monster::Monster()

@@ -30,6 +30,7 @@ public:
 	void SendRemoveObjectPacket(int to, int obj);
 	void SendChangeChannelPacket(int to, bool result);
 	void SendChatPacket(int to, int obj, wchar_t* chat);
+	void SendChangeAvatarPacket(int to, int obj, int texId);
 
 private:
 	void errorDisplay(const char* msg, int error);

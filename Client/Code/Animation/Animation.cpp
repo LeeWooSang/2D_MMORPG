@@ -73,6 +73,13 @@ void Animation::Update()
 	}
 }
 
+void Animation::Reset()
+{
+	mTextures.clear();
+	mPositions.clear();
+	mName.clear();
+}
+
 void Animation::SetTexture(const std::string& objName, const std::string& texName)
 {
 	// 다른 오브젝트가 올경우
@@ -106,6 +113,17 @@ void Animation::SetTexture(const std::string& objName, int count)
 		mTextures.emplace_back(tex);
 		mPositions.emplace_back(tex->GetOrigin());
 	}
+}
+
+void Animation::SetTexture(const std::string& texName)
+{
+	Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture(texName);
+	if (tex == nullptr)
+	{
+		return;
+	}
+	mTextures.emplace_back(tex);
+	mPositions.emplace_back(tex->GetOrigin());
 }
 
 bool Animation::IsVisible()

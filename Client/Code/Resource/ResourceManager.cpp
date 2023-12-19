@@ -102,46 +102,46 @@ bool ResourceManager::Initialize()
 		}
 		mTextureList.emplace("XButton", texture);
 	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(40, 39);
-		if (texture->LoadTexture(L"../Resource/Textures/Sword.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("Sword", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(40, 39);
-		if (texture->LoadTexture(L"../Resource/Textures/Ax.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("Ax", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(40, 39);
-		if (texture->LoadTexture(L"../Resource/Textures/Club.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("Club", texture);
-	}
-	{
-		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(40, 39);
-		if (texture->LoadTexture(L"../Resource/Textures/Dagger.png") == false)
-		{
-			texture.reset();
-			return false;
-		}
-		mTextureList.emplace("Dagger", texture);
-	}
+	//{
+	//	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+	//	texture->CreateTexture(40, 39);
+	//	if (texture->LoadTexture(L"../Resource/Textures/Sword.png") == false)
+	//	{
+	//		texture.reset();
+	//		return false;
+	//	}
+	//	mTextureList.emplace("Sword", texture);
+	//}
+	//{
+	//	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+	//	texture->CreateTexture(40, 39);
+	//	if (texture->LoadTexture(L"../Resource/Textures/Ax.png") == false)
+	//	{
+	//		texture.reset();
+	//		return false;
+	//	}
+	//	mTextureList.emplace("Ax", texture);
+	//}
+	//{
+	//	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+	//	texture->CreateTexture(40, 39);
+	//	if (texture->LoadTexture(L"../Resource/Textures/Club.png") == false)
+	//	{
+	//		texture.reset();
+	//		return false;
+	//	}
+	//	mTextureList.emplace("Club", texture);
+	//}
+	//{
+	//	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+	//	texture->CreateTexture(40, 39);
+	//	if (texture->LoadTexture(L"../Resource/Textures/Dagger.png") == false)
+	//	{
+	//		texture.reset();
+	//		return false;
+	//	}
+	//	mTextureList.emplace("Dagger", texture);
+	//}
 	
 	if (loadTextureDatas() == false)
 	{
@@ -200,6 +200,22 @@ TextureData& ResourceManager::GetTextureData(const std::string name)
 	return mTextureDatas[name];
 }
 
+TextureData& ResourceManager::GetTextureDataIcon(int texId)
+{
+	int index = -1;
+	std::vector<TextureData>& v = mTextureIds[texId];
+	for (int i = 0; i < v.size(); ++i)
+	{
+		if (v[i].icon == true)
+		{
+			index = i;
+			break;
+		}
+	}
+
+	return v[index];
+}
+
 bool ResourceManager::loadTextureDatas()
 {
 	rapidjson::Document doc;
@@ -217,7 +233,39 @@ bool ResourceManager::loadTextureDatas()
 		int originX = doc[i]["OriginX"].GetInt();
 		int originY = doc[i]["OriginY"].GetInt();
 
-		mTextureDatas.emplace(name, TextureData(path, name, width, height, originX, originY));
+		int texId = 0;
+		bool icon = false;
+		int motion = -1;
+		if (doc[i].HasMember("TextureId") == true)
+		{
+			texId = doc[i]["TextureId"].GetInt();
+		}
+		if (doc[i].HasMember("Icon") == true)
+		{
+			icon = doc[i]["Icon"].GetBool();
+		}
+		if (doc[i].HasMember("Motion") == true)
+		{
+			motion = doc[i]["Motion"].GetInt();
+		}
+		mTextureDatas.emplace(name, TextureData(path, name, width, height, originX, originY, texId, icon, motion));
+		
+		if (texId == 0)
+		{
+			continue;
+		}
+
+		if (mTextureIds.count(texId) == false)
+		{
+			std::vector<TextureData> v;
+			v.reserve(1000);
+			v.emplace_back(TextureData(path, name, width, height, originX, originY, texId, icon, motion));
+			mTextureIds.emplace(texId, v);
+		}
+		else
+		{
+			mTextureIds[texId].emplace_back(TextureData(path, name, width, height, originX, originY, texId, icon, motion));
+		}
 	}
 	
 	// 텍스쳐 로드

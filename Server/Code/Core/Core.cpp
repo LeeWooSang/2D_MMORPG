@@ -161,6 +161,7 @@ void Core::SendAddObjectPacket(int to, int obj)
 	packet.id = obj;
 	packet.x = x;
 	packet.y = y;
+	packet.texId = mUsers[obj].GetTexId();
 
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
@@ -216,6 +217,17 @@ void Core::SendChatPacket(int to, int obj, wchar_t* chat)
 	packet.type = SC_PACKET_TYPE::SC_CHAT;
 	packet.id = obj;
 	wcsncpy_s(packet.chat, chat, MAX_CHAT_LENGTH);
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendChangeAvatarPacket(int to, int obj, int texId)
+{
+	SCChangeAvatarPacket packet;
+	packet.size = sizeof(SCChangeAvatarPacket);
+	packet.type = SC_PACKET_TYPE::SC_CHANGE_AVATAR;
+	packet.id = obj;
+	packet.texId = texId;
 
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
@@ -488,7 +500,7 @@ void Core::processPacket(int id, char* buf)
 			mUsers[id].SetChannel(channel);
 			SendLoginOkPacket(id);
 
-			//mUsers[id].SetPosition(0, 0);
+			mUsers[id].SetPosition(0, 0);
 
 			int x = mUsers[id].GetX();
 			int y = mUsers[id].GetY();
@@ -557,6 +569,14 @@ void Core::processPacket(int id, char* buf)
 			CSAttackPacket* packet = reinterpret_cast<CSAttackPacket*>(buf);
 			// 몬스터에게 공격했는지 체크
 			mUsers[id].ProcessAttack();
+			break;
+		}
+
+		case CS_PACKET_TYPE::CS_CHANGE_AVATAR:
+		{
+			CSChangeAvatarPacket* packet = reinterpret_cast<CSChangeAvatarPacket*>(buf);
+			// 주변 다른 유저들에게 아바타 바꼈다고 전송
+			mUsers[id].ProcessChangeAvatar(packet->texId);
 			break;
 		}
 
