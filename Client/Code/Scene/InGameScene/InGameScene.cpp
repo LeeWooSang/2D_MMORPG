@@ -262,14 +262,15 @@ void InGameScene::Render()
 
 	GET_INSTANCE(UIManager)->Render();
 
-	//int x = 50;
-	//int y = 300;
+	int x = 400;
+	int y = 200;
 	//SetAvatarPose0(x, y);
 	//SetAvatarPose1(x + 50, y);
 	//SetAvatarPose2(x + 100, y);
 	//SetAvatarPose3(x + 150, y);
 	//SetMonsterPose0(x, y);
 	//SetMonsterPose1(x, y);
+	//SetInventory(x, y);
 }
 
 void InGameScene::processKeyboardMessage()
@@ -653,6 +654,145 @@ void InGameScene::SetMonsterPose1(int x, int y)
 {
 	{
 		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("IdleOrangeMushroom1");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+}
+
+void InGameScene::SetInventory(int x, int y)
+{
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUIBackground0");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUIBackground1");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUIBackground2");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUITab00");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUITab11");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUIButton0");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUIButton1");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUIButton2");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUIButton3");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUIButton4");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUIButton5");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUIButton6");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUIButton7");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUIButton8");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("InvenUIButton9");
 		D2D1_RECT_F rect;
 		rect.left = x + tex->GetOrigin().first;
 		rect.top = y + tex->GetOrigin().second;

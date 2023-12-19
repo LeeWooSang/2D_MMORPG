@@ -36,6 +36,7 @@ public:
 
 	void SetMonsterPose0(int x, int y);
 	void SetMonsterPose1(int x, int y);
+	void SetInventory(int x, int y);
 
 private:
 	bool checkRange(int x, int y);

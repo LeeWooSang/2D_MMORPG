@@ -423,7 +423,7 @@
     "Width": 41,
     "Height": 16,
     "OriginX": -14,
-    "OriginY": 39,
+    "OriginY": 38,
     "TextureId": 10001,
     "Icon": false,
     "Motion": 1
@@ -434,7 +434,7 @@
     "Width": 40,
     "Height": 9,
     "OriginX": -6,
-    "OriginY": 45,
+    "OriginY": 44,
     "TextureId": 10001,
     "Icon": false,
     "Motion": 1
@@ -473,6 +473,94 @@
     "Motion": -1
   },
   {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponAx0.png",
+    "Name": "IdleWeaponAx0",
+    "Width": 42,
+    "Height": 25,
+    "OriginX": -7,
+    "OriginY": 47,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponAx0.png",
+    "Name": "IdleWeaponAx1",
+    "Width": 42,
+    "Height": 25,
+    "OriginX": -7,
+    "OriginY": 47,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponAx0.png",
+    "Name": "IdleWeaponAx2",
+    "Width": 42,
+    "Height": 25,
+    "OriginX": -6,
+    "OriginY": 47,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponAx0.png",
+    "Name": "WalkWeaponAx0",
+    "Width": 44,
+    "Height": 17,
+    "OriginX": -6,
+    "OriginY": 45,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponAx1.png",
+    "Name": "WalkWeaponAx1",
+    "Width": 44,
+    "Height": 18,
+    "OriginX": -12,
+    "OriginY": 40,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponAx2.png",
+    "Name": "WalkWeaponAx2",
+    "Width": 44,
+    "Height": 17,
+    "OriginX": -6,
+    "OriginY": 45,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponAx3.png",
+    "Name": "WalkWeaponAx3",
+    "Width": 42,
+    "Height": 25,
+    "OriginX": -4,
+    "OriginY": 45,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Jump/JumpWeaponAx0.png",
+    "Name": "JumpWeaponAx0",
+    "Width": 18,
+    "Height": 44,
+    "OriginX": 12,
+    "OriginY": 4,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 2
+  },
+  {
     "Path": "../Resource/Textures/Dagger.png",
     "Name": "Dagger",
     "Width": 40,
@@ -482,6 +570,94 @@
     "TextureId": 10003,
     "Icon": true,
     "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponDagger0.png",
+    "Name": "IdleWeaponDagger0",
+    "Width": 31,
+    "Height": 13,
+    "OriginX": 3,
+    "OriginY": 47,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponDagger0.png",
+    "Name": "IdleWeaponDagger1",
+    "Width": 31,
+    "Height": 13,
+    "OriginX": 3,
+    "OriginY": 47,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponDagger0.png",
+    "Name": "IdleWeaponDagger2",
+    "Width": 31,
+    "Height": 13,
+    "OriginX": 4,
+    "OriginY": 47,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponDagger0.png",
+    "Name": "WalkWeaponDagger0",
+    "Width": 31,
+    "Height": 6,
+    "OriginX": 5,
+    "OriginY": 45,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponDagger1.png",
+    "Name": "WalkWeaponDagger1",
+    "Width": 31,
+    "Height": 13,
+    "OriginX": -4,
+    "OriginY": 40,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponDagger2.png",
+    "Name": "WalkWeaponDagger2",
+    "Width": 31,
+    "Height": 6,
+    "OriginX": 5,
+    "OriginY": 45,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponDagger3.png",
+    "Name": "WalkWeaponDagger3",
+    "Width": 31,
+    "Height": 13,
+    "OriginX": 7,
+    "OriginY": 42,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Jump/JumpWeaponDagger0.png",
+    "Name": "JumpWeaponDagger0",
+    "Width": 13,
+    "Height": 31,
+    "OriginX": 17,
+    "OriginY": 17,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 2
   },
   {
     "Path": "../Resource/Textures/Character/Body/Jump/JumpBody0.png",
@@ -898,6 +1074,125 @@
     "Height": 39,
     "OriginX": 178,
     "OriginY": 254
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIBackground0.png",
+    "Name": "InvenUIBackground0",
+    "Width": 197,
+    "Height": 380,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIBackground1.png",
+    "Name": "InvenUIBackground1",
+    "Width": 185,
+    "Height": 351,
+    "OriginX": 6,
+    "OriginY": 23
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIBackground2.png",
+    "Name": "InvenUIBackground2",
+    "Width": 183,
+    "Height": 296,
+    "OriginX": 7,
+    "OriginY": 45
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUITab00.png",
+    "Name": "InvenUITab00",
+    "Width": 29,
+    "Height": 19,
+    "OriginX": 9,
+    "OriginY": 26
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUITab11.png",
+    "Name": "InvenUITab11",
+    "Width": 29,
+    "Height": 17,
+    "OriginX": 39,
+    "OriginY": 28
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton0.png",
+    "Name": "InvenUIButton0",
+    "Width": 40,
+    "Height": 16,
+    "OriginX": 9,
+    "OriginY": 307
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton1.png",
+    "Name": "InvenUIButton1",
+    "Width": 82,
+    "Height": 16,
+    "OriginX": 9,
+    "OriginY": 325
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton2.png",
+    "Name": "InvenUIButton2",
+    "Width": 28,
+    "Height": 28,
+    "OriginX": 9,
+    "OriginY": 343
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton3.png",
+    "Name": "InvenUIButton3",
+    "Width": 28,
+    "Height": 28,
+    "OriginX": 39,
+    "OriginY": 343
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton4.png",
+    "Name": "InvenUIButton4",
+    "Width": 28,
+    "Height": 28,
+    "OriginX": 69,
+    "OriginY": 343
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton5.png",
+    "Name": "InvenUIButton5",
+    "Width": 28,
+    "Height": 28,
+    "OriginX": 99,
+    "OriginY": 343
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton6.png",
+    "Name": "InvenUIButton6",
+    "Width": 28,
+    "Height": 28,
+    "OriginX": 129,
+    "OriginY": 343
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton7.png",
+    "Name": "InvenUIButton7",
+    "Width": 29,
+    "Height": 28,
+    "OriginX": 159,
+    "OriginY": 343
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton8.png",
+    "Name": "InvenUIButton8",
+    "Width": 16,
+    "Height": 16,
+    "OriginX": 154,
+    "OriginY": 307
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton9.png",
+    "Name": "InvenUIButton9",
+    "Width": 16,
+    "Height": 16,
+    "OriginX": 172,
+    "OriginY": 307
   }
-
 ]

@@ -344,6 +344,11 @@ void EquipSlotUI::Update()
 			child.second[i]->Update();
 		}
 	}
+
+	if (mItem != nullptr)
+	{
+		mItem->Update();
+	}
 }
 
 void EquipSlotUI::Render()
