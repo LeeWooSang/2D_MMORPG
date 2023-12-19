@@ -25,29 +25,28 @@ void EventManager::processPacketEvent()
 		PacketEvent& ev = mEventQueue.front();
 		switch (ev.packetType)
 		{
-		case SC_LOGIN_OK:
-		{
-			scene->InitializeObject(ev.id);
-			break;
-		}
-		case SC_ADD_OBJECT:
-		{
-			scene->AddObject(ev.id, ev.x, ev.y);
-			break;
-		}
-		case SC_REMOVE_OBJECT:
-		{
-			scene->RemoveObject(ev.id);
-			break;
-		}
-		case SC_POSITION:
-		{
-			scene->UpdateObjectPosition(ev.id, ev.x, ev.y);
-			break;
-		}
-
-		default:
-			break;
+			case SC_LOGIN_OK:
+			{
+				scene->InitializeObject(ev.id);
+				break;
+			}
+			case SC_ADD_OBJECT:
+			{
+				scene->AddObject(ev.id, ev.x, ev.y);
+				break;
+			}
+			case SC_REMOVE_OBJECT:
+			{
+				scene->RemoveObject(ev.id);
+				break;
+			}
+			case SC_POSITION:
+			{
+				scene->UpdateObjectPosition(ev.id, ev.x, ev.y);
+				break;
+			}
+			default:
+				break;
 		}
 		mEventQueue.pop();
 	}
