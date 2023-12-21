@@ -1,12 +1,14 @@
 #include "Character.h"
+#include <string>
+#include <random>
+#include <unordered_set>
+
 #include "../../Network/Network.h"
 #include "../../GraphicEngine/GraphicEngine.h"
 #include "../../Resource/Texture/Texture.h"
 #include "../../Input/Input.h"
 #include "../UI/Inventory/Inventory.h"
 #include "../../GameTimer/GameTimer.h"
-#include <string>
-#include <random>
 
 #include "../../Resource/ResourceManager.h"
 #include "../../Manager/SceneMangaer/SceneManager.h"
@@ -286,19 +288,16 @@ bool AnimationCharacter::Initialize(int x, int y)
 			Animation* ani = new Animation;
 			ani->Initialize();
 			ani->IsRepeat();
-			ani->SetTexture("EquipBodyIdleDreamOfDoll", 3);
 			equipBody->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
 		}
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("EquipBodyWalkDreamOfDoll", 4);
 			equipBody->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
 		}
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("EquipBodyJumpDreamOfDoll", 1);
 			equipBody->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
 		}
 	}
@@ -308,26 +307,23 @@ bool AnimationCharacter::Initialize(int x, int y)
 			Animation* ani = new Animation;
 			ani->Initialize();
 			ani->IsRepeat();
-			ani->SetTexture("EquipArmIdleDreamOfDoll", 3);
 			equipArm->AddAnimation(ANIMATION_MONTION_TYPE::IDLE, ani);
 		}
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("EquipArmWalkDreamOfDoll", 4);
 			equipArm->AddAnimation(ANIMATION_MONTION_TYPE::WALK, ani);
 		}
 		{
 			Animation* ani = new Animation;
 			ani->Initialize();
-			ani->SetTexture("EquipArmJumpDreamOfDoll", 1);
 			equipArm->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
 		}
 
 	}
 
 	AddChild("Body", body);
-	AddChild("LongCoat", equipBody);
+	AddChild("Longcoat", equipBody);
 	AddChild("LeftHand", leftHand);
 	AddChild("Head", head);
 	AddChild("Face", face);
@@ -495,6 +491,16 @@ void AnimationCharacter::AddChild(const std::string& name, AnimationCharacter* o
 	obj->mParent = this;
 }
 
+AnimationCharacter* AnimationCharacter::FindChildObject(const std::string& name)
+{
+	if (mChildObjects.count(name) == true)
+	{
+		return mChildObjects[name];
+	}
+
+	return nullptr;
+}
+
 void AnimationCharacter::SetAvatar(const std::string& parts, ANIMATION_MONTION_TYPE motion, const std::string& partsName, int count)
 {
 	if (mChildObjects.count(parts) == false)
@@ -505,6 +511,49 @@ void AnimationCharacter::SetAvatar(const std::string& parts, ANIMATION_MONTION_T
 	for (int i = 0; i < count; ++i)
 	{
 		mChildObjects[parts]->mAnimations[motion]->SetTexture(partsName, partsName + std::to_string(i));
+	}
+}
+
+void AnimationCharacter::SetAvatar(int texId)
+{
+	std::vector<TextureData>& v = GET_INSTANCE(ResourceManager)->GetTextureDatas(texId);
+
+	std::unordered_set<std::string> partsList;
+	for (int i = 0; i < v.size(); ++i)
+	{
+		partsList.emplace(v[i].parts);
+	}
+
+	for (auto parts : partsList)
+	{
+		// 해당 파트의 모든 모션을 리셋
+		for (auto& motion : mChildObjects[parts]->mAnimations)
+		{
+			motion.second->Reset();
+		}
+	}
+
+	for (int i = 0; i < v.size(); ++i)
+	{
+		if (v[i].icon == true)
+		{
+			continue;
+		}
+
+		std::string p = v[i].parts;
+		ANIMATION_MONTION_TYPE motion = static_cast<ANIMATION_MONTION_TYPE>(v[i].motion);
+
+		mChildObjects[p]->mAnimations[motion]->SetTexture(v[i].name);
+		//mChildObjects[parts]->mAnimations[motion]->SetTexture(v[i].name);
+	}
+
+	// 모든 부위의 애니메이션 번호를 초기화
+	for (auto& obj : mRenderChildObjects)
+	{
+		for (auto& ani : obj->mAnimations)
+		{
+			ani.second->ResetCurrentNum();
+		}
 	}
 }
 
@@ -561,8 +610,10 @@ void AnimationCharacter::SetWeaponAvatar(int texId)
 			continue;
 		}
 
+		std::string p = v[i].parts;
 		ANIMATION_MONTION_TYPE motion = static_cast<ANIMATION_MONTION_TYPE>(v[i].motion);
-		mChildObjects[parts]->mAnimations[motion]->SetTexture(v[i].name);
+
+		mChildObjects[p]->mAnimations[motion]->SetTexture(v[i].name);
 	}
 
 	// 모든 부위의 애니메이션 번호를 초기화
@@ -600,6 +651,10 @@ Player::~Player()
 bool Player::Initialize(int x, int y)
 {
 	AnimationCharacter::Initialize(x, y);
+	for (auto& ani : FindChildObject("Face")->GetAnimations())
+	{
+		ani.second->SetTexture("Face2");
+	}
 
 	SetAnimationMotion(ANIMATION_MONTION_TYPE::IDLE);
 
@@ -810,28 +865,43 @@ void Player::AddItem()
 
 	std::random_device rd;
 	std::default_random_engine dre(rd());
-	std::uniform_int_distribution<int> uid(0, 3);
+	std::uniform_int_distribution<int> uid(0, 4);
 	switch (uid(dre))
 	{
-	case 0:
-		itemName = "Ax";
-		texId = 10002;
-		break;
+		case 0:
+		{
+			itemName = "Ax";
+			texId = 10002;
+			break;
+		}
 
-	case 1:
-		itemName = "Sword";
-		texId = 10000;
-		break;
+		case 1:
+		{
+			itemName = "Sword";
+			texId = 10000;
+			break;
+		}
 
-	case 2:
-		itemName = "Dagger";
-		texId = 10003;
-		break;
+		case 2:
+		{
+			itemName = "Dagger";
+			texId = 10003;
+			break;
+		}
 
-	default:
-		itemName = "Club";
-		texId = 10001;
-		break;
+		case 3:
+		{
+			itemName = "Club";
+			texId = 10001;
+			break;
+		}
+
+		default:
+		{
+			itemName = "DreamOfDoll";
+			texId = 9999;
+			break;
+		}
 	}
 
 	static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"))->AddItem(texId);

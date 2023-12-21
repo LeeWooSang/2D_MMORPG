@@ -34,7 +34,7 @@ private:
 	InventoryItem* mItem;
 };
 
-constexpr int MAX_INVENTORY_WIDTH_SLOT_SIZE = 6;
+constexpr int MAX_INVENTORY_WIDTH_SLOT_SIZE = 8;
 constexpr int MAX_INVENTORY_HEIGHT_SLOT_SIZE = 4;
 constexpr int VIEW_SLOT_HEIGHT = 6;
 
@@ -89,7 +89,11 @@ public:
 	int GetTexId()	const { return mTexId; }
 	void SetTexId(int id) { mTexId = id; }
 
+	void SetItemType(int type) { mItemType = type; }
+	int GetItemType()	const { return mItemType; }
+
 private:
 	std::string mItemName;
 	int mTexId;
+	int mItemType;
 };

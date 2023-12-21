@@ -297,10 +297,9 @@ void EquipUI::OpenEquipUI()
 	}
 }
 
-InventoryItem* EquipUI::AddEquipItem(EQUIP_SLOT_TYPE slotType, InventoryItem* item)
+InventoryItem* EquipUI::AddEquipItem(InventoryItem* item)
 {
-	int type = static_cast<int>(slotType);
-	EquipSlotUI* slotUI = static_cast<EquipSlotUI*>(FindChildUIs("Slot")[type]);
+	EquipSlotUI* slotUI = static_cast<EquipSlotUI*>(FindChildUIs("Slot")[item->GetItemType()]);
 	return slotUI->AddItem(item);
 }
 
@@ -433,6 +432,16 @@ void EquipSlotUI::MouseLButtonClick()
 	mItem = nullptr;
 }
 
+void EquipSlotUI::SetPosition(int x, int y)
+{
+	UI::SetPosition(x, y);
+
+	if (mItem != nullptr)
+	{
+		mItem->SetPosition(mPos.first + 5, mPos.second + 5);
+	}
+}
+
 InventoryItem* EquipSlotUI::AddItem(InventoryItem* newItem)
 {
 	// 기존 아이템 저장
@@ -440,7 +449,7 @@ InventoryItem* EquipSlotUI::AddItem(InventoryItem* newItem)
 
 	// 새로운 아이템 저장
 	mItem = newItem;
-	mItem->SetPosition(mPos.first, mPos.second);
+	mItem->SetPosition(mPos.first + 5, mPos.second + 5);
 
 	return oldItem;
 }

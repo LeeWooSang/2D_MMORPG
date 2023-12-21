@@ -3,16 +3,27 @@
 #include "../../../../Server/Code/Common/Protocol.h"
 #include <unordered_map>
 #include <queue>
+#include <memory>
 
-struct PacketEvent
+struct PacketBase
 {
-	PacketEvent(char _packetType, int _id, int _x, int _y)
-		: packetType(_packetType), id(_id), x(_x), y(_y) {}
-
 	char packetType;
 	int id;
+};
+struct PositionPacket : public PacketBase
+{
 	int x;
 	int y;
+};
+struct AddPacket : public PacketBase
+{
+	int x;
+	int y;
+	int texId;
+};
+struct AvatarPacket : public PacketBase
+{
+	int texId;
 };
 
 class EventManager
@@ -20,8 +31,7 @@ class EventManager
 	SINGLE_TONE(EventManager)
 
 public:
-	void AddPacketEvent(char packetType, int id, int x, int y) { mEventQueue.push(PacketEvent(packetType, id, x, y)); }
-	void AddPacketEvent(PacketEvent p) { mEventQueue.push(p); }
+	void AddPacketEvent(std::shared_ptr< PacketBase> packet) { mEventQueue.push(packet); }
 
 	void Update();
 
@@ -29,5 +39,5 @@ private:
 	void processPacketEvent();
 
 private:
-	static std::queue<PacketEvent> mEventQueue;
+	static std::queue<std::shared_ptr<PacketBase>> mEventQueue;
 };

@@ -117,6 +117,9 @@ void Animation::SetTexture(const std::string& objName, int count)
 
 void Animation::SetTexture(const std::string& texName)
 {
+	mTextures.clear();
+	mPositions.clear();
+
 	Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture(texName);
 	if (tex == nullptr)
 	{
@@ -140,4 +143,5 @@ void Animation::ResetCurrentNum()
 {
 	mElapsedTime = 0.0;
 	mCurrentNum = 0;
+	mFlag = false;
 }

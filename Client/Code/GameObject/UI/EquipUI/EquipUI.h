@@ -44,7 +44,7 @@ public:
 	virtual void MouseLButtonClick();
 
 	void OpenEquipUI();
-	InventoryItem* AddEquipItem(EQUIP_SLOT_TYPE slotType, InventoryItem* item);
+	InventoryItem* AddEquipItem(InventoryItem* item);
 
 private:
 	bool mOpen;
@@ -65,6 +65,8 @@ public:
 	virtual void MouseLButtonDown();
 	virtual void MouseLButtonUp();
 	virtual void MouseLButtonClick();
+
+	virtual void SetPosition(int x, int y);
 
 	InventoryItem* AddItem(InventoryItem* newItem);
 	void SetSlotType(EQUIP_SLOT_TYPE type) { mType = type; }

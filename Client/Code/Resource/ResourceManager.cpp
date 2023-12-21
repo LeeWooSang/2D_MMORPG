@@ -63,7 +63,7 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(64, 64);
+		texture->CreateTexture(30, 30);
 		if (texture->LoadTexture(L"../Resource/Textures/Slot.png") == false)
 		{
 			texture.reset();
@@ -226,45 +226,50 @@ bool ResourceManager::loadTextureDatas()
 
 	for (int i = 0; i < doc.Size(); ++i)
 	{
-		std::string path = doc[i]["Path"].GetString();
-		std::string name = doc[i]["Name"].GetString();
-		int width = doc[i]["Width"].GetInt();
-		int height = doc[i]["Height"].GetInt();
-		int originX = doc[i]["OriginX"].GetInt();
-		int originY = doc[i]["OriginY"].GetInt();
+		TextureData data;
+		data.path = doc[i]["Path"].GetString();
+		data.name = doc[i]["Name"].GetString();
+		data.size = std::make_pair(doc[i]["Width"].GetInt(), doc[i]["Height"].GetInt());
+		data.origin = std::make_pair(doc[i]["OriginX"].GetInt(), doc[i]["OriginY"].GetInt());
 
-		int texId = 0;
-		bool icon = false;
-		int motion = -1;
 		if (doc[i].HasMember("TextureId") == true)
 		{
-			texId = doc[i]["TextureId"].GetInt();
+			data.texId = doc[i]["TextureId"].GetInt();
 		}
 		if (doc[i].HasMember("Icon") == true)
 		{
-			icon = doc[i]["Icon"].GetBool();
+			data.icon = doc[i]["Icon"].GetBool();
 		}
 		if (doc[i].HasMember("Motion") == true)
 		{
-			motion = doc[i]["Motion"].GetInt();
+			data.motion = doc[i]["Motion"].GetInt();
 		}
-		mTextureDatas.emplace(name, TextureData(path, name, width, height, originX, originY, texId, icon, motion));
+		if (doc[i].HasMember("Parts") == true)
+		{
+			data.parts = doc[i]["Parts"].GetString();
+		}
+		if (doc[i].HasMember("EquipSlotType") == true)
+		{
+			data.equipSlotType = doc[i]["EquipSlotType"].GetInt();
+		}
+
+		mTextureDatas.emplace(data.name, data);
 		
-		if (texId == 0)
+		if (data.texId == 0)
 		{
 			continue;
 		}
 
-		if (mTextureIds.count(texId) == false)
+		if (mTextureIds.count(data.texId) == false)
 		{
 			std::vector<TextureData> v;
 			v.reserve(1000);
-			v.emplace_back(TextureData(path, name, width, height, originX, originY, texId, icon, motion));
-			mTextureIds.emplace(texId, v);
+			v.emplace_back(data);
+			mTextureIds.emplace(data.texId, v);
 		}
 		else
 		{
-			mTextureIds[texId].emplace_back(TextureData(path, name, width, height, originX, originY, texId, icon, motion));
+			mTextureIds[data.texId].emplace_back(data);
 		}
 	}
 	

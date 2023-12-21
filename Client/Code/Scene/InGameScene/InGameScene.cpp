@@ -331,9 +331,9 @@ void InGameScene::AddObject(int id, int x, int y)
 	}
 	else if (id < MAX_USER)
 	{
-		//mOtherPlayers[id]->SetWeaponAvatar("Sword");
+		//mOtherPlayers[id]->SetAvatar()
 		mOtherPlayers[id]->SetPosition(x, y);
-		mOtherPlayers[id]->Visible();		
+		mOtherPlayers[id]->Visible();
 	}
 	else
 	{
@@ -378,7 +378,7 @@ void InGameScene::RemoveObject(int id)
 void InGameScene::UpdateObjectAvatar(int id, int texId)
 {
 	// texId를 이용하여 아이템 이름 구분
-	mOtherPlayers[id]->SetWeaponAvatar("Sword");
+	mOtherPlayers[id]->SetAvatar(texId);
 }
 
 Player* InGameScene::GetPlayer()

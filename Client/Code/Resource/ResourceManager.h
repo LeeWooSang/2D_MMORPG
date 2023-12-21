@@ -17,11 +17,8 @@ struct TextInfo
 struct TextureData
 {
 	TextureData()
-		: path(""), name(""), size(std::make_pair(0, 0)), origin(std::make_pair(0, 0)), texId(0), icon(false), motion(-1) {}
-
-	TextureData(const std::string& _path, const std::string& _name, int width, int height, int originX, int originY, int _texId, bool _icon, int _motion)
-		: path(_path), name(_name), size(std::make_pair(width, height)), origin(std::make_pair(originX, originY)),
-		texId(_texId), icon(_icon), motion(_motion)
+		: path(""), name(""), size(std::make_pair(0, 0)), origin(std::make_pair(0, 0)), 
+		texId(0), icon(false), motion(-1), parts(""), equipSlotType(0)
 	{
 	}
 
@@ -32,6 +29,8 @@ struct TextureData
 	int texId;
 	bool icon;
 	int motion;
+	std::string parts;
+	int equipSlotType;
 };
 
 class Texture;

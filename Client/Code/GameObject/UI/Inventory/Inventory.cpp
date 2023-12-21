@@ -70,10 +70,8 @@ void InventorySlot::Render()
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
-	//pos.right = pos.left + mTexture->GetSize().first;
-	//pos.bottom = pos.top + mTexture->GetSize().second;
-	pos.right = pos.left + 30;
-	pos.bottom = pos.top + 30;
+	pos.right = pos.left + mTexture->GetSize().first;
+	pos.bottom = pos.top + mTexture->GetSize().second;
 
 	//GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 	GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "검은색");
@@ -123,19 +121,17 @@ void InventorySlot::MouseLButtonClick()
 
 	// 아바타에 아이템 장착
 	Player* player = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE))->GetPlayer();
-	//player->SetWeaponAvatar(mItem->GetItemName());
-	player->SetWeaponAvatar(mItem->GetTexId());
-
-	EQUIP_SLOT_TYPE slotType = EQUIP_SLOT_TYPE::WEAPON;
-	// 장비창에 아이템 장착
-	EquipUI* ui = static_cast<EquipUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("EquipUI"));
-	InventoryItem* oldItem = ui->AddEquipItem(slotType, mItem);
-	AddItem(oldItem);
+	player->SetAvatar(mItem->GetTexId());
 
 	// 서버에 아바타 바꿨다는 패킷 전송
 #ifdef SERVER_CONNECT
-	GET_INSTANCE(Network)->SendChangeAvatarPacket(static_cast<char>(slotType), 0);
+	GET_INSTANCE(Network)->SendChangeAvatarPacket(mItem->GetItemType(), mItem->GetTexId());
 #endif
+
+	// 장비창에 아이템 장착
+	EquipUI* ui = static_cast<EquipUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("EquipUI"));
+	InventoryItem* oldItem = ui->AddEquipItem(mItem);
+	AddItem(oldItem);
 }
 
 void InventorySlot::SetPosition(int x, int y)
@@ -151,12 +147,13 @@ void InventorySlot::SetPosition(int x, int y)
 void InventorySlot::AddItem(int texId)
 {
 	TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureDataIcon(texId);
-	// 벡터 가장 앞에있는 것이 아이콘
 
 	// 아이템 추가
-	mItem = new InventoryItem;	
+	mItem = new InventoryItem;
 	mItem->SetTexId(data.texId);
 	mItem->SetItemName(data.name);
+	mItem->SetItemType(data.equipSlotType);
+
 	// 텍스쳐 추가
 	mItem->SetTexture(data.name);
 	mItem->Visible();
@@ -204,69 +201,6 @@ Inventory::~Inventory()
 bool Inventory::Initialize(int x, int y)
 {
 	UI::Initialize(x, y);
-
-	//SetTexture("Inventory");
-
-	//{
-	//	ButtonUI* button = new ButtonUI;
-	//	button->Initialize(300, 2);
-	//	button->SetTexture("XButton");
-	//	button->Visible();
-	//	AddChildUI("Button", button);
-	//}
-
-	//mSlotGap = 10;
-	//
-	//mSlotWidth = GET_INSTANCE(ResourceManager)->FindTexture("Slot")->GetSize().first;
-	//mSlotHeight = GET_INSTANCE(ResourceManager)->FindTexture("Slot")->GetSize().second;
-
-	//// 슬롯의 모델좌표
-	//int originX = 7;
-	//int originY = 47;
-	//int tempX = originX;
-	//int tempY = originY;
-
-	//int num = 0;
-	//for (int i = 0; i < MAX_INVENTORY_WIDTH_SLOT_SIZE; ++i)
-	//{
-	//	for (int j = 0; j < MAX_INVENTORY_HEIGHT_SLOT_SIZE; ++j)
-	//	{
-	//		InventorySlot* slot = new InventorySlot;
-	//		if (slot->Initialize(tempX, tempY) == false)
-	//		{
-	//			return false;
-	//		}
-	//		if (slot->SetTexture("Slot") == false)
-	//		{
-	//			return false;
-	//		}
-
-	//		// 슬롯 번호
-	//		slot->SetSlotNum(num++);
-
-	//		// 자식 추가
-	//		AddChildUI("Slot", slot);
-
-	//		tempX += (mSlotWidth + mSlotGap);
-	//	}
-
-	//	tempX = originX;
-	//	tempY += (mSlotHeight + mSlotGap);
-	//}
-
-	//if (MAX_INVENTORY_WIDTH_SLOT_SIZE > VIEW_SLOT_HEIGHT)
-	//{
-	//	Scroll* scroll = new Scroll;
-	//	scroll->Initialize(300, 47);
-
-	//	int alphaValue = ((originY + (VIEW_SLOT_HEIGHT - 1) * (mSlotHeight + 1 + mSlotGap)) - originY) / MAX_INVENTORY_WIDTH_SLOT_SIZE;
-	//	scroll->SetAlphaValue(alphaValue);
-
-	//	scroll->SetTexture("ScrollBackground");
-	//	scroll->Visible();
-	//	AddChildUI("Scroll", scroll);
-	//}
-
 	{
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("InvenUIBackground0");
 		SetTexture(data.name);
@@ -328,22 +262,6 @@ bool Inventory::Initialize(int x, int y)
 		ui->Visible();
 		AddChildUI("Button", ui);
 	}
-
-	if (MAX_INVENTORY_WIDTH_SLOT_SIZE > VIEW_SLOT_HEIGHT)
-	{
-		int originX = 175;
-		int originY = 55;
-
-		Scroll* scroll = new Scroll;
-		scroll->Initialize(originX, originY);
-
-		int alphaValue = ((originY + (VIEW_SLOT_HEIGHT - 1) * (mSlotHeight + 1 + mSlotGap)) - originY) / MAX_INVENTORY_WIDTH_SLOT_SIZE;
-		scroll->SetAlphaValue(alphaValue);
-		scroll->SetTexture("ScrollBackground");
-		scroll->Visible();
-		AddChildUI("Scroll", scroll);
-	}
-
 	{
 		int originX = 165;
 		int originY = 0;
@@ -393,7 +311,22 @@ bool Inventory::Initialize(int x, int y)
 			tempY += (mSlotHeight + mSlotGap);
 		}
 	}
-	
+
+	if (MAX_INVENTORY_WIDTH_SLOT_SIZE > VIEW_SLOT_HEIGHT)
+	{
+		int originX = 175;
+		int originY = 55;
+
+		Scroll* scroll = new Scroll;
+		scroll->Initialize(originX, originY);
+
+		int alphaValue = ((originY + (VIEW_SLOT_HEIGHT - 1) * (mSlotHeight + 1 + mSlotGap)) - originY) / MAX_INVENTORY_WIDTH_SLOT_SIZE;
+		scroll->SetAlphaValue(alphaValue);
+		scroll->SetTexture("ScrollBackground");
+		scroll->Visible();
+		AddChildUI("Scroll", scroll);
+	}
+
 	SetPosition(x, y);
 
 	return true;
@@ -407,21 +340,21 @@ void Inventory::Update()
 	}
 
 	// 보이는 슬롯만 렌더링하도록
-	//for (auto& slot : mChildUIs["Slot"])
-	//{
-	//	int left = slot->GetPosition().first;
-	//	int top = slot->GetPosition().second;
-	//	int right = left + slot->GetTexture()->GetSize().first;
-	//	int bottom = top + slot->GetTexture()->GetSize().second;
-	//	if (CheckContain(left, top, right, bottom) == false)
-	//	{
-	//		slot->NotVisible();
-	//	}
-	//	else
-	//	{
-	//		slot->Visible();
-	//	}
-	//}
+	for (auto& slot : mChildUIs["Slot"])
+	{
+		int left = slot->GetPosition().first;
+		int top = slot->GetPosition().second;
+		int right = left + slot->GetTexture()->GetSize().first;
+		int bottom = top + slot->GetTexture()->GetSize().second;
+		if (CheckContain(left, top, right, bottom) == false)
+		{
+			slot->NotVisible();
+		}
+		else
+		{
+			slot->Visible();
+		}
+	}
 
 	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
 	MouseOverCollision(mousePos.first, mousePos.second);
@@ -493,9 +426,14 @@ void Inventory::MouseLButtonClick()
 
 void Inventory::ProcessMouseWheelEvent(unsigned long long wParam)
 {
+	if (mChildUIs.count("Scroll") == false)
+	{
+		return;
+	}
+
 	bool upFlag = false, downFlag = false;
 	int min = 0;
-	int max = MAX_INVENTORY_WIDTH_SLOT_SIZE - 5;
+	int max = MAX_INVENTORY_WIDTH_SLOT_SIZE - VIEW_SLOT_HEIGHT;
 	static int scrollBar = max;
 
 	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
@@ -548,7 +486,7 @@ void Inventory::ProcessMouseWheelEvent(unsigned long long wParam)
 	}
 
 	// 스크롤이 있는경우에
-	if (mChildUIs.count("Scroll") != 0)
+	if (mChildUIs.count("Scroll") == true)
 	{
 		// 스크롤 바;
 		ScrollBar* scrollBars = static_cast<ScrollBar*>(mChildUIs["Scroll"].front()->FindChildUIs("ScrollBar").front());
@@ -601,11 +539,17 @@ void Inventory::ProcessMouseWheelEvent(unsigned long long wParam)
 
 bool Inventory::CheckContain(int left, int top, int right, int bottom)
 {
+	//D2D1_RECT_F rect;
+	//rect.left = mPos.first;
+	//rect.top = mPos.second + 30;
+	//rect.right = rect.left + mTexture->GetSize().first;
+	//rect.bottom = rect.top + mTexture->GetSize().second - 60;
+
 	D2D1_RECT_F rect;
-	rect.left = mPos.first;
-	rect.top = mPos.second + 30;
-	rect.right = rect.left + mTexture->GetSize().first;
-	rect.bottom = rect.top + mTexture->GetSize().second - 60;
+	rect.left = mPos.first + 4;
+	rect.top = mPos.second + 45;
+	rect.right = rect.left + +175;
+	rect.bottom = rect.top + 260;
 
 	if (left < rect.left || right > rect.right || top < rect.top || bottom > rect.bottom)
 	{
@@ -687,6 +631,7 @@ InventoryItem::InventoryItem()
 {
 	mItemName.clear();
 	mTexId = -1;
+	mItemType = 0;
 }
 
 InventoryItem::~InventoryItem()
@@ -719,12 +664,6 @@ void InventoryItem::Render()
 	pos.top = mPos.second;
 	pos.right = pos.left + mTexture->GetSize().first;
 	pos.bottom = pos.top + mTexture->GetSize().second;
-
-	//D2D1_RECT_F rect;
-	//rect.left = 0;
-	//rect.top = 0;
-	//rect.right = rect.left + 118;
-	//rect.bottom = rect.top + 118;
 
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 

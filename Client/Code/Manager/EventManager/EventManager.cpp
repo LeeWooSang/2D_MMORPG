@@ -3,7 +3,7 @@
 #include "../../Scene/InGameScene/InGameScene.h"
 
 INIT_INSTACNE(EventManager)
-std::queue<PacketEvent> EventManager::mEventQueue;
+std::queue<std::shared_ptr<PacketBase>> EventManager::mEventQueue;
 EventManager::EventManager()
 {
 }
@@ -22,39 +22,44 @@ void EventManager::processPacketEvent()
 	while (mEventQueue.empty() == false)
 	{
 		InGameScene* scene = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE));
-		PacketEvent& ev = mEventQueue.front();
-		switch (ev.packetType)
+		PacketBase* ev = mEventQueue.front().get();
+		switch (ev->packetType)
 		{
 			case SC_LOGIN_OK:
 			{
-				scene->InitializeObject(ev.id);
+				scene->InitializeObject(ev->id);
 				break;
 			}
 			case SC_ADD_OBJECT:
 			{
-				scene->AddObject(ev.id, ev.x, ev.y);
+				AddPacket* e = static_cast<AddPacket*>(ev);
+				scene->AddObject(e->id, e->x, e->y);
 				break;
 			}
 			case SC_REMOVE_OBJECT:
 			{
-				scene->RemoveObject(ev.id);
+				scene->RemoveObject(ev->id);
 				break;
 			}
 			case SC_POSITION:
 			{
-				scene->UpdateObjectPosition(ev.id, ev.x, ev.y);
+				PositionPacket* e = static_cast<PositionPacket*>(ev);
+				scene->UpdateObjectPosition(e->id, e->x, e->y);
 				break;
 			}
 
 			case SC_CHANGE_AVATAR:
 			{
-				scene->UpdateObjectAvatar(ev.id, 0);
+				AvatarPacket* e = static_cast<AvatarPacket*>(ev);
+				scene->UpdateObjectAvatar(e->id, e->texId);
 				break;
 			}
 
 			default:
 				break;
 		}
+
+		mEventQueue.front().reset();
 		mEventQueue.pop();
 	}
 }

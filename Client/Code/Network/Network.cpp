@@ -151,7 +151,11 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_LOGIN_OK:
 		{		
 			SCLoginOkPacket* packet = reinterpret_cast<SCLoginOkPacket*>(mPacketBuffer);
-			GET_INSTANCE(EventManager)->AddPacketEvent(PacketEvent(packet->type, packet->id, 0, 0));
+
+			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
+			p->packetType = packet->type;
+			p->id = packet->id;
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
 			break;
 		}
 
@@ -165,21 +169,38 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_POSITION:
 		{
 			SCPositionPacket* packet = reinterpret_cast<SCPositionPacket*>(mPacketBuffer);
-			GET_INSTANCE(EventManager)->AddPacketEvent(PacketEvent(packet->type, packet->id, packet->x, packet->y));
+
+			std::shared_ptr<PositionPacket> p = std::make_shared<PositionPacket>();
+			p->packetType = packet->type;
+			p->id = packet->id;
+			p->x = packet->x;
+			p->y = packet->y;
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
 			break;
 		}
 
 		case SC_PACKET_TYPE::SC_ADD_OBJECT:
 		{
 			SCAddObjectPacket* packet = reinterpret_cast<SCAddObjectPacket*>(mPacketBuffer);
-			GET_INSTANCE(EventManager)->AddPacketEvent(PacketEvent(packet->type, packet->id, packet->x, packet->y));
+
+			std::shared_ptr<AddPacket> p = std::make_shared<AddPacket>();
+			p->packetType = packet->type;
+			p->id = packet->id;
+			p->x = packet->x;
+			p->y = packet->y;
+			p->texId = 0;
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
 			break;
 		}
 
 		case SC_PACKET_TYPE::SC_REMOVE_OBJECT:
 		{
 			SCRemoveObjectPacket* packet = reinterpret_cast<SCRemoveObjectPacket*>(mPacketBuffer);
-			GET_INSTANCE(EventManager)->AddPacketEvent(PacketEvent(packet->type, packet->id, 0, 0));
+
+			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
+			p->packetType = packet->type;
+			p->id = packet->id;
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
 			break;
 		}
 
@@ -212,7 +233,12 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_CHANGE_AVATAR:
 		{
 			SCChangeAvatarPacket* packet = reinterpret_cast<SCChangeAvatarPacket*>(mPacketBuffer);
-			GET_INSTANCE(EventManager)->AddPacketEvent(PacketEvent(packet->type, packet->id, 0, 0));
+
+			std::shared_ptr<AvatarPacket> p = std::make_shared<AvatarPacket>();
+			p->packetType = packet->type;
+			p->id = packet->id;
+			p->texId = packet->texId;
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
 			break;
 		}
 

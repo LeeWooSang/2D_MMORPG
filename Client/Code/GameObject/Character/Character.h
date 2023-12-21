@@ -59,10 +59,15 @@ public:
 	void SetId(int id) { mId = id; }
 
 	void AddChild(const std::string& name, AnimationCharacter* obj);
+	AnimationCharacter* FindChildObject(const std::string& name);
+
 	void AddAnimation(ANIMATION_MONTION_TYPE motion, Animation* animation)		{ mAnimations.emplace(motion, animation); }
+	std::unordered_map<ANIMATION_MONTION_TYPE, Animation*>& GetAnimations() { return mAnimations; }
+	
 	void SetAnimationMotion(ANIMATION_MONTION_TYPE motion);
 	void SetAvatar(const std::string& parts, ANIMATION_MONTION_TYPE motion, const std::string& objName, int count);
 
+	void SetAvatar(int texId);
 	void SetWeaponAvatar(const std::string& itemName);
 	void SetWeaponAvatar(int texId);
 
