@@ -96,6 +96,9 @@
     <Filter Include="Code\Manager\SceneManager">
       <UniqueIdentifier>{d393da9a-6b7f-4ebf-a0bf-8942ea037c69}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\GameObject\UI\SkillUI">
+      <UniqueIdentifier>{c2b985b3-7638-44cd-95ae-5a3bdc7c5639}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -184,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Manager\SceneMangaer\SceneManager.cpp">
       <Filter>Code\Manager\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\UI\SkillUI\SkillUI.cpp">
+      <Filter>Code\GameObject\UI\SkillUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -279,6 +285,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\Manager\SceneMangaer\SceneManager.h">
       <Filter>Code\Manager\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\UI\SkillUI\SkillUI.h">
+      <Filter>Code\GameObject\UI\SkillUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

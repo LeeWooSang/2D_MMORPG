@@ -10,9 +10,9 @@
 #include "../../GameObject/UI/InputUI/ChattingInputUI/ChattingInputUI.h"
 #include "../../GameObject/UI/Inventory/Inventory.h"
 #include "../../GameObject/UI/EquipUI/EquipUI.h"
+#include "../../GameObject/UI/SkillUI/SkillUI.h"
 
 #include "../../../../Server/Code/Common/Protocol.h"
-
 #include "../../Resource/ResourceManager.h"
 #include "../../Resource/Texture/Texture.h"
 #include <random>
@@ -143,6 +143,14 @@ bool InGameScene::Initialize()
 	}
 	AddSceneUI("Inventory", inventory);
 
+	SkillUI* skillUI = new SkillUI;
+	if (skillUI->Initialize(0, 0) == false)
+	{
+		return false;
+	}
+	AddSceneUI("SkillUI", skillUI);
+
+
 	mIsReady = true;
 
 	return true;
@@ -271,6 +279,7 @@ void InGameScene::Render()
 	//SetMonsterPose0(x, y);
 	//SetMonsterPose1(x, y);
 	//SetInventory(x, y);
+	//SetSkill(x, y);
 }
 
 void InGameScene::processKeyboardMessage()
@@ -305,6 +314,12 @@ void InGameScene::processKeyboardMessage()
 				EquipUI* equipUI = static_cast<EquipUI*>(FindUI("EquipUI"));
 				equipUI->OpenEquipUI();
 				GET_INSTANCE(UIManager)->SetFocusUI(equipUI);
+			}
+			else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::K_KEY) == true)
+			{
+				SkillUI* skillUI = static_cast<SkillUI*>(FindUI("SkillUI"));
+				skillUI->OpenSkillUI();
+				GET_INSTANCE(UIManager)->SetFocusUI(skillUI);
 			}
 			else
 			{
@@ -800,6 +815,206 @@ void InGameScene::SetInventory(int x, int y)
 		rect.bottom = rect.top + tex->GetSize().second;
 		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
 	}
+}
+
+void InGameScene::SetSkill(int x, int y)
+{
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUIBackground0");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUIBackground1");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUITab02");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUITab12");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUITab22");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUITab32");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUITab40");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUITab52");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUITab62");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUIBackground2");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUIBackground3");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUIButton0");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUIButton1");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUIButton2");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUIButton3");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUIButton4");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUISlot00");
+		int originX = tex->GetOrigin().first;
+		int originY = tex->GetOrigin().second;
+		int gap = 3;
+		for (int i = 0; i < 5; ++i)
+		{
+			for (int j = 0; j < 2; ++j)
+			{
+				D2D1_RECT_F rect;
+				rect.left = x + originX + (j * (tex->GetSize().first + gap));
+				rect.top = y + originY + (i * (tex->GetSize().second + gap));
+				rect.right = rect.left + tex->GetSize().first;
+				rect.bottom = rect.top + tex->GetSize().second;
+				GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+			}
+		}
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUISlot1");
+		int originX = tex->GetOrigin().first;
+		int originY = tex->GetOrigin().second;
+		int gap = 3;
+		for (int i = 0; i < 2; ++i)
+		{
+			D2D1_RECT_F rect;
+			rect.left = x + originX + (i * (tex->GetSize().first + gap));
+			rect.top = y + originY;
+			rect.right = rect.left + tex->GetSize().first;
+			rect.bottom = rect.top + tex->GetSize().second;
+			GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+		}
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("Icon0");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUIButton50");
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+
 }
 
 bool InGameScene::checkRange(int x, int y)

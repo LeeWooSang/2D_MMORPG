@@ -1359,5 +1359,165 @@
     "Height": 16,
     "OriginX": 172,
     "OriginY": 307
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIBackground0.png",
+    "Name": "SkillUIBackground0",
+    "Width": 318,
+    "Height": 361,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIBackground1.png",
+    "Name": "SkillUIBackground1",
+    "Width": 306,
+    "Height": 333,
+    "OriginX": 6,
+    "OriginY": 22
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIBackground2.png",
+    "Name": "SkillUIBackground2",
+    "Width": 304,
+    "Height": 45,
+    "OriginX": 8,
+    "OriginY": 47
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIBackground3.png",
+    "Name": "SkillUIBackground3",
+    "Width": 95,
+    "Height": 16,
+    "OriginX": 213,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab02.png",
+    "Name": "SkillUITab02",
+    "Width": 25,
+    "Height": 18,
+    "OriginX": 11,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab12.png",
+    "Name": "SkillUITab12",
+    "Width": 25,
+    "Height": 18,
+    "OriginX": 37,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab22.png",
+    "Name": "SkillUITab22",
+    "Width": 25,
+    "Height": 18,
+    "OriginX": 63,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab32.png",
+    "Name": "SkillUITab32",
+    "Width": 25,
+    "Height": 18,
+    "OriginX": 89,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab40.png",
+    "Name": "SkillUITab40",
+    "Width": 25,
+    "Height": 20,
+    "OriginX": 115,
+    "OriginY": 27
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab52.png",
+    "Name": "SkillUITab52",
+    "Width": 25,
+    "Height": 18,
+    "OriginX": 141,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab62.png",
+    "Name": "SkillUITab62",
+    "Width": 25,
+    "Height": 18,
+    "OriginX": 167,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIButton0.png",
+    "Name": "SkillUIButton0",
+    "Width": 50,
+    "Height": 16,
+    "OriginX": 11,
+    "OriginY": 335
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIButton1.png",
+    "Name": "SkillUIButton1",
+    "Width": 50,
+    "Height": 16,
+    "OriginX": 63,
+    "OriginY": 335
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIButton2.png",
+    "Name": "SkillUIButton2",
+    "Width": 50,
+    "Height": 16,
+    "OriginX": 115,
+    "OriginY": 335
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIButton3.png",
+    "Name": "SkillUIButton3",
+    "Width": 50,
+    "Height": 16,
+    "OriginX": 206,
+    "OriginY": 335
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIButton4.png",
+    "Name": "SkillUIButton4",
+    "Width": 50,
+    "Height": 16,
+    "OriginX": 258,
+    "OriginY": 335
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIButton50.png",
+    "Name": "SkillUIButton50",
+    "Width": 14,
+    "Height": 12,
+    "OriginX": 136,
+    "OriginY": 113
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUISlot00.png",
+    "Name": "SkillUISlot00",
+    "Width": 140,
+    "Height": 35,
+    "OriginX": 11,
+    "OriginY": 93
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUISlot1.png",
+    "Name": "SkillUISlot1",
+    "Width": 140,
+    "Height": 35,
+    "OriginX": 11,
+    "OriginY": 283
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/Hero/Icon0.png",
+    "Name": "Icon0",
+    "Width": 32,
+    "Height": 32,
+    "OriginX": 13,
+    "OriginY": 95
   }
 ]
