@@ -99,6 +99,9 @@
     <Filter Include="Code\GameObject\UI\SkillUI">
       <UniqueIdentifier>{c2b985b3-7638-44cd-95ae-5a3bdc7c5639}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\GameObject\Skill">
+      <UniqueIdentifier>{23ca503a-f933-49b2-bb22-1ef339124f5b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -190,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\GameObject\UI\SkillUI\SkillUI.cpp">
       <Filter>Code\GameObject\UI\SkillUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\Skill\Skill.cpp">
+      <Filter>Code\GameObject\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -288,6 +294,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameObject\UI\SkillUI\SkillUI.h">
       <Filter>Code\GameObject\UI\SkillUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\Skill\Skill.h">
+      <Filter>Code\GameObject\Skill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

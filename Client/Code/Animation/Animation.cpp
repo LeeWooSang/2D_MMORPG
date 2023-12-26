@@ -9,11 +9,14 @@ Animation::Animation()
 	mName.clear();
 	mTextures.clear();
 	mPositions.clear();
+
+	mPlaySpeed = 1.0;
 	mCurrentNum = 0;
 	mElapsedTime = 0.0;
 
 	mRepeat = false;
 	mFlag = false;
+	mFinish = false;
 }
 
 Animation::~Animation()
@@ -25,22 +28,23 @@ Animation::~Animation()
 
 bool Animation::Initialize()
 {
+	//mElapsedTime = 0.2;
 	return true;
 }
 
 void Animation::Update()
 {
-	float playSpeed = 1.0;
-	mElapsedTime += GET_INSTANCE(GameTimer)->GetElapsedTime() * playSpeed;
+	mElapsedTime += GET_INSTANCE(GameTimer)->GetElapsedTime() * mPlaySpeed;
 	if (mRepeat == false)
 	{
 		if (mElapsedTime > 0.2)
 		{
-			mElapsedTime = 0.0;
+			mElapsedTime -= 0.2;
 			++mCurrentNum;
 			if (mCurrentNum >= mTextures.size())
 			{
 				mCurrentNum = 0;
+				mFinish = true;
 			}
 		}
 	}
@@ -49,7 +53,7 @@ void Animation::Update()
 	{
 		if (mElapsedTime > 0.3)
 		{
-			mElapsedTime = 0.0;
+			mElapsedTime -= 0.3;
 			if (mFlag == false)
 			{
 				++mCurrentNum;
@@ -78,6 +82,7 @@ void Animation::Reset()
 	mTextures.clear();
 	mPositions.clear();
 	mName.clear();
+
 }
 
 void Animation::SetTexture(const std::string& objName, const std::string& texName)
@@ -117,9 +122,6 @@ void Animation::SetTexture(const std::string& objName, int count)
 
 void Animation::SetTexture(const std::string& texName)
 {
-	mTextures.clear();
-	mPositions.clear();
-
 	Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture(texName);
 	if (tex == nullptr)
 	{

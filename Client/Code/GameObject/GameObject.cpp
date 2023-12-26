@@ -18,14 +18,6 @@ GameObject::GameObject()
 {
     mAttr = ATTR_STATE_TYPE::DEFAULT;
     mTexture = nullptr;
-
-    mAnimationState = 0;
-    mCurrFrame = 0;
-    mFrameSize = 0;
-    mCurrAnimation = 0;
-    mAnimationCounter = 0;
-    mAnimationIndex = 0;
-    mAnimationCountMax = 0;
 }
 
 GameObject::~GameObject()
@@ -38,16 +30,8 @@ bool GameObject::Initialize(int x, int y)
     mAttr = ATTR_STATE_TYPE::DEFAULT;
     mPos.first = x;
     mPos.second = y;
-    mDir = 0;
+    mDir = 1;
     mTexture = nullptr;
-
-    mAnimationState = 0;
-    mCurrFrame = 0;
-    mFrameSize = 0;
-    mCurrAnimation = 0;
-    mAnimationCounter = 0;
-    mAnimationIndex = 0;
-    mAnimationCountMax = 0;
 
     return true;
 }
@@ -66,14 +50,6 @@ void GameObject::Reset()
     mPos = std::make_pair(0, 0);
     mDir = 0;
     mTexture = nullptr;
-
-    mAnimationState = 0;
-    mCurrFrame = 0;
-    mFrameSize = 0;
-    mCurrAnimation = 0;
-    mAnimationCounter = 0;
-    mAnimationIndex = 0;
-    mAnimationCountMax = 0;
 }
 
 bool GameObject::SetTexture(const std::string& name)

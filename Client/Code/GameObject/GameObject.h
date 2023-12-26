@@ -23,8 +23,6 @@ enum ATTR_STATE_TYPE
 	VISIBLE				= 0x0001,		// 0000 0001
 };
 
-constexpr int MAX_ANIMATIONS = 16;
-
 class Texture;
 class GameObject : Object
 {
@@ -39,6 +37,7 @@ public:
 
 	virtual void SetPosition(int x, int y) { mPos = std::make_pair(x, y); }
 	const std::pair<int, int>& GetPosition()	const { return mPos; }
+	char GetDirection()	const { return mDir; }
 
 	Texture* GetTexture()	const { return mTexture; }
 	bool SetTexture(const std::string& name);
@@ -54,14 +53,5 @@ protected:
 	char mDir;
 	int mAttr;
 	Texture* mTexture;
-
-	int mAnimationState;     // an animation state variable, up to you
-	int mCurrFrame;     // current animation frame
-	int mFrameSize;     // total number of animation frames
-	int mCurrAnimation; // index of current animation
-	int mAnimationCounter;   // used to time animation transitions
-	int mAnimationIndex;     // animation element index
-	int mAnimationCountMax; // number of cycles before animation
-	//int* mAnimations[MAX_ANIMATIONS]; // animation sequences
 };
 

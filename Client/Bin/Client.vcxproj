@@ -143,6 +143,7 @@
     <ClCompile Include="..\Code\GameObject\Character\Character.cpp" />
     <ClCompile Include="..\Code\GameObject\GameObject.cpp" />
     <ClCompile Include="..\Code\GameObject\Map\Map.cpp" />
+    <ClCompile Include="..\Code\GameObject\Skill\Skill.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\ButtonUI\ButtonUI.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\ChattingBox\ChattingBox.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\EquipUI\EquipUI.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="..\Code\GameObject\Character\Character.h" />
     <ClInclude Include="..\Code\GameObject\GameObject.h" />
     <ClInclude Include="..\Code\GameObject\Map\Map.h" />
+    <ClInclude Include="..\Code\GameObject\Skill\Skill.h" />
     <ClInclude Include="..\Code\GameObject\UI\ButtonUI\ButtonUI.h" />
     <ClInclude Include="..\Code\GameObject\UI\ChattingBox\ChattingBox.h" />
     <ClInclude Include="..\Code\GameObject\UI\EquipUI\EquipUI.h" />

@@ -4,6 +4,7 @@
 #include "../../GameObject/Map/Map.h"
 #include "../../GraphicEngine/GraphicEngine.h"
 #include "../../GameObject/Character/Character.h"
+#include "../../GameObject/Skill/Skill.h"
 
 #include "../../Manager/UIManager/UIManager.h"
 #include "../../GameObject/UI/ChattingBox/ChattingBox.h"
@@ -25,6 +26,8 @@ InGameScene::InGameScene()
 	mTiles.clear();
 	mPlayer = nullptr;
 	mIsReady = false;
+
+	mSkill = nullptr;
 }
 
 InGameScene::~InGameScene()
@@ -47,6 +50,7 @@ InGameScene::~InGameScene()
 	mOtherPlayers.clear();
 	mMonsters.clear();
 	delete mPlayer;
+	delete mSkill;
 }
 
 bool InGameScene::Initialize()
@@ -150,6 +154,11 @@ bool InGameScene::Initialize()
 	}
 	AddSceneUI("SkillUI", skillUI);
 
+	mSkill = new Skill;
+	if (mSkill->Initialize(0, 0) == false)
+	{
+		return false;
+	}
 
 	mIsReady = true;
 
@@ -194,6 +203,8 @@ void InGameScene::Update()
 		otherPlayer.second->Update();
 	}
 
+	mSkill->Update();
+
 	GET_INSTANCE(UIManager)->Update();
 }
 
@@ -227,6 +238,9 @@ void InGameScene::Render()
 	}
 
 	mPlayer->Render();
+
+	mSkill->Render();
+
 	{
 		D2D1_RECT_F rect;
 		rect.left = 45;
@@ -279,7 +293,8 @@ void InGameScene::Render()
 	//SetMonsterPose0(x, y);
 	//SetMonsterPose1(x, y);
 	//SetInventory(x, y);
-	//SetSkill(x, y);
+	//SetSkillUI(x, y);
+	//SetSkillEffect(x, y);
 }
 
 void InGameScene::processKeyboardMessage()
@@ -320,6 +335,10 @@ void InGameScene::processKeyboardMessage()
 				SkillUI* skillUI = static_cast<SkillUI*>(FindUI("SkillUI"));
 				skillUI->OpenSkillUI();
 				GET_INSTANCE(UIManager)->SetFocusUI(skillUI);
+			}
+			else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::CONTROL_KEY) == true)
+			{
+				mSkill->Visible();
 			}
 			else
 			{
@@ -817,7 +836,7 @@ void InGameScene::SetInventory(int x, int y)
 	}
 }
 
-void InGameScene::SetSkill(int x, int y)
+void InGameScene::SetSkillUI(int x, int y)
 {
 	{
 		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("SkillUIBackground0");
@@ -1015,6 +1034,29 @@ void InGameScene::SetSkill(int x, int y)
 		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
 	}
 
+}
+
+void InGameScene::SetSkillEffect(int x, int y)
+{
+	for(int i = 13; i < 14; ++i)
+	{
+		std::string name = "Effect" + std::to_string(i);
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture(name);
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
+	std::string name = "Effect14";
+	Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture(name);
+	D2D1_RECT_F rect;
+	rect.left = x + tex->GetOrigin().first;
+	rect.top = y + tex->GetOrigin().second;
+	rect.right = rect.left + tex->GetSize().first;
+	rect.bottom = rect.top + tex->GetSize().second;
+	GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
 }
 
 bool InGameScene::checkRange(int x, int y)

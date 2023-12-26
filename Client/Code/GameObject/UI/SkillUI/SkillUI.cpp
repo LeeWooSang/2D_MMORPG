@@ -157,6 +157,7 @@ void SkillUI::Update()
 void SkillUI::Render()
 {
 	UI::Render();
+	GET_INSTANCE(GraphicEngine)->RenderText(L"123", mPos.first + 280, mPos.second + 25, "굴림", "검은색");
 }
 
 void SkillUI::MouseOverCollision(int x, int y)

@@ -64,18 +64,6 @@ void Character::Reset()
 {
 	mId = -1;
 	mState = CHARACTER_STATE_TYPE::DEFAULT;
-	mAnimationState = 0;
-	mCurrFrame = 0;
-	mFrameSize = 0;
-	mCurrAnimation = 0;
-	mAnimationCounter = 0;
-	mAnimationIndex = 0;
-	mAnimationCountMax = 0;
-}
-
-void Character::SetAnimationInfo(int frameSize)
-{
-	mFrameSize = frameSize;
 }
 
 AnimationCharacter::AnimationCharacter()
@@ -651,10 +639,10 @@ Player::~Player()
 bool Player::Initialize(int x, int y)
 {
 	AnimationCharacter::Initialize(x, y);
-	for (auto& ani : FindChildObject("Face")->GetAnimations())
-	{
-		ani.second->SetTexture("Face2");
-	}
+	//for (auto& ani : FindChildObject("Face")->GetAnimations())
+	//{
+	//	ani.second->SetTexture("Face2");
+	//}
 
 	SetAnimationMotion(ANIMATION_MONTION_TYPE::IDLE);
 

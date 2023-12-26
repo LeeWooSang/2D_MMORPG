@@ -19,7 +19,7 @@
 #include <vector>
 #include <unordered_map>
 
-constexpr int MAX_FONT_COUNT = 2;
+constexpr int MAX_FONT_COUNT = 3;
 
 struct FontInfo
 {

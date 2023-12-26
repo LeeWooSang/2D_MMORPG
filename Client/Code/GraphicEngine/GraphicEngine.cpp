@@ -131,13 +131,13 @@ void GraphicEngine::createFont()
 	IDWriteFontSetBuilder1* pFontSetBuilder;
 	HRESULT result = mWriteFactory->CreateFontSetBuilder(&pFontSetBuilder);
 
-	IDWriteFontFile* fontFile[MAX_FONT_COUNT];
-	IDWriteFontSet* fontSet[MAX_FONT_COUNT];
+	IDWriteFontFile* fontFile[MAX_FONT_COUNT - 1];
+	IDWriteFontSet* fontSet[MAX_FONT_COUNT - 1];
 
-	std::wstring fontName[MAX_FONT_COUNT];
+	std::wstring fontName[MAX_FONT_COUNT - 1];
 	unsigned int max_length = 64;
 
-	for (int i = 0; i < MAX_FONT_COUNT; ++i)
+	for (int i = 0; i < MAX_FONT_COUNT - 1; ++i)
 	{
 		// 해당하는 경로에서 폰트 파일을 로드한다.
 		result = mWriteFactory->CreateFontFileReference(fontPath[i].c_str(), nullptr, &fontFile[i]);
@@ -162,7 +162,7 @@ void GraphicEngine::createFont()
 
 	pFontSetBuilder->Release();
 
-	for (int i = 0; i < MAX_FONT_COUNT; ++i)
+	for (int i = 0; i < MAX_FONT_COUNT - 1; ++i)
 	{
 		fontFile[i]->Release();
 		fontSet[i]->Release();
@@ -176,7 +176,7 @@ void GraphicEngine::createFont()
 	IDWriteTextLayout* pTextLayout[MAX_FONT_COUNT];
 	std::wstring wstr = L"M TextLayout Initialize";
 
-	for (int i = 0; i < MAX_FONT_COUNT; ++i)
+	for (int i = 0; i < MAX_FONT_COUNT - 1; ++i)
 	{
 		// 폰트 객체 생성	
 		result = mWriteFactory->CreateTextFormat(
@@ -207,6 +207,25 @@ void GraphicEngine::createFont()
 			mFontMap.emplace("메이플", FontInfo(pFont[i], pTextLayout[i], fontSize));
 		}
 	}
+
+	fontSize = 17;
+	// 폰트 객체 생성	
+	result = mWriteFactory->CreateTextFormat(
+		L"Gulim",
+		mFontCollection,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		//DWRITE_FONT_WEIGHT_DEMI_BOLD,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		fontSize,
+		L"en-US",
+		&pFont[2]);
+
+	result = pFont[2]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+	result = pFont[2]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
+	result = mWriteFactory->CreateTextLayout(wstr.c_str(), static_cast<UINT32>(wstr.length()), pFont[2], 0, 0, &pTextLayout[2]);
+	mFontMap.emplace("굴림", FontInfo(pFont[2], pTextLayout[2], fontSize));
+
 }
 
 void GraphicEngine::createBrushColor()

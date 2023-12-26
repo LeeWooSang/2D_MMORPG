@@ -28,14 +28,21 @@ public:
 	void ResetCurrentNum();
 	int GetCurrentNum()		const { return mCurrentNum; }
 
+	void SetPlaySpeed(float speed) { mPlaySpeed = speed; }
+
+	bool GetIsFinish()	const { return mFinish; }
+	void SetFinish(bool finish) { mFinish = finish; }
+
 private:
 	std::string mName;
 	std::vector<Texture*> mTextures;
 	std::vector<std::pair<int, int>> mPositions;
 
+	float mPlaySpeed;
+
 	int mCurrentNum;
 	float mElapsedTime;
-
 	bool mRepeat;
 	bool mFlag;
+	bool mFinish;
 };
