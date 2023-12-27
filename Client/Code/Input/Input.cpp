@@ -3,13 +3,19 @@
 #include "../Core/Core.h"
 #include "../Manager/SceneMangaer/SceneManager.h"
 #include <Windows.h>
-//#include <imm.h>
-//#pragma comment(lib,"imm32.lib")
+#include <imm.h>
+#pragma comment(lib,"imm32.lib")
 
 INIT_INSTACNE(Input)
 std::pair<int, int> Input::mMousePos = std::make_pair(0, 0);
 Input::Input()
 {
+#ifdef _DEBUG
+	_wsetlocale(LC_ALL, L"korean");
+	// 에러발생시 한글로 출력되도록 명령
+	std::wcout.imbue(std::locale("korean"));
+#endif
+
 	mFlag = false;
 	mMousePos.first = 0;
 	mMousePos.second = 0;
@@ -139,6 +145,14 @@ void Input::ProcessKeyboardMessage(unsigned int msg, unsigned long long wParam, 
 		
 		//std::cout << wParam << std::endl;	
 	}
+
+	if (msg == WM_IME_COMPOSITION)
+	{
+		//processKorean(lParam);
+	}
+	else if (msg == WM_IME_NOTIFY)
+	{
+	}
 }
 
 void Input::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)
@@ -239,4 +253,42 @@ void Input::setMousePos()
 	::ScreenToClient(GET_INSTANCE(Core)->GetMainHandle(), &mouse);
 	mMousePos.first = mouse.x;
 	mMousePos.second = mouse.y;
+}
+
+std::wstring m_comb;
+void Input::processKorean(long long lParam)
+{
+	HIMC himc = ImmGetContext(GET_INSTANCE(Core)->GetMainHandle());
+	int len = 0;
+	wchar_t temp[10] = { 0, };
+
+	// 한글 조합중
+	if (lParam & GCS_COMPSTR)
+	{
+		len = ImmGetCompositionString(himc, GCS_COMPSTR, nullptr, 0);
+		if (len > 0)
+		{
+			ImmGetCompositionString(himc, GCS_COMPSTR, temp, len);
+			temp[len] = 0;
+			m_comb = temp;
+ 		}
+	}
+	// 한글 완성
+	else if (lParam & GCS_RESULTSTR)
+	{
+		len = ImmGetCompositionString(himc, GCS_RESULTSTR, nullptr, 0);
+		if (len > 0)
+		{
+			ImmGetCompositionString(himc, GCS_RESULTSTR, temp, len);
+			temp[len] = 0;
+
+			//unsigned char key = static_cast<unsigned char>(m_textList.size());
+			std::wstring text = temp;
+			//m_textList.emplace_back(TextInfo(key, text));
+			//std::wcout << text << std::endl;
+			m_comb.clear();
+		}
+	}
+
+	ImmReleaseContext(GET_INSTANCE(Core)->GetMainHandle(), himc);
 }

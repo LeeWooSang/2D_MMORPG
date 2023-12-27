@@ -1521,7 +1521,7 @@
     "OriginY": 95
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect0.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect0.png",
     "Name": "Effect0",
     "Width": 396,
     "Height": 360,
@@ -1529,7 +1529,7 @@
     "OriginY": 0
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect1.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect1.png",
     "Name": "Effect1",
     "Width": 376,
     "Height": 296,
@@ -1537,7 +1537,7 @@
     "OriginY": 28
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect2.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect2.png",
     "Name": "Effect2",
     "Width": 920,
     "Height": 492,
@@ -1545,7 +1545,7 @@
     "OriginY": -30
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect3.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect3.png",
     "Name": "Effect3",
     "Width": 884,
     "Height": 520,
@@ -1553,7 +1553,7 @@
     "OriginY": -7
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect4.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect4.png",
     "Name": "Effect4",
     "Width": 892,
     "Height": 516,
@@ -1561,7 +1561,7 @@
     "OriginY": -7
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect5.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect5.png",
     "Name": "Effect5",
     "Width": 888,
     "Height": 616,
@@ -1569,7 +1569,7 @@
     "OriginY": -107
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect6.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect6.png",
     "Name": "Effect6",
     "Width": 932,
     "Height": 600,
@@ -1577,7 +1577,7 @@
     "OriginY": -105
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect7.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect7.png",
     "Name": "Effect7",
     "Width": 904,
     "Height": 560,
@@ -1585,7 +1585,7 @@
     "OriginY": -90
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect8.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect8.png",
     "Name": "Effect8",
     "Width": 916,
     "Height": 536,
@@ -1593,7 +1593,7 @@
     "OriginY": -95
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect9.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect9.png",
     "Name": "Effect9",
     "Width": 900,
     "Height": 552,
@@ -1601,7 +1601,7 @@
     "OriginY": -95
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect10.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect10.png",
     "Name": "Effect10",
     "Width": 832,
     "Height": 592,
@@ -1609,7 +1609,7 @@
     "OriginY": -148
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect11.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect11.png",
     "Name": "Effect11",
     "Width": 828,
     "Height": 592,
@@ -1617,15 +1617,15 @@
     "OriginY": -148
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect12.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect12.png",
     "Name": "Effect12",
-    "Width": 828,
-    "Height": 588,
+    "Width": 30,
+    "Height": 30,
     "OriginX": -422,
     "OriginY": -155
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect13.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect13.png",
     "Name": "Effect13",
     "Width": 844,
     "Height": 600,
@@ -1633,13 +1633,40 @@
     "OriginY": -156
   },
   {
-    "Path": "../Resource/Textures/Skill/Hero/Effect0/Effect14.png",
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect14.png",
     "Name": "Effect14",
     "Width": 696,
     "Height": 536,
     "OriginX": -420,
     "OriginY": -150
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect0.png",
+    "Name": "Effect00",
+    "Width": 396,
+    "Height": 360,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect1.png",
+    "Name": "Effect11",
+    "Width": 396,
+    "Height": 360,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+
+
+  {
+    "Path": "../Resource/Textures/Slot.png",
+    "Name": "KeySlot",
+    "Width": 32,
+    "Height": 32,
+    "OriginX": 0,
+    "OriginY": 0
   }
+
 
 
 

@@ -100,6 +100,8 @@ public:
 private:
 	void setMousePos();
 	
+	void processKorean(long long lParam);
+
 private:
 	//static std::array<KeyState, MAX_KEY_TYPE> mKeyStateList;
 	std::array<KeyState, MAX_KEY_TYPE> mKeyStateList;

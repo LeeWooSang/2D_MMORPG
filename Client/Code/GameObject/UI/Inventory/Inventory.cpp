@@ -403,6 +403,11 @@ void Inventory::Render()
 			child.second[i]->Render();
 		}
 	}
+
+	// 메소
+	GET_INSTANCE(GraphicEngine)->RenderText(L"1,000,000,000", mPos.first + 45, mPos.second + 305);
+	// 메포
+	GET_INSTANCE(GraphicEngine)->RenderText(L"10,000,000", mPos.first + 82, mPos.second + 323);
 }
 
 void Inventory::MouseOver()

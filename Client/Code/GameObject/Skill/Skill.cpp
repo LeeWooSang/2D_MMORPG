@@ -33,7 +33,7 @@ bool Skill::Initialize(int x, int y)
 
 	Animation* ani = new Animation;
 	ani->SetTexture("Effect", 15);
-	ani->SetPlaySpeed(2.0);
+	ani->SetPlaySpeed(3.0);
 	mAnimations.emplace(SKILL_TYPE::RAGING_BLOW, ani);
 	
 	//Visible();
@@ -78,6 +78,8 @@ void Skill::Render()
 
 	if (mAnimations[mMotion]->GetIsFinish() == false && mAnimations.size() > 0)
 	{
+		std::cout << mAnimations[mMotion]->GetCurrentNum() << std::endl;
+
 		std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
 		Texture* tex = mAnimations[mMotion]->GetTexture();
 		D2D1_RECT_F rect;

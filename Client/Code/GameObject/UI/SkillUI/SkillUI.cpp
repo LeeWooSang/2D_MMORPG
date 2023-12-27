@@ -125,6 +125,17 @@ bool SkillUI::Initialize(int x, int y)
 		ui->Visible();
 		AddChildUI("Icon", ui);
 	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("SkillUIButton50");
+		UI* ui = new UI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI("Button", ui);
+	}
 
 	SetPosition(150, 150);
 
@@ -144,6 +155,14 @@ void SkillUI::Update()
 	{
 		Move(mousePos.first, mousePos.second);
 	}
+	
+	if (mMouseLButtonClick == true)
+	{
+		UI* ui = mChildUIs["Icon"].front();
+		ui->Click(mousePos.first, mousePos.second);
+		//ui->Move(mousePos.first, mousePos.second);
+
+	}
 
 	for (auto& child : mChildUIs)
 	{
@@ -157,7 +176,7 @@ void SkillUI::Update()
 void SkillUI::Render()
 {
 	UI::Render();
-	GET_INSTANCE(GraphicEngine)->RenderText(L"123", mPos.first + 280, mPos.second + 25, "±¼¸²", "°ËÀº»ö");
+	GET_INSTANCE(GraphicEngine)->RenderText(L"999", mPos.first + 205, mPos.second + 27);
 }
 
 void SkillUI::MouseOverCollision(int x, int y)

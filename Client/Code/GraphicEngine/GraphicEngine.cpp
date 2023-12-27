@@ -103,6 +103,12 @@ void GraphicEngine::RenderTexture(Texture* texture, const D2D1_RECT_F& pos, cons
 	mRenderTarget->DrawBitmap(texture->GetImage(), pos, 1.0, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, rect);
 }
 
+void GraphicEngine::RenderText(const std::wstring& text, int x, int y)
+{
+	D2D1_RECT_F rect = { x, y, x + 100, y + 100 };
+	mRenderTarget->DrawTextW(text.c_str(), static_cast<UINT32>(text.length()), mFontMap["굴림"].font, &rect, mBrushColorMap["검은색"]);
+}
+
 void GraphicEngine::RenderText(const std::wstring& text, int x, int y, const std::string& font, const std::string& color)
 {
 	//RECT rect = { x, y, mWidth, mHeight };
@@ -119,6 +125,8 @@ void GraphicEngine::RenderText(const std::wstring& text, int x, int y, const std
 
 void GraphicEngine::createFont()
 {
+	const int MAX_LOAD_FONT_COUNT = 2;
+
 	// 폰트 경로
 	std::wstring fontPath[] = { L"../Resource/Fonts/a피오피동글.ttf", L"../Resource/Fonts/메이플스토리.ttf" };
 
@@ -131,13 +139,13 @@ void GraphicEngine::createFont()
 	IDWriteFontSetBuilder1* pFontSetBuilder;
 	HRESULT result = mWriteFactory->CreateFontSetBuilder(&pFontSetBuilder);
 
-	IDWriteFontFile* fontFile[MAX_FONT_COUNT - 1];
-	IDWriteFontSet* fontSet[MAX_FONT_COUNT - 1];
+	IDWriteFontFile* fontFile[MAX_LOAD_FONT_COUNT];
+	IDWriteFontSet* fontSet[MAX_LOAD_FONT_COUNT];
 
-	std::wstring fontName[MAX_FONT_COUNT - 1];
+	std::wstring fontName[MAX_LOAD_FONT_COUNT];
 	unsigned int max_length = 64;
 
-	for (int i = 0; i < MAX_FONT_COUNT - 1; ++i)
+	for (int i = 0; i < MAX_LOAD_FONT_COUNT; ++i)
 	{
 		// 해당하는 경로에서 폰트 파일을 로드한다.
 		result = mWriteFactory->CreateFontFileReference(fontPath[i].c_str(), nullptr, &fontFile[i]);
@@ -162,22 +170,21 @@ void GraphicEngine::createFont()
 
 	pFontSetBuilder->Release();
 
-	for (int i = 0; i < MAX_FONT_COUNT - 1; ++i)
+	for (int i = 0; i < MAX_LOAD_FONT_COUNT; ++i)
 	{
 		fontFile[i]->Release();
 		fontSet[i]->Release();
 	}
 
-	float fontSize = 25.f;
-
-	// 폰트 객체
-	IDWriteTextFormat* pFont[MAX_FONT_COUNT];
-	// 폰트 형식
-	IDWriteTextLayout* pTextLayout[MAX_FONT_COUNT];
-	std::wstring wstr = L"M TextLayout Initialize";
-
-	for (int i = 0; i < MAX_FONT_COUNT - 1; ++i)
+	for (int i = 0; i < MAX_LOAD_FONT_COUNT; ++i)
 	{
+		// 폰트 객체
+		IDWriteTextFormat* font;
+		// 폰트 형식
+		IDWriteTextLayout* textLayout;
+		float fontSize = 25.f;
+		std::wstring wstr = L"TextLayout Initialize";
+
 		// 폰트 객체 생성	
 		result = mWriteFactory->CreateTextFormat(
 			fontName[i].c_str(),
@@ -188,44 +195,48 @@ void GraphicEngine::createFont()
 			DWRITE_FONT_STRETCH_NORMAL,
 			fontSize,
 			L"en-US",
-			&pFont[i]);
+			&font);
 
 		if (i == 0)
 		{
 			// 폰트를 중앙에 정렬시키기
-			result = pFont[i]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-			result = pFont[i]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-			result = mWriteFactory->CreateTextLayout(wstr.c_str(), static_cast<UINT32>(wstr.length()), pFont[i], 1024.0f, 1024.0f, &pTextLayout[i]);
+			result = font->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+			result = font->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+			result = mWriteFactory->CreateTextLayout(wstr.c_str(), static_cast<UINT32>(wstr.length()), font, 1024.0f, 1024.0f, &textLayout);
 
-			mFontMap.emplace("피오피동글", FontInfo(pFont[i], pTextLayout[i], fontSize));
+			mFontMap.emplace("피오피동글", FontInfo(font, textLayout, fontSize));
 		}
 		else
 		{
-			result = pFont[i]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
-			result = pFont[i]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
-			result = mWriteFactory->CreateTextLayout(wstr.c_str(), static_cast<UINT32>(wstr.length()), pFont[i], 0, 0, &pTextLayout[i]);
-			mFontMap.emplace("메이플", FontInfo(pFont[i], pTextLayout[i], fontSize));
+			result = font->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+			result = font->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
+			result = mWriteFactory->CreateTextLayout(wstr.c_str(), static_cast<UINT32>(wstr.length()), font, 0, 0, &textLayout);
+			mFontMap.emplace("메이플", FontInfo(font, textLayout, fontSize));
 		}
 	}
 
-	fontSize = 17;
-	// 폰트 객체 생성	
-	result = mWriteFactory->CreateTextFormat(
-		L"Gulim",
-		mFontCollection,
-		DWRITE_FONT_WEIGHT_NORMAL,
-		//DWRITE_FONT_WEIGHT_DEMI_BOLD,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		fontSize,
-		L"en-US",
-		&pFont[2]);
+	{
+		IDWriteTextFormat* font;
+		IDWriteTextLayout* textLayout;
+		float fontSize = 14;
+		std::wstring wstr = L"0";
 
-	result = pFont[2]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
-	result = pFont[2]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
-	result = mWriteFactory->CreateTextLayout(wstr.c_str(), static_cast<UINT32>(wstr.length()), pFont[2], 0, 0, &pTextLayout[2]);
-	mFontMap.emplace("굴림", FontInfo(pFont[2], pTextLayout[2], fontSize));
+		result = mWriteFactory->CreateTextFormat(
+			L"Gulim",
+			mFontCollection,
+			DWRITE_FONT_WEIGHT_NORMAL,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			fontSize,
+			L"en-US",
+			&font);
 
+		//result = font->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+		result = font->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+		result = font->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
+		result = mWriteFactory->CreateTextLayout(wstr.c_str(), static_cast<UINT32>(wstr.length()), font, 0, 0, &textLayout);
+		mFontMap.emplace("굴림", FontInfo(font, textLayout, fontSize));
+	}
 }
 
 void GraphicEngine::createBrushColor()

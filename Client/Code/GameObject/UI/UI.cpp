@@ -13,6 +13,8 @@ UI::UI()
 
 	mMouseOver = false;
 	mMouseLButtonDown = false;
+	mMouseLButtonClick = false;
+
 	mDragStartPos = std::make_pair(0, 0);
 }
 
@@ -109,6 +111,7 @@ void UI::MouseLButtonUp()
 
 void UI::MouseLButtonClick()
 {
+	mMouseLButtonClick = true;
 	std::cout << "UI LButton Å¬¸¯" << std::endl;
 }
 
@@ -127,6 +130,20 @@ void UI::Move(int mouseX, int mouseY)
 		for (int i = 0; i < child.second.size(); ++i)
 		{
 			child.second[i]->SetPosition(x, y);
+		}
+	}
+}
+
+void UI::Click(int mouseX, int mouseY)
+{
+	mPos.first = mouseX;
+	mPos.second = mouseY;
+
+	for (auto& child : mChildUIs)
+	{
+		for (int i = 0; i < child.second.size(); ++i)
+		{
+			child.second[i]->SetPosition(mouseX, mouseY);
 		}
 	}
 }
