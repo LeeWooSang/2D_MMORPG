@@ -4,7 +4,6 @@
 #include "../../GameObject/Map/Map.h"
 #include "../../GraphicEngine/GraphicEngine.h"
 #include "../../GameObject/Character/Character.h"
-#include "../../GameObject/Skill/Skill.h"
 
 #include "../../Manager/UIManager/UIManager.h"
 #include "../../GameObject/UI/ChattingBox/ChattingBox.h"
@@ -12,6 +11,7 @@
 #include "../../GameObject/UI/Inventory/Inventory.h"
 #include "../../GameObject/UI/EquipUI/EquipUI.h"
 #include "../../GameObject/UI/SkillUI/SkillUI.h"
+#include "../../GameObject/Skill/Skill.h"
 
 #include "../../../../Server/Code/Common/Protocol.h"
 #include "../../Resource/ResourceManager.h"
@@ -26,8 +26,6 @@ InGameScene::InGameScene()
 	mTiles.clear();
 	mPlayer = nullptr;
 	mIsReady = false;
-
-	mSkill = nullptr;
 }
 
 InGameScene::~InGameScene()
@@ -50,7 +48,6 @@ InGameScene::~InGameScene()
 	mOtherPlayers.clear();
 	mMonsters.clear();
 	delete mPlayer;
-	delete mSkill;
 }
 
 bool InGameScene::Initialize()
@@ -152,13 +149,9 @@ bool InGameScene::Initialize()
 	{
 		return false;
 	}
-	AddSceneUI("SkillUI", skillUI);
+	skillUI->AddSkillSlot("레이징블로우", 123123);
 
-	mSkill = new Skill;
-	if (mSkill->Initialize(0, 0) == false)
-	{
-		return false;
-	}
+	AddSceneUI("SkillUI", skillUI);
 
 	mIsReady = true;
 
@@ -203,8 +196,6 @@ void InGameScene::Update()
 		otherPlayer.second->Update();
 	}
 
-	mSkill->Update();
-
 	GET_INSTANCE(UIManager)->Update();
 }
 
@@ -238,8 +229,6 @@ void InGameScene::Render()
 	}
 
 	mPlayer->Render();
-
-	mSkill->Render();
 
 	{
 		D2D1_RECT_F rect;
@@ -338,7 +327,11 @@ void InGameScene::processKeyboardMessage()
 			}
 			else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::CONTROL_KEY) == true)
 			{
-				mSkill->Visible();
+				Skill* skill = static_cast<SkillUI*>(FindUI("SkillUI"))->FindSkill("레이징블로우");
+				if (skill != nullptr)
+				{
+					skill->UseSkill();
+				}
 			}
 			else
 			{

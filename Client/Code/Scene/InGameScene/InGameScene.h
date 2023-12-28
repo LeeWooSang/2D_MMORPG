@@ -52,6 +52,4 @@ private:
 	std::unordered_map<int, std::shared_ptr<Monster>> mMonsters;
 
 	Player* mPlayer;
-
-	class Skill* mSkill;
 };

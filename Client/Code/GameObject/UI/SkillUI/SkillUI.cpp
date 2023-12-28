@@ -4,6 +4,7 @@
 #include "../../../Input/Input.h"
 #include "../ButtonUI/ButtonUI.h"
 #include "../../../GraphicEngine/GraphicEngine.h"
+#include "../../Skill/Skill.h"
 
 SkillUI::SkillUI()
 	: UI()
@@ -114,30 +115,7 @@ bool SkillUI::Initialize(int x, int y)
 		}
 	}
 
-	{
-		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("Icon0");
-		UI* ui = new UI;
-		if (ui->Initialize(data.origin.first, data.origin.second) == false)
-		{
-			return false;
-		}
-		ui->SetTexture(data.name);
-		ui->Visible();
-		AddChildUI("Icon", ui);
-	}
-	{
-		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("SkillUIButton50");
-		UI* ui = new UI;
-		if (ui->Initialize(data.origin.first, data.origin.second) == false)
-		{
-			return false;
-		}
-		ui->SetTexture(data.name);
-		ui->Visible();
-		AddChildUI("Button", ui);
-	}
-
-	SetPosition(150, 150);
+	SetPosition(400, 150);
 
 	return true;
 }
@@ -161,7 +139,6 @@ void SkillUI::Update()
 		UI* ui = mChildUIs["Icon"].front();
 		ui->Click(mousePos.first, mousePos.second);
 		//ui->Move(mousePos.first, mousePos.second);
-
 	}
 
 	for (auto& child : mChildUIs)
@@ -234,7 +211,7 @@ void SkillUI::OpenSkillUI()
 	}
 }
 
-void SkillUI::AddSkill(const std::string& name)
+void SkillUI::AddSkillSlot(const std::string& name, int texId)
 {
 	for (auto& skillSlot : mChildUIs["Slot"])
 	{
@@ -242,20 +219,52 @@ void SkillUI::AddSkill(const std::string& name)
 		// 비어있는 슬롯에 추가
 		if (slot->GetEmpty() == true)
 		{
-			AddSkill(name);
+			slot->AddSkill(name, texId);
 			break;
 		}
 	}
+}
+
+Skill* SkillUI::FindSkill(const std::string& name)
+{
+	for (auto& skillSlot : mChildUIs["Slot"])
+	{
+		SkillSlotUI* slot = static_cast<SkillSlotUI*>(skillSlot);
+		// 비어있는 슬롯에 추가
+		if (slot->GetEmpty() == true)
+		{
+			continue;
+		}
+
+		Skill* skill = slot->GetSkill();
+		if (skill == nullptr)
+		{
+			continue;
+		}
+
+		if (skill->GetName() == name)
+		{
+			return skill;
+		}
+	}
+
+	return nullptr;
 }
 
 SkillSlotUI::SkillSlotUI()
 	: UI()
 {
 	mEmpty = true;
+	mSkill = nullptr;
 }
 
 SkillSlotUI::~SkillSlotUI()
 {
+	if (mSkill != nullptr)
+	{
+		delete mSkill;
+		mSkill = nullptr;
+	}
 }
 
 bool SkillSlotUI::Initialize(int x, int y)
@@ -268,11 +277,21 @@ bool SkillSlotUI::Initialize(int x, int y)
 void SkillSlotUI::Update()
 {
 	UI::Update();
+
+	if (mSkill != nullptr)
+	{
+		mSkill->Update();
+	}
 }
 
 void SkillSlotUI::Render()
 {
 	UI::Render();
+
+	if (mSkill != nullptr)
+	{
+		mSkill->Render();
+	}
 }
 
 void SkillSlotUI::MouseOverCollision(int x, int y)
@@ -314,8 +333,53 @@ void SkillSlotUI::MouseLButtonClick()
 	UI::MouseLButtonClick();
 }
 
-void SkillSlotUI::AddSkill(const std::string& name)
+void SkillSlotUI::AddSkill(const std::string& name, int texId)
 {
 	mEmpty = false;
 
+	// 스킬 아이콘 추가
+	{
+		int index = -1;
+		std::vector<TextureData>& v = GET_INSTANCE(ResourceManager)->GetTextureDatas(texId);
+		for (int i = 0; i < v.size(); ++i)
+		{
+			if (v[i].icon == true)
+			{
+				index = i;
+				break;
+			}
+		}
+		if (index == -1)
+		{
+			return;
+		}
+
+		UI* ui = new UI;
+		if (ui->Initialize(v[index].origin.first, v[index].origin.second) == false)
+		{
+			return;
+		}
+		ui->SetTexture(v[index].name);
+		ui->Visible();
+		mParentUI->AddChildUI("Icon", ui);
+		ui->SetPosition(mPos.first, mPos.second);
+	}
+	// 스킬 레벨업 버튼 추가
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("SkillUIButton50");
+		UI* ui = new UI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		mParentUI->AddChildUI("Button", ui);
+		ui->SetPosition(mPos.first, mPos.second);
+	}
+
+	mSkill = new Skill;
+	mSkill->Initialize(0, 0);
+	mSkill->SetName(name);
+	mSkill->AddEffect(texId);
 }
