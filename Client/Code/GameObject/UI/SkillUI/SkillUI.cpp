@@ -23,7 +23,7 @@ bool SkillUI::Initialize(int x, int y)
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("SkillUIBackground0");
 		SetTexture(data.name);
 	}
-	for(int i = 1; i < 4; ++i)
+	for(int i = 1; i < 5; ++i)
 	{
 		std::string name = "SkillUIBackground" + std::to_string(i);
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(name);
@@ -136,8 +136,8 @@ void SkillUI::Update()
 	
 	if (mMouseLButtonClick == true)
 	{
-		UI* ui = mChildUIs["Icon"].front();
-		ui->Click(mousePos.first, mousePos.second);
+		//UI* ui = mChildUIs["Icon"].front();
+		//ui->Click(mousePos.first, mousePos.second);
 		//ui->Move(mousePos.first, mousePos.second);
 	}
 
@@ -154,6 +154,7 @@ void SkillUI::Render()
 {
 	UI::Render();
 	GET_INSTANCE(GraphicEngine)->RenderText(L"999", mPos.first + 205, mPos.second + 27);
+	GET_INSTANCE(GraphicEngine)->RenderText(L"궁극의 히어로", mPos.first + 125, mPos.second + 58, "흰색");
 }
 
 void SkillUI::MouseOverCollision(int x, int y)
@@ -363,6 +364,14 @@ void SkillSlotUI::AddSkill(const std::string& name, int texId)
 		ui->Visible();
 		mParentUI->AddChildUI("Icon", ui);
 		ui->SetPosition(mPos.first, mPos.second);
+
+		if (v.size() > 1)
+		{
+			mSkill = new Skill;
+			mSkill->Initialize(0, 0);
+			mSkill->SetName(name);
+			mSkill->AddEffect(texId);
+		}
 	}
 	// 스킬 레벨업 버튼 추가
 	{
@@ -377,9 +386,4 @@ void SkillSlotUI::AddSkill(const std::string& name, int texId)
 		mParentUI->AddChildUI("Button", ui);
 		ui->SetPosition(mPos.first, mPos.second);
 	}
-
-	mSkill = new Skill;
-	mSkill->Initialize(0, 0);
-	mSkill->SetName(name);
-	mSkill->AddEffect(texId);
 }

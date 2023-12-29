@@ -47,7 +47,7 @@ public:
 	void RenderTexture(Texture* texture, const D2D1_RECT_F& pos);
 	void RenderTexture(Texture* texture, const D2D1_RECT_F& pos, const D2D1_RECT_F& rect);
 
-	void RenderText(const std::wstring& text, int x, int y);
+	void RenderText(const std::wstring& text, int x, int y, const std::string& color = "°ËÀº»ö");
     void RenderText(const std::wstring& text, int x, int y, const std::string& font, const std::string& color);
 
 	void createFont();

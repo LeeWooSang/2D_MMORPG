@@ -30,7 +30,7 @@ Skill::~Skill()
 bool Skill::Initialize(int x, int y)
 {
 	GameObject::Initialize(x, y);
-	mCurrentEffect = 1;
+	mCurrentEffect = 0;
 
 	return true;
 }
@@ -50,6 +50,15 @@ void Skill::Update()
 	if (checkFinish() == true)
 	{
 		NotVisible();
+
+		if (mCurrentEffect == 0)
+		{
+			mCurrentEffect = 1;
+		}
+		else
+		{
+			mCurrentEffect = 0;
+		}
 		return;
 	}
 

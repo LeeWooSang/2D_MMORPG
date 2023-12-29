@@ -150,6 +150,15 @@ bool InGameScene::Initialize()
 		return false;
 	}
 	skillUI->AddSkillSlot("레이징블로우", 123123);
+	skillUI->AddSkillSlot("인사이징", 123124);
+	skillUI->AddSkillSlot("매직 크래쉬", 123125);
+	skillUI->AddSkillSlot("인레이지", 123126);
+	skillUI->AddSkillSlot("메이플 용사", 123127);
+	skillUI->AddSkillSlot("용사의 의지", 123128);
+	skillUI->AddSkillSlot("어드밴스드 코보", 123129);
+	skillUI->AddSkillSlot("컴뱃 마스터리", 123130);
+	skillUI->AddSkillSlot("스탠스", 123131);
+	skillUI->AddSkillSlot("어드밴스드 파이널 어택", 123132);
 
 	AddSceneUI("SkillUI", skillUI);
 
@@ -1031,9 +1040,19 @@ void InGameScene::SetSkillUI(int x, int y)
 
 void InGameScene::SetSkillEffect(int x, int y)
 {
-	for(int i = 13; i < 14; ++i)
+	//for(int i = 0; i < 14; ++i)
+	//{
+	//	std::string name = "Effect0" + std::to_string(i);
+	//	Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture(name);
+	//	D2D1_RECT_F rect;
+	//	rect.left = x + tex->GetOrigin().first;
+	//	rect.top = y + tex->GetOrigin().second;
+	//	rect.right = rect.left + tex->GetSize().first;
+	//	rect.bottom = rect.top + tex->GetSize().second;
+	//	GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	//}
 	{
-		std::string name = "Effect" + std::to_string(i);
+		std::string name = "Effect1_16";
 		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture(name);
 		D2D1_RECT_F rect;
 		rect.left = x + tex->GetOrigin().first;
@@ -1042,14 +1061,16 @@ void InGameScene::SetSkillEffect(int x, int y)
 		rect.bottom = rect.top + tex->GetSize().second;
 		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
 	}
-	std::string name = "Effect14";
-	Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture(name);
-	D2D1_RECT_F rect;
-	rect.left = x + tex->GetOrigin().first;
-	rect.top = y + tex->GetOrigin().second;
-	rect.right = rect.left + tex->GetSize().first;
-	rect.bottom = rect.top + tex->GetSize().second;
-	GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	{
+		std::string name = "Effect1_17";
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture(name);
+		D2D1_RECT_F rect;
+		rect.left = x + tex->GetOrigin().first;
+		rect.top = y + tex->GetOrigin().second;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+	}
 }
 
 bool InGameScene::checkRange(int x, int y)

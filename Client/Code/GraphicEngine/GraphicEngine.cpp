@@ -103,10 +103,10 @@ void GraphicEngine::RenderTexture(Texture* texture, const D2D1_RECT_F& pos, cons
 	mRenderTarget->DrawBitmap(texture->GetImage(), pos, 1.0, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, rect);
 }
 
-void GraphicEngine::RenderText(const std::wstring& text, int x, int y)
+void GraphicEngine::RenderText(const std::wstring& text, int x, int y, const std::string& color)
 {
 	D2D1_RECT_F rect = { x, y, x + 100, y + 100 };
-	mRenderTarget->DrawTextW(text.c_str(), static_cast<UINT32>(text.length()), mFontMap["±¼¸²"].font, &rect, mBrushColorMap["°ËÀº»ö"]);
+	mRenderTarget->DrawTextW(text.c_str(), static_cast<UINT32>(text.length()), mFontMap["±¼¸²"].font, &rect, mBrushColorMap[color]);
 }
 
 void GraphicEngine::RenderText(const std::wstring& text, int x, int y, const std::string& font, const std::string& color)
