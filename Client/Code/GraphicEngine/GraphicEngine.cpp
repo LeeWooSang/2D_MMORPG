@@ -103,6 +103,12 @@ void GraphicEngine::RenderTexture(Texture* texture, const D2D1_RECT_F& pos, cons
 	mRenderTarget->DrawBitmap(texture->GetImage(), pos, 1.0, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, rect);
 }
 
+void GraphicEngine::RenderText(const std::wstring& text, int x, int y)
+{
+	D2D1_RECT_F rect = { x, y, x + 100, y + 100 };
+	mRenderTarget->DrawTextW(text.c_str(), static_cast<UINT32>(text.length()), mFontMap["기본"].font, &rect, mBrushColorMap["검은색"]);
+}
+
 void GraphicEngine::RenderText(const std::wstring& text, int x, int y, const std::string& color)
 {
 	D2D1_RECT_F rect = { x, y, x + 100, y + 100 };
@@ -113,10 +119,8 @@ void GraphicEngine::RenderText(const std::wstring& text, int x, int y, const std
 {
 	//RECT rect = { x, y, mWidth, mHeight };
 	//mFont->DrawTextW(mSprite, text, -1, &rect, 0, color);
-
 	D2D1_RECT_F rect = {x, y, mWidth + 100, mHeight };
 	mRenderTarget->DrawTextW(text.c_str(), static_cast<UINT32>(text.length()), mFontMap[font].font, &rect, mBrushColorMap[color]);
-
 	//float pointX;
 	//float pointY;
 	//DWRITE_HIT_TEST_METRICS metrics;
@@ -236,6 +240,28 @@ void GraphicEngine::createFont()
 		result = font->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
 		result = mWriteFactory->CreateTextLayout(wstr.c_str(), static_cast<UINT32>(wstr.length()), font, 0, 0, &textLayout);
 		mFontMap.emplace("굴림", FontInfo(font, textLayout, fontSize));
+	}
+
+	{
+		IDWriteTextFormat* font;
+		IDWriteTextLayout* textLayout;
+		float fontSize = 12;
+		std::wstring wstr = L"0";
+
+		result = mWriteFactory->CreateTextFormat(
+			L"Gulim",
+			mFontCollection,
+			DWRITE_FONT_WEIGHT_NORMAL,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			fontSize,
+			L"en-US",
+			&font);
+
+		result = font->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+		result = font->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
+		result = mWriteFactory->CreateTextLayout(wstr.c_str(), static_cast<UINT32>(wstr.length()), font, 0, 0, &textLayout);
+		mFontMap.emplace("기본", FontInfo(font, textLayout, fontSize));
 	}
 }
 

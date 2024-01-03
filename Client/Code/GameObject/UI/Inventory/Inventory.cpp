@@ -15,6 +15,13 @@
 #include "../EquipUI/EquipUI.h"
 #include "../../Character/Character.h"
 
+void CloseInventory(const std::string& name);
+void CloseInventory(const std::string& skillName)
+{
+	Inventory* ui = static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"));
+	ui->OpenInventory();
+}
+
 InventorySlot::InventorySlot()
 	: UI()
 {
@@ -270,6 +277,8 @@ bool Inventory::Initialize(int x, int y)
 		button->Initialize(originX, originY);
 		button->SetTexture("XButton");
 		button->Visible();
+		button->SetLButtonClickCallback(CloseInventory);
+
 		AddChildUI("Button", button);
 	}
 
@@ -417,6 +426,7 @@ void Inventory::MouseOver()
 void Inventory::MouseLButtonDown()
 {
 	UI::MouseLButtonDown();
+	//std::cout << "dd";
 }
 
 void Inventory::MouseLButtonUp()

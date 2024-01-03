@@ -149,16 +149,6 @@ bool InGameScene::Initialize()
 	{
 		return false;
 	}
-	skillUI->AddSkillSlot("레이징블로우", 123123);
-	skillUI->AddSkillSlot("인사이징", 123124);
-	skillUI->AddSkillSlot("매직 크래쉬", 123125);
-	skillUI->AddSkillSlot("인레이지", 123126);
-	skillUI->AddSkillSlot("메이플 용사", 123127);
-	skillUI->AddSkillSlot("용사의 의지", 123128);
-	skillUI->AddSkillSlot("어드밴스드 코보", 123129);
-	skillUI->AddSkillSlot("컴뱃 마스터리", 123130);
-	skillUI->AddSkillSlot("스탠스", 123131);
-	skillUI->AddSkillSlot("어드밴스드 파이널 어택", 123132);
 
 	AddSceneUI("SkillUI", skillUI);
 
@@ -336,7 +326,7 @@ void InGameScene::processKeyboardMessage()
 			}
 			else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::CONTROL_KEY) == true)
 			{
-				Skill* skill = static_cast<SkillUI*>(FindUI("SkillUI"))->FindSkill("레이징블로우");
+				Skill* skill = static_cast<SkillUI*>(FindUI("SkillUI"))->FindSkill("레이징 블로우");
 				if (skill != nullptr)
 				{
 					skill->UseSkill();

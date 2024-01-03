@@ -7,6 +7,8 @@
 ButtonUI::ButtonUI()
 	: UI()
 {
+	mFunc = nullptr;
+	mName.clear();
 }
 
 ButtonUI::~ButtonUI()
@@ -89,5 +91,9 @@ void ButtonUI::MouseLButtonUp()
 void ButtonUI::MouseLButtonClick()
 {
 	std::cout << "버튼 유아이 클릭" << std::endl;
+	if (mFunc != nullptr)
+	{
+		mFunc(mName);
+	}
 	//static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"))->OpenInventory();
 }

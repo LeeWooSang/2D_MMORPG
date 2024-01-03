@@ -11,6 +11,9 @@
 Skill::Skill()
 	: GameObject()
 {
+	mName.clear();
+	mSkillLevel = 0;
+
 	mCurrentEffect = 0;
 	mEffects.clear();
 }

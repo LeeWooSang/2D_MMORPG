@@ -20,14 +20,20 @@ public:
 	void AddEffect(int texId);
 	void UseSkill();
 
-	const std::string& GetName()	const { return mName; }
+	const std::string& GetName()	 const { return mName; }
 	void SetName(const std::string& name) { mName = name; }
+
+	int GetSkillLevel()	const { return mSkillLevel; }
+	void SetSkillLevel(int skillLevel) { mSkillLevel = skillLevel; }
+
 
 private:
 	bool checkFinish();
 
 private:
 	std::string mName;
+	int mSkillLevel;
+
 	int mCurrentEffect;
 	std::vector<class SkillEffect*> mEffects;
 };

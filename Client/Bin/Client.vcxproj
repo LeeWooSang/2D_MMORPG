@@ -172,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Server\Code\Common\Protocol.h" />
     <ClInclude Include="..\Code\Animation\Animation.h" />
+    <ClInclude Include="..\Code\Common\Utility.h" />
     <ClInclude Include="..\Code\Common\Defines.h" />
     <ClInclude Include="..\Code\Common\JsonFormat.h" />
     <ClInclude Include="..\Code\Common\Macro.h" />

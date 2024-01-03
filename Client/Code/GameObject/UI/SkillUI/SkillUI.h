@@ -23,8 +23,12 @@ public:
 	void AddSkillSlot(const std::string& name, int texId);
 	Skill* FindSkill(const std::string& name);
 
+	int GetSkillPoint()	const { return mSkillPoint; }
+	void SetSkillPoint(int skillPoint) { mSkillPoint = skillPoint; }
+
 private:
 	bool mOpen;
+	int mSkillPoint;
 };
 
 class SkillSlotUI : public UI

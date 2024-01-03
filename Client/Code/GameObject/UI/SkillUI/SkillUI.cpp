@@ -1,4 +1,5 @@
 #include "SkillUI.h"
+#include "../../../Common/Utility.h"
 #include "../../../Resource/ResourceManager.h"
 #include "../../../Resource/Texture/Texture.h"
 #include "../../../Input/Input.h"
@@ -6,10 +7,16 @@
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../../Skill/Skill.h"
 
+#include "../../../Manager/SceneMangaer/SceneManager.h"
+#include "../../../Scene/InGameScene/InGameScene.h"
+
+void SkillLevelUP(const std::string& skillName);
+
 SkillUI::SkillUI()
 	: UI()
 {
 	mOpen = false;
+	mSkillPoint = 0;
 }
 
 SkillUI::~SkillUI()
@@ -115,7 +122,21 @@ bool SkillUI::Initialize(int x, int y)
 		}
 	}
 
+	AddSkillSlot("레이징 블로우", 123123);
+	AddSkillSlot("인사이징", 123124);
+	AddSkillSlot("매직 크래쉬", 123125);
+	AddSkillSlot("인레이지", 123126);
+	AddSkillSlot("메이플 용사", 123127);
+	AddSkillSlot("용사의 의지", 123128);
+	AddSkillSlot("어드밴스드 콤보", 123129);
+	AddSkillSlot("컴뱃 마스터리", 123130);
+	AddSkillSlot("스탠스", 123131);
+	AddSkillSlot("어드밴스드 파이널 어택", 123132);
+
+
 	SetPosition(400, 150);
+
+	mSkillPoint = 100;
 
 	return true;
 }
@@ -153,7 +174,7 @@ void SkillUI::Update()
 void SkillUI::Render()
 {
 	UI::Render();
-	GET_INSTANCE(GraphicEngine)->RenderText(L"999", mPos.first + 205, mPos.second + 27);
+	GET_INSTANCE(GraphicEngine)->RenderText(std::to_wstring(mSkillPoint), mPos.first + 205, mPos.second + 27, "검은색");
 	GET_INSTANCE(GraphicEngine)->RenderText(L"궁극의 히어로", mPos.first + 125, mPos.second + 58, "흰색");
 }
 
@@ -290,6 +311,22 @@ void SkillSlotUI::Render()
 	UI::Render();
 
 	if (mSkill != nullptr)
+	{	
+		std::string name = mSkill->GetName();
+		if (name.length() > 18)
+		{
+			name.clear();
+			//for (int i = 0; i < 9;)
+			//{
+			//	name[i] = mSkill->GetName()[i];
+			//}
+			name = "어드밴스드 파이..";
+		}
+		GET_INSTANCE(GraphicEngine)->RenderText(StringToWString(name), mPos.first + 40, mPos.second);
+		GET_INSTANCE(GraphicEngine)->RenderText(std::to_wstring(mSkill->GetSkillLevel()), mPos.first + 40, mPos.second + 18);
+	}
+
+	if (mSkill != nullptr)
 	{
 		mSkill->Render();
 	}
@@ -365,25 +402,46 @@ void SkillSlotUI::AddSkill(const std::string& name, int texId)
 		mParentUI->AddChildUI("Icon", ui);
 		ui->SetPosition(mPos.first, mPos.second);
 
+		mSkill = new Skill;
+		mSkill->Initialize(0, 0);
+		mSkill->SetName(name);
 		if (v.size() > 1)
 		{
-			mSkill = new Skill;
-			mSkill->Initialize(0, 0);
-			mSkill->SetName(name);
 			mSkill->AddEffect(texId);
 		}
 	}
 	// 스킬 레벨업 버튼 추가
 	{
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("SkillUIButton50");
-		UI* ui = new UI;
-		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		ButtonUI* ui = new ButtonUI;
+		
+		int x = mOriginX + 125;
+		int y = mOriginY + 20;
+		if (ui->Initialize(x, y) == false)
 		{
 			return;
 		}
 		ui->SetTexture(data.name);
 		ui->Visible();
 		mParentUI->AddChildUI("Button", ui);
-		ui->SetPosition(mPos.first, mPos.second);
+		ui->SetLButtonClickCallback(SkillLevelUP, name);
+	}
+}
+
+void SkillLevelUP(const std::string& skillName)
+{
+	SkillUI* ui = static_cast<SkillUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("SkillUI"));
+	int skillPoint = ui->GetSkillPoint();
+	if (skillPoint > 0)
+	{
+		ui->SetSkillPoint(--skillPoint);
+		Skill* skill = ui->FindSkill(skillName);
+		if (skill == nullptr)
+		{
+			return;
+		}
+
+		int skillLevel = skill->GetSkillLevel();
+		skill->SetSkillLevel(++skillLevel);
 	}
 }
