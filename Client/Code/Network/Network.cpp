@@ -112,13 +112,25 @@ void Network::SendChangeChannelPacket(char channel)
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 
-void Network::SendChatPacket(const std::wstring& chat)
+void Network::SendBroadCastingChatPacket(const std::wstring& chat)
 {
-	CSChatPacket packet;
-	packet.size = sizeof(CSChatPacket);
-	packet.type = CS_PACKET_TYPE::CS_CHAT;
+	CSBroadcastingChatPacket packet;
+	packet.size = sizeof(CSBroadcastingChatPacket);
+	packet.type = CS_PACKET_TYPE::CS_BROADCASTING_CHAT;
 	wcsncpy_s(packet.chat, chat.c_str(), MAX_CHAT_LENGTH);
 	
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
+void Network::SendWhisperingChatPacket(int id, const std::wstring& chat)
+{
+	CSWhisperingChatPacket packet;
+	packet.size = sizeof(CSWhisperingChatPacket);
+	packet.type = CS_PACKET_TYPE::CS_WHISPERING_CHAT;
+	packet.id = id;
+
+	wcsncpy_s(packet.chat, chat.c_str(), MAX_CHAT_LENGTH);
+
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 

@@ -35,7 +35,9 @@ public:
 	void SendLoginPacket(const std::string& loginId, const std::string& loginPassword);
 	void SendMovePacket(char dir);
 	void SendChangeChannelPacket(char channel);
-	void SendChatPacket(const std::wstring& chat);
+	void SendBroadCastingChatPacket(const std::wstring& chat);
+	void SendWhisperingChatPacket(int id, const std::wstring& chat);
+
 	void SendAttackPacket();
 	void SendChangeAvatarPacket(char slotType, int texId);
 private:

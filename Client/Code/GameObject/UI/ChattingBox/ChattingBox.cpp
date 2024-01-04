@@ -1,9 +1,23 @@
 #include "ChattingBox.h"
 #include "../InputUI/ChattingInputUI/ChattingInputUI.h"
+#include "../ButtonUI/ChattingMenuUI/ChattingMenuUI.h"
+
 #include "../../../Network/Network.h"
 #include "../../../Input/Input.h"
 #include "../../../GraphicEngine/GraphicEngine.h"
+#include "../../../Manager/SceneMangaer/SceneManager.h"
+#include "../../../Scene/InGameScene/InGameScene.h"
 
+void ChangeChattingMenu(const std::string& name);
+void ChangeChattingMenu(const std::string& name)
+{
+	ChattingMenuUI* ui = static_cast<ChattingMenuUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("ChattingBox"));
+	if (ui == nullptr)
+	{
+		return;
+	}
+	ui->ChangeType();
+}
 ChattingBox::ChattingBox()
 	: UI()
 {
@@ -22,12 +36,22 @@ bool ChattingBox::Initialize(int x, int y)
 	UI::Initialize(x, y);
 	Visible();
 
+	{
+		ChattingMenuUI* ui = new ChattingMenuUI;
+		if (ui->Initialize(0, 205) == false)
+		{
+			return false;
+		}
+		ui->SetLButtonClickCallback(ChangeChattingMenu, "모두에게");
+
+		AddChildUI("ChattingMenuUI", ui);
+	}
+
 	ChattingInputUI* ui = new ChattingInputUI;
-	if (ui->Initialize(0, 205) == false)
+	if (ui->Initialize(105, 205) == false)
 	{
 		return false;
 	}
-
 	AddChildUI("ChattingInputUI", ui);
 
 	SetPosition(0, 420);
@@ -41,6 +65,18 @@ void ChattingBox::Update()
 	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
 	{
 		return;
+	}
+
+	{
+		ChattingInputUI* ui = static_cast<ChattingInputUI*>(FindChildUIs("ChattingInputUI").front());
+		if (ui->GetIsOpen() == true)
+		{
+			FindChildUIs("ChattingMenuUI").front()->Visible();
+		}
+		else
+		{
+			FindChildUIs("ChattingMenuUI").front()->NotVisible();
+		}
 	}
 
 	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
@@ -67,7 +103,7 @@ void ChattingBox::Render()
 	pos.left = mPos.first;
 	pos.top = mPos.second;
 	pos.right = pos.left + 400;
-	pos.bottom = pos.top + 200;
+	pos.bottom = pos.top + 235;
 
 	GET_INSTANCE(GraphicEngine)->RenderFillRectangle(pos, "밝은검은색");
 
@@ -120,7 +156,7 @@ void ChattingBox::MouseOverCollision(int x, int y)
 	collisionBox.left = mPos.first;
 	collisionBox.right = mPos.first + 400;
 	collisionBox.top = mPos.second;
-	collisionBox.bottom = mPos.second + 200;
+	collisionBox.bottom = mPos.second + 235;
 
 	if (x >= collisionBox.left && x <= collisionBox.right && y >= collisionBox.top && y <= collisionBox.bottom)
 	{
@@ -167,13 +203,8 @@ bool ChattingBox::CheckContain(int left, int top, int right, int bottom)
 
 void ChattingBox::OpenChattingBox()
 {
-	for (auto& child : mChildUIs)
-	{
-		for (int i = 0; i < child.second.size(); ++i)
-		{
-			static_cast<ChattingInputUI*>(child.second[i])->OpenChattingBox();
-		}
-	}
+	ChattingInputUI* ui = static_cast<ChattingInputUI*>(FindChildUIs("ChattingInputUI").front());
+	ui->OpenChattingBox();
 }
 
 void ChattingBox::AddChattingLog(int id, const wchar_t* chatting)

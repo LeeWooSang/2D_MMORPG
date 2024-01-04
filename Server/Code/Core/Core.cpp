@@ -555,12 +555,21 @@ void Core::processPacket(int id, char* buf)
 			break;
 		}
 
-		case CS_PACKET_TYPE::CS_CHAT:
+		case CS_PACKET_TYPE::CS_BROADCASTING_CHAT:
 		{
-			CSChatPacket* packet = reinterpret_cast<CSChatPacket*>(buf);
+			CSBroadcastingChatPacket* packet = reinterpret_cast<CSBroadcastingChatPacket*>(buf);
 			SendChatPacket(id, id, packet->chat);
 			// 주변 사람들에게 채팅보냄
-			mUsers[id].ProcessChat(packet->chat);
+			mUsers[id].ProcessBroadcastingChat(packet->chat);
+			break;
+		}
+
+		case CS_PACKET_TYPE::CS_WHISPERING_CHAT:
+		{
+			CSWhisperingChatPacket* packet = reinterpret_cast<CSWhisperingChatPacket*>(buf);
+			SendChatPacket(id, id, packet->chat);
+			// 주변 사람들에게 채팅보냄
+			mUsers[id].ProcessWhisperingChat(packet->id, packet->chat);
 			break;
 		}
 

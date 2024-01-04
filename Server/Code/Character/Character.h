@@ -75,7 +75,9 @@ public:
 	void CheckViewList();
 
 	void ProcessChangeChannelViewList(int oldChannel, int newChannel);
-	void ProcessChat(wchar_t* chat);
+	void ProcessBroadcastingChat(wchar_t* chat);
+	void ProcessWhisperingChat(int id, wchar_t* chat);
+
 	void ProcessAttack();
 	void ProcessChangeAvatar(int texId);
 

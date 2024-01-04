@@ -24,6 +24,7 @@ public:
 	virtual void MouseLButtonClick();
 
 	void OpenChattingBox();
+	bool GetIsOpen()	const { return mOpen; }
 
 private:
 	virtual void processInput();

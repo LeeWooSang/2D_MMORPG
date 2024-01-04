@@ -675,7 +675,7 @@ void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 	}
 }
 
-void Player::ProcessChat(wchar_t* chat)
+void Player::ProcessBroadcastingChat(wchar_t* chat)
 {
 	int myId = mOver->myId;
 	Player* users = GET_INSTANCE(Core)->GetUsers();
@@ -712,6 +712,17 @@ void Player::ProcessChat(wchar_t* chat)
 	{
 		GET_INSTANCE(Core)->SendChatPacket(id, myId, chat);
 	}
+}
+
+void Player::ProcessWhisperingChat(int id, wchar_t* chat)
+{
+	Player* users = GET_INSTANCE(Core)->GetUsers();
+	if (users[id].GetIsConnect() == false)
+	{
+		return;
+	}
+	int myId = mOver->myId;
+	GET_INSTANCE(Core)->SendChatPacket(id, myId, chat);
 }
 
 void Player::ProcessAttack()

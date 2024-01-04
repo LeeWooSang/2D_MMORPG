@@ -63,7 +63,7 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(30, 30);
+		texture->CreateTexture(100, 30);
 		if (texture->LoadTexture(L"../Resource/Textures/Slot.png") == false)
 		{
 			texture.reset();
@@ -102,46 +102,6 @@ bool ResourceManager::Initialize()
 		}
 		mTextureList.emplace("XButton", texture);
 	}
-	//{
-	//	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-	//	texture->CreateTexture(40, 39);
-	//	if (texture->LoadTexture(L"../Resource/Textures/Sword.png") == false)
-	//	{
-	//		texture.reset();
-	//		return false;
-	//	}
-	//	mTextureList.emplace("Sword", texture);
-	//}
-	//{
-	//	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-	//	texture->CreateTexture(40, 39);
-	//	if (texture->LoadTexture(L"../Resource/Textures/Ax.png") == false)
-	//	{
-	//		texture.reset();
-	//		return false;
-	//	}
-	//	mTextureList.emplace("Ax", texture);
-	//}
-	//{
-	//	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-	//	texture->CreateTexture(40, 39);
-	//	if (texture->LoadTexture(L"../Resource/Textures/Club.png") == false)
-	//	{
-	//		texture.reset();
-	//		return false;
-	//	}
-	//	mTextureList.emplace("Club", texture);
-	//}
-	//{
-	//	std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-	//	texture->CreateTexture(40, 39);
-	//	if (texture->LoadTexture(L"../Resource/Textures/Dagger.png") == false)
-	//	{
-	//		texture.reset();
-	//		return false;
-	//	}
-	//	mTextureList.emplace("Dagger", texture);
-	//}
 	
 	if (loadTextureDatas() == false)
 	{

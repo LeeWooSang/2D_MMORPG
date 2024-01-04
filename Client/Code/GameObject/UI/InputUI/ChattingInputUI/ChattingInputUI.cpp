@@ -3,6 +3,7 @@
 #include "../../../../Network/Network.h"
 #include "../../../../GraphicEngine/GraphicEngine.h"
 #include "../../ChattingBox/ChattingBox.h"
+#include "../../ButtonUI/ChattingMenuUI/ChattingMenuUI.h"
 
 ChattingInputUI::ChattingInputUI()
 	: InputUI()
@@ -197,7 +198,14 @@ void ChattingInputUI::processInput()
 			{
 				mChatState = CHAT_STATE::CHAT_END;
 #ifdef SERVER_CONNECT
-				GET_INSTANCE(Network)->SendChatPacket(mText);
+				if (ChattingMenuUI::GetChattingType() == static_cast<int>(CHATTING_TYPE::WHISPERING))
+				{
+					GET_INSTANCE(Network)->SendWhisperingChatPacket(1, mText);
+				}
+				else
+				{
+					GET_INSTANCE(Network)->SendBroadCastingChatPacket(mText);
+				}
 				mText.clear();
 				mCarrotIndex = 0;
 #else

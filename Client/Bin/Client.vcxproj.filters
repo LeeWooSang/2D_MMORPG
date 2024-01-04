@@ -101,6 +101,9 @@
     <Filter Include="Resource">
       <UniqueIdentifier>{79cc316a-24ff-4a32-ba22-60091a1b80ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\GameObject\UI\ButtonUI\ChattingMenuUI">
+      <UniqueIdentifier>{512298e2-ee19-41f6-9d86-416a1e6abbf9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -195,6 +198,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\GameObject\Skill\Skill.cpp">
       <Filter>Code\GameObject\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\UI\ButtonUI\ChattingMenuUI\ChattingMenuUI.cpp">
+      <Filter>Code\GameObject\UI\ButtonUI\ChattingMenuUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -299,6 +305,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\Common\Utility.h">
       <Filter>Code\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\UI\ButtonUI\ChattingMenuUI\ChattingMenuUI.h">
+      <Filter>Code\GameObject\UI\ButtonUI\ChattingMenuUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
