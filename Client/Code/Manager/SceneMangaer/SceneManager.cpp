@@ -1,9 +1,11 @@
 #include "SceneManager.h"
+#include <Windows.h>
+
 #include "../../Scene/Scene.h"
 #include "../../Scene/LoginScene/LoginScene.h"
 #include "../../Scene/InGameScene/InGameScene.h"
-#include "../../GameObject/Character/Character.h"
 #include "../UIManager/UIManager.h"
+#include "../../GameObject/UI/Inventory/Inventory.h"
 
 INIT_INSTACNE(SceneManager)
 SceneManager::SceneManager()
@@ -60,8 +62,27 @@ Scene* SceneManager::FindScene(SCENE_TYPE type)
 
 void SceneManager::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)
 {
-	if (mSceneType == SCENE_TYPE::INGAME_SCENE)
+	if (mSceneType != SCENE_TYPE::INGAME_SCENE)
 	{
-		static_cast<InGameScene*>(mScenes[mSceneType])->GetPlayer()->ProcessMouseMessage(msg, wParam, lParam);
+		return;
 	}
+	InGameScene* scene = static_cast<InGameScene*>(mScenes[mSceneType]);
+	Inventory* inventory = static_cast<Inventory*>(scene->FindUI("Inventory"));
+
+	switch (msg)
+	{
+		case WM_MOUSEWHEEL:
+		{
+			inventory->ProcessMouseWheelEvent(wParam);
+			break;
+		}
+		case WM_LBUTTONDBLCLK:
+		{
+			inventory->ProcessMouseDoubleClickEvent();
+			break;
+		}
+		default:
+			break;
+	}
+
 }

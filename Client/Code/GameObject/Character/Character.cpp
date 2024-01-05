@@ -799,12 +799,12 @@ void Player::ProcessKeyboardMessage()
 
 void Player::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, long long lParam)
 {
-	Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"));
-	//Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"));
-	if (inventory != nullptr && inventory->IsVisible() == true)
-	{
-		inventory->ProcessMouseWheelEvent(wParam);
-	}
+	//Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"));
+	////Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(UIManager)->FindUI("Inventory"));
+	//if (inventory != nullptr && inventory->IsVisible() == true)
+	//{
+	//	inventory->ProcessMouseWheelEvent(wParam);
+	//}
 }
 
 void Player::Move(char dir)

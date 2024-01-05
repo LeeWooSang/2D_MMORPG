@@ -13,6 +13,8 @@
 #include "../../GameObject/UI/SkillUI/SkillUI.h"
 #include "../../GameObject/Skill/Skill.h"
 
+#include "../../GameObject/UI/ExchangeUI/ExchangeUI.h"
+
 #include "../../../../Server/Code/Common/Protocol.h"
 #include "../../Resource/ResourceManager.h"
 #include "../../Resource/Texture/Texture.h"
@@ -151,6 +153,12 @@ bool InGameScene::Initialize()
 	}
 
 	AddSceneUI("SkillUI", skillUI);
+
+	ExchangeUI* exchange = new ExchangeUI;
+	exchange->Initialize(0, 0);
+	exchange->Visible();
+	exchange->SetPosition(200, 300);
+	AddSceneUI("ExchangeUI", exchange);
 
 	mIsReady = true;
 

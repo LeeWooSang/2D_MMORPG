@@ -63,13 +63,13 @@ bool ResourceManager::Initialize()
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
-		texture->CreateTexture(100, 30);
+		texture->CreateTexture(30, 30);
 		if (texture->LoadTexture(L"../Resource/Textures/Slot.png") == false)
 		{
 			texture.reset();
 			return false;
 		}
-		mTextureList.emplace("Slot", texture);
+		mTextureList.emplace("InventorySlot", texture);
 	}
 	{
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
@@ -102,7 +102,17 @@ bool ResourceManager::Initialize()
 		}
 		mTextureList.emplace("XButton", texture);
 	}
-	
+	{
+		std::shared_ptr<Texture> texture = std::make_shared<Texture>();
+		texture->CreateTexture(100, 30);
+		if (texture->LoadTexture(L"../Resource/Textures/Slot.png") == false)
+		{
+			texture.reset();
+			return false;
+		}
+		mTextureList.emplace("Slot", texture);
+	}
+
 	if (loadTextureDatas() == false)
 	{
 		return false;

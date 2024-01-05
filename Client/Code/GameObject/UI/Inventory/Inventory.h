@@ -16,6 +16,7 @@ public:
 	virtual void MouseLButtonDown();
 	virtual void MouseLButtonUp();
 	virtual void MouseLButtonClick();
+	void MouseLButtonDoubleClick();
 
 	virtual void SetPosition(int x, int y);
 
@@ -28,10 +29,12 @@ public:
 
 	InventoryItem* GetItem() { return mItem; }
 
+	void SetMouseLButtonDoubleClick(bool doubleClick) { mMouseLButtonDoubleClick = doubleClick; }
 
 private:
 	int mSlotNum;
 	InventoryItem* mItem;
+	bool mMouseLButtonDoubleClick;
 };
 
 constexpr int MAX_INVENTORY_WIDTH_SLOT_SIZE = 8;
@@ -53,6 +56,8 @@ public:
 	virtual void MouseLButtonClick();
 
 	void ProcessMouseWheelEvent(unsigned long long wParam);
+	void ProcessMouseDoubleClickEvent();
+
 	virtual bool CheckContain(int left, int top, int right, int bottom);
 
 	void AddItem(int texId);
@@ -92,8 +97,13 @@ public:
 	void SetItemType(int type) { mItemType = type; }
 	int GetItemType()	const { return mItemType; }
 
+	void SetItemDrag(bool drag) { mItemDrag = drag; }
+	bool GetItemDrag()	const { return mItemDrag; }
+
 private:
 	std::string mItemName;
 	int mTexId;
 	int mItemType;
+
+	bool mItemDrag;
 };

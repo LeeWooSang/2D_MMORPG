@@ -104,6 +104,9 @@
     <Filter Include="Code\GameObject\UI\ButtonUI\ChattingMenuUI">
       <UniqueIdentifier>{512298e2-ee19-41f6-9d86-416a1e6abbf9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\GameObject\UI\ExchangeUI">
+      <UniqueIdentifier>{c32c0b6f-ce34-40ef-84f2-b77c52871a48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -201,6 +204,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\GameObject\UI\ButtonUI\ChattingMenuUI\ChattingMenuUI.cpp">
       <Filter>Code\GameObject\UI\ButtonUI\ChattingMenuUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\UI\ExchangeUI\ExchangeUI.cpp">
+      <Filter>Code\GameObject\UI\ExchangeUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -308,6 +314,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameObject\UI\ButtonUI\ChattingMenuUI\ChattingMenuUI.h">
       <Filter>Code\GameObject\UI\ButtonUI\ChattingMenuUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\UI\ExchangeUI\ExchangeUI.h">
+      <Filter>Code\GameObject\UI\ExchangeUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

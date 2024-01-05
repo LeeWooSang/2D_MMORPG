@@ -27,6 +27,7 @@ InventorySlot::InventorySlot()
 {
 	mSlotNum = 0;
 	mItem = nullptr;
+	mMouseLButtonDoubleClick = false;
 }
 
 InventorySlot::~InventorySlot()
@@ -56,6 +57,11 @@ void InventorySlot::Update()
 
 	if (mItem != nullptr)
 	{
+		if (mMouseLButtonClick == true)
+		{
+			mItem->Move(mousePos.first, mousePos.second);
+		}
+
 		mItem->Update();
 	}
 }
@@ -112,6 +118,11 @@ void InventorySlot::MouseOver()
 void InventorySlot::MouseLButtonDown()
 {
 	UI::MouseLButtonDown();
+
+	if (mItem != nullptr)
+	{
+		mItem->MouseLButtonDown();
+	}
 }
 
 void InventorySlot::MouseLButtonUp()
@@ -120,6 +131,43 @@ void InventorySlot::MouseLButtonUp()
 }
 
 void InventorySlot::MouseLButtonClick()
+{
+	if (mMouseLButtonDoubleClick == true)
+	{
+		std::cout << "더블 클릭" << std::endl;
+
+		mMouseLButtonClick = false;
+		mItem->SetItemDrag(false);
+
+		MouseLButtonDoubleClick();
+		mMouseLButtonDoubleClick = false;
+	}
+	else
+	{
+		std::cout << "클릭" << std::endl;
+
+		if (mItem != nullptr)
+		{
+			if (mItem->GetItemDrag() == false)
+			{
+				mMouseLButtonClick = true;
+				std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
+				mItem->Click(mousePos.first, mousePos.second);
+
+				mItem->SetItemDrag(true);
+			}
+			else
+			{
+				mMouseLButtonClick = false;
+				mItem->SetPosition(mPos.first, mPos.second);
+				mItem->SetItemDrag(false);
+			}
+
+		}
+	}
+}
+
+void InventorySlot::MouseLButtonDoubleClick()
 {
 	if (mItem == nullptr)
 	{
@@ -303,7 +351,7 @@ bool Inventory::Initialize(int x, int y)
 				{
 					return false;
 				}
-				if (slot->SetTexture("Slot") == false)
+				if (slot->SetTexture("InventorySlot") == false)
 				{
 					return false;
 				}
@@ -426,7 +474,6 @@ void Inventory::MouseOver()
 void Inventory::MouseLButtonDown()
 {
 	UI::MouseLButtonDown();
-	//std::cout << "dd";
 }
 
 void Inventory::MouseLButtonUp()
@@ -552,6 +599,23 @@ void Inventory::ProcessMouseWheelEvent(unsigned long long wParam)
 	}
 }
 
+void Inventory::ProcessMouseDoubleClickEvent()
+{
+	std::vector<UI*>& slots = FindChildUIs("Slot");
+	for (int i = 0; i < slots.size(); ++i)
+	{		
+		// 더블클릭 이벤트가 발생한 슬롯
+		if (slots[i]->GetMouseLButtonDown() == true)
+		{
+			InventorySlot* slot = static_cast<InventorySlot*>(slots[i]);
+			// 더블클릭 이벤트가 발생했다고 설정
+			slot->SetMouseLButtonDoubleClick(true);
+			//slot->MouseLButtonDoubleClick();
+			break;
+		}
+	}	
+}
+
 bool Inventory::CheckContain(int left, int top, int right, int bottom)
 {
 	//D2D1_RECT_F rect;
@@ -647,6 +711,8 @@ InventoryItem::InventoryItem()
 	mItemName.clear();
 	mTexId = -1;
 	mItemType = 0;
+
+	mItemDrag = false;
 }
 
 InventoryItem::~InventoryItem()

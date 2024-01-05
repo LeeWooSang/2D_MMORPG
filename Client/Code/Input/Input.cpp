@@ -115,18 +115,23 @@ void Input::ProcessWindowMessage(unsigned int msg, unsigned long long wParam, lo
 		case WM_CHAR:
 		case WM_KEYDOWN:
 		case WM_KEYUP:
+		{
 			ProcessKeyboardMessage(msg, wParam, lParam);
 			break;
+		}
 
 		case WM_LBUTTONDOWN:
 		case WM_LBUTTONUP:
+		case WM_LBUTTONDBLCLK:
 		case WM_RBUTTONDOWN:
 		case WM_RBUTTONUP:
 		case WM_MOUSEMOVE:
 		case WM_VSCROLL:
 		case WM_MOUSEWHEEL:
+		{
 			ProcessMouseMessage(msg, wParam, lParam);
 			break;
+		}
 
 		default:
 			break;
@@ -170,6 +175,7 @@ void Input::ProcessMouseMessage(unsigned int msg, unsigned long long wParam, lon
 			break;
 		}
 
+		case WM_LBUTTONDBLCLK:
 		case WM_MOUSEWHEEL:
 		{
 			GET_INSTANCE(SceneManager)->ProcessMouseMessage(msg, wParam, lParam);
