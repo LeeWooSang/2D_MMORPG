@@ -32,4 +32,6 @@ private:
 private:
 	bool mOpen;
 	CHAT_STATE mChatState;
+
+	bool mWhispering;
 };

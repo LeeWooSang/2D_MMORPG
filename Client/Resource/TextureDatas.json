@@ -1997,7 +1997,24 @@
     "Height": 32,
     "OriginX": 0,
     "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/ExchangeUI/ExchangeButtonUI0.png",
+    "Name": "ExchangeButtonUI0",
+    "Width": 50,
+    "Height": 31,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/ExchangeUI/ExchangeButtonUI1.png",
+    "Name": "ExchangeButtonUI1",
+    "Width": 50,
+    "Height": 31,
+    "OriginX": 0,
+    "OriginY": 0
   }
+
 
 
 

@@ -22,7 +22,7 @@ bool ChattingMenuUI::Initialize(int x, int y)
 	ButtonUI::Initialize(x, y);
 	mChattingTypes.emplace_back(ChattingType(CHATTING_TYPE::BROADCASTING, L"모두에게"));
 	mChattingTypes.emplace_back(ChattingType(CHATTING_TYPE::BROADCASTING, L"파티에게"));
-	mChattingTypes.emplace_back(ChattingType(CHATTING_TYPE::WHISPERING, L"귓속말"));
+	mChattingTypes.emplace_back(ChattingType(CHATTING_TYPE::WHISPERING, L""));
 
 	SetTexture("Slot");
 
@@ -110,4 +110,20 @@ void ChattingMenuUI::ChangeType()
 	{
 		mCurrentType = 0;
 	}
+}
+
+void ChattingMenuUI::SetWhispering(int id)
+{
+	mCurrentType = static_cast<int>(CHATTING_TYPE::WHISPERING);
+	mChattingTypes[mCurrentType].name = std::to_wstring(id);	
+}
+
+int ChattingMenuUI::GetWhisperingId()
+{
+	mCurrentType = static_cast<int>(CHATTING_TYPE::WHISPERING);
+	if (mChattingTypes[mCurrentType].name == L"")
+	{
+		return -1;
+	}
+	return _wtoi(mChattingTypes[mCurrentType].name.c_str());
 }

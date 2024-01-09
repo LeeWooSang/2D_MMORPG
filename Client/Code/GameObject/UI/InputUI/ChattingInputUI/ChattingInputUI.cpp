@@ -10,6 +10,7 @@ ChattingInputUI::ChattingInputUI()
 {
 	mOpen = false;
 	mChatState = CHAT_STATE::NONE;
+	mWhispering = false;
 }
 
 ChattingInputUI::~ChattingInputUI()
@@ -78,6 +79,7 @@ void ChattingInputUI::OpenChattingBox()
 
 void ChattingInputUI::processInput()
 {
+
 	for (int i = KEY_TYPE::NUM0_KEY; i <= KEY_TYPE::NUM9_KEY; ++i)
 	{
 		if (GET_INSTANCE(Input)->KeyOnceCheck(static_cast<KEY_TYPE>(i)) == true)
@@ -159,6 +161,28 @@ void ChattingInputUI::processInput()
 
 		mChatState = CHAT_STATE::CHATTING;
 		++mCarrotIndex;
+
+		// 귓속말 명령어인지 확인
+		if (mText == L"/r ")
+		{
+			mWhispering = true;
+		}
+	}
+
+	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::SLASH_KEY) == true)
+	{
+		wchar_t wc = '/';
+		if (mCarrotIndex == mText.length())
+		{
+			mText += wc;
+		}
+		else
+		{
+			mText.insert(mText.begin() + (mCarrotIndex), wc);
+		}
+
+		mChatState = CHAT_STATE::CHATTING;
+		++mCarrotIndex;
 	}
 
 	if (mText.length() > 0)
@@ -196,24 +220,41 @@ void ChattingInputUI::processInput()
 			// 채팅 패킷 전송하고, 계속 채팅상태
 			if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
 			{
-				mChatState = CHAT_STATE::CHAT_END;
-#ifdef SERVER_CONNECT
-				if (ChattingMenuUI::GetChattingType() == static_cast<int>(CHATTING_TYPE::WHISPERING))
+				if (mWhispering == false)
 				{
-					GET_INSTANCE(Network)->SendWhisperingChatPacket(1, mText);
+					mChatState = CHAT_STATE::CHAT_END;
+#ifdef SERVER_CONNECT
+					if (ChattingMenuUI::GetChattingType() == static_cast<int>(CHATTING_TYPE::WHISPERING))
+					{
+						GET_INSTANCE(Network)->SendWhisperingChatPacket(ChattingMenuUI::GetWhisperingId(), mText);
+					}
+					else
+					{
+						GET_INSTANCE(Network)->SendBroadCastingChatPacket(mText);
+					}
+					mText.clear();
+					mCarrotIndex = 0;
+#else
+					// 채팅 기록
+					static_cast<ChattingBox*>(mParentUI)->AddChattingLog(0, mText.c_str());
+					mText.clear();
+					mCarrotIndex = 0;
+#endif 
 				}
+
+				// 귓속말 명령어가 입력됬다면,
 				else
 				{
-					GET_INSTANCE(Network)->SendBroadCastingChatPacket(mText);
+					std::wstring id = L"";
+					for (int i = 3; i < mText.length(); ++i)
+					{
+						id += mText[i];
+					}
+					ChattingMenuUI::SetWhispering(_wtoi(id.c_str()));
+					mText.clear();
+					mCarrotIndex = 0;
+					mWhispering = false;
 				}
-				mText.clear();
-				mCarrotIndex = 0;
-#else
-				// 채팅 기록
-				static_cast<ChattingBox*>(mParentUI)->AddChattingLog(0, mText.c_str());
-				mText.clear();
-				mCarrotIndex = 0;
-#endif 
 			}
 		}
 		SetCarrotPos();

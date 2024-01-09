@@ -36,6 +36,9 @@ public:
 	void ChangeType();
 	static int GetChattingType()	{ return mCurrentType; }
 
+	static void SetWhispering(int id);
+	static int GetWhisperingId();
+
 private:
 	static std::vector<ChattingType> mChattingTypes;
 	static int mCurrentType;

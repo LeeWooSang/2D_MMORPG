@@ -156,8 +156,6 @@ bool InGameScene::Initialize()
 
 	ExchangeUI* exchange = new ExchangeUI;
 	exchange->Initialize(0, 0);
-	exchange->Visible();
-	exchange->SetPosition(200, 300);
 	AddSceneUI("ExchangeUI", exchange);
 
 	mIsReady = true;
