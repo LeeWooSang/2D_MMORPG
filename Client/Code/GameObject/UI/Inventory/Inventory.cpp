@@ -705,6 +705,27 @@ void Inventory::OpenInventory()
 	}
 }
 
+InventorySlot* Inventory::FindSlot()
+{
+	std::vector<UI*>& v = FindChildUIs("Slot");
+	for (int i = 0; i < v.size(); ++i)
+	{
+		InventorySlot* slot = static_cast<InventorySlot*>(v[i]);
+		if (slot->GetItem() == nullptr)
+		{
+			continue;
+		}
+
+		if (slot->GetItem()->GetItemDrag() == true)
+		{
+			std::cout << i << "번 슬롯 아이템" << std::endl;
+			return slot;
+		}
+	}
+
+	return nullptr;
+}
+
 InventoryItem::InventoryItem()
 	: UI()
 {

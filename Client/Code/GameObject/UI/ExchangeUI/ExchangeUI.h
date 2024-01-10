@@ -10,17 +10,18 @@ public:
 	virtual void Update();
 	virtual void Render();
 
-	virtual void MouseOverCollision(int x, int y);
-
 	virtual void MouseOver();
 	virtual void MouseLButtonDown();
 	virtual void MouseLButtonUp();
 	virtual void MouseLButtonClick();
 
+	class ExchangeSlotUI* FindSlot();
+
 private:
 
 };
 
+class InventoryItem;
 class ExchangeSlotUI : public UI
 {
 public:
@@ -40,9 +41,9 @@ public:
 
 	void AddItem(int texId);
 	void AddItem(const std::string& name);
-	//void AddItem(InventoryItem* item);
+	void AddItem(InventoryItem* item);
 
 private:
 	int mSlotNum;
-	//InventoryItem* mItem;
+	InventoryItem* mItem;
 };

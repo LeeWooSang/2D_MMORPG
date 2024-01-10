@@ -4,6 +4,10 @@
 #include "../../../Resource/ResourceManager.h"
 #include "../../../Resource/Texture/Texture.h"
 
+#include "../../../Manager/SceneMangaer/SceneManager.h"
+#include "../../../Scene/InGameScene/InGameScene.h"
+#include "../Inventory/Inventory.h"
+
 ExchangeUI::ExchangeUI()
 	: UI()
 {
@@ -16,6 +20,8 @@ ExchangeUI::~ExchangeUI()
 bool ExchangeUI::Initialize(int x, int y)
 {
 	UI::Initialize(x, y);
+
+	SetTexture("ExchangeBackground0");
 
 	int slotNum = 0;
 	int size = 30;
@@ -99,19 +105,17 @@ void ExchangeUI::Render()
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
-	pos.right = pos.left + 400;
-	pos.bottom = pos.top + 300;
-
-	GET_INSTANCE(GraphicEngine)->RenderFillRectangle(pos, "검은색");
-	//GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
-	//if (mMouseLButtonDown)
-	//{
-	//	GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "파란색");
-	//}
-	//else if (mMouseOver)
-	//{
-	//	GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
-	//}
+	pos.right = pos.left + mTexture->GetSize().first;
+	pos.bottom = pos.top + mTexture->GetSize().second;
+	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+	if (mMouseLButtonDown)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "파란색");
+	}
+	else if (mMouseOver)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+	}
 
 	for (auto& child : mChildUIs)
 	{
@@ -120,10 +124,6 @@ void ExchangeUI::Render()
 			child.second[i]->Render();
 		}
 	}
-}
-
-void ExchangeUI::MouseOverCollision(int x, int y)
-{
 }
 
 void ExchangeUI::MouseOver()
@@ -140,16 +140,39 @@ void ExchangeUI::MouseLButtonUp()
 
 void ExchangeUI::MouseLButtonClick()
 {
+	std::cout << "click" << std::endl;
+}
+
+ExchangeSlotUI* ExchangeUI::FindSlot()
+{
+	std::vector<UI*>& v = FindChildUIs("Slot");
+	for (int i = 0; i < v.size(); ++i)
+	{
+		ExchangeSlotUI* slot = static_cast<ExchangeSlotUI*>(v[i]);
+		if (slot->GetMouseLButtonClick() == true)
+		{
+			std::cout << i << std::endl;
+			return slot;
+		}
+	}
+
+	return nullptr;
 }
 
 ExchangeSlotUI::ExchangeSlotUI()
 	: UI()
 {
 	mSlotNum = 0;
+	mItem = nullptr;
 }
 
 ExchangeSlotUI::~ExchangeSlotUI()
 {
+	if (mItem != nullptr)
+	{
+		delete mItem;
+		mItem = nullptr;
+	}
 }
 
 bool ExchangeSlotUI::Initialize(int x, int y)
@@ -171,6 +194,12 @@ void ExchangeSlotUI::Render()
 	// 보이는 것만 렌더
 	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
 	{
+		return;
+	}
+
+	if (mItem != nullptr)
+	{
+		mItem->Render();
 		return;
 	}
 
@@ -198,6 +227,7 @@ void ExchangeSlotUI::Render()
 			child.second[i]->Render();
 		}
 	}
+
 }
 
 void ExchangeSlotUI::MouseOver()
@@ -214,4 +244,19 @@ void ExchangeSlotUI::MouseLButtonUp()
 
 void ExchangeSlotUI::MouseLButtonClick()
 {
+	Inventory* ui = static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"));
+	InventorySlot* slot = ui->FindSlot();
+	if (slot != nullptr)
+	{
+		AddItem(slot->GetItem());
+		slot->SetItem();
+		slot->SetMouseLButtonClick(false);
+	}
+}
+
+void ExchangeSlotUI::AddItem(InventoryItem* item)
+{
+	mItem = item;
+	mItem->SetItemDrag(false);
+	mItem->SetPosition(mPos.first, mPos.second);
 }

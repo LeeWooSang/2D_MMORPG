@@ -28,6 +28,7 @@ public:
 	void AddItem(InventoryItem* item);
 
 	InventoryItem* GetItem() { return mItem; }
+	void SetItem() { mItem = nullptr; }
 
 	void SetMouseLButtonDoubleClick(bool doubleClick) { mMouseLButtonDoubleClick = doubleClick; }
 
@@ -69,6 +70,8 @@ public:
 
 	std::pair<int, int> GetDragStartPos()	const { return mDragStartPos; }
 	void SetDragStartPos(std::pair<int, int> pos) { mDragStartPos = pos; }
+
+	InventorySlot* FindSlot();
 
 private:
 	// 슬롯 간의 간격

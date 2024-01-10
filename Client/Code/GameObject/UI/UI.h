@@ -41,6 +41,9 @@ public:
 	bool GetMouseLButtonDown()	const;
 	void SetMouseLButtonDown(bool lButtonDown);
 
+	bool GetMouseLButtonClick() const { return mMouseLButtonClick; }
+	void SetMouseLButtonClick(bool click) { mMouseLButtonClick = click; }
+
 protected:
 	UI* mParentUI;
 	//std::vector<UI*> mChildUIs;
