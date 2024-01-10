@@ -1,11 +1,11 @@
 #pragma once
 #include "../UI.h"
 
-class ExchangeUI : public UI
+class TradeUI : public UI
 {
 public:
-	ExchangeUI();
-	virtual ~ExchangeUI();
+	TradeUI();
+	virtual ~TradeUI();
 	virtual bool Initialize(int x, int y);
 	virtual void Update();
 	virtual void Render();
@@ -15,18 +15,18 @@ public:
 	virtual void MouseLButtonUp();
 	virtual void MouseLButtonClick();
 
-	class ExchangeSlotUI* FindSlot();
+	class TradeSlotUI* FindSlot();
 
 private:
 
 };
 
 class InventoryItem;
-class ExchangeSlotUI : public UI
+class TradeSlotUI : public UI
 {
 public:
-	ExchangeSlotUI();
-	virtual ~ExchangeSlotUI();
+	TradeSlotUI();
+	virtual ~TradeSlotUI();
 	virtual bool Initialize(int x, int y);
 	virtual void Update();
 	virtual void Render();

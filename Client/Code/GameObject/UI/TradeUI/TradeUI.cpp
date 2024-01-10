@@ -1,4 +1,4 @@
-#include "ExchangeUI.h"
+#include "TradeUI.h"
 #include "../ButtonUI/ButtonUI.h"
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../../../Resource/ResourceManager.h"
@@ -8,35 +8,67 @@
 #include "../../../Scene/InGameScene/InGameScene.h"
 #include "../Inventory/Inventory.h"
 
-ExchangeUI::ExchangeUI()
+TradeUI::TradeUI()
 	: UI()
 {
 }
 
-ExchangeUI::~ExchangeUI()
+TradeUI::~TradeUI()
 {
 }
 
-bool ExchangeUI::Initialize(int x, int y)
+bool TradeUI::Initialize(int x, int y)
 {
 	UI::Initialize(x, y);
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("TradeUIBackground0");
+		SetTexture(data.name);
+	}
+	
+	for (int i = 1; i <= 2; ++i)
+	{
+		std::string name = "TradeUIBackground" + std::to_string(i);
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(name);
+		UI* ui = new UI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI("Background", ui);
+	}
 
-	SetTexture("ExchangeBackground0");
+	for (int i = 0; i < 4; ++i)
+	{
+		std::string name = "TradeUIButton" + std::to_string(i);
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(name);
+		ButtonUI* ui = new ButtonUI;
+		if(ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}	
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI("Button", ui);
+	}
 
 	int slotNum = 0;
-	int size = 30;
-	int gap = 10;
+	int size = 32;
+	int gapX = 7;
+	int gapY = 5;
 	for (int j = 0; j < 3; ++j)
 	{
 		for (int i = 0; i < 3; ++i)
 		{
-			ExchangeSlotUI* slot = new ExchangeSlotUI;
-			int originX = 10 + (i * (size + gap));
-			int originY = 180 + (j * (size + gap));
+			TradeSlotUI* slot = new TradeSlotUI;
+			int originX = 12 + (i * (size + gapX));
+			int originY = 152 + (j * (size + gapY));
 			if (slot->Initialize(originX, originY) == false)
 			{
 				return false;
 			}
+			slot->SetTexture("KeySlot");
 			slot->SetSlotNum(slotNum++);
 			slot->Visible();
 			AddChildUI("Slot", slot);
@@ -47,40 +79,18 @@ bool ExchangeUI::Initialize(int x, int y)
 	{
 		for (int i = 0; i < 3; ++i)
 		{
-			ExchangeSlotUI* slot = new ExchangeSlotUI;
-			int originX = 280 + (i * (size + gap));
-			int originY = 180 + (j * (size + gap));
+			TradeSlotUI* slot = new TradeSlotUI;
+			int originX = 150 + (i * (size + gapX));
+			int originY = 152 + (j * (size + gapY));
 			if (slot->Initialize(originX, originY) == false)
 			{
 				return false;
 			}
+			slot->SetTexture("KeySlot");
 			slot->SetSlotNum(slotNum++);
 			slot->Visible();
-			AddChildUI("Slot", slot);
+			AddChildUI("KeySlot", slot);
 		}
-	}
-
-	{
-		ButtonUI* ui = new ButtonUI;
-		if(ui->Initialize(175, 40) == false)
-		{
-			return false;
-		}
-		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ExchangeButtonUI0");
-		ui->SetTexture(data.name);
-		ui->Visible();
-		AddChildUI("Button", ui);
-	}
-	{
-		ButtonUI* ui = new ButtonUI;
-		if (ui->Initialize(175, 75) == false)
-		{
-			return false;
-		}
-		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ExchangeButtonUI1");
-		ui->SetTexture(data.name);
-		ui->Visible();
-		AddChildUI("Button", ui);
 	}
 
 	Visible();
@@ -89,12 +99,12 @@ bool ExchangeUI::Initialize(int x, int y)
 	return true;
 }
 
-void ExchangeUI::Update()
+void TradeUI::Update()
 {
 	UI::Update();
 }
 
-void ExchangeUI::Render()
+void TradeUI::Render()
 {
 	// 보이는 것만 렌더
 	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
@@ -126,29 +136,28 @@ void ExchangeUI::Render()
 	}
 }
 
-void ExchangeUI::MouseOver()
+void TradeUI::MouseOver()
 {
 }
 
-void ExchangeUI::MouseLButtonDown()
+void TradeUI::MouseLButtonDown()
 {
 }
 
-void ExchangeUI::MouseLButtonUp()
+void TradeUI::MouseLButtonUp()
 {
 }
 
-void ExchangeUI::MouseLButtonClick()
+void TradeUI::MouseLButtonClick()
 {
-	std::cout << "click" << std::endl;
 }
 
-ExchangeSlotUI* ExchangeUI::FindSlot()
+TradeSlotUI* TradeUI::FindSlot()
 {
 	std::vector<UI*>& v = FindChildUIs("Slot");
 	for (int i = 0; i < v.size(); ++i)
 	{
-		ExchangeSlotUI* slot = static_cast<ExchangeSlotUI*>(v[i]);
+		TradeSlotUI* slot = static_cast<TradeSlotUI*>(v[i]);
 		if (slot->GetMouseLButtonClick() == true)
 		{
 			std::cout << i << std::endl;
@@ -159,14 +168,14 @@ ExchangeSlotUI* ExchangeUI::FindSlot()
 	return nullptr;
 }
 
-ExchangeSlotUI::ExchangeSlotUI()
+TradeSlotUI::TradeSlotUI()
 	: UI()
 {
 	mSlotNum = 0;
 	mItem = nullptr;
 }
 
-ExchangeSlotUI::~ExchangeSlotUI()
+TradeSlotUI::~TradeSlotUI()
 {
 	if (mItem != nullptr)
 	{
@@ -175,21 +184,19 @@ ExchangeSlotUI::~ExchangeSlotUI()
 	}
 }
 
-bool ExchangeSlotUI::Initialize(int x, int y)
+bool TradeSlotUI::Initialize(int x, int y)
 {
 	UI::Initialize(x, y);
-
-	SetTexture("InventorySlot");
 
 	return true;
 }
 
-void ExchangeSlotUI::Update()
+void TradeSlotUI::Update()
 {
 	UI::Update();
 }
 
-void ExchangeSlotUI::Render()
+void TradeSlotUI::Render()
 {
 	// 보이는 것만 렌더
 	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
@@ -209,7 +216,8 @@ void ExchangeSlotUI::Render()
 	pos.right = pos.left + mTexture->GetSize().first;
 	pos.bottom = pos.top + mTexture->GetSize().second;
 
-	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+	//GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+	//GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "검은색");
 
 	if (mMouseLButtonDown)
 	{
@@ -230,19 +238,19 @@ void ExchangeSlotUI::Render()
 
 }
 
-void ExchangeSlotUI::MouseOver()
+void TradeSlotUI::MouseOver()
 {
 }
 
-void ExchangeSlotUI::MouseLButtonDown()
+void TradeSlotUI::MouseLButtonDown()
 {
 }
 
-void ExchangeSlotUI::MouseLButtonUp()
+void TradeSlotUI::MouseLButtonUp()
 {
 }
 
-void ExchangeSlotUI::MouseLButtonClick()
+void TradeSlotUI::MouseLButtonClick()
 {
 	Inventory* ui = static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"));
 	InventorySlot* slot = ui->FindSlot();
@@ -254,7 +262,7 @@ void ExchangeSlotUI::MouseLButtonClick()
 	}
 }
 
-void ExchangeSlotUI::AddItem(InventoryItem* item)
+void TradeSlotUI::AddItem(InventoryItem* item)
 {
 	mItem = item;
 	mItem->SetItemDrag(false);

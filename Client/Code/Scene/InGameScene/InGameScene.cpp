@@ -13,7 +13,7 @@
 #include "../../GameObject/UI/SkillUI/SkillUI.h"
 #include "../../GameObject/Skill/Skill.h"
 
-#include "../../GameObject/UI/ExchangeUI/ExchangeUI.h"
+#include "../../GameObject/UI/TradeUI/TradeUI.h"
 
 #include "../../../../Server/Code/Common/Protocol.h"
 #include "../../Resource/ResourceManager.h"
@@ -154,9 +154,9 @@ bool InGameScene::Initialize()
 
 	AddSceneUI("SkillUI", skillUI);
 
-	ExchangeUI* exchange = new ExchangeUI;
-	exchange->Initialize(0, 0);
-	AddSceneUI("ExchangeUI", exchange);
+	TradeUI* trade = new TradeUI;
+	trade->Initialize(0, 0);
+	AddSceneUI("TradeUI", trade);
 
 	mIsReady = true;
 
