@@ -8,9 +8,20 @@
 #include "../../../Scene/InGameScene/InGameScene.h"
 #include "../Inventory/Inventory.h"
 
+void CloseTradeUI(const std::string& name);
+void CloseTradeUI(const std::string& name)
+{
+	TradeUI* ui = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
+	if (ui->GetIsOpen() == true)
+	{
+		ui->OpenTradeUI();
+	}
+}
+
 TradeUI::TradeUI()
 	: UI()
 {
+	mOpen = false;
 }
 
 TradeUI::~TradeUI()
@@ -39,7 +50,20 @@ bool TradeUI::Initialize(int x, int y)
 		AddChildUI("Background", ui);
 	}
 
-	for (int i = 0; i < 4; ++i)
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("TradeUIButton0");
+		ButtonUI* ui = new ButtonUI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		ui->SetLButtonClickCallback(CloseTradeUI);
+		AddChildUI("Button", ui);
+	}
+
+	for (int i = 1; i < 4; ++i)
 	{
 		std::string name = "TradeUIButton" + std::to_string(i);
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(name);
@@ -93,8 +117,8 @@ bool TradeUI::Initialize(int x, int y)
 		}
 	}
 
-	Visible();
-	SetPosition(200, 200);
+	//Visible();
+	SetPosition(140, 150);
 
 	return true;
 }
@@ -150,6 +174,23 @@ void TradeUI::MouseLButtonUp()
 
 void TradeUI::MouseLButtonClick()
 {
+	std::cout << "클릭" << std::endl;
+}
+
+void TradeUI::OpenTradeUI()
+{
+	// 닫혀있다면
+	if (mOpen == false)
+	{
+		mOpen = true;
+		Visible();
+	}
+	// 열려있다면
+	else
+	{
+		mOpen = false;
+		NotVisible();
+	}
 }
 
 TradeSlotUI* TradeUI::FindSlot()
@@ -166,6 +207,32 @@ TradeSlotUI* TradeUI::FindSlot()
 	}
 
 	return nullptr;
+}
+
+void TradeUI::Visible()
+{
+	mAttr |= ATTR_STATE_TYPE::VISIBLE;
+
+	for (auto& child : mChildUIs)
+	{
+		for (int i = 0; i < child.second.size(); ++i)
+		{
+			child.second[i]->Visible();
+		}
+	}
+}
+
+void TradeUI::NotVisible()
+{
+	mAttr &= ~ATTR_STATE_TYPE::VISIBLE;
+
+	for (auto& child : mChildUIs)
+	{
+		for (int i = 0; i < child.second.size(); ++i)
+		{
+			child.second[i]->NotVisible();
+		}
+	}
 }
 
 TradeSlotUI::TradeSlotUI()

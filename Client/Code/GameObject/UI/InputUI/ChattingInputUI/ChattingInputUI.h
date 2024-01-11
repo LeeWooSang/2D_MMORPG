@@ -34,4 +34,5 @@ private:
 	CHAT_STATE mChatState;
 
 	bool mWhispering;
+	bool mTrading;
 };

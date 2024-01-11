@@ -19,7 +19,10 @@ void CloseInventory(const std::string& name);
 void CloseInventory(const std::string& skillName)
 {
 	Inventory* ui = static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"));
-	ui->OpenInventory();
+	if (ui->GetIsOpen() == true)
+	{
+		ui->OpenInventory();
+	}
 }
 
 InventorySlot::InventorySlot()

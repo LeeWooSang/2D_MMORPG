@@ -5,12 +5,17 @@
 #include "../../ChattingBox/ChattingBox.h"
 #include "../../ButtonUI/ChattingMenuUI/ChattingMenuUI.h"
 
+#include "../../../../Manager/SceneMangaer/SceneManager.h"
+#include "../../../../Scene/InGameScene/InGameScene.h"
+#include "../../TradeUI/TradeUI.h"
+
 ChattingInputUI::ChattingInputUI()
 	: InputUI()
 {
 	mOpen = false;
 	mChatState = CHAT_STATE::NONE;
 	mWhispering = false;
+	mTrading = false;
 }
 
 ChattingInputUI::~ChattingInputUI()
@@ -167,6 +172,10 @@ void ChattingInputUI::processInput()
 		{
 			mWhispering = true;
 		}
+		else if (mText == L"/t ")
+		{
+			mTrading = true;
+		}
 	}
 
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::SLASH_KEY) == true)
@@ -220,7 +229,40 @@ void ChattingInputUI::processInput()
 			// 채팅 패킷 전송하고, 계속 채팅상태
 			if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
 			{
-				if (mWhispering == false)
+				// 귓속말 명령어가 입력됬다면,
+				if (mWhispering == true)
+				{
+					std::wstring id = L"";
+					for (int i = 3; i < mText.length(); ++i)
+					{
+						id += mText[i];
+					}
+					ChattingMenuUI::SetWhispering(_wtoi(id.c_str()));
+					mText.clear();
+					mCarrotIndex = 0;
+					mWhispering = false;
+					mTrading = false;
+				}
+
+				else if (mTrading == true)
+				{
+					std::wstring id = L"";
+					for (int i = 3; i < mText.length(); ++i)
+					{
+						id += mText[i];
+					}
+
+					// 교환창 오픈
+					TradeUI* ui = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
+					ui->OpenTradeUI();
+
+					mText.clear();
+					mCarrotIndex = 0;
+					mWhispering = false;
+					mTrading = false;
+				}
+
+				else
 				{
 					mChatState = CHAT_STATE::CHAT_END;
 #ifdef SERVER_CONNECT
@@ -240,20 +282,6 @@ void ChattingInputUI::processInput()
 					mText.clear();
 					mCarrotIndex = 0;
 #endif 
-				}
-
-				// 귓속말 명령어가 입력됬다면,
-				else
-				{
-					std::wstring id = L"";
-					for (int i = 3; i < mText.length(); ++i)
-					{
-						id += mText[i];
-					}
-					ChattingMenuUI::SetWhispering(_wtoi(id.c_str()));
-					mText.clear();
-					mCarrotIndex = 0;
-					mWhispering = false;
 				}
 			}
 		}

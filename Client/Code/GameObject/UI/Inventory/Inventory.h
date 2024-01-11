@@ -66,6 +66,7 @@ public:
 	void AddItem(int slot, const std::string& name);
 	void AddItem(InventoryItem* item);
 
+	bool GetIsOpen()	const { return mOpen; }
 	void OpenInventory();
 
 	std::pair<int, int> GetDragStartPos()	const { return mDragStartPos; }

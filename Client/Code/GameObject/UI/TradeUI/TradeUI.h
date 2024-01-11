@@ -15,10 +15,16 @@ public:
 	virtual void MouseLButtonUp();
 	virtual void MouseLButtonClick();
 
+	void OpenTradeUI();
+
 	class TradeSlotUI* FindSlot();
 
-private:
+	bool GetIsOpen()	const { return mOpen; }
+	virtual void Visible();
+	virtual void NotVisible();
 
+private:
+	bool mOpen;
 };
 
 class InventoryItem;
