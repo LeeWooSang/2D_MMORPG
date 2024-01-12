@@ -156,6 +156,27 @@ void Network::SendChangeAvatarPacket(char slotType, int texId)
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 
+void Network::SendRequestTradePacket(int id)
+{
+	CSRequestTradePacket packet;
+	packet.size = sizeof(CSRequestTradePacket);
+	packet.type = CS_PACKET_TYPE::CS_REQUEST_TRADE;
+	packet.id = id;
+
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
+void Network::SendTradePacket(int id, int* items)
+{
+	CSTradePacket packet;
+	packet.size = sizeof(CSTradePacket);
+	packet.type = CS_PACKET_TYPE::CS_TRADE;
+	packet.id = id;
+	memcpy(packet.items, items, sizeof(packet.items));
+
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
 void Network::processPacket()
 {
 	switch (mPacketBuffer[1])
@@ -250,6 +271,42 @@ void Network::processPacket()
 			p->packetType = packet->type;
 			p->id = packet->id;
 			p->texId = packet->texId;
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
+			break;
+		}
+
+		case SC_PACKET_TYPE::SC_REQUEST_TRADE:
+		{
+			SCRequestTradePacket* packet = reinterpret_cast<SCRequestTradePacket*>(mPacketBuffer);
+
+			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
+			p->packetType = packet->type;
+			p->id = packet->id;
+
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
+			break;
+		}
+
+		case SC_PACKET_TYPE::SC_TRADE:
+		{
+			SCTradePacket* packet = reinterpret_cast<SCTradePacket*>(mPacketBuffer);
+
+			std::shared_ptr<TradePacket> p = std::make_shared<TradePacket>();
+			p->packetType = packet->type;
+			p->id = packet->id;
+			memcpy(p->items, packet->items, sizeof(p->items));
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
+			break;
+		}
+
+		case SC_PACKET_TYPE::SC_TRADE_POST_PROCESSING:
+		{
+			SCTradePostProcessingPacket* packet = reinterpret_cast<SCTradePostProcessingPacket*>(mPacketBuffer);
+
+			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
+			p->packetType = packet->type;
+			p->id = myId;
+
 			GET_INSTANCE(EventManager)->AddPacketEvent(p);
 			break;
 		}

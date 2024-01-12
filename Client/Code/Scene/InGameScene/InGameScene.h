@@ -25,6 +25,10 @@ public:
 	void RemoveObject(int id);
 	void UpdateObjectAvatar(int id, int texId);
 
+	void RequestTrade();
+	void TradeItems(int id, int* items);
+	void TradePostProcessing();
+
 	Player* GetPlayer();
 	AnimationCharacter* GetOtherPlayer(int id);
 	Monster* GetMonster(int id);

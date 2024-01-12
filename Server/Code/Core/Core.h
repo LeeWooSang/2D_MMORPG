@@ -21,6 +21,7 @@ public:
 	Player& GetUser(int index) { return mUsers[index]; }
 	Channel& GetChannel(int channel) { return mChannels[channel]; }
 
+public:
 	void SendLoginOkPacket(int to);
 	void SendLoginFailPacket(int to);
 	void SendPositionPacket(int to, int obj);
@@ -31,6 +32,11 @@ public:
 	void SendChangeChannelPacket(int to, bool result);
 	void SendChatPacket(int to, int obj, wchar_t* chat);
 	void SendChangeAvatarPacket(int to, int obj, int texId);
+
+	void SendRequestTradePacket(int to, int obj);
+	void SendTradePacket(int to, int obj, int* items);
+	void SendTradePostProcessingPacket(int to);
+
 
 private:
 	void errorDisplay(const char* msg, int error);

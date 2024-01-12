@@ -80,6 +80,7 @@ public:
 
 	void ProcessAttack();
 	void ProcessChangeAvatar(int texId);
+	void ProcessTrade(int id, int* items);
 
 	int GetTexId()	const { return mTexId; }
 

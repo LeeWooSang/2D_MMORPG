@@ -232,6 +232,36 @@ void Core::SendChangeAvatarPacket(int to, int obj, int texId)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
+void Core::SendRequestTradePacket(int to, int obj)
+{
+	SCRequestTradePacket packet;
+	packet.size = sizeof(SCRequestTradePacket);
+	packet.type = SC_PACKET_TYPE::SC_REQUEST_TRADE;
+	packet.id = obj;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendTradePacket(int to, int obj, int* items)
+{
+	SCTradePacket packet;
+	packet.size = sizeof(SCTradePacket);
+	packet.type = SC_PACKET_TYPE::SC_TRADE;
+	packet.id = obj;
+	memcpy(packet.items, items, sizeof(packet.items));
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendTradePostProcessingPacket(int to)
+{
+	SCTradePostProcessingPacket packet;
+	packet.size = sizeof(SCTradePostProcessingPacket);
+	packet.type = SC_PACKET_TYPE::SC_TRADE_POST_PROCESSING;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
 void Core::errorDisplay(const char* msg, int error)
 {
 	WCHAR* lpMsgBuf;
@@ -586,6 +616,20 @@ void Core::processPacket(int id, char* buf)
 			CSChangeAvatarPacket* packet = reinterpret_cast<CSChangeAvatarPacket*>(buf);
 			// 주변 다른 유저들에게 아바타 바꼈다고 전송
 			mUsers[id].ProcessChangeAvatar(packet->texId);
+			break;
+		}
+
+		case CS_PACKET_TYPE::CS_REQUEST_TRADE:
+		{
+			CSRequestTradePacket* packet = reinterpret_cast<CSRequestTradePacket*>(buf);
+			SendRequestTradePacket(packet->id, id);
+			break;
+		}
+
+		case CS_PACKET_TYPE::CS_TRADE:
+		{
+			CSTradePacket* packet = reinterpret_cast<CSTradePacket*>(buf);
+			mUsers[id].ProcessTrade(packet->id, packet->items);
 			break;
 		}
 

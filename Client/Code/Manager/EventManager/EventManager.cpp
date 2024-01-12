@@ -55,6 +55,25 @@ void EventManager::processPacketEvent()
 				break;
 			}
 
+			case SC_REQUEST_TRADE:
+			{
+				scene->RequestTrade();
+				break;
+			}
+
+			case SC_TRADE:
+			{
+				TradePacket* e = static_cast<TradePacket*>(ev);
+				scene->TradeItems(e->id, e->items);
+				break;
+			}
+
+			case SC_TRADE_POST_PROCESSING:
+			{
+				scene->TradePostProcessing();
+				break;
+			}
+
 			default:
 				break;
 		}

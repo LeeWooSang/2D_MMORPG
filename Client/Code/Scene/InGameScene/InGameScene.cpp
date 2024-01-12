@@ -413,6 +413,32 @@ void InGameScene::UpdateObjectAvatar(int id, int texId)
 	mOtherPlayers[id]->SetAvatar(texId);
 }
 
+void InGameScene::RequestTrade()
+{
+	TradeUI* trade = static_cast<TradeUI*>(FindUI("TradeUI"));
+	trade->OpenTradeUI();
+}
+
+void InGameScene::TradeItems(int id, int* items)
+{
+	Inventory* inventory = static_cast<Inventory*>(FindUI("Inventory"));
+	for (int i = 0; i < 9; ++i)
+	{
+		if (items[i] == -1)
+		{
+			continue;
+		}
+		inventory->AddItem(items[i]);
+	}
+	CloseTradeUI("TradeUI");
+}
+
+void InGameScene::TradePostProcessing()
+{
+	TradeUI* trade = static_cast<TradeUI*>(FindUI("TradeUI"));
+	trade->TradePostProcessing();
+}
+
 Player* InGameScene::GetPlayer()
 {
 	return mPlayer;

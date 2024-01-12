@@ -806,6 +806,21 @@ void Player::ProcessChangeAvatar(int texId)
 	}
 }
 
+void Player::ProcessTrade(int id, int* items)
+{
+	int myId = mOver->myId;
+	Player* users = GET_INSTANCE(Core)->GetUsers();
+	if (users[id].GetIsConnect() == false)
+	{
+		return;
+	}
+
+	// 상대방에게 아이템을 넘겨주는 패킷 전송
+	GET_INSTANCE(Core)->SendTradePacket(id, myId, items);
+	// 나에게는 후처리 패킷 전송
+	GET_INSTANCE(Core)->SendTradePostProcessingPacket(myId);
+}
+
 Monster::Monster()
 	: Character()
 {

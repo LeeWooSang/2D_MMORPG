@@ -20,11 +20,19 @@ public:
 	class TradeSlotUI* FindSlot();
 
 	bool GetIsOpen()	const { return mOpen; }
+
+	int GetTradeUserId()	const { return mTradeUserId; }
+	void SetTradeUserId(int id) { mTradeUserId = id; }
+	void ResetTradeUserId() { mTradeUserId = -1; }
+
+	void TradePostProcessing();
+
 	virtual void Visible();
 	virtual void NotVisible();
 
 private:
 	bool mOpen;
+	int mTradeUserId;
 };
 
 class InventoryItem;
@@ -45,11 +53,13 @@ public:
 	int GetSlotNum()	const { return mSlotNum; }
 	void SetSlotNum(int num) { mSlotNum = num; }
 
-	void AddItem(int texId);
-	void AddItem(const std::string& name);
 	void AddItem(InventoryItem* item);
+	InventoryItem* GetItem() { return mItem; }
+	void ResetSlot();
 
 private:
 	int mSlotNum;
 	InventoryItem* mItem;
 };
+
+void CloseTradeUI(const std::string& name);

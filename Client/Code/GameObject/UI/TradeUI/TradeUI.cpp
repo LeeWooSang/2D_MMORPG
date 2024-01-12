@@ -1,4 +1,6 @@
 #include "TradeUI.h"
+#include "../../../Network/Network.h"
+
 #include "../ButtonUI/ButtonUI.h"
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../../../Resource/ResourceManager.h"
@@ -8,20 +10,51 @@
 #include "../../../Scene/InGameScene/InGameScene.h"
 #include "../Inventory/Inventory.h"
 
-void CloseTradeUI(const std::string& name);
 void CloseTradeUI(const std::string& name)
 {
 	TradeUI* ui = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
-	if (ui->GetIsOpen() == true)
+	if (ui->GetIsOpen() == false)
 	{
-		ui->OpenTradeUI();
+		return;
 	}
+	ui->OpenTradeUI();
+	ui->ResetTradeUserId();
+}
+
+void TradeClick(const std::string& name);
+void TradeClick(const std::string& name)
+{
+	TradeUI* ui = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
+	if (ui->GetIsOpen() == false)
+	{
+		return;
+	}
+
+	// 아이템 아이디를 저장할 배열
+	int items[9];
+	memset(items, -1, sizeof(items));
+
+	std::vector<UI*>& v = ui->FindChildUIs("Slot");
+	for (int i = 0; i < v.size(); ++i)
+	{
+		TradeSlotUI* slot = static_cast<TradeSlotUI*>(v[i]);
+		if (slot->GetItem() == nullptr)
+		{
+			continue;
+		}
+		items[i] = slot->GetItem()->GetTexId();
+	}
+
+#ifdef SERVER_CONNECT
+	GET_INSTANCE(Network)->SendTradePacket(ui->GetTradeUserId(), items);
+#endif // SERVER_CONNECT
 }
 
 TradeUI::TradeUI()
 	: UI()
 {
 	mOpen = false;
+	mTradeUserId = -1;
 }
 
 TradeUI::~TradeUI()
@@ -62,8 +95,20 @@ bool TradeUI::Initialize(int x, int y)
 		ui->SetLButtonClickCallback(CloseTradeUI);
 		AddChildUI("Button", ui);
 	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("TradeUIButton1");
+		ButtonUI* ui = new ButtonUI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		ui->SetLButtonClickCallback(TradeClick);
+		AddChildUI("Button", ui);
+	}
 
-	for (int i = 1; i < 4; ++i)
+	for (int i = 2; i < 4; ++i)
 	{
 		std::string name = "TradeUIButton" + std::to_string(i);
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(name);
@@ -86,7 +131,7 @@ bool TradeUI::Initialize(int x, int y)
 		for (int i = 0; i < 3; ++i)
 		{
 			TradeSlotUI* slot = new TradeSlotUI;
-			int originX = 12 + (i * (size + gapX));
+			int originX = 150 + (i * (size + gapX));
 			int originY = 152 + (j * (size + gapY));
 			if (slot->Initialize(originX, originY) == false)
 			{
@@ -104,7 +149,7 @@ bool TradeUI::Initialize(int x, int y)
 		for (int i = 0; i < 3; ++i)
 		{
 			TradeSlotUI* slot = new TradeSlotUI;
-			int originX = 150 + (i * (size + gapX));
+			int originX = 12 + (i * (size + gapX));
 			int originY = 152 + (j * (size + gapY));
 			if (slot->Initialize(originX, originY) == false)
 			{
@@ -201,12 +246,22 @@ TradeSlotUI* TradeUI::FindSlot()
 		TradeSlotUI* slot = static_cast<TradeSlotUI*>(v[i]);
 		if (slot->GetMouseLButtonClick() == true)
 		{
-			std::cout << i << std::endl;
 			return slot;
 		}
 	}
 
 	return nullptr;
+}
+
+void TradeUI::TradePostProcessing()
+{
+	std::vector<UI*>& v = FindChildUIs("Slot");
+	for (int i = 0; i < 9; ++i)
+	{
+		TradeSlotUI* slot = static_cast<TradeSlotUI*>(v[i]);
+		slot->ResetSlot();
+	}
+	CloseTradeUI("dd");
 }
 
 void TradeUI::Visible()
@@ -334,4 +389,13 @@ void TradeSlotUI::AddItem(InventoryItem* item)
 	mItem = item;
 	mItem->SetItemDrag(false);
 	mItem->SetPosition(mPos.first, mPos.second);
+}
+
+void TradeSlotUI::ResetSlot()
+{
+	if (mItem != nullptr)
+	{
+		delete mItem;
+		mItem = nullptr;
+	}
 }

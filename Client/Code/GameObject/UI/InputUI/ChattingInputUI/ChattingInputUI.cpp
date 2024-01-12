@@ -232,12 +232,14 @@ void ChattingInputUI::processInput()
 				// 귓속말 명령어가 입력됬다면,
 				if (mWhispering == true)
 				{
-					std::wstring id = L"";
+					std::wstring temp = L"";
 					for (int i = 3; i < mText.length(); ++i)
 					{
-						id += mText[i];
+						temp += mText[i];
 					}
-					ChattingMenuUI::SetWhispering(_wtoi(id.c_str()));
+
+					int id = _wtoi(temp.c_str());
+					ChattingMenuUI::SetWhispering(id);
 					mText.clear();
 					mCarrotIndex = 0;
 					mWhispering = false;
@@ -246,20 +248,28 @@ void ChattingInputUI::processInput()
 
 				else if (mTrading == true)
 				{
-					std::wstring id = L"";
+					std::wstring temp = L"";
 					for (int i = 3; i < mText.length(); ++i)
 					{
-						id += mText[i];
+						temp += mText[i];
 					}
 
+					int id = _wtoi(temp.c_str());
 					// 교환창 오픈
 					TradeUI* ui = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
 					ui->OpenTradeUI();
+					ui->SetTradeUserId(id);
 
 					mText.clear();
 					mCarrotIndex = 0;
 					mWhispering = false;
 					mTrading = false;
+
+#ifdef SERVER_CONNECT
+					// 상대방한테도 교환창 오픈
+					GET_INSTANCE(Network)->SendRequestTradePacket(id);
+#endif // SERVER_CONNECT
+
 				}
 
 				else

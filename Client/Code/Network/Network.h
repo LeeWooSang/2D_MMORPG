@@ -32,6 +32,7 @@ public:
 	bool Initialize(const HWND& handle);
 	void PreocessNetwork(unsigned long long wparam, long long lparam);
 
+public:
 	void SendLoginPacket(const std::string& loginId, const std::string& loginPassword);
 	void SendMovePacket(char dir);
 	void SendChangeChannelPacket(char channel);
@@ -40,6 +41,10 @@ public:
 
 	void SendAttackPacket();
 	void SendChangeAvatarPacket(char slotType, int texId);
+
+	void SendRequestTradePacket(int id);
+	void SendTradePacket(int id, int* items);
+
 private:
 	void processPacket();
 	void recvPacket();

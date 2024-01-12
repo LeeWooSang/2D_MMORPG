@@ -25,6 +25,10 @@ struct AvatarPacket : public PacketBase
 {
 	int texId;
 };
+struct TradePacket : public PacketBase
+{
+	int items[9];
+};
 
 class EventManager
 {

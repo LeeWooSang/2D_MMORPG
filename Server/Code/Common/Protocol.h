@@ -99,7 +99,9 @@ enum CS_PACKET_TYPE
 	CS_BROADCASTING_CHAT,
 	CS_WHISPERING_CHAT,
 	CS_ATTACK,
-	CS_CHANGE_AVATAR
+	CS_CHANGE_AVATAR,
+	CS_REQUEST_TRADE,
+	CS_TRADE
 };
 
 enum SC_PACKET_TYPE
@@ -111,7 +113,10 @@ enum SC_PACKET_TYPE
 	SC_REMOVE_OBJECT,
 	SC_CHANGE_CHANNEL,
 	SC_CHAT,
-	SC_CHANGE_AVATAR
+	SC_CHANGE_AVATAR,
+	SC_REQUEST_TRADE,
+	SC_TRADE,
+	SC_TRADE_POST_PROCESSING
 };
 
 #pragma pack(push, 1)
@@ -163,7 +168,20 @@ struct CSChangeAvatarPacket
 	char type;
 	// ½½·Ô¹øÈ£
 	char slotType;
-	int texId;	 
+	int texId;
+};
+struct CSRequestTradePacket
+{
+	char size;
+	char type;
+	int id;
+};
+struct CSTradePacket
+{
+	char size;
+	char type;
+	int id;
+	int items[9];
 };
 ///////////////////////////////////////////////////
 struct SCLoginOkPacket
@@ -220,4 +238,22 @@ struct SCChangeAvatarPacket
 	char type;
 	int id;
 	int texId;
+};
+struct SCRequestTradePacket
+{
+	char size;
+	char type;
+	int id;
+};
+struct SCTradePacket
+{
+	char size;
+	char type;
+	int id;
+	int items[9];
+};
+struct SCTradePostProcessingPacket
+{
+	char size;
+	char type;
 };
