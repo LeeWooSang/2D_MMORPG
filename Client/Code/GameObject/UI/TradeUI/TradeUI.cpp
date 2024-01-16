@@ -10,18 +10,18 @@
 #include "../../../Scene/InGameScene/InGameScene.h"
 #include "../Inventory/Inventory.h"
 
-void CloseTradeUI(const std::string& name)
+void TradeCancelClick(const std::string& name)
 {
-	TradeUI* ui = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
-	if (ui->GetIsOpen() == false)
-	{
-		return;
-	}
-	ui->OpenTradeUI();
-	ui->ResetTradeUserId();
+	TradeUI* trade = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
+
+#ifdef SERVER_CONNECT
+	// 취소 버튼 클릭 전송
+	GET_INSTANCE(Network)->SendTradeCancelPacket(trade->GetTradeUserId());
+#endif // SERVER_CONNECT
+
+	trade->ProcessTradeCancel();
 }
 
-void TradeClick(const std::string& name);
 void TradeClick(const std::string& name)
 {
 	TradeUI* ui = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
@@ -30,7 +30,7 @@ void TradeClick(const std::string& name)
 		return;
 	}
 
-	// 아이템 아이디를 저장할 배열
+	// 내가 올린 아이템 아이디를 저장할 배열
 	int items[9];
 	memset(items, -1, sizeof(items));
 
@@ -92,7 +92,7 @@ bool TradeUI::Initialize(int x, int y)
 		}
 		ui->SetTexture(data.name);
 		ui->Visible();
-		ui->SetLButtonClickCallback(CloseTradeUI);
+		ui->SetLButtonClickCallback(TradeCancelClick);
 		AddChildUI("Button", ui);
 	}
 	{
@@ -158,7 +158,7 @@ bool TradeUI::Initialize(int x, int y)
 			slot->SetTexture("KeySlot");
 			slot->SetSlotNum(slotNum++);
 			slot->Visible();
-			AddChildUI("KeySlot", slot);
+			AddChildUI("Slot", slot);
 		}
 	}
 
@@ -253,15 +253,63 @@ TradeSlotUI* TradeUI::FindSlot()
 	return nullptr;
 }
 
+void TradeUI::AddItemOfTradeUser(int texId, int slotNum)
+{
+	// 상대방 슬롯은 나의 슬롯번호 + 9
+	int index = slotNum + 9;
+	std::vector<UI*>& v = FindChildUIs("Slot");
+	TradeSlotUI* slot = static_cast<TradeSlotUI*>(v[index]);
+	slot->AddItem(texId);
+}
+
 void TradeUI::TradePostProcessing()
 {
 	std::vector<UI*>& v = FindChildUIs("Slot");
-	for (int i = 0; i < 9; ++i)
+	for (int i = 0; i < v.size(); ++i)
 	{
 		TradeSlotUI* slot = static_cast<TradeSlotUI*>(v[i]);
 		slot->ResetSlot();
 	}
-	CloseTradeUI("dd");
+
+	if (mOpen == false)
+	{
+		return;
+	}
+	OpenTradeUI();
+	ResetTradeUserId();
+}
+
+void TradeUI::ProcessTradeCancel()
+{
+	TradeUI* trade = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
+	if (trade->GetIsOpen() == false)
+	{
+		return;
+	}
+	std::vector<UI*>& v = trade->FindChildUIs("Slot");
+
+	// 내 아이템을 인벤토리에 원위치 시켜야함
+	Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"));
+	for (int i = 0; i < 9; ++i)
+	{
+		TradeSlotUI* slot = static_cast<TradeSlotUI*>(v[i]);
+		if (slot->GetItem() == nullptr)
+		{
+			continue;
+		}
+		inventory->AddItem(slot->GetItem());
+		// 슬롯의 아이템 null로 초기화
+		slot->SetItem();
+	}
+
+	// 상대방 교환 슬롯
+	for (int i = 9; i < v.size(); ++i)
+	{
+		static_cast<TradeSlotUI*>(v[i])->ResetSlot();
+	}
+
+	trade->OpenTradeUI();
+	trade->ResetTradeUserId();
 }
 
 void TradeUI::Visible()
@@ -388,6 +436,32 @@ void TradeSlotUI::AddItem(InventoryItem* item)
 {
 	mItem = item;
 	mItem->SetItemDrag(false);
+	mItem->SetPosition(mPos.first, mPos.second);
+
+#ifdef SERVER_CONNECT
+	int userId = static_cast<TradeUI*>(mParentUI)->GetTradeUserId();
+	// 아이템을 올렸다고 패킷 전송
+	GET_INSTANCE(Network)->SendAddTradeItem(userId, mItem->GetTexId(), mSlotNum);
+#endif // SERVER_CONNECT
+}
+
+void TradeSlotUI::AddItem(int texId)
+{
+	TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureDataIcon(texId);
+
+	// 아이템 추가
+	mItem = new InventoryItem;
+	if (mItem->Initialize(0, 0) == false)
+	{
+		return;
+	}
+	mItem->SetTexId(data.texId);
+	mItem->SetItemName(data.name);
+	mItem->SetItemType(data.equipSlotType);
+
+	// 텍스쳐 추가
+	mItem->SetTexture(data.name);
+	mItem->Visible();
 	mItem->SetPosition(mPos.first, mPos.second);
 }
 

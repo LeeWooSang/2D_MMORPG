@@ -62,7 +62,6 @@ struct Over
 	WSAOVERLAPPED	overlapped;
 	SERVER_EVENT			eventType;
 	int					myId;
-
 	int					channel;
 	int					sectorXId;
 	int					sectorYId;
@@ -76,7 +75,6 @@ struct OverEx : public Over
 		memset(messageBuffer, 0, sizeof(messageBuffer));
 		dataBuffer.buf = messageBuffer;
 		dataBuffer.len = MAX_BUFFER;
-
 	}
 
 	WSABUF	dataBuffer;
@@ -100,8 +98,11 @@ enum CS_PACKET_TYPE
 	CS_WHISPERING_CHAT,
 	CS_ATTACK,
 	CS_CHANGE_AVATAR,
+
 	CS_REQUEST_TRADE,
-	CS_TRADE
+	CS_ADD_TRADE_ITEM,
+	CS_TRADE,
+	CS_TRADE_CANCEL
 };
 
 enum SC_PACKET_TYPE
@@ -115,8 +116,10 @@ enum SC_PACKET_TYPE
 	SC_CHAT,
 	SC_CHANGE_AVATAR,
 	SC_REQUEST_TRADE,
+	SC_ADD_TRADE_ITEM,
 	SC_TRADE,
-	SC_TRADE_POST_PROCESSING
+	SC_TRADE_POST_PROCESSING,
+	SC_TRADE_CANCEL
 };
 
 #pragma pack(push, 1)
@@ -176,12 +179,26 @@ struct CSRequestTradePacket
 	char type;
 	int id;
 };
+struct CSAddTradeItemPacket
+{
+	char size;
+	char type;
+	int id;
+	int texId;
+	int slotNum;
+};
 struct CSTradePacket
 {
 	char size;
 	char type;
 	int id;
 	int items[9];
+};
+struct CSTradeCancelPacket
+{
+	char size;
+	char type;
+	int id;
 };
 ///////////////////////////////////////////////////
 struct SCLoginOkPacket
@@ -245,6 +262,13 @@ struct SCRequestTradePacket
 	char type;
 	int id;
 };
+struct SCAddTradeItemPacket
+{
+	char size;
+	char type;
+	int texId;
+	int slotNum;
+};
 struct SCTradePacket
 {
 	char size;
@@ -253,6 +277,11 @@ struct SCTradePacket
 	int items[9];
 };
 struct SCTradePostProcessingPacket
+{
+	char size;
+	char type;
+};
+struct SCTradeCancelPacket
 {
 	char size;
 	char type;

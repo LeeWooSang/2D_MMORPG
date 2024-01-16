@@ -8,6 +8,7 @@
 #include "../../../../Manager/SceneMangaer/SceneManager.h"
 #include "../../../../Scene/InGameScene/InGameScene.h"
 #include "../../TradeUI/TradeUI.h"
+#include "../../../Character/Character.h"
 
 ChattingInputUI::ChattingInputUI()
 	: InputUI()
@@ -254,22 +255,26 @@ void ChattingInputUI::processInput()
 						temp += mText[i];
 					}
 
-					int id = _wtoi(temp.c_str());
-					// 교환창 오픈
-					TradeUI* ui = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
-					ui->OpenTradeUI();
-					ui->SetTradeUserId(id);
-
 					mText.clear();
 					mCarrotIndex = 0;
 					mWhispering = false;
 					mTrading = false;
 
-#ifdef SERVER_CONNECT
-					// 상대방한테도 교환창 오픈
-					GET_INSTANCE(Network)->SendRequestTradePacket(id);
-#endif // SERVER_CONNECT
+					int id = _wtoi(temp.c_str());
+					InGameScene* scene = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE));
+					// 나자신에게 교환을 신청한게 아니라면
+					if (scene->GetPlayer()->GetId() != id)
+					{
+						// 교환창 오픈
+						TradeUI* ui = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
+						ui->OpenTradeUI();
+						ui->SetTradeUserId(id);
 
+#ifdef SERVER_CONNECT
+						// 상대방한테도 교환창 오픈
+						GET_INSTANCE(Network)->SendRequestTradePacket(id);
+#endif // SERVER_CONNECT
+					}
 				}
 
 				else

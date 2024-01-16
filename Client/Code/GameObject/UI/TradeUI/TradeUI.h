@@ -25,7 +25,10 @@ public:
 	void SetTradeUserId(int id) { mTradeUserId = id; }
 	void ResetTradeUserId() { mTradeUserId = -1; }
 
+	void AddItemOfTradeUser(int texId, int slotNum);
+
 	void TradePostProcessing();
+	void ProcessTradeCancel();
 
 	virtual void Visible();
 	virtual void NotVisible();
@@ -54,7 +57,12 @@ public:
 	void SetSlotNum(int num) { mSlotNum = num; }
 
 	void AddItem(InventoryItem* item);
+	// 다른 사람이 아이템을 올릴 때
+	void AddItem(int texId);
+
 	InventoryItem* GetItem() { return mItem; }
+	void SetItem() { mItem = nullptr; }
+
 	void ResetSlot();
 
 private:
@@ -62,4 +70,5 @@ private:
 	InventoryItem* mItem;
 };
 
-void CloseTradeUI(const std::string& name);
+void TradeCancelClick(const std::string& name);
+void TradeClick(const std::string& name);

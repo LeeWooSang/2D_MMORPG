@@ -242,6 +242,17 @@ void Core::SendRequestTradePacket(int to, int obj)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
+void Core::SendAddTradeItemPacket(int to, int texId, int slotNum)
+{
+	SCAddTradeItemPacket packet;
+	packet.size = sizeof(SCAddTradeItemPacket);
+	packet.type = SC_PACKET_TYPE::SC_ADD_TRADE_ITEM;
+	packet.texId = texId;
+	packet.slotNum = slotNum;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
 void Core::SendTradePacket(int to, int obj, int* items)
 {
 	SCTradePacket packet;
@@ -258,6 +269,15 @@ void Core::SendTradePostProcessingPacket(int to)
 	SCTradePostProcessingPacket packet;
 	packet.size = sizeof(SCTradePostProcessingPacket);
 	packet.type = SC_PACKET_TYPE::SC_TRADE_POST_PROCESSING;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendTradeCancelPacket(int to)
+{
+	SCTradeCancelPacket packet;
+	packet.size = sizeof(SCTradeCancelPacket);
+	packet.type = SC_PACKET_TYPE::SC_TRADE_CANCEL;
 
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
@@ -622,7 +642,28 @@ void Core::processPacket(int id, char* buf)
 		case CS_PACKET_TYPE::CS_REQUEST_TRADE:
 		{
 			CSRequestTradePacket* packet = reinterpret_cast<CSRequestTradePacket*>(buf);
+			int tradeUserId = packet->id;
+			if (mUsers[tradeUserId].GetIsConnect() == false)
+			{
+				// 교환건 상대가 없으면 교환창 닫기 전송
+				return;
+			}
+
 			SendRequestTradePacket(packet->id, id);
+			break;
+		}
+
+		case CS_PACKET_TYPE::CS_ADD_TRADE_ITEM:
+		{
+			CSAddTradeItemPacket* packet = reinterpret_cast<CSAddTradeItemPacket*>(buf);
+			int tradeUserId = packet->id;
+			if (mUsers[tradeUserId].GetIsConnect() == false)
+			{
+				// 교환건 상대가 없으면 교환창 닫고, 인벤토리에 아이템 다시 넣기
+				return;
+			}
+
+			SendAddTradeItemPacket(tradeUserId, packet->texId, packet->slotNum);
 			break;
 		}
 
@@ -631,6 +672,12 @@ void Core::processPacket(int id, char* buf)
 			CSTradePacket* packet = reinterpret_cast<CSTradePacket*>(buf);
 			mUsers[id].ProcessTrade(packet->id, packet->items);
 			break;
+		}
+
+		case CS_PACKET_TYPE::CS_TRADE_CANCEL:
+		{
+			CSTradeCancelPacket* packet = reinterpret_cast<CSTradeCancelPacket*>(buf);
+			SendTradeCancelPacket(packet->id);
 		}
 
 		default:

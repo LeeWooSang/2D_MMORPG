@@ -43,7 +43,9 @@ public:
 	void SendChangeAvatarPacket(char slotType, int texId);
 
 	void SendRequestTradePacket(int id);
+	void SendAddTradeItem(int id, int texId, int slotNum);
 	void SendTradePacket(int id, int* items);
+	void SendTradeCancelPacket(int id);
 
 private:
 	void processPacket();

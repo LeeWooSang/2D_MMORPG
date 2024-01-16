@@ -166,6 +166,18 @@ void Network::SendRequestTradePacket(int id)
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 
+void Network::SendAddTradeItem(int id, int texId, int slotNum)
+{
+	CSAddTradeItemPacket packet;
+	packet.size = sizeof(CSAddTradeItemPacket);
+	packet.type = CS_PACKET_TYPE::CS_ADD_TRADE_ITEM;
+	packet.id = id;
+	packet.texId = texId;
+	packet.slotNum = slotNum;
+
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
 void Network::SendTradePacket(int id, int* items)
 {
 	CSTradePacket packet;
@@ -173,6 +185,16 @@ void Network::SendTradePacket(int id, int* items)
 	packet.type = CS_PACKET_TYPE::CS_TRADE;
 	packet.id = id;
 	memcpy(packet.items, items, sizeof(packet.items));
+
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
+void Network::SendTradeCancelPacket(int id)
+{
+	CSTradeCancelPacket packet;
+	packet.size = sizeof(CSTradeCancelPacket);
+	packet.type = CS_PACKET_TYPE::CS_TRADE_CANCEL;
+	packet.id = id;
 
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
@@ -287,6 +309,19 @@ void Network::processPacket()
 			break;
 		}
 
+		case SC_PACKET_TYPE::SC_ADD_TRADE_ITEM:
+		{
+			SCAddTradeItemPacket* packet = reinterpret_cast<SCAddTradeItemPacket*>(mPacketBuffer);
+
+			std::shared_ptr<AddTradeItemPacket> p = std::make_shared<AddTradeItemPacket>();
+			p->packetType = packet->type;
+			p->id = myId;
+			p->texId = packet->texId;
+			p->slotNum = packet->slotNum;
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
+			break;
+		}
+
 		case SC_PACKET_TYPE::SC_TRADE:
 		{
 			SCTradePacket* packet = reinterpret_cast<SCTradePacket*>(mPacketBuffer);
@@ -302,6 +337,18 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_TRADE_POST_PROCESSING:
 		{
 			SCTradePostProcessingPacket* packet = reinterpret_cast<SCTradePostProcessingPacket*>(mPacketBuffer);
+
+			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
+			p->packetType = packet->type;
+			p->id = myId;
+
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
+			break;
+		}
+
+		case SC_PACKET_TYPE::SC_TRADE_CANCEL:
+		{
+			SCTradeCancelPacket* packet = reinterpret_cast<SCTradeCancelPacket*>(mPacketBuffer);
 
 			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
 			p->packetType = packet->type;

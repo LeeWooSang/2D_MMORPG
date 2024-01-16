@@ -61,6 +61,13 @@ void EventManager::processPacketEvent()
 				break;
 			}
 
+			case SC_ADD_TRADE_ITEM:
+			{
+				AddTradeItemPacket* e = static_cast<AddTradeItemPacket*>(ev);
+				scene->AddTradeItem(e->id, e->texId, e->slotNum);
+				break;
+			}
+
 			case SC_TRADE:
 			{
 				TradePacket* e = static_cast<TradePacket*>(ev);
@@ -71,6 +78,12 @@ void EventManager::processPacketEvent()
 			case SC_TRADE_POST_PROCESSING:
 			{
 				scene->TradePostProcessing();
+				break;
+			}
+
+			case SC_TRADE_CANCEL:
+			{
+				scene->TradeCancel();
 				break;
 			}
 

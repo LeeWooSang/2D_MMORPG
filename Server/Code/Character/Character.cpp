@@ -817,8 +817,9 @@ void Player::ProcessTrade(int id, int* items)
 
 	// 상대방에게 아이템을 넘겨주는 패킷 전송
 	GET_INSTANCE(Core)->SendTradePacket(id, myId, items);
-	// 나에게는 후처리 패킷 전송
+	// 나와 상대에게 후처리 패킷 전송
 	GET_INSTANCE(Core)->SendTradePostProcessingPacket(myId);
+	GET_INSTANCE(Core)->SendTradePostProcessingPacket(id);
 }
 
 Monster::Monster()

@@ -34,9 +34,10 @@ public:
 	void SendChangeAvatarPacket(int to, int obj, int texId);
 
 	void SendRequestTradePacket(int to, int obj);
+	void SendAddTradeItemPacket(int to, int texId, int slotNum);
 	void SendTradePacket(int to, int obj, int* items);
 	void SendTradePostProcessingPacket(int to);
-
+	void SendTradeCancelPacket(int to);
 
 private:
 	void errorDisplay(const char* msg, int error);

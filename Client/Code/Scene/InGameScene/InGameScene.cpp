@@ -419,6 +419,12 @@ void InGameScene::RequestTrade()
 	trade->OpenTradeUI();
 }
 
+void InGameScene::AddTradeItem(int id, int texId, int slotNum)
+{
+	TradeUI* trade = static_cast<TradeUI*>(FindUI("TradeUI"));
+	trade->AddItemOfTradeUser(texId, slotNum);
+}
+
 void InGameScene::TradeItems(int id, int* items)
 {
 	Inventory* inventory = static_cast<Inventory*>(FindUI("Inventory"));
@@ -430,13 +436,18 @@ void InGameScene::TradeItems(int id, int* items)
 		}
 		inventory->AddItem(items[i]);
 	}
-	CloseTradeUI("TradeUI");
 }
 
 void InGameScene::TradePostProcessing()
 {
 	TradeUI* trade = static_cast<TradeUI*>(FindUI("TradeUI"));
 	trade->TradePostProcessing();
+}
+
+void InGameScene::TradeCancel()
+{
+	TradeUI* trade = static_cast<TradeUI*>(FindUI("TradeUI"));
+	trade->ProcessTradeCancel();
 }
 
 Player* InGameScene::GetPlayer()

@@ -25,6 +25,11 @@ struct AvatarPacket : public PacketBase
 {
 	int texId;
 };
+struct AddTradeItemPacket : public PacketBase
+{
+	int texId;
+	int slotNum;
+};
 struct TradePacket : public PacketBase
 {
 	int items[9];
