@@ -170,6 +170,11 @@ UI* UIManager::getFocusUI()
 	std::list<UI*>::iterator targetIter = sceneUIs.end();
 	for (auto iter = sceneUIs.begin(); iter != sceneUIs.end(); ++iter)
 	{
+		if ((*iter)->IsVisible() == false)
+		{
+			continue;
+		}
+
 		if ((*iter)->GetMouseOver() == true)
 		{
 			targetIter = iter;

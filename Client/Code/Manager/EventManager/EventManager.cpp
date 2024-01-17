@@ -57,7 +57,7 @@ void EventManager::processPacketEvent()
 
 			case SC_REQUEST_TRADE:
 			{
-				scene->RequestTrade();
+				scene->RequestTrade(ev->id);
 				break;
 			}
 

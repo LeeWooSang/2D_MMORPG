@@ -16,6 +16,7 @@ void TradeCancelClick(const std::string& name)
 
 #ifdef SERVER_CONNECT
 	// 취소 버튼 클릭 전송
+	std::cout << "TRADE CANCEL SEND - userId : " << trade->GetTradeUserId() << std::endl;
 	GET_INSTANCE(Network)->SendTradeCancelPacket(trade->GetTradeUserId());
 #endif // SERVER_CONNECT
 
@@ -271,10 +272,6 @@ void TradeUI::TradePostProcessing()
 		slot->ResetSlot();
 	}
 
-	if (mOpen == false)
-	{
-		return;
-	}
 	OpenTradeUI();
 	ResetTradeUserId();
 }

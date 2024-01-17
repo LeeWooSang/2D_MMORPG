@@ -413,9 +413,10 @@ void InGameScene::UpdateObjectAvatar(int id, int texId)
 	mOtherPlayers[id]->SetAvatar(texId);
 }
 
-void InGameScene::RequestTrade()
+void InGameScene::RequestTrade(int id)
 {
 	TradeUI* trade = static_cast<TradeUI*>(FindUI("TradeUI"));
+	trade->SetTradeUserId(id);
 	trade->OpenTradeUI();
 }
 
@@ -434,6 +435,7 @@ void InGameScene::TradeItems(int id, int* items)
 		{
 			continue;
 		}
+		std::cout << "TradeItems - texId : " << items[i] << std::endl;
 		inventory->AddItem(items[i]);
 	}
 }
