@@ -1,6 +1,7 @@
 #pragma once
 #include "../UI.h"
 
+constexpr int MAX_TRADE_SLOT = 9;
 class TradeUI : public UI
 {
 public:

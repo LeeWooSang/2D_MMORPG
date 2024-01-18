@@ -212,6 +212,8 @@ Player::Player()
 {
 	memset(mPacketBuf, 0, sizeof(mPacketBuf));
 	mTexId = 0;
+	mState = BEHAVIOR_STATE::IDLE;
+	mTradeId = -1;
 }
 
 Player::~Player()
@@ -247,6 +249,8 @@ void Player::Reset()
 	mChannelIndex = -1;
 	mChannel = -1;
 	mTexId = 0;
+	mState = BEHAVIOR_STATE::IDLE;
+	mTradeId = -1;
 
 	closesocket(mSocket);
 }
@@ -283,6 +287,8 @@ bool Player::Inititalize(int id)
 	mChannelIndex = -1;
 	mChannel = -1;
 	mTexId = 0;
+	mState = BEHAVIOR_STATE::IDLE;
+	mTradeId = -1;
 
 	return true;
 }
@@ -804,22 +810,6 @@ void Player::ProcessChangeAvatar(int texId)
 	{
 		GET_INSTANCE(Core)->SendChangeAvatarPacket(id, myId, texId);
 	}
-}
-
-void Player::ProcessTrade(int id, int* items)
-{
-	int myId = mOver->myId;
-	Player* users = GET_INSTANCE(Core)->GetUsers();
-	if (users[id].GetIsConnect() == false)
-	{
-		return;
-	}
-
-	// 상대방에게 아이템을 넘겨주는 패킷 전송
-	GET_INSTANCE(Core)->SendTradePacket(id, myId, items);
-	// 나와 상대에게 후처리 패킷 전송
-	GET_INSTANCE(Core)->SendTradePostProcessingPacket(myId);
-	GET_INSTANCE(Core)->SendTradePostProcessingPacket(id);
 }
 
 Monster::Monster()

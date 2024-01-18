@@ -26,9 +26,8 @@ public:
 	void UpdateObjectAvatar(int id, int texId);
 
 	void RequestTrade(int id);
-	void AddTradeItem(int id, int texId, int slotNum);
-	void TradeItems(int id, int* items);
-	void TradePostProcessing();
+	void AddTradeItem(int texId, int slotNum);
+	void TradeItems(int* items);
 	void TradeCancel();
 
 	Player* GetPlayer();

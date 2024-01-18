@@ -118,7 +118,6 @@ enum SC_PACKET_TYPE
 	SC_REQUEST_TRADE,
 	SC_ADD_TRADE_ITEM,
 	SC_TRADE,
-	SC_TRADE_POST_PROCESSING,
 	SC_TRADE_CANCEL
 };
 
@@ -273,13 +272,7 @@ struct SCTradePacket
 {
 	char size;
 	char type;
-	int id;
 	int items[9];
-};
-struct SCTradePostProcessingPacket
-{
-	char size;
-	char type;
 };
 struct SCTradeCancelPacket
 {

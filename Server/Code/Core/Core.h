@@ -35,8 +35,7 @@ public:
 
 	void SendRequestTradePacket(int to, int obj);
 	void SendAddTradeItemPacket(int to, int texId, int slotNum);
-	void SendTradePacket(int to, int obj, int* items);
-	void SendTradePostProcessingPacket(int to);
+	void SendTradePacket(int to, int* items);
 	void SendTradeCancelPacket(int to);
 
 private:
@@ -67,10 +66,8 @@ private:
 
 	volatile bool mIsRun;
 	
-	// id, ¿Œµ¶Ω∫
-	//tbb::concurrent_hash_map<int, int> mObjectIds;
-
 	Player* mUsers;
+	class Trade* mTrades;
 
 	tbb::concurrent_queue<Over*> mLeafWorks;
 

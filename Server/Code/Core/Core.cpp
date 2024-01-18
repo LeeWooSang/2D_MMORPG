@@ -1,8 +1,7 @@
 #include "Core.h"
 #include "../GameTimer/GameTimer.h"
 #include "../Database/Database.h"
-//#include "../Character/Character.h"
-
+#include "../Trade/Trade.h"
 
 INIT_INSTACNE(Core)
 Core::Core()
@@ -14,6 +13,9 @@ Core::Core()
 	std::wcout.imbue(std::locale("korean"));
 
 	//_CrtSetBreakAlloc(727);
+
+	mUsers = nullptr;
+	mTrades = nullptr;
 }
 
 Core::~Core()
@@ -41,6 +43,7 @@ Core::~Core()
 	while (popLeafWork() == true);
 
 	delete[] mUsers;
+	delete[] mTrades;
 
 	WSACleanup();
 }
@@ -68,12 +71,14 @@ bool Core::Initialize()
 
 	//int objectId = 0;
 	mUsers = new Player[MAX_USER];
+	mTrades = new Trade[MAX_USER];
 	for (int i = 0; i < MAX_USER; ++i)
 	{
 		if (mUsers[i].Inititalize(i) == false)
 		{
 			return false;
 		}
+		mTrades[i].Initialize(i);
 	}
 
 	int workerThreadCount = 6;
@@ -253,22 +258,12 @@ void Core::SendAddTradeItemPacket(int to, int texId, int slotNum)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
-void Core::SendTradePacket(int to, int obj, int* items)
+void Core::SendTradePacket(int to, int* items)
 {
 	SCTradePacket packet;
 	packet.size = sizeof(SCTradePacket);
 	packet.type = SC_PACKET_TYPE::SC_TRADE;
-	packet.id = obj;
 	memcpy(packet.items, items, sizeof(packet.items));
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendTradePostProcessingPacket(int to)
-{
-	SCTradePostProcessingPacket packet;
-	packet.size = sizeof(SCTradePostProcessingPacket);
-	packet.type = SC_PACKET_TYPE::SC_TRADE_POST_PROCESSING;
 
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
@@ -485,6 +480,7 @@ void Core::threadPool()
 void Core::disconnect(int id)
 {
 	mUsers[id].PlayerDisconnect();
+	mTrades[id].Reset();
 	std::cout << id << "번 클라이언트 연결 끊어짐" << std::endl;
 }
 
@@ -642,50 +638,42 @@ void Core::processPacket(int id, char* buf)
 		case CS_PACKET_TYPE::CS_REQUEST_TRADE:
 		{
 			CSRequestTradePacket* packet = reinterpret_cast<CSRequestTradePacket*>(buf);
-			int tradeUserId = packet->id;
-			std::cout << "tradeUserId : " << tradeUserId << std::endl;
-
-			if (mUsers[tradeUserId].GetIsConnect() == false)
-			{
-				// 교환건 상대가 없으면 교환창 닫기 전송
-				return;
-			}
-
-			SendRequestTradePacket(tradeUserId, id);
+			mTrades[id].StartTrade(packet->id);
 			break;
 		}
 
 		case CS_PACKET_TYPE::CS_ADD_TRADE_ITEM:
 		{
 			CSAddTradeItemPacket* packet = reinterpret_cast<CSAddTradeItemPacket*>(buf);
-			int tradeUserId = packet->id;
-			std::cout << "tradeUserId : " << tradeUserId << std::endl;
-
-			if (mUsers[tradeUserId].GetIsConnect() == false)
+			// 교환 id를 알아야 한다.
+			int tradeId = mUsers[id].GetTradeId();
+			if (tradeId != -1)
 			{
-				// 교환건 상대가 없으면 교환창 닫고, 인벤토리에 아이템 다시 넣기
-				return;
+				mTrades[tradeId].AddItem(id, packet->slotNum, packet->texId);
 			}
-
-			SendAddTradeItemPacket(tradeUserId, packet->texId, packet->slotNum);
 			break;
 		}
 
 		case CS_PACKET_TYPE::CS_TRADE:
 		{
 			CSTradePacket* packet = reinterpret_cast<CSTradePacket*>(buf);
-			int tradeUserId = packet->id;
-			std::cout << "tradeUserId : " << tradeUserId << std::endl;
-			mUsers[id].ProcessTrade(tradeUserId, packet->items);
+			int tradeId = mUsers[id].GetTradeId();
+			if (tradeId != -1)
+			{
+				mTrades[tradeId].ProcessTrade(id);
+			}
 			break;
 		}
 
 		case CS_PACKET_TYPE::CS_TRADE_CANCEL:
 		{
 			CSTradeCancelPacket* packet = reinterpret_cast<CSTradeCancelPacket*>(buf);
-			int tradeUserId = packet->id;
-			std::cout << "tradeUserId : " << tradeUserId << std::endl;
-			SendTradeCancelPacket(tradeUserId);
+			int tradeId = mUsers[id].GetTradeId();
+			if (tradeId != -1)
+			{
+				mTrades[tradeId].ProcessCancel();
+			}
+			break;
 		}
 
 		default:

@@ -315,7 +315,6 @@ void Network::processPacket()
 
 			std::shared_ptr<AddTradeItemPacket> p = std::make_shared<AddTradeItemPacket>();
 			p->packetType = packet->type;
-			p->id = myId;
 			p->texId = packet->texId;
 			p->slotNum = packet->slotNum;
 			GET_INSTANCE(EventManager)->AddPacketEvent(p);
@@ -328,20 +327,7 @@ void Network::processPacket()
 
 			std::shared_ptr<TradePacket> p = std::make_shared<TradePacket>();
 			p->packetType = packet->type;
-			p->id = packet->id;
 			memcpy(p->items, packet->items, sizeof(p->items));
-			GET_INSTANCE(EventManager)->AddPacketEvent(p);
-			break;
-		}
-
-		case SC_PACKET_TYPE::SC_TRADE_POST_PROCESSING:
-		{
-			SCTradePostProcessingPacket* packet = reinterpret_cast<SCTradePostProcessingPacket*>(mPacketBuffer);
-
-			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
-			p->packetType = packet->type;
-			p->id = myId;
-
 			GET_INSTANCE(EventManager)->AddPacketEvent(p);
 			break;
 		}

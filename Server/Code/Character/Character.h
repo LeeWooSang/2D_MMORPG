@@ -53,6 +53,20 @@ protected:
 class Player : public Character
 {
 public:
+	// 플레이어 행동 상태
+	enum class BEHAVIOR_STATE
+	{
+		// 일반
+		IDLE,
+		// 전투
+		BATTLE,
+		// 교환
+		TRADE,
+		// 그 외
+		DEFAULT
+	};
+
+public:
 	Player();
 	~Player();
 	virtual void Reset();
@@ -80,9 +94,14 @@ public:
 
 	void ProcessAttack();
 	void ProcessChangeAvatar(int texId);
-	void ProcessTrade(int id, int* items);
 
 	int GetTexId()	const { return mTexId; }
+	
+	BEHAVIOR_STATE GetState() const { return mState; }
+	void SetState(BEHAVIOR_STATE state) { mState = state; }
+
+	int GetTradeId()	const { return mTradeId; }
+	void SetTradeId(int tradeId) { mTradeId = tradeId; }
 
 private:
 	SOCKET mSocket;
@@ -92,6 +111,8 @@ private:
 	bool mConnect;
 
 	int mTexId;
+	BEHAVIOR_STATE mState;
+	int mTradeId;
 };
 
 enum class MONSTER_STATE

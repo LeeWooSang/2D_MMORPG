@@ -32,11 +32,11 @@ void TradeClick(const std::string& name)
 	}
 
 	// 내가 올린 아이템 아이디를 저장할 배열
-	int items[9];
+	int items[MAX_TRADE_SLOT];
 	memset(items, -1, sizeof(items));
 
 	std::vector<UI*>& v = ui->FindChildUIs("Slot");
-	for (int i = 0; i < v.size(); ++i)
+	for (int i = 0; i < MAX_TRADE_SLOT; ++i)
 	{
 		TradeSlotUI* slot = static_cast<TradeSlotUI*>(v[i]);
 		if (slot->GetItem() == nullptr)
@@ -257,7 +257,7 @@ TradeSlotUI* TradeUI::FindSlot()
 void TradeUI::AddItemOfTradeUser(int texId, int slotNum)
 {
 	// 상대방 슬롯은 나의 슬롯번호 + 9
-	int index = slotNum + 9;
+	int index = slotNum + MAX_TRADE_SLOT;
 	std::vector<UI*>& v = FindChildUIs("Slot");
 	TradeSlotUI* slot = static_cast<TradeSlotUI*>(v[index]);
 	slot->AddItem(texId);
@@ -287,7 +287,7 @@ void TradeUI::ProcessTradeCancel()
 
 	// 내 아이템을 인벤토리에 원위치 시켜야함
 	Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"));
-	for (int i = 0; i < 9; ++i)
+	for (int i = 0; i < MAX_TRADE_SLOT; ++i)
 	{
 		TradeSlotUI* slot = static_cast<TradeSlotUI*>(v[i]);
 		if (slot->GetItem() == nullptr)
@@ -300,7 +300,7 @@ void TradeUI::ProcessTradeCancel()
 	}
 
 	// 상대방 교환 슬롯
-	for (int i = 9; i < v.size(); ++i)
+	for (int i = MAX_TRADE_SLOT; i < v.size(); ++i)
 	{
 		static_cast<TradeSlotUI*>(v[i])->ResetSlot();
 	}

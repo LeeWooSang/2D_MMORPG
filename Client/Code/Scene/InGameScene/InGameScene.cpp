@@ -420,16 +420,16 @@ void InGameScene::RequestTrade(int id)
 	trade->OpenTradeUI();
 }
 
-void InGameScene::AddTradeItem(int id, int texId, int slotNum)
+void InGameScene::AddTradeItem(int texId, int slotNum)
 {
 	TradeUI* trade = static_cast<TradeUI*>(FindUI("TradeUI"));
 	trade->AddItemOfTradeUser(texId, slotNum);
 }
 
-void InGameScene::TradeItems(int id, int* items)
+void InGameScene::TradeItems(int* items)
 {
 	Inventory* inventory = static_cast<Inventory*>(FindUI("Inventory"));
-	for (int i = 0; i < 9; ++i)
+	for (int i = 0; i < MAX_TRADE_SLOT; ++i)
 	{
 		if (items[i] == -1)
 		{
@@ -438,10 +438,7 @@ void InGameScene::TradeItems(int id, int* items)
 		std::cout << "TradeItems - texId : " << items[i] << std::endl;
 		inventory->AddItem(items[i]);
 	}
-}
 
-void InGameScene::TradePostProcessing()
-{
 	TradeUI* trade = static_cast<TradeUI*>(FindUI("TradeUI"));
 	trade->TradePostProcessing();
 }

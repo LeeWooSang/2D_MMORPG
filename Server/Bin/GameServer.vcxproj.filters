@@ -36,6 +36,9 @@
     <Filter Include="Code\Sector">
       <UniqueIdentifier>{e38a1d97-6818-42c9-b443-815e7eb5dd20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Trade">
+      <UniqueIdentifier>{9172f58e-a70d-4fb7-aa97-4d7e08a403e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameServer.rc">
@@ -77,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\Sector\Sector.cpp">
       <Filter>Code\Sector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Trade\Trade.cpp">
+      <Filter>Code\Trade</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\Sector\Sector.h">
       <Filter>Code\Sector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Trade\Trade.h">
+      <Filter>Code\Trade</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
