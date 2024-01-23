@@ -2054,5 +2054,30 @@
     "Height": 17,
     "OriginX": 499,
     "OriginY": 276
+  },
+  {
+    "Path": "../Resource/Textures/DialogUI/DialogUIBackground0.png",
+    "Name": "DialogUIBackground0",
+    "Width": 230,
+    "Height": 102,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/DialogUI/DialogUIButton0.png",
+    "Name": "DialogUIButton0",
+    "Width": 50,
+    "Height": 33,
+    "OriginX": 60,
+    "OriginY": 60
+  },
+  {
+    "Path": "../Resource/Textures/DialogUI/DialogUIButton1.png",
+    "Name": "DialogUIButton1",
+    "Width": 50,
+    "Height": 33,
+    "OriginX": 120,
+    "OriginY": 60
   }
+
 ]

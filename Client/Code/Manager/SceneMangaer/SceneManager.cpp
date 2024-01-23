@@ -39,14 +39,14 @@ void SceneManager::AddScene(SCENE_TYPE type)
 	if (type == SCENE_TYPE::LOGIN_SCENE)
 	{
 		LoginScene* scene = new LoginScene;
-		scene->Initialize();
 		mScenes.emplace(type, scene);
+		scene->Initialize();
 	}
 	else if (type == SCENE_TYPE::INGAME_SCENE)
 	{
 		InGameScene* scene = new InGameScene;
-		scene->Initialize();
 		mScenes.emplace(type, scene);
+		scene->Initialize();
 	}
 }
 

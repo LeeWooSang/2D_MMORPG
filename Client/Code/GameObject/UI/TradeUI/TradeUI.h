@@ -1,6 +1,7 @@
 #pragma once
 #include "../UI.h"
 
+class DialogUI;
 constexpr int MAX_TRADE_SLOT = 9;
 class TradeUI : public UI
 {
@@ -34,9 +35,22 @@ public:
 	virtual void Visible();
 	virtual void NotVisible();
 
+	void SetMyMeso(long long meso) { mMyMeso = meso; }
+	void SetTradeUserMeso(long long meso) { mTradeUserMeso = meso; }
+	
+	void AddMyMeso(long long meso) { mMyMeso += meso; }
+	void AddTradeUserMeso(long long meso) { mTradeUserMeso += meso; }
+
+	DialogUI* GetMesoDialogUI() { return mMesoDialogUI; }
+
 private:
 	bool mOpen;
 	int mTradeUserId;
+
+	long long mMyMeso;
+	long long mTradeUserMeso;
+
+	DialogUI* mMesoDialogUI;
 };
 
 class InventoryItem;
@@ -73,3 +87,4 @@ private:
 
 void TradeCancelClick(const std::string& name);
 void TradeClick(const std::string& name);
+void AddMesoClick(const std::string& name);

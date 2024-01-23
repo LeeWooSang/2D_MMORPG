@@ -2,6 +2,8 @@
 #include "../../../Network/Network.h"
 
 #include "../ButtonUI/ButtonUI.h"
+#include "../DialogUI/DialogUI.h"
+
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../../../Resource/ResourceManager.h"
 #include "../../../Resource/Texture/Texture.h"
@@ -9,6 +11,7 @@
 #include "../../../Manager/SceneMangaer/SceneManager.h"
 #include "../../../Scene/InGameScene/InGameScene.h"
 #include "../Inventory/Inventory.h"
+#include "../../../Manager/UIManager/UIManager.h"
 
 void TradeCancelClick(const std::string& name)
 {
@@ -46,9 +49,20 @@ void TradeClick(const std::string& name)
 		items[i] = slot->GetItem()->GetTexId();
 	}
 
+	// 나의 메소도 초기화 시켜야함
+	ui->SetMyMeso(0);
+	ui->SetTradeUserMeso(0);
+
 #ifdef SERVER_CONNECT
 	GET_INSTANCE(Network)->SendTradePacket(ui->GetTradeUserId(), items);
 #endif // SERVER_CONNECT
+}
+
+void AddMesoClick(const std::string& name)
+{
+	TradeUI* trade = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
+	trade->GetMesoDialogUI()->OpenDialogUI();
+	GET_INSTANCE(UIManager)->SetFocusUI(trade->GetMesoDialogUI());
 }
 
 TradeUI::TradeUI()
@@ -56,10 +70,18 @@ TradeUI::TradeUI()
 {
 	mOpen = false;
 	mTradeUserId = -1;
+	mMyMeso = 0;
+	mTradeUserMeso = 0;
+	mMesoDialogUI = nullptr;
 }
 
 TradeUI::~TradeUI()
 {
+	if (mMesoDialogUI != nullptr)
+	{
+		//delete mMesoDialogUI;
+		mMesoDialogUI = nullptr;
+	}
 }
 
 bool TradeUI::Initialize(int x, int y)
@@ -108,16 +130,25 @@ bool TradeUI::Initialize(int x, int y)
 		ui->SetLButtonClickCallback(TradeClick);
 		AddChildUI("Button", ui);
 	}
-
-	for (int i = 2; i < 4; ++i)
 	{
-		std::string name = "TradeUIButton" + std::to_string(i);
-		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(name);
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("TradeUIButton2");
 		ButtonUI* ui = new ButtonUI;
 		if(ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}	
+		ui->SetTexture(data.name);
+		ui->Visible();
+		ui->SetLButtonClickCallback(AddMesoClick);
+		AddChildUI("Button", ui);
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("TradeUIButton3");
+		ButtonUI* ui = new ButtonUI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
 		ui->SetTexture(data.name);
 		ui->Visible();
 		AddChildUI("Button", ui);
@@ -163,6 +194,13 @@ bool TradeUI::Initialize(int x, int y)
 		}
 	}
 
+	mMesoDialogUI = new DialogUI;
+	if (mMesoDialogUI->Initialize(200, 0) == false)
+	{
+		return false;
+	}
+	GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->AddSceneUI("MesoDialogUI", mMesoDialogUI);
+
 	//Visible();
 	SetPosition(140, 150);
 
@@ -203,6 +241,14 @@ void TradeUI::Render()
 		{
 			child.second[i]->Render();
 		}
+	}
+
+	{
+		std::wstring myMeso = std::to_wstring(mMyMeso);
+		std::wstring myTradeUserMeso = std::to_wstring(mTradeUserMeso);
+
+		GET_INSTANCE(GraphicEngine)->RenderText(myMeso, mPos.first - 41, mPos.second + 260, "검은색");
+		GET_INSTANCE(GraphicEngine)->RenderText(myTradeUserMeso, mPos.first - 180, mPos.second + 260, "검은색");
 	}
 }
 
@@ -304,6 +350,11 @@ void TradeUI::ProcessTradeCancel()
 	{
 		static_cast<TradeSlotUI*>(v[i])->ResetSlot();
 	}
+
+	// 나의 메소도 원위치 시켜야함
+	inventory->AddMeso(mMyMeso);
+	mMyMeso = 0;
+	mTradeUserMeso = 0;
 
 	trade->OpenTradeUI();
 	trade->ResetTradeUserId();

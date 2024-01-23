@@ -252,6 +252,7 @@ Inventory::Inventory()
 	mSlotHeight = 0;
 
 	mOpen = false;
+	mMeso = 100000000;
 }
 
 Inventory::~Inventory()
@@ -466,10 +467,12 @@ void Inventory::Render()
 		}
 	}
 
-	// 메소
-	GET_INSTANCE(GraphicEngine)->RenderText(L"1,000,000,000", mPos.first + 45, mPos.second + 305);
-	// 메포
-	GET_INSTANCE(GraphicEngine)->RenderText(L"10,000,000", mPos.first + 82, mPos.second + 323);
+	{
+		// 메소
+		GET_INSTANCE(GraphicEngine)->RenderText(std::to_wstring(mMeso), mPos.first - 152, mPos.second + 305, "검은색");
+		// 메포
+		GET_INSTANCE(GraphicEngine)->RenderText(L"10,000", mPos.first - 116, mPos.second + 323, "검은색");
+	}
 }
 
 void Inventory::MouseOver()
@@ -729,6 +732,15 @@ InventorySlot* Inventory::FindSlot()
 	}
 
 	return nullptr;
+}
+
+void Inventory::DeductMeso(long long meso)
+{
+	mMeso -= meso;
+	if (mMeso < 0)
+	{
+		mMeso = 0;
+	}
 }
 
 InventoryItem::InventoryItem()

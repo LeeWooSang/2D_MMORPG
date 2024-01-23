@@ -105,13 +105,13 @@ void GraphicEngine::RenderTexture(Texture* texture, const D2D1_RECT_F& pos, cons
 
 void GraphicEngine::RenderText(const std::wstring& text, int x, int y)
 {
-	D2D1_RECT_F rect = { x, y, x + 100, y + 100 };
+	D2D1_RECT_F rect = { x, y, x + 300, y + 100 };
 	mRenderTarget->DrawTextW(text.c_str(), static_cast<UINT32>(text.length()), mFontMap["기본"].font, &rect, mBrushColorMap["검은색"]);
 }
 
 void GraphicEngine::RenderText(const std::wstring& text, int x, int y, const std::string& color)
 {
-	D2D1_RECT_F rect = { x, y, x + 100, y + 100 };
+	D2D1_RECT_F rect = { x, y, x + 300, y + 100 };
 	mRenderTarget->DrawTextW(text.c_str(), static_cast<UINT32>(text.length()), mFontMap["굴림"].font, &rect, mBrushColorMap[color]);
 }
 
@@ -235,7 +235,6 @@ void GraphicEngine::createFont()
 			L"en-US",
 			&font);
 
-		//result = font->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 		result = font->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
 		result = font->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
 		result = mWriteFactory->CreateTextLayout(wstr.c_str(), static_cast<UINT32>(wstr.length()), font, 0, 0, &textLayout);

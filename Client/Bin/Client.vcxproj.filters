@@ -50,9 +50,6 @@
     <Filter Include="Code\Scene">
       <UniqueIdentifier>{04b3905a-7f6c-45b3-b81a-7becd3929545}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\Scene\InGameScene">
-      <UniqueIdentifier>{9edaddd4-cda0-4d6d-958e-11e28e0c34a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Scene\LoginScene">
       <UniqueIdentifier>{67331ae4-5773-4f15-8faa-3a6868c9821d}</UniqueIdentifier>
     </Filter>
@@ -106,6 +103,12 @@
     </Filter>
     <Filter Include="Code\GameObject\UI\TradeUI">
       <UniqueIdentifier>{c32c0b6f-ce34-40ef-84f2-b77c52871a48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GameObject\UI\DialogUI">
+      <UniqueIdentifier>{8a43eb90-22a2-427e-a3a3-5dff5c26f387}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Scene\InGameScene">
+      <UniqueIdentifier>{9edaddd4-cda0-4d6d-958e-11e28e0c34a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -207,6 +210,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\GameObject\UI\TradeUI\TradeUI.cpp">
       <Filter>Code\GameObject\UI\TradeUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\UI\DialogUI\DialogUI.cpp">
+      <Filter>Code\GameObject\UI\DialogUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -317,6 +323,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameObject\UI\TradeUI\TradeUI.h">
       <Filter>Code\GameObject\UI\TradeUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\UI\DialogUI\DialogUI.h">
+      <Filter>Code\GameObject\UI\DialogUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

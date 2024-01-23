@@ -74,6 +74,11 @@ public:
 
 	InventorySlot* FindSlot();
 
+	long long GetMeso()	const { return mMeso; }
+	void SetMeso(long long meso) { mMeso = meso; }
+	void AddMeso(long long meso) { mMeso += meso; }
+	void DeductMeso(long long meso);
+
 private:
 	// 슬롯 간의 간격
 	int mSlotGap;
@@ -81,6 +86,7 @@ private:
 	int mSlotHeight;
 
 	bool mOpen;
+	long long mMeso;
 };
 
 class InventoryItem : public UI

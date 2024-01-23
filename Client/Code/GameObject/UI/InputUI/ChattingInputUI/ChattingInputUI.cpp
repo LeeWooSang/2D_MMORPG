@@ -262,6 +262,7 @@ void ChattingInputUI::processInput()
 
 					int id = _wtoi(temp.c_str());
 					InGameScene* scene = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE));
+#ifdef SERVER_CONNECT
 					// 나자신에게 교환을 신청한게 아니라면
 					if (scene->GetPlayer()->GetId() != id)
 					{
@@ -269,12 +270,15 @@ void ChattingInputUI::processInput()
 						TradeUI* ui = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
 						ui->OpenTradeUI();
 						ui->SetTradeUserId(id);
-
-#ifdef SERVER_CONNECT
 						// 상대방한테도 교환창 오픈
 						GET_INSTANCE(Network)->SendRequestTradePacket(id);
-#endif // SERVER_CONNECT
 					}
+#else
+					// 교환창 오픈
+					TradeUI* ui = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
+					ui->OpenTradeUI();
+					ui->SetTradeUserId(id);
+#endif
 				}
 
 				else

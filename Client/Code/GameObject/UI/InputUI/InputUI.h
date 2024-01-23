@@ -16,6 +16,7 @@ public:
 	virtual void MouseLButtonUp();
 	virtual void MouseLButtonClick();
 
+	const std::wstring GetText()	const { return mText; }
 	void SetText(const std::wstring& text);
 	void SetCarrotPos();
 
