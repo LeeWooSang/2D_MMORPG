@@ -1,11 +1,11 @@
 #pragma once
-#include "../UI.h"
+#include "../DialogUI.h"
 
-class DialogUI : public UI
+class TradeMesoDialog : public DialogUI
 {
 public:
-	DialogUI();
-	virtual ~DialogUI();
+	TradeMesoDialog();
+	virtual ~TradeMesoDialog();
 	virtual bool Initialize(int x, int y);
 	virtual void Update();
 	virtual void Render();
@@ -15,12 +15,7 @@ public:
 	virtual void MouseLButtonUp();
 	virtual void MouseLButtonClick();
 
-	void OpenDialogUI();
-
-	virtual void Visible();
-	virtual void NotVisible();
-
-	bool GetIsOpen()	const { return mOpen; }
-private:
-	bool mOpen;
 };
+
+void OkButtonClick(const std::string& name);
+void CancelButtonClick(const std::string& name);

@@ -9,6 +9,8 @@ Trade::Trade()
 	mTradeUserId = -1;
 	memset(mSlotA, -1, sizeof(int) * MAX_TRADE_SLOT);
 	memset(mSlotB, -1, sizeof(int) * MAX_TRADE_SLOT);
+	mMyMeso = 0;
+	mTradeUserMeso = 0;
 	mReadyA = false;
 	mReadyB = false;
 }
@@ -23,6 +25,8 @@ void Trade::Reset()
 	mTradeUserId = -1;
 	memset(mSlotA, -1, sizeof(int) * MAX_TRADE_SLOT);
 	memset(mSlotB, -1, sizeof(int) * MAX_TRADE_SLOT);
+	mMyMeso = 0;
+	mTradeUserMeso = 0;
 	mReadyA = false;
 	mReadyB = false;
 }
@@ -93,6 +97,38 @@ void Trade::AddItem(int id, int slotNum, int itemId)
 	}
 }
 
+void Trade::AddMeso(int id, long long meso)
+{
+	int myId = mMyId;
+	int tradeUserId = mTradeUserId;
+
+	// 교환중인 상대 아이디가 맞는지 확인
+	if (id != myId && id != tradeUserId)
+	{
+		return;
+	}
+
+	Player* users = GET_INSTANCE(Core)->GetUsers();
+	if (users[tradeUserId].GetIsConnect() == false)
+	{
+		Reset();
+		return;
+	}
+
+	// 내가 아이템을 올린 경우
+	if (id == myId)
+	{
+		mMyMeso += meso;
+		GET_INSTANCE(Core)->SendAddTradeMesoPacket(tradeUserId, mMyMeso);
+	}
+	// 상대가 아이템을 올린 경우
+	else if (id == tradeUserId)
+	{
+		mTradeUserMeso += meso;
+		GET_INSTANCE(Core)->SendAddTradeMesoPacket(myId, mTradeUserMeso);
+	}
+}
+
 void Trade::ProcessTrade(int id)
 {
 	int myId = mMyId;
@@ -147,8 +183,8 @@ void Trade::ProcessTrade(int id)
 		mTradeMtx.unlock();
 
 		// 교환창 아이템을 전송한다. (클라이언트에서는 교환창까지 닫는다)
-		GET_INSTANCE(Core)->SendTradePacket(myId, mSlotB);
-		GET_INSTANCE(Core)->SendTradePacket(tradeUserId, mSlotA);
+		GET_INSTANCE(Core)->SendTradePacket(myId, mSlotB, mTradeUserMeso);
+		GET_INSTANCE(Core)->SendTradePacket(tradeUserId, mSlotA, mMyMeso);
 		Reset();
 	}
 	else

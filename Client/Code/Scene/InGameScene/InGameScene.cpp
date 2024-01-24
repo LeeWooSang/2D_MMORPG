@@ -426,7 +426,13 @@ void InGameScene::AddTradeItem(int texId, int slotNum)
 	trade->AddItemOfTradeUser(texId, slotNum);
 }
 
-void InGameScene::TradeItems(int* items)
+void InGameScene::AddTradeMeso(long long meso)
+{
+	TradeUI* trade = static_cast<TradeUI*>(FindUI("TradeUI"));
+	trade->AddTradeUserMeso(meso);
+}
+
+void InGameScene::TradeItems(int* items, long long meso)
 {
 	Inventory* inventory = static_cast<Inventory*>(FindUI("Inventory"));
 	for (int i = 0; i < MAX_TRADE_SLOT; ++i)
@@ -438,6 +444,7 @@ void InGameScene::TradeItems(int* items)
 		std::cout << "TradeItems - texId : " << items[i] << std::endl;
 		inventory->AddItem(items[i]);
 	}
+	inventory->AddMeso(meso);
 
 	TradeUI* trade = static_cast<TradeUI*>(FindUI("TradeUI"));
 	trade->TradePostProcessing();

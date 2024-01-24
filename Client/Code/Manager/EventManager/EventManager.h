@@ -30,9 +30,14 @@ struct AddTradeItemPacket : public PacketBase
 	int texId;
 	int slotNum;
 };
+struct AddTradeMesoPacket : public PacketBase
+{
+	long long meso;
+};
 struct TradePacket : public PacketBase
 {
 	int items[9];
+	long long meso;
 };
 
 class EventManager

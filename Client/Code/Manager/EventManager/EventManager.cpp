@@ -68,10 +68,17 @@ void EventManager::processPacketEvent()
 				break;
 			}
 
+			case SC_ADD_TRADE_MESO:
+			{
+				AddTradeMesoPacket* e = static_cast<AddTradeMesoPacket*>(ev);
+				scene->AddTradeMeso(e->meso);
+				break;
+			}
+
 			case SC_TRADE:
 			{
 				TradePacket* e = static_cast<TradePacket*>(ev);
-				scene->TradeItems(e->items);
+				scene->TradeItems(e->items, e->meso);
 				break;
 			}
 

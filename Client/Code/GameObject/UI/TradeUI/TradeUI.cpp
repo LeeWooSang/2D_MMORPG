@@ -2,7 +2,7 @@
 #include "../../../Network/Network.h"
 
 #include "../ButtonUI/ButtonUI.h"
-#include "../DialogUI/DialogUI.h"
+#include "../DialogUI/TradeMesoDialog/TradeMesoDialog.h"
 
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../../../Resource/ResourceManager.h"
@@ -49,12 +49,8 @@ void TradeClick(const std::string& name)
 		items[i] = slot->GetItem()->GetTexId();
 	}
 
-	// 나의 메소도 초기화 시켜야함
-	ui->SetMyMeso(0);
-	ui->SetTradeUserMeso(0);
-
 #ifdef SERVER_CONNECT
-	GET_INSTANCE(Network)->SendTradePacket(ui->GetTradeUserId(), items);
+	GET_INSTANCE(Network)->SendTradePacket(ui->GetTradeUserId(), items, ui->GetMyMeso());
 #endif // SERVER_CONNECT
 }
 
@@ -79,7 +75,6 @@ TradeUI::~TradeUI()
 {
 	if (mMesoDialogUI != nullptr)
 	{
-		//delete mMesoDialogUI;
 		mMesoDialogUI = nullptr;
 	}
 }
@@ -194,7 +189,7 @@ bool TradeUI::Initialize(int x, int y)
 		}
 	}
 
-	mMesoDialogUI = new DialogUI;
+	mMesoDialogUI = new TradeMesoDialog;
 	if (mMesoDialogUI->Initialize(200, 0) == false)
 	{
 		return false;
@@ -317,6 +312,9 @@ void TradeUI::TradePostProcessing()
 		TradeSlotUI* slot = static_cast<TradeSlotUI*>(v[i]);
 		slot->ResetSlot();
 	}
+
+	mMyMeso = 0;
+	mTradeUserMeso = 0;
 
 	OpenTradeUI();
 	ResetTradeUserId();

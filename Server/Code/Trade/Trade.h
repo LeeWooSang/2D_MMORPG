@@ -13,9 +13,9 @@ public:
 	void Initialize(int myId) { mMyId = myId; };
 	void StartTrade(int tradeUserId);
 	void AddItem(int id, int slotNum, int itemId);
+	void AddMeso(int id, long long meso);
 	void ProcessTrade(int id);
 	void ProcessCancel();
-
 
 private:
 	bool checkMySlot(int slotNum);
@@ -23,10 +23,16 @@ private:
 
 private:
 	std::mutex mTradeMtx;
+
 	int mMyId;
 	int mTradeUserId;
+	
 	int mSlotA[MAX_TRADE_SLOT];
 	int mSlotB[MAX_TRADE_SLOT];
+	
+	long long mMyMeso;
+	long long mTradeUserMeso;
+
 	bool mReadyA;
 	bool mReadyB;
 };

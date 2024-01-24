@@ -148,6 +148,7 @@
     <ClCompile Include="..\Code\GameObject\UI\ButtonUI\ChattingMenuUI\ChattingMenuUI.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\ChattingBox\ChattingBox.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\DialogUI\DialogUI.cpp" />
+    <ClCompile Include="..\Code\GameObject\UI\DialogUI\TradeMesoDialog\TradeMesoDialog.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\EquipUI\EquipUI.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\InputUI\ChattingInputUI\ChattingInputUI.cpp" />
     <ClCompile Include="..\Code\GameObject\UI\InputUI\InputUI.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="..\Code\GameObject\UI\ButtonUI\ChattingMenuUI\ChattingMenuUI.h" />
     <ClInclude Include="..\Code\GameObject\UI\ChattingBox\ChattingBox.h" />
     <ClInclude Include="..\Code\GameObject\UI\DialogUI\DialogUI.h" />
+    <ClInclude Include="..\Code\GameObject\UI\DialogUI\TradeMesoDialog\TradeMesoDialog.h" />
     <ClInclude Include="..\Code\GameObject\UI\EquipUI\EquipUI.h" />
     <ClInclude Include="..\Code\GameObject\UI\InputUI\ChattingInputUI\ChattingInputUI.h" />
     <ClInclude Include="..\Code\GameObject\UI\InputUI\InputUI.h" />

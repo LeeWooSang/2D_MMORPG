@@ -44,7 +44,8 @@ public:
 
 	void SendRequestTradePacket(int id);
 	void SendAddTradeItem(int id, int texId, int slotNum);
-	void SendTradePacket(int id, int* items);
+	void SendAddTradeMeso(int id, long long meso);
+	void SendTradePacket(int id, int* items, long long meso);
 	void SendTradeCancelPacket(int id);
 
 private:

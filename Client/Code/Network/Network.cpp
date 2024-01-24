@@ -178,13 +178,25 @@ void Network::SendAddTradeItem(int id, int texId, int slotNum)
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 
-void Network::SendTradePacket(int id, int* items)
+void Network::SendAddTradeMeso(int id, long long meso)
+{
+	CSAddTradeMesoPacket packet;
+	packet.size = sizeof(CSAddTradeMesoPacket);
+	packet.type = CS_PACKET_TYPE::CS_ADD_TRADE_MESO;
+	packet.id = id;
+	packet.meso = meso;
+
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
+void Network::SendTradePacket(int id, int* items, long long meso)
 {
 	CSTradePacket packet;
 	packet.size = sizeof(CSTradePacket);
 	packet.type = CS_PACKET_TYPE::CS_TRADE;
 	packet.id = id;
 	memcpy(packet.items, items, sizeof(packet.items));
+	packet.meso = meso;
 
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
@@ -321,6 +333,17 @@ void Network::processPacket()
 			break;
 		}
 
+		case SC_PACKET_TYPE::SC_ADD_TRADE_MESO:
+		{
+			SCAddTradeMesoPacket* packet = reinterpret_cast<SCAddTradeMesoPacket*>(mPacketBuffer);
+
+			std::shared_ptr<AddTradeMesoPacket> p = std::make_shared<AddTradeMesoPacket>();
+			p->packetType = packet->type;
+			p->meso = packet->meso;
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
+			break;
+		}
+
 		case SC_PACKET_TYPE::SC_TRADE:
 		{
 			SCTradePacket* packet = reinterpret_cast<SCTradePacket*>(mPacketBuffer);
@@ -328,6 +351,7 @@ void Network::processPacket()
 			std::shared_ptr<TradePacket> p = std::make_shared<TradePacket>();
 			p->packetType = packet->type;
 			memcpy(p->items, packet->items, sizeof(p->items));
+			p->meso = packet->meso;
 			GET_INSTANCE(EventManager)->AddPacketEvent(p);
 			break;
 		}

@@ -101,6 +101,7 @@ enum CS_PACKET_TYPE
 
 	CS_REQUEST_TRADE,
 	CS_ADD_TRADE_ITEM,
+	CS_ADD_TRADE_MESO,
 	CS_TRADE,
 	CS_TRADE_CANCEL
 };
@@ -117,6 +118,7 @@ enum SC_PACKET_TYPE
 	SC_CHANGE_AVATAR,
 	SC_REQUEST_TRADE,
 	SC_ADD_TRADE_ITEM,
+	SC_ADD_TRADE_MESO,
 	SC_TRADE,
 	SC_TRADE_CANCEL
 };
@@ -186,12 +188,20 @@ struct CSAddTradeItemPacket
 	int texId;
 	int slotNum;
 };
+struct CSAddTradeMesoPacket
+{
+	char size;
+	char type;
+	int id;
+	long long meso;
+};
 struct CSTradePacket
 {
 	char size;
 	char type;
 	int id;
 	int items[9];
+	long long meso;
 };
 struct CSTradeCancelPacket
 {
@@ -268,11 +278,18 @@ struct SCAddTradeItemPacket
 	int texId;
 	int slotNum;
 };
+struct SCAddTradeMesoPacket
+{
+	char size;
+	char type;
+	long long meso;
+};
 struct SCTradePacket
 {
 	char size;
 	char type;
 	int items[9];
+	long long meso;
 };
 struct SCTradeCancelPacket
 {

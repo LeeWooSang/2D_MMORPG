@@ -35,6 +35,7 @@ public:
 	virtual void Visible();
 	virtual void NotVisible();
 
+	long long GetMyMeso()	const { return mMyMeso; }
 	void SetMyMeso(long long meso) { mMyMeso = meso; }
 	void SetTradeUserMeso(long long meso) { mTradeUserMeso = meso; }
 	

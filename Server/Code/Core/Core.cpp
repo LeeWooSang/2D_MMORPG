@@ -258,12 +258,23 @@ void Core::SendAddTradeItemPacket(int to, int texId, int slotNum)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
-void Core::SendTradePacket(int to, int* items)
+void Core::SendAddTradeMesoPacket(int to, long long meso)
+{
+	SCAddTradeMesoPacket packet;
+	packet.size = sizeof(SCAddTradeMesoPacket);
+	packet.type = SC_PACKET_TYPE::SC_ADD_TRADE_MESO;
+	packet.meso = meso;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendTradePacket(int to, int* items, long long meso)
 {
 	SCTradePacket packet;
 	packet.size = sizeof(SCTradePacket);
 	packet.type = SC_PACKET_TYPE::SC_TRADE;
 	memcpy(packet.items, items, sizeof(packet.items));
+	packet.meso = meso;
 
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
@@ -650,6 +661,18 @@ void Core::processPacket(int id, char* buf)
 			if (tradeId != -1)
 			{
 				mTrades[tradeId].AddItem(id, packet->slotNum, packet->texId);
+			}
+			break;
+		}
+
+		case CS_PACKET_TYPE::CS_ADD_TRADE_MESO:
+		{
+			CSAddTradeMesoPacket* packet = reinterpret_cast<CSAddTradeMesoPacket*>(buf);
+			// 교환 id를 알아야 한다.
+			int tradeId = mUsers[id].GetTradeId();
+			if (tradeId != -1)
+			{
+				mTrades[tradeId].AddMeso(id, packet->meso);
 			}
 			break;
 		}

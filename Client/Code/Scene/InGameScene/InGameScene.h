@@ -27,7 +27,8 @@ public:
 
 	void RequestTrade(int id);
 	void AddTradeItem(int texId, int slotNum);
-	void TradeItems(int* items);
+	void AddTradeMeso(long long meso);
+	void TradeItems(int* items, long long meso);
 	void TradeCancel();
 
 	Player* GetPlayer();
