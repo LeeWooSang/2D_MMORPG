@@ -67,6 +67,9 @@ public:
 	void SetAnimationMotion(ANIMATION_MONTION_TYPE motion);
 	void SetAvatar(const std::string& parts, ANIMATION_MONTION_TYPE motion, const std::string& objName, int count);
 
+	std::vector<int>& GetAvatarIds() { return mAvatarIds; }
+	void SetAvatarId(int texId);
+	
 	void SetAvatar(int texId);
 	void SetWeaponAvatar(const std::string& itemName);
 	void SetWeaponAvatar(int texId);
@@ -80,6 +83,8 @@ protected:
 
 	ANIMATION_MONTION_TYPE mMotion;
 	std::unordered_map<ANIMATION_MONTION_TYPE, Animation*> mAnimations;
+
+	std::vector<int> mAvatarIds;
 };
 
 class Player : public AnimationCharacter

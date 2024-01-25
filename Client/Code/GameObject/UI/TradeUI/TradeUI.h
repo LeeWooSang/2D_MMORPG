@@ -44,6 +44,9 @@ public:
 
 	DialogUI* GetMesoDialogUI() { return mMesoDialogUI; }
 
+	void SetAvatar();
+	void ResetAvatar();
+
 private:
 	bool mOpen;
 	int mTradeUserId;
@@ -52,6 +55,8 @@ private:
 	long long mTradeUserMeso;
 
 	DialogUI* mMesoDialogUI;
+	class AnimationCharacter* mMyAvatar;
+	class AnimationCharacter* mTradeUserAvatar;
 };
 
 class InventoryItem;

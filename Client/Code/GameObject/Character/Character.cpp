@@ -75,6 +75,7 @@ AnimationCharacter::AnimationCharacter()
 
 	mMotion = ANIMATION_MONTION_TYPE::IDLE;
 	mAnimations.clear();
+	mAvatarIds.clear();
 }
 
 AnimationCharacter::~AnimationCharacter()
@@ -98,6 +99,7 @@ AnimationCharacter::~AnimationCharacter()
 		}
 	}
 	mAnimations.clear();
+	mAvatarIds.clear();
 }
 
 bool AnimationCharacter::Initialize(int x, int y)
@@ -500,6 +502,12 @@ void AnimationCharacter::SetAvatar(const std::string& parts, ANIMATION_MONTION_T
 	{
 		mChildObjects[parts]->mAnimations[motion]->SetTexture(partsName, partsName + std::to_string(i));
 	}
+}
+
+void AnimationCharacter::SetAvatarId(int texId)
+{
+	mAvatarIds.emplace_back(texId);
+	SetAvatar(texId);
 }
 
 void AnimationCharacter::SetAvatar(int texId)

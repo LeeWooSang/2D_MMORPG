@@ -357,7 +357,6 @@ void InGameScene::AddObject(int id, int x, int y)
 	int myId = mPlayer->GetId();
 	if (myId == id)
 	{
-		//mPlayer->SetWeaponAvatar("Sword");
 		GET_INSTANCE(Camera)->SetPosition(x, y);
 		mPlayer->SetPosition(x, y);
 	}
@@ -410,7 +409,7 @@ void InGameScene::RemoveObject(int id)
 void InGameScene::UpdateObjectAvatar(int id, int texId)
 {
 	// texId를 이용하여 아이템 이름 구분
-	mOtherPlayers[id]->SetAvatar(texId);
+	mOtherPlayers[id]->SetAvatarId(texId);
 }
 
 void InGameScene::RequestTrade(int id)

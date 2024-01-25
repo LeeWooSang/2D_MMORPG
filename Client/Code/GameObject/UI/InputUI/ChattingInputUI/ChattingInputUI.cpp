@@ -268,16 +268,16 @@ void ChattingInputUI::processInput()
 					{
 						// 교환창 오픈
 						TradeUI* ui = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
-						ui->OpenTradeUI();
 						ui->SetTradeUserId(id);
+						ui->OpenTradeUI();
 						// 상대방한테도 교환창 오픈
 						GET_INSTANCE(Network)->SendRequestTradePacket(id);
 					}
 #else
 					// 교환창 오픈
 					TradeUI* ui = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
-					ui->OpenTradeUI();
 					ui->SetTradeUserId(id);
+					ui->OpenTradeUI();
 #endif
 				}
 

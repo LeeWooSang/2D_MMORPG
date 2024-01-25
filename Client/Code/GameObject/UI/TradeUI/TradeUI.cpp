@@ -13,6 +13,8 @@
 #include "../Inventory/Inventory.h"
 #include "../../../Manager/UIManager/UIManager.h"
 
+#include "../../Character/Character.h"
+
 void TradeCancelClick(const std::string& name)
 {
 	TradeUI* trade = static_cast<TradeUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("TradeUI"));
@@ -69,6 +71,8 @@ TradeUI::TradeUI()
 	mMyMeso = 0;
 	mTradeUserMeso = 0;
 	mMesoDialogUI = nullptr;
+	mMyAvatar = nullptr;
+	mTradeUserAvatar = nullptr;
 }
 
 TradeUI::~TradeUI()
@@ -76,6 +80,18 @@ TradeUI::~TradeUI()
 	if (mMesoDialogUI != nullptr)
 	{
 		mMesoDialogUI = nullptr;
+	}
+
+	if (mMyAvatar != nullptr)
+	{
+		delete mMyAvatar;
+		mMyAvatar = nullptr;
+	}
+
+	if (mTradeUserAvatar != nullptr)
+	{
+		delete mTradeUserAvatar;
+		mTradeUserAvatar = nullptr;
 	}
 }
 
@@ -205,6 +221,15 @@ bool TradeUI::Initialize(int x, int y)
 void TradeUI::Update()
 {
 	UI::Update();
+
+	if (mMyAvatar != nullptr)
+	{
+		mMyAvatar->Update();
+	}
+	if (mTradeUserAvatar != nullptr)
+	{
+		mTradeUserAvatar->Update();
+	}
 }
 
 void TradeUI::Render()
@@ -245,6 +270,19 @@ void TradeUI::Render()
 		GET_INSTANCE(GraphicEngine)->RenderText(myMeso, mPos.first - 41, mPos.second + 260, "검은색");
 		GET_INSTANCE(GraphicEngine)->RenderText(myTradeUserMeso, mPos.first - 180, mPos.second + 260, "검은색");
 	}
+
+	InGameScene* scene = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE));
+	if (mMyAvatar != nullptr)
+	{
+		mMyAvatar->Render();
+		GET_INSTANCE(GraphicEngine)->RenderText(std::to_wstring(scene->GetPlayer()->GetId()), mPos.first + 215, mPos.second + 121);
+	}
+	if(mTradeUserAvatar != nullptr)
+	{
+		mTradeUserAvatar->Render();
+		GET_INSTANCE(GraphicEngine)->RenderText(std::to_wstring(scene->GetOtherPlayer(mTradeUserId)->GetId()), mPos.first + 52, mPos.second + 121);
+
+	}
 }
 
 void TradeUI::MouseOver()
@@ -271,12 +309,14 @@ void TradeUI::OpenTradeUI()
 	{
 		mOpen = true;
 		Visible();
+		SetAvatar();
 	}
 	// 열려있다면
 	else
 	{
 		mOpen = false;
 		NotVisible();
+		ResetAvatar();
 	}
 }
 
@@ -381,6 +421,65 @@ void TradeUI::NotVisible()
 		{
 			child.second[i]->NotVisible();
 		}
+	}
+}
+
+void TradeUI::SetAvatar()
+{
+	// 나의 아바타 설정
+	{
+		mMyAvatar = new AnimationCharacter;
+		if (mMyAvatar->Initialize(0, 0) == false)
+		{
+			return;
+		}
+
+		InGameScene* scene = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE));
+		std::vector<int>& avatarIds = scene->GetPlayer()->GetAvatarIds();
+		for (int i = 0; i < avatarIds.size(); ++i)
+		{
+			mMyAvatar->SetAvatarId(avatarIds[i]);
+		}
+
+		mMyAvatar->SetAnimationMotion(ANIMATION_MONTION_TYPE::IDLE);
+		mMyAvatar->Visible();
+		mMyAvatar->SetPosition(1, -1);
+	}
+
+	// 상대 아바타 설정
+	{
+		mTradeUserAvatar = new AnimationCharacter;
+		if (mTradeUserAvatar->Initialize(0, 0) == false)
+		{
+			return;
+		}
+
+		InGameScene* scene = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE));
+		std::vector<int>& avatarIds = scene->GetOtherPlayer(mTradeUserId)->GetAvatarIds();
+		for (int i = 0; i < avatarIds.size(); ++i)
+		{
+			mTradeUserAvatar->SetAvatarId(avatarIds[i]);
+		}
+
+		mTradeUserAvatar->SetAnimationMotion(ANIMATION_MONTION_TYPE::IDLE);
+		mTradeUserAvatar->Visible();
+		mTradeUserAvatar->SetDirection(-1);
+		mTradeUserAvatar->SetPosition(-2, -1);
+	}
+}
+
+void TradeUI::ResetAvatar()
+{
+	if (mMyAvatar != nullptr)
+	{
+		delete mMyAvatar;
+		mMyAvatar = nullptr;
+	}
+
+	if (mTradeUserAvatar != nullptr)
+	{
+		delete mTradeUserAvatar;
+		mTradeUserAvatar = nullptr;
 	}
 }
 
