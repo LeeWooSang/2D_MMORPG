@@ -941,15 +941,12 @@ bool Monster::Initialize(int x, int y)
 			monster->AddAnimation(ANIMATION_MONTION_TYPE::JUMP, ani);
 		}
 	}
-
+	monster->mId = mId;
 	AddChild("monster", monster);
 
 	//Visible();
 
-	std::random_device rd;
-	std::default_random_engine dre(rd());
-	std::uniform_int_distribution<int> uid(0, 2);
-	ANIMATION_MONTION_TYPE motion = static_cast<ANIMATION_MONTION_TYPE>(uid(dre));
+	ANIMATION_MONTION_TYPE motion = ANIMATION_MONTION_TYPE::IDLE;
 	SetAnimationMotion(motion);
 
 	SetDirection(1);
@@ -999,22 +996,25 @@ void Monster::Render()
 
 			GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
 
+			//std::wstring text = L"Id (" + std::to_wstring(mParent->GetId()) + L")";
+			//GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), rect.left, rect.right, "메이플", "검은색");
+
 			mat = D2D1::Matrix3x2F::Identity();
 			GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
 		}
 	}
-	//else
-	//{
-	//	std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
+	else
+	{
+		std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
 
-	//	// 이미지 위치
-	//	D2D1_RECT_F pos;
-	//	pos.left = (mPos.first - cameraPos.first) * 65.0 + 8.0;
-	//	pos.top = (mPos.second - cameraPos.second) * 65.0 + 8.0;
+		// 이미지 위치
+		D2D1_RECT_F pos;
+		pos.left = (mPos.first - cameraPos.first) * 65.0 + 8.0;
+		pos.top = (mPos.second - cameraPos.second) * 65.0 + 8.0;
 
-	//	std::wstring text = L"Id (" + std::to_wstring(mId) + L")";
-	//	GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top + 60), "메이플", "검은색");
-	//}
+		std::wstring text = L"Id (" + std::to_wstring(mId) + L")";
+		GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top + 60), "메이플", "검은색");
+	}
 
 	for (auto& obj : mRenderChildObjects)
 	{

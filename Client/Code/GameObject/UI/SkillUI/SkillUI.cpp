@@ -174,8 +174,8 @@ void SkillUI::Update()
 void SkillUI::Render()
 {
 	UI::Render();
-	GET_INSTANCE(GraphicEngine)->RenderText(std::to_wstring(mSkillPoint), mPos.first + 205, mPos.second + 27, "°ËÀº»ö");
-	GET_INSTANCE(GraphicEngine)->RenderText(L"±Ã±ØÀÇ È÷¾î·Î", mPos.first + 125, mPos.second + 58, "Èò»ö");
+	GET_INSTANCE(GraphicEngine)->RenderText(std::to_wstring(mSkillPoint), mPos.first + 5, mPos.second + 27, "°ËÀº»ö");
+	GET_INSTANCE(GraphicEngine)->RenderText(L"±Ã±ØÀÇ È÷¾î·Î", mPos.first - 100, mPos.second + 58, "Èò»ö");
 }
 
 void SkillUI::MouseOverCollision(int x, int y)

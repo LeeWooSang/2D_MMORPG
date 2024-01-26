@@ -363,13 +363,13 @@ void InGameScene::AddObject(int id, int x, int y)
 	else if (id < MAX_USER)
 	{
 		//mOtherPlayers[id]->SetAvatar()
-		mOtherPlayers[id]->SetPosition(x, y);
 		mOtherPlayers[id]->Visible();
+		mOtherPlayers[id]->SetPosition(x, y);
 	}
 	else
 	{
-		mMonsters[id]->SetPosition(x, y);
 		mMonsters[id]->Visible();
+		mMonsters[id]->SetPosition(x, y);
 	}
 }
 
@@ -384,12 +384,10 @@ void InGameScene::UpdateObjectPosition(int id, int x, int y)
 	else if (id < MAX_USER)
 	{
 		mOtherPlayers[id]->SetPosition(x, y);
-		mOtherPlayers[id]->Visible();
 	}
 	else
 	{
 		mMonsters[id]->SetPosition(x, y);
-		mMonsters[id]->Visible();
 	}
 }
 
