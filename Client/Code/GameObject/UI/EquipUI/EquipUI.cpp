@@ -220,8 +220,8 @@ void EquipUI::Render()
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
-	pos.right = pos.left + mTexture->GetSize().first;
-	pos.bottom = pos.top + mTexture->GetSize().second;
+	pos.right = pos.left + mRect.first;
+	pos.bottom = pos.top + mRect.second;
 
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
@@ -240,25 +240,6 @@ void EquipUI::Render()
 		{
 			child.second[i]->Render();
 		}
-	}
-}
-
-void EquipUI::MouseOverCollision(int x, int y)
-{
-	// ui의 rect와 닿았는가?
-	RECT collisionBox;
-	collisionBox.left = mPos.first;
-	collisionBox.right = mPos.first + mTexture->GetSize().first;
-	collisionBox.top = mPos.second;
-	collisionBox.bottom = mPos.second + mTexture->GetSize().second;
-
-	if (x >= collisionBox.left && x <= collisionBox.right && y >= collisionBox.top && y <= collisionBox.bottom)
-	{
-		mMouseOver = true;
-	}
-	else
-	{
-		mMouseOver = false;
 	}
 }
 
@@ -361,8 +342,8 @@ void EquipSlotUI::Render()
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
-	pos.right = pos.left + mTexture->GetSize().first;
-	pos.bottom = pos.top + mTexture->GetSize().second;
+	pos.right = pos.left + mRect.first;
+	pos.bottom = pos.top + mRect.second;
 
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
@@ -386,25 +367,6 @@ void EquipSlotUI::Render()
 		{
 			child.second[i]->Render();
 		}
-	}
-}
-
-void EquipSlotUI::MouseOverCollision(int x, int y)
-{
-	// ui의 rect와 닿았는가?
-	RECT collisionBox;
-	collisionBox.left = mPos.first;
-	collisionBox.right = mPos.first + mTexture->GetSize().first;
-	collisionBox.top = mPos.second;
-	collisionBox.bottom = mPos.second + mTexture->GetSize().second;
-
-	if (x >= collisionBox.left && x <= collisionBox.right && y >= collisionBox.top && y <= collisionBox.bottom)
-	{
-		mMouseOver = true;
-	}
-	else
-	{
-		mMouseOver = false;
 	}
 }
 

@@ -20,8 +20,10 @@ bool InputUI::Initialize(int x, int y)
 {
 	UI::Initialize(x, y);
 
+	SetRect(300, 30);
 	//SetPosition(x, 200);
 	mCarrotPos = std::make_pair(mPos.first, mPos.second);
+
 	Visible();
 
 	return true;
@@ -54,8 +56,11 @@ void InputUI::Render()
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
-	pos.right = pos.left + 400;
-	pos.bottom = pos.top + 30;
+	//pos.right = pos.left + 400;
+	//pos.bottom = pos.top + 30;
+	pos.right = pos.left + mRect.first;
+	pos.bottom = pos.top + mRect.second;
+
 	GET_INSTANCE(GraphicEngine)->RenderFillRectangle(pos, "¹àÀº°ËÀº»ö");
 
 	if (mElapsedTime > 0.5)

@@ -54,6 +54,8 @@ private:
 	std::pair<int, int> mTileMaxPos;
 	std::vector<std::vector<Map*>> mTiles;
 
+	std::vector<Map*> mNewTiles;
+
 	std::unordered_map<int, std::shared_ptr<AnimationCharacter>> mOtherPlayers;
 	std::unordered_map<int, std::shared_ptr<Monster>> mMonsters;
 

@@ -178,25 +178,6 @@ void SkillUI::Render()
 	GET_INSTANCE(GraphicEngine)->RenderText(L"±Ã±ØÀÇ È÷¾î·Î", mPos.first - 100, mPos.second + 58, "Èò»ö");
 }
 
-void SkillUI::MouseOverCollision(int x, int y)
-{
-	// uiÀÇ rect¿Í ´ê¾Ò´Â°¡?
-	RECT collisionBox;
-	collisionBox.left = mPos.first;
-	collisionBox.right = mPos.first + mTexture->GetSize().first;
-	collisionBox.top = mPos.second;
-	collisionBox.bottom = mPos.second + mTexture->GetSize().second;
-
-	if (x >= collisionBox.left && x <= collisionBox.right && y >= collisionBox.top && y <= collisionBox.bottom)
-	{
-		mMouseOver = true;
-	}
-	else
-	{
-		mMouseOver = false;
-	}
-}
-
 void SkillUI::MouseOver()
 {
 	UI::MouseOver();
@@ -329,25 +310,6 @@ void SkillSlotUI::Render()
 	if (mSkill != nullptr)
 	{
 		mSkill->Render();
-	}
-}
-
-void SkillSlotUI::MouseOverCollision(int x, int y)
-{
-	// uiÀÇ rect¿Í ´ê¾Ò´Â°¡?
-	RECT collisionBox;
-	collisionBox.left = mPos.first;
-	collisionBox.right = mPos.first + mTexture->GetSize().first;
-	collisionBox.top = mPos.second;
-	collisionBox.bottom = mPos.second + mTexture->GetSize().second;
-
-	if (x >= collisionBox.left && x <= collisionBox.right && y >= collisionBox.top && y <= collisionBox.bottom)
-	{
-		mMouseOver = true;
-	}
-	else
-	{
-		mMouseOver = false;
 	}
 }
 

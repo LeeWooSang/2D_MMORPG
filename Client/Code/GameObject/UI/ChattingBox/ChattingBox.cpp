@@ -34,6 +34,7 @@ ChattingBox::~ChattingBox()
 bool ChattingBox::Initialize(int x, int y)
 {
 	UI::Initialize(x, y);
+	SetRect(400, 235);
 	Visible();
 
 	{
@@ -102,8 +103,8 @@ void ChattingBox::Render()
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
-	pos.right = pos.left + 400;
-	pos.bottom = pos.top + 235;
+	pos.right = pos.left + mRect.first;
+	pos.bottom = pos.top + mRect.second;
 
 	GET_INSTANCE(GraphicEngine)->RenderFillRectangle(pos, "밝은검은색");
 

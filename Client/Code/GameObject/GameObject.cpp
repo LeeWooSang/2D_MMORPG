@@ -18,6 +18,8 @@ GameObject::GameObject()
 {
     mAttr = ATTR_STATE_TYPE::DEFAULT;
     mTexture = nullptr;
+    mWorldPos = std::make_pair(0.0, 0.0);
+    mRect = std::make_pair(0, 0);
 }
 
 GameObject::~GameObject()
@@ -61,7 +63,8 @@ bool GameObject::SetTexture(const std::string& name)
     }
 
     mTexture = tex;
-    
+    SetRect(mTexture->GetSize().first, mTexture->GetSize().second);
+
     return true;
 }
 

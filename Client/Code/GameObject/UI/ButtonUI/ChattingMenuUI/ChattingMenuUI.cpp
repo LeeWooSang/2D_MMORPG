@@ -59,8 +59,8 @@ void ChattingMenuUI::Render()
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
-	pos.right = pos.left + mTexture->GetSize().first;
-	pos.bottom = pos.top + mTexture->GetSize().second;
+	pos.right = pos.left + mRect.first;
+	pos.bottom = pos.top + mRect.second;
 
 	if (mMouseLButtonDown)
 	{

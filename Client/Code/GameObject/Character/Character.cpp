@@ -373,13 +373,6 @@ void AnimationCharacter::Render()
 				std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
 				Texture* tex = mAnimations[mMotion]->GetTexture();
 
-				//D2D1_RECT_F pos;
-				//pos.left = (mPos.first - cameraPos.first) * 65.0 + mAnimations[mMotion]->GetPosition().first+ 23.0;
-				//pos.top = (mPos.second - cameraPos.second) * 65.0 + mAnimations[mMotion]->GetPosition().second + 8.0;
-				//pos.right = pos.left + tex->GetSize().first;
-				//pos.bottom = pos.top + tex->GetSize().second;
-				//GET_INSTANCE(GraphicEngine)->RenderTexture(tex, pos);
-
 				D2D1_RECT_F rect;
 				rect.left = 0;
 				rect.top = 0;
@@ -389,13 +382,14 @@ void AnimationCharacter::Render()
 				D2D1_MATRIX_3X2_F mat = D2D1::Matrix3x2F::Identity();
 				mat._11 *= mDir;
 				mat._32 = (mPos.second - cameraPos.second) * 65.0 + 8.0 + mAnimations[mMotion]->GetPosition().second;
+
 				if (mDir == 1)
 				{
-					mat._31 = (mPos.first - cameraPos.first) * 65.0 + 23.0 + mAnimations[mMotion]->GetPosition().first * mDir;
+					mat._31 = (mPos.first - cameraPos.first) * 65.0 + mAnimations[mMotion]->GetPosition().first * mDir + 25;
 				}
 				else
 				{
-					mat._31 = (mPos.first - cameraPos.first) * 65.0 + 60.0 + mAnimations[mMotion]->GetPosition().first * mDir;
+					mat._31 = (mPos.first - cameraPos.first) * 65.0 + mAnimations[mMotion]->GetPosition().first * mDir + 60;
 				}
 
 				GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);

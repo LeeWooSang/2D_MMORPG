@@ -27,6 +27,8 @@ bool ChattingInputUI::Initialize(int x, int y)
 {
 	InputUI::Initialize(x, y);
 
+	SetRect(295, 30);
+
 	mCarrotPos = std::make_pair(0, 705);
 	Visible();
 

@@ -47,9 +47,14 @@ public:
 	virtual void NotVisible() { mAttr &= ~ATTR_STATE_TYPE::VISIBLE; }
 	bool IsVisible();
 
+	virtual void SetRect(int width, int height) { mRect = std::make_pair(width, height); }
+
 protected:
 	// x, y
 	std::pair<int, int> mPos;
+	std::pair<float, float> mWorldPos;
+	std::pair<int, int> mRect;
+
 	char mDir;
 	int mAttr;
 	Texture* mTexture;

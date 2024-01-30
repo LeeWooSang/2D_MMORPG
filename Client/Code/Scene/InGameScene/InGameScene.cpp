@@ -119,7 +119,7 @@ bool InGameScene::Initialize()
 #ifdef SERVER_CONNECT
 		monster->NotVisible();
 #else
-		monster->Visible();
+		//monster->Visible();
 		monster->SetPosition(uid(dre), uid(dre));
 #endif
 		mMonsters.emplace(i, monster);
@@ -157,6 +157,20 @@ bool InGameScene::Initialize()
 	TradeUI* trade = new TradeUI;
 	trade->Initialize(0, 0);
 	AddSceneUI("TradeUI", trade);
+
+	{
+		Map* tile = new Map;
+		if (tile->Initialize(0, 0) == false)
+		{
+			return false;
+		}
+		if (tile->SetTexture("Tile") == false)
+		{
+			return false;
+		}
+		mNewTiles.emplace_back(tile);
+	}
+
 
 	mIsReady = true;
 
@@ -221,6 +235,11 @@ void InGameScene::Render()
 			}
 			mTiles[i][j]->Render();
 		}
+	}
+
+	for (auto& tile : mNewTiles)
+	{
+		tile->Render();
 	}
 
 	for (auto& monster : mMonsters)
@@ -289,6 +308,66 @@ void InGameScene::Render()
 	//SetInventory(x, y);
 	//SetSkillUI(x, y);
 	//SetSkillEffect(x, y);
+
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("Player");
+		std::pair<float, float> pos = std::make_pair(0.0, 0.0);
+		std::pair<int, int> origin = std::make_pair(10, 0);
+		std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
+		char dir = -1;
+
+		D2D1_MATRIX_3X2_F mat = D2D1::Matrix3x2F::Identity();
+		mat._11 *= dir;
+		mat._31 = origin.first * dir + (pos.first - cameraPos.first) * 65 + 8.0;
+		mat._32 = origin.second + (pos.second - cameraPos.second) * 65 + 8.0;
+		if (dir == -1)
+		{
+			mat._31 += tex->GetSize().first - origin.first * dir;
+		}
+
+		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
+
+		D2D1_RECT_F rect;
+		rect.left = 0;
+		rect.top = 0;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		//GET_INSTANCE(GraphicEngine)->RenderRectangle(rect);
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+
+		mat = D2D1::Matrix3x2F::Identity();
+		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
+	}
+	{
+		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("Player");
+		std::pair<float, float> pos = std::make_pair(1.0, 0.0);
+		std::pair<int, int> origin = std::make_pair(0, 0);
+		std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
+		char dir = 1;
+
+		D2D1_MATRIX_3X2_F mat = D2D1::Matrix3x2F::Identity();
+		mat._11 *= dir;
+		mat._31 = origin.first * dir + (pos.first - cameraPos.first) * 65 + 8.0;
+		mat._32 = origin.second + (pos.second - cameraPos.second) * 65 + 8.0;
+		if (dir == -1)
+		{
+			mat._31 += tex->GetSize().first;
+		}
+
+		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
+
+		D2D1_RECT_F rect;
+		rect.left = 0;
+		rect.top = 0;
+		rect.right = rect.left + tex->GetSize().first;
+		rect.bottom = rect.top + tex->GetSize().second;
+		//GET_INSTANCE(GraphicEngine)->RenderRectangle(rect);
+		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+
+		mat = D2D1::Matrix3x2F::Identity();
+		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
+
+	}
 }
 
 void InGameScene::processKeyboardMessage()

@@ -104,6 +104,7 @@ bool TradeMesoDialog::Initialize(int x, int y)
 	{
 		return false;
 	}
+	ui->SetRect(230, 30);
 	ui->Visible();
 	AddChildUI("Input", ui);
 	
@@ -143,8 +144,8 @@ void TradeMesoDialog::Render()
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
-	pos.right = pos.left + mTexture->GetSize().first;
-	pos.bottom = pos.top + mTexture->GetSize().second;
+	pos.right = pos.left + mRect.first;
+	pos.bottom = pos.top + mRect.second;
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 	if (mMouseLButtonDown)

@@ -11,8 +11,6 @@ public:
 	virtual void Update();
 	virtual void Render();
 
-	virtual void MouseOverCollision(int x, int y);
-
 	virtual void MouseOver();
 	virtual void MouseLButtonDown();
 	virtual void MouseLButtonUp();
@@ -39,8 +37,6 @@ public:
 	virtual bool Initialize(int x, int y);
 	virtual void Update();
 	virtual void Render();
-
-	virtual void MouseOverCollision(int x, int y);
 
 	virtual void MouseOver();
 	virtual void MouseLButtonDown();
