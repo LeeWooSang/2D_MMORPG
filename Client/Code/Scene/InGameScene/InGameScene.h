@@ -23,6 +23,8 @@ public:
 	void AddObject(int id, int x, int y);
 	void UpdateObjectPosition(int id, int x, int y);
 	void RemoveObject(int id);
+	void RemoveAllObject();
+
 	void UpdateObjectAvatar(int id, int texId);
 
 	void RequestTrade(int id);
@@ -57,7 +59,10 @@ private:
 	std::vector<Map*> mNewTiles;
 
 	std::unordered_map<int, std::shared_ptr<AnimationCharacter>> mOtherPlayers;
+	std::unordered_map<int, std::shared_ptr<AnimationCharacter>> mVisibleOtherPlayers;
+
 	std::unordered_map<int, std::shared_ptr<Monster>> mMonsters;
+	std::unordered_map<int, std::shared_ptr<Monster>> mVisibleMonsters;
 
 	Player* mPlayer;
 };

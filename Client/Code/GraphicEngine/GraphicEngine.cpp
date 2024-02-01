@@ -7,6 +7,9 @@ GraphicEngine::GraphicEngine()
 	mWidth = 0;
 	mHeight = 0;
 	mFactory = nullptr;
+	mGeometry = nullptr;
+	mSink = nullptr;
+
 	mWICImagingFactory = nullptr;
 	mWriteFactory = nullptr;
 	mFontCollection = nullptr;
@@ -32,6 +35,8 @@ GraphicEngine::~GraphicEngine()
 	mRenderTarget->Release();
 	mWriteFactory->Release();
 	mWICImagingFactory->Release();
+	mSink->Release();
+	mGeometry->Release();
 	mFactory->Release();
 }
 
@@ -69,6 +74,9 @@ bool GraphicEngine::Initialize(HWND handle, int width, int height)
 		return false;
 	}
 
+	mFactory->CreatePathGeometry(&mGeometry);
+	mGeometry->Open(&mSink);
+
 	// 텍스트를 위한 Factory 생성
 	result = ::DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory5), (IUnknown**)&mWriteFactory);
 	if (result != S_OK)
@@ -91,6 +99,11 @@ void GraphicEngine::RenderRectangle(const D2D1_RECT_F& pos, const std::string& c
 void GraphicEngine::RenderFillRectangle(const D2D1_RECT_F& pos, const std::string& color)
 {
 	mRenderTarget->FillRectangle(pos, mBrushColorMap[color]);
+}
+
+void GraphicEngine::RenderGeometry()
+{
+	mRenderTarget->DrawGeometry(mGeometry, mBrushColorMap["빨간색"], 2.0);
 }
 
 void GraphicEngine::RenderTexture(Texture* texture, const D2D1_RECT_F& pos)

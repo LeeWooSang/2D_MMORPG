@@ -29,6 +29,7 @@ public:
 	void SendAddMonsterPacket(int to, int obj, int x, int y);
 	void SendMonsterPositionPacket(int to, int obj, int x, int y);
 	void SendRemoveObjectPacket(int to, int obj);
+	void SendRemoveAllObjectPacket(int to);
 	void SendChangeChannelPacket(int to, bool result);
 	void SendChatPacket(int to, int obj, wchar_t* chat);
 	void SendChangeAvatarPacket(int to, int obj, int texId);

@@ -41,6 +41,13 @@ void EventManager::processPacketEvent()
 				scene->RemoveObject(ev->id);
 				break;
 			}
+
+			case SC_REMOVE_ALL_OBJECT:
+			{
+				scene->RemoveAllObject();
+				break;
+			}
+
 			case SC_POSITION:
 			{
 				PositionPacket* e = static_cast<PositionPacket*>(ev);

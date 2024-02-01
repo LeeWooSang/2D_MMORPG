@@ -47,6 +47,8 @@ InGameScene::~InGameScene()
 		}
 	}
 
+	mVisibleOtherPlayers.clear();
+	mVisibleMonsters.clear();
 	mOtherPlayers.clear();
 	mMonsters.clear();
 	delete mPlayer;
@@ -90,7 +92,7 @@ bool InGameScene::Initialize()
 	std::uniform_int_distribution<int> uid(0, WIDTH - 1);
 
 	// 나를 제외한 나머지 유저 수
-	for (int i = 0; i < MAX_CHANNEL_USER; ++i)
+	for (int i = 0; i < MAX_CHANNEL * MAX_CHANNEL_USER; ++i)
 	{
 		std::shared_ptr<AnimationCharacter> otherPlayer = std::make_shared<AnimationCharacter>();
 		if (otherPlayer->Initialize(0, 0) == false)
@@ -158,18 +160,18 @@ bool InGameScene::Initialize()
 	trade->Initialize(0, 0);
 	AddSceneUI("TradeUI", trade);
 
-	{
-		Map* tile = new Map;
-		if (tile->Initialize(0, 0) == false)
-		{
-			return false;
-		}
-		if (tile->SetTexture("Tile") == false)
-		{
-			return false;
-		}
-		mNewTiles.emplace_back(tile);
-	}
+	//{
+	//	Map* tile = new Map;
+	//	if (tile->Initialize(0, 0) == false)
+	//	{
+	//		return false;
+	//	}
+	//	if (tile->SetTexture("Tile") == false)
+	//	{
+	//		return false;
+	//	}
+	//	mNewTiles.emplace_back(tile);
+	//}
 
 
 	mIsReady = true;
@@ -205,6 +207,18 @@ void InGameScene::Update()
 		}
 	}
 
+#ifdef SERVER_CONNECT
+	for (auto& monster : mVisibleMonsters)
+	{
+		monster.second->Update();
+}
+
+	for (auto& otherPlayer : mVisibleOtherPlayers)
+	{
+		otherPlayer.second->Update();
+	}
+
+#else
 	for (auto& monster : mMonsters)
 	{
 		monster.second->Update();
@@ -214,6 +228,7 @@ void InGameScene::Update()
 	{
 		otherPlayer.second->Update();
 	}
+#endif
 
 	GET_INSTANCE(UIManager)->Update();
 }
@@ -237,11 +252,17 @@ void InGameScene::Render()
 		}
 	}
 
-	for (auto& tile : mNewTiles)
+#ifdef SERVER_CONNECT
+	for (auto& monster : mVisibleMonsters)
 	{
-		tile->Render();
+		monster.second->Render();
 	}
 
+	for (auto& player : mVisibleOtherPlayers)
+	{
+		player.second->Render();
+	}
+#else
 	for (auto& monster : mMonsters)
 	{
 		monster.second->Render();
@@ -251,6 +272,7 @@ void InGameScene::Render()
 	{
 		player.second->Render();
 	}
+#endif // SERVER_CONNECT
 
 	mPlayer->Render();
 
@@ -309,64 +331,55 @@ void InGameScene::Render()
 	//SetSkillUI(x, y);
 	//SetSkillEffect(x, y);
 
+	//{
+	//	Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("Player");
+	//	std::pair<float, float> pos = std::make_pair(0.0, 0.0);
+	//	std::pair<int, int> origin = std::make_pair(10, 0);
+	//	std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
+	//	char dir = -1;
+
+	//	D2D1_MATRIX_3X2_F mat = D2D1::Matrix3x2F::Identity();
+	//	mat._11 *= dir;
+	//	mat._31 = origin.first * dir + (pos.first - cameraPos.first) * 65 + 8.0;
+	//	mat._32 = origin.second + (pos.second - cameraPos.second) * 65 + 8.0;
+	//	if (dir == -1)
+	//	{
+	//		mat._31 += tex->GetSize().first - origin.first * dir;
+	//	}
+
+	//	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
+
+	//	D2D1_RECT_F rect;
+	//	rect.left = 0;
+	//	rect.top = 0;
+	//	rect.right = rect.left + tex->GetSize().first;
+	//	rect.bottom = rect.top + tex->GetSize().second;
+	//	//GET_INSTANCE(GraphicEngine)->RenderRectangle(rect);
+	//	GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+
+	//	mat = D2D1::Matrix3x2F::Identity();
+	//	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
+	//}
+
 	{
-		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("Player");
-		std::pair<float, float> pos = std::make_pair(0.0, 0.0);
-		std::pair<int, int> origin = std::make_pair(10, 0);
-		std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
-		char dir = -1;
+		ID2D1GeometrySink* sink = GET_INSTANCE(GraphicEngine)->GetSink();
 
-		D2D1_MATRIX_3X2_F mat = D2D1::Matrix3x2F::Identity();
-		mat._11 *= dir;
-		mat._31 = origin.first * dir + (pos.first - cameraPos.first) * 65 + 8.0;
-		mat._32 = origin.second + (pos.second - cameraPos.second) * 65 + 8.0;
-		if (dir == -1)
+		sink->SetFillMode(D2D1_FILL_MODE_WINDING);
+		sink->BeginFigure(D2D1::Point2F(50, 0), D2D1_FIGURE_BEGIN_FILLED);
+
+		D2D1_POINT_2F points[] =
 		{
-			mat._31 += tex->GetSize().first - origin.first * dir;
-		}
+		   D2D1::Point2F(50, 0),
+		   D2D1::Point2F(100, 50),
+		   D2D1::Point2F(100, 100),
+		   D2D1::Point2F(50, 150),
+		};
 
-		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
+		sink->AddLines(points, ARRAYSIZE(points));
+		sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+		sink->Close();
 
-		D2D1_RECT_F rect;
-		rect.left = 0;
-		rect.top = 0;
-		rect.right = rect.left + tex->GetSize().first;
-		rect.bottom = rect.top + tex->GetSize().second;
-		//GET_INSTANCE(GraphicEngine)->RenderRectangle(rect);
-		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
-
-		mat = D2D1::Matrix3x2F::Identity();
-		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
-	}
-	{
-		Texture* tex = GET_INSTANCE(ResourceManager)->FindTexture("Player");
-		std::pair<float, float> pos = std::make_pair(1.0, 0.0);
-		std::pair<int, int> origin = std::make_pair(0, 0);
-		std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
-		char dir = 1;
-
-		D2D1_MATRIX_3X2_F mat = D2D1::Matrix3x2F::Identity();
-		mat._11 *= dir;
-		mat._31 = origin.first * dir + (pos.first - cameraPos.first) * 65 + 8.0;
-		mat._32 = origin.second + (pos.second - cameraPos.second) * 65 + 8.0;
-		if (dir == -1)
-		{
-			mat._31 += tex->GetSize().first;
-		}
-
-		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
-
-		D2D1_RECT_F rect;
-		rect.left = 0;
-		rect.top = 0;
-		rect.right = rect.left + tex->GetSize().first;
-		rect.bottom = rect.top + tex->GetSize().second;
-		//GET_INSTANCE(GraphicEngine)->RenderRectangle(rect);
-		GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
-
-		mat = D2D1::Matrix3x2F::Identity();
-		GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
-
+		GET_INSTANCE(GraphicEngine)->RenderGeometry();
 	}
 }
 
@@ -442,13 +455,21 @@ void InGameScene::AddObject(int id, int x, int y)
 	else if (id < MAX_USER)
 	{
 		//mOtherPlayers[id]->SetAvatar()
-		mOtherPlayers[id]->Visible();
-		mOtherPlayers[id]->SetPosition(x, y);
+		//mOtherPlayers[id]->Visible();
+		//mOtherPlayers[id]->SetPosition(x, y);
+		std::shared_ptr<AnimationCharacter> otherPlayer = mOtherPlayers[id];
+		otherPlayer->Visible();
+		otherPlayer->SetPosition(x, y);
+		mVisibleOtherPlayers.emplace(id, otherPlayer);
 	}
 	else
 	{
-		mMonsters[id]->Visible();
-		mMonsters[id]->SetPosition(x, y);
+		//mMonsters[id]->Visible();
+		//mMonsters[id]->SetPosition(x, y);
+		std::shared_ptr<Monster> monster = mMonsters[id];
+		monster->Visible();
+		monster->SetPosition(x, y);
+		mVisibleMonsters.emplace(id, monster);
 	}
 }
 
@@ -462,11 +483,19 @@ void InGameScene::UpdateObjectPosition(int id, int x, int y)
 	}
 	else if (id < MAX_USER)
 	{
-		mOtherPlayers[id]->SetPosition(x, y);
+		if (mVisibleOtherPlayers.count(id) == true)
+		{
+			mVisibleOtherPlayers[id]->SetPosition(x, y);
+		}
+		//mOtherPlayers[id]->SetPosition(x, y);
 	}
 	else
 	{
-		mMonsters[id]->SetPosition(x, y);
+		if (mVisibleMonsters.count(id) == true)
+		{
+			mVisibleMonsters[id]->SetPosition(x, y);
+		}
+		//mMonsters[id]->SetPosition(x, y);
 	}
 }
 
@@ -475,12 +504,36 @@ void InGameScene::RemoveObject(int id)
 	int myId = mPlayer->GetId();
 	if (id < MAX_USER)
 	{
-		mOtherPlayers[id]->NotVisible();
+		if (mVisibleOtherPlayers.count(id) == true)
+		{
+			mVisibleOtherPlayers[id]->NotVisible();
+			mVisibleOtherPlayers.erase(id);
+		}
+		//mOtherPlayers[id]->NotVisible();
 	}
 	else
 	{
-		mMonsters[id]->NotVisible();
+		if (mVisibleMonsters.count(id) == true)
+		{
+			mVisibleMonsters[id]->NotVisible();
+			mVisibleMonsters.erase(id);
+		}
+		//mMonsters[id]->NotVisible();
 	}
+}
+
+void InGameScene::RemoveAllObject()
+{
+	for (auto& otherPlayer : mVisibleOtherPlayers)
+	{
+		otherPlayer.second->NotVisible();
+	}
+	for (auto& monster : mVisibleMonsters)
+	{
+		monster.second->NotVisible();
+	}
+	mVisibleOtherPlayers.clear();
+	mVisibleMonsters.clear();
 }
 
 void InGameScene::UpdateObjectAvatar(int id, int texId)

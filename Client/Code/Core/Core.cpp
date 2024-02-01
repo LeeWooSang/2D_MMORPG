@@ -80,7 +80,7 @@ void Core::Run()
 	GET_INSTANCE(SceneManager)->Update();
 
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->BeginDraw();
-	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::Black));
+	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::White));
 	GET_INSTANCE(SceneManager)->Render();
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->EndDraw();
 

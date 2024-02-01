@@ -58,7 +58,7 @@ SOCKET gListenSocket;
 
 Client gClients[MAX_OBJECT];
 
-constexpr int MAX_DUMMY_CLINET = MAX_CHANNEL_USER - 100;
+constexpr int MAX_DUMMY_CLINET = (MAX_CHANNEL_USER * MAX_CHANNEL) - 100;
 
 bool Initialize();
 void ThreadPool();

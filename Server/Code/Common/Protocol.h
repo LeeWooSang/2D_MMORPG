@@ -14,8 +14,8 @@ constexpr int WIDTH = 500;
 constexpr int HEIGHT = 500;
 
 // 채널 개수
-constexpr int MAX_CHANNEL = 1;
-constexpr int MAX_CHANNEL_USER = 400;
+constexpr int MAX_CHANNEL = 5;
+constexpr int MAX_CHANNEL_USER = 150;
 
 // 섹터 크기
 constexpr int SECTOR_WIDTH = WIDTH / 10;
@@ -29,7 +29,7 @@ constexpr int USER_START_ID = 0;
 constexpr int MAX_USER = 2000;
 
 constexpr int MONSTER_START_ID = MAX_USER;
-constexpr int SECTOR_MAX_MONSTER = 40;
+constexpr int SECTOR_MAX_MONSTER = 20;
 
 constexpr int MAX_OBJECT = MAX_USER + (SECTOR_WIDTH_SIZE * SECTOR_HEIGHT_SIZE * SECTOR_MAX_MONSTER);
 
@@ -113,6 +113,7 @@ enum SC_PACKET_TYPE
 	SC_POSITION,
 	SC_ADD_OBJECT,
 	SC_REMOVE_OBJECT,
+	SC_REMOVE_ALL_OBJECT,
 	SC_CHANGE_CHANNEL,
 	SC_CHAT,
 	SC_CHANGE_AVATAR,
@@ -244,6 +245,11 @@ struct SCRemoveObjectPacket
 	char size;
 	char type;
 	int id;
+};
+struct SCRemoveAllObjectPacket
+{
+	char size;
+	char type;
 };
 struct SCChangeChannelPacket
 {

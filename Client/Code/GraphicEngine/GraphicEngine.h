@@ -43,6 +43,7 @@ public:
 	bool Initialize(HWND handle, int width, int height);
 	void RenderRectangle(const D2D1_RECT_F& pos, const std::string& color = "說除儀");
 	void RenderFillRectangle(const D2D1_RECT_F& pos, const std::string& color = "說除儀");
+	void RenderGeometry();
 
 	void RenderTexture(Texture* texture, const D2D1_RECT_F& pos);
 	void RenderTexture(Texture* texture, const D2D1_RECT_F& pos, const D2D1_RECT_F& rect);
@@ -60,12 +61,18 @@ public:
 	IDWriteFactory5* GetWriteFactory() { return mWriteFactory; }
 	FontInfo& GetFont(const std::string& key) { return mFontMap[key]; }
 
+	ID2D1PathGeometry* GetGeometry() { return mGeometry; }
+	ID2D1GeometrySink* GetSink() { return mSink; }
 
 private:
 	int mWidth;
 	int mHeight;
 
 	ID2D1Factory3* mFactory;
+
+	ID2D1PathGeometry* mGeometry;
+	ID2D1GeometrySink* mSink;
+
 	IWICImagingFactory* mWICImagingFactory;
 	IDWriteFactory5* mWriteFactory;
 	IDWriteFontCollection1* mFontCollection;

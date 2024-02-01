@@ -271,6 +271,16 @@ void Network::processPacket()
 			break;
 		}
 
+		case SC_PACKET_TYPE::SC_REMOVE_ALL_OBJECT:
+		{
+			SCRemoveAllObjectPacket* packet = reinterpret_cast<SCRemoveAllObjectPacket*>(mPacketBuffer);
+
+			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
+			p->packetType = packet->type;
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
+			break;
+		}
+
 		case SC_PACKET_TYPE::SC_CHANGE_CHANNEL:
 		{
 			// 준비가 아직 안됬으면 걍 리턴

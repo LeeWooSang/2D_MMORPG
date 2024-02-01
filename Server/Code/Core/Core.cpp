@@ -205,6 +205,15 @@ void Core::SendRemoveObjectPacket(int to, int obj)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
+void Core::SendRemoveAllObjectPacket(int to)
+{
+	SCRemoveAllObjectPacket packet;
+	packet.size = sizeof(SCRemoveAllObjectPacket);
+	packet.type = SC_PACKET_TYPE::SC_REMOVE_ALL_OBJECT;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
 void Core::SendChangeChannelPacket(int to, bool result)
 {
 	SCChangeChannelPacket packet;
@@ -377,7 +386,7 @@ void Core::acceptClient()
 		int id = createPlayerId();
 		mUsers[id].SetSocket(clientSocket);
 		mUsers[id].PlayerConnect();
-		std::cout << "Accept - " << id << "번 Client" << std::endl;
+		//std::cout << "Accept - " << id << "번 Client" << std::endl;
 
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(clientSocket), mIOCP, id, 0);
 		recvPacket(id);
@@ -557,14 +566,15 @@ void Core::processPacket(int id, char* buf)
 			mUsers[id].SetChannel(channel);
 			SendLoginOkPacket(id);
 
-			mUsers[id].SetPosition(0, 0);
+			//mUsers[id].SetPosition(0, 0);
 
 			int x = mUsers[id].GetX();
 			int y = mUsers[id].GetY();
 
 			// 섹터 찾아서 넣기
 			mChannels[channel].PushSectorObject(x, y, id);
-			mUsers[id].ProcessLoginViewList();			
+			mUsers[id].ProcessLoginViewList();
+			std::cout << id << " client is " << channel  << " channel login" << std::endl;
 			break;
 		}
 
@@ -583,22 +593,29 @@ void Core::processPacket(int id, char* buf)
 			CSChangeChannelPacket* packet = reinterpret_cast<CSChangeChannelPacket*>(buf);
 			bool result = false;
 
-			volatile int oldChannel = mUsers[id].GetChannel();
+			int oldChannel = mUsers[id].GetChannel();
 			int newChannel = packet->channel;
-			std::cout << "oldChannel : " << oldChannel << ", newChannel : " << newChannel << std::endl;
 			if (oldChannel == newChannel)
 			{
+				std::cout << id << " client change channel fail : " << oldChannel << " --> " << newChannel << std::endl;
 				SendChangeChannelPacket(id, result);
 				break;
 			}
 
 			if (mChannels[newChannel].IsFull() == false)
 			{
+				int x = mUsers[id].GetX();
+				int y = mUsers[id].GetY();
+
 				int oldChannelIndex = mUsers[id].GetChannelIndex();
 				// 기존 채널에서 pop
 				mChannels[oldChannel].PopUser(oldChannelIndex);
+				// 기존 섹터에서 pop
+				mChannels[oldChannel].PopSectorObject(x, y, id);
+
 				// 새로운 채널로 insert
 				int newChannelIndex = mChannels[newChannel].PushUser(id);
+				mChannels[newChannel].PushSectorObject(x, y, id);
 
 				mUsers[id].SetChannelIndex(newChannelIndex);
 				mUsers[id].SetChannel(newChannel);
@@ -606,8 +623,14 @@ void Core::processPacket(int id, char* buf)
 				mUsers[id].ProcessChangeChannelViewList(oldChannel, newChannel);
 
 				result = true;
-				std::cout << id << " 클라이언트 채널변경 : " << oldChannel << " --> " << newChannel << std::endl;
+				std::cout << id << " client change channel ok: " << oldChannel << " --> " << newChannel << std::endl;
 			}
+			else
+			{
+				std::cout << id << " client change channel fail : " << oldChannel << " --> " << newChannel << std::endl;
+				std::cout << newChannel << " channel is full" << std::endl;
+			}
+
 			SendChangeChannelPacket(id, result);
 			break;
 		}
@@ -738,14 +761,17 @@ void Core::processEvent(Over* over)
 
 int Core::FindChannel()
 {
+	std::random_device rd;
+	std::default_random_engine dre(rd());
+	std::uniform_int_distribution<int> uid(0, MAX_CHANNEL - 1);
+
+	int randomChannel = uid(dre);
 	while (true)
 	{
-		for (int i = 0; i < mChannels.size(); ++i)
+		int randomChannel = uid(dre);
+		if (mChannels[randomChannel].IsFull() == false)
 		{
-			if (mChannels[i].IsFull() == false)
-			{
-				return i;
-			}
+			return randomChannel;
 		}
 	}
 
