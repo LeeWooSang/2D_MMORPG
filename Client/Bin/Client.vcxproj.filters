@@ -113,6 +113,9 @@
     <Filter Include="Code\GameObject\UI\DialogUI\TradeMesoDialog">
       <UniqueIdentifier>{473608c4-82f5-4aa7-a55f-83ab9d8cd424}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\GameObject\UI\GameMenuUI">
+      <UniqueIdentifier>{123ed521-b06c-4dc5-b7ee-e089c4a2fd0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -219,6 +222,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\GameObject\UI\DialogUI\TradeMesoDialog\TradeMesoDialog.cpp">
       <Filter>Code\GameObject\UI\DialogUI\TradeMesoDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\UI\GameMenuUI\GameMenuUI.cpp">
+      <Filter>Code\GameObject\UI\GameMenuUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -335,6 +341,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameObject\UI\DialogUI\TradeMesoDialog\TradeMesoDialog.h">
       <Filter>Code\GameObject\UI\DialogUI\TradeMesoDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\UI\GameMenuUI\GameMenuUI.h">
+      <Filter>Code\GameObject\UI\GameMenuUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

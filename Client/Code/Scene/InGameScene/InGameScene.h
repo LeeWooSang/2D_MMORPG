@@ -20,6 +20,7 @@ public:
 	virtual void processKeyboardMessage();
 
 	void InitializeObject(int myId);
+	void AddPlayer(int id, int x, int y, int* texIds);
 	void AddObject(int id, int x, int y);
 	void UpdateObjectPosition(int id, int x, int y);
 	void RemoveObject(int id);

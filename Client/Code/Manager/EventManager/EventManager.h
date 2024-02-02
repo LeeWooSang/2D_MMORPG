@@ -15,6 +15,12 @@ struct PositionPacket : public PacketBase
 	int x;
 	int y;
 };
+struct AddPlayerPacket : public PacketBase
+{
+	int x;
+	int y;
+	int texIds[21];
+};
 struct AddPacket : public PacketBase
 {
 	int x;

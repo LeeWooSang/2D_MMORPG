@@ -66,7 +66,14 @@ void ButtonUI::Render()
 		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
 	}
 
-	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+	if (mTexture != nullptr)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+	}
+	else
+	{
+		GET_INSTANCE(GraphicEngine)->RenderFillRectangle(pos, "Èò»ö");
+	}
 
 	for (auto& child : mChildUIs)
 	{

@@ -130,7 +130,7 @@ bool LoginScene::Initialize()
 	}
 	{
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginButton");
-		UI* ui = new ButtonUI;
+		ButtonUI* ui = new ButtonUI;
 		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
@@ -141,12 +141,13 @@ bool LoginScene::Initialize()
 	}
 	{
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginQuitButton");
-		UI* ui = new ButtonUI;
+		ButtonUI* ui = new ButtonUI;
 		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
 		ui->SetTexture(data.name);
+		ui->SetLButtonClickCallback(GameQuitClick, "Quit");
 		ui->Visible();
 		loginUI->AddChildUI(data.name, ui);
 	}

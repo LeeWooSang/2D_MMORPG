@@ -14,7 +14,7 @@
 #define WINDOW_WIDTH    800
 #define WINDOW_HEIGHT   800
 
-#define SERVER_CONNECT
+//#define SERVER_CONNECT
 
 #define LOGIN_ID					"test_id"
 #define LOGIN_PASSWORD		"test_password"

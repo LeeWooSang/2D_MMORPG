@@ -39,3 +39,5 @@ protected:
 	std::list<UI*> mUIs;
 	std::unordered_map<std::string, UI*> mUIsMap;
 };
+
+void GameQuitClick(const std::string& name);

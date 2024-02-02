@@ -1,6 +1,11 @@
 #include "Scene.h"
 #include <iostream>
-#include "../GameObject/UI/Inventory/Inventory.h"
+#include "../Core/Core.h"
+
+void GameQuitClick(const std::string& name)
+{
+	GET_INSTANCE(Core)->Quit();
+}
 
 Scene::Scene()
 {
@@ -47,5 +52,4 @@ UI* Scene::FindUI(const std::string& name)
 std::list<UI*>& Scene::GetSceneUIs()
 {
 	return mUIs;
-	// TODO: 여기에 return 문을 삽입합니다.
 }

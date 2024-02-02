@@ -100,6 +100,7 @@ bool Input::Initialize()
 	mKeyStateList[KEY_TYPE::PLUS_KEY].keyType = VK_OEM_PLUS;
 	mKeyStateList[KEY_TYPE::HYPHEN_KEY].keyType = VK_OEM_MINUS;
 	
+	mKeyStateList[KEY_TYPE::ESC_KEY].keyType = VK_ESCAPE;
 	mKeyStateList[KEY_TYPE::MOUSE_LBUTTON].keyType = VK_LBUTTON;
 	mKeyStateList[KEY_TYPE::MOUSE_RBUTTON].keyType = VK_RBUTTON;
 
@@ -142,11 +143,11 @@ void Input::ProcessKeyboardMessage(unsigned int msg, unsigned long long wParam, 
 {
 	if (msg == WM_KEYDOWN)
 	{
-		if (wParam == VK_ESCAPE)
-		{
-			GET_INSTANCE(Core)->Quit();
-			return;
-		}
+		//if (wParam == VK_ESCAPE)
+		//{
+		//	GET_INSTANCE(Core)->Quit();
+		//	return;
+		//}
 		
 		//std::cout << wParam << std::endl;	
 	}

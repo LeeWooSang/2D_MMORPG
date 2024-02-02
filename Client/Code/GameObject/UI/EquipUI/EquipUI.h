@@ -42,6 +42,7 @@ public:
 	virtual void MouseLButtonClick();
 
 	void OpenEquipUI();
+	void AddEquipItem(int slot, int texId);
 	InventoryItem* AddEquipItem(InventoryItem* item);
 
 private:

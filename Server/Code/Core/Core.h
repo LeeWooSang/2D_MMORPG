@@ -25,6 +25,7 @@ public:
 	void SendLoginOkPacket(int to);
 	void SendLoginFailPacket(int to);
 	void SendPositionPacket(int to, int obj);
+	void SendAddPlayerPacket(int to, int obj, int* texIds);
 	void SendAddObjectPacket(int to, int obj);
 	void SendAddMonsterPacket(int to, int obj, int x, int y);
 	void SendMonsterPositionPacket(int to, int obj, int x, int y);

@@ -30,6 +30,21 @@ void EventManager::processPacketEvent()
 				scene->InitializeObject(ev->id);
 				break;
 			}
+
+			case SC_POSITION:
+			{
+				PositionPacket* e = static_cast<PositionPacket*>(ev);
+				scene->UpdateObjectPosition(e->id, e->x, e->y);
+				break;
+			}
+
+			case SC_ADD_PLAYER:
+			{
+				AddPlayerPacket* e = static_cast<AddPlayerPacket*>(ev);
+				scene->AddPlayer(e->id, e->x, e->y, e->texIds);
+				break;
+			}
+
 			case SC_ADD_OBJECT:
 			{
 				AddPacket* e = static_cast<AddPacket*>(ev);
@@ -45,13 +60,6 @@ void EventManager::processPacketEvent()
 			case SC_REMOVE_ALL_OBJECT:
 			{
 				scene->RemoveAllObject();
-				break;
-			}
-
-			case SC_POSITION:
-			{
-				PositionPacket* e = static_cast<PositionPacket*>(ev);
-				scene->UpdateObjectPosition(e->id, e->x, e->y);
 				break;
 			}
 

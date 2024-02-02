@@ -4,6 +4,7 @@
 #include "../Channel/Channel.h"
 #include "../Sector/Sector.h"
 #include <vector>
+#include "../../../Client/Code/Common/Utility.h"
 
 Character::Character()
 	: mOver(nullptr), mX(0), mY(0)
@@ -211,7 +212,8 @@ Player::Player()
 	: Character(), mSocket(0), mPrevSize(0), mSendBytes(0), mConnect(false)
 {
 	memset(mPacketBuf, 0, sizeof(mPacketBuf));
-	mTexId = 0;
+	memset(mAvatarTexIds, 0, sizeof(mAvatarTexIds));
+
 	mState = BEHAVIOR_STATE::IDLE;
 	mTradeId = -1;
 }
@@ -239,18 +241,19 @@ void Player::Reset()
 	mViewList.clear();
 
 	// 좌표 리셋
-	std::random_device rd;
-	std::default_random_engine dre(rd());
-	std::uniform_int_distribution<int> uidX(0, WIDTH - 1);
-	std::uniform_int_distribution<int> uidY(0, HEIGHT - 1);
-	mX = uidX(dre);
-	mY = uidY(dre);
+	mX = GetRandomNumber(0, WIDTH - 1);
+	mY = GetRandomNumber(0, HEIGHT - 1);
 
 	mChannelIndex = -1;
 	mChannel = -1;
-	mTexId = 0;
+	memset(mAvatarTexIds, 0, sizeof(mAvatarTexIds));
 	mState = BEHAVIOR_STATE::IDLE;
 	mTradeId = -1;
+
+	{
+		mAvatarTexIds[static_cast<int>(EQUIP_SLOT_TYPE::WEAPON)] = GetRandomNumber(10000, 10003);
+		mAvatarTexIds[static_cast<int>(EQUIP_SLOT_TYPE::TOP_BODY)] = 9999;
+	}
 
 	closesocket(mSocket);
 }
@@ -274,21 +277,19 @@ bool Player::Inititalize(int id)
 	mConnect = false;
 	mSocket = 0;
 
-	std::random_device rd;
-	std::default_random_engine dre(rd());
-	std::uniform_int_distribution<int> uidX(0, WIDTH - 1);
-	std::uniform_int_distribution<int> uidY(0, HEIGHT - 1);
-
-	mX = uidX(dre);
-	mY = uidY(dre);
-	//mX = 0;
-	//mY = 0;
+	mX = GetRandomNumber(0, WIDTH - 1);
+	mY = GetRandomNumber(0, HEIGHT - 1);
 
 	mChannelIndex = -1;
 	mChannel = -1;
-	mTexId = 0;
+	memset(mAvatarTexIds, 0, sizeof(mAvatarTexIds));
 	mState = BEHAVIOR_STATE::IDLE;
 	mTradeId = -1;
+
+	{
+		mAvatarTexIds[static_cast<int>(EQUIP_SLOT_TYPE::WEAPON)] = GetRandomNumber(10000, 10003);
+		mAvatarTexIds[static_cast<int>(EQUIP_SLOT_TYPE::TOP_BODY)] = 9999;
+	}
 
 	return true;
 }
@@ -338,7 +339,7 @@ void Player::ProcessLoginViewList()
 {
 	int myId = mOver->myId;
 	// 내가 누구인지 보내주어야함
-	GET_INSTANCE(Core)->SendAddObjectPacket(myId, myId);
+	GET_INSTANCE(Core)->SendAddPlayerPacket(myId, myId, mAvatarTexIds);
 
 	Player* users = GET_INSTANCE(Core)->GetUsers();
 
@@ -376,7 +377,7 @@ void Player::ProcessLoginViewList()
 			mViewList.insert(acc, id);
 			acc->second = id;
 			acc.release();
-			GET_INSTANCE(Core)->SendAddObjectPacket(myId, id);
+			GET_INSTANCE(Core)->SendAddPlayerPacket(myId, id, users[id].GetAvatarTexIds());
 		}
 		// 다른애들에게 나의 정보를 보냄
 		{
@@ -384,7 +385,7 @@ void Player::ProcessLoginViewList()
 			users[id].GetViewList().insert(acc, myId);
 			acc->second = myId;
 			acc.release();
-			GET_INSTANCE(Core)->SendAddObjectPacket(id, myId);
+			GET_INSTANCE(Core)->SendAddPlayerPacket(id, myId, mAvatarTexIds);
 		}
 	}
 
@@ -515,7 +516,7 @@ void Player::CheckViewList()
 			}
 			else
 			{
-				GET_INSTANCE(Core)->SendAddObjectPacket(myId, id);
+				GET_INSTANCE(Core)->SendAddPlayerPacket(myId, id, users[id].GetAvatarTexIds());
 
 				// 상대방 유저의 뷰리스트 검사
 				if (users[id].GetViewList().count(myId) == false)
@@ -524,7 +525,7 @@ void Player::CheckViewList()
 					users[id].GetViewList().insert(acc, myId);
 					acc->second = myId;
 					acc.release();
-					GET_INSTANCE(Core)->SendAddObjectPacket(id, myId);
+					GET_INSTANCE(Core)->SendAddPlayerPacket(id, myId, mAvatarTexIds);
 				}
 				else
 				{
@@ -547,7 +548,7 @@ void Player::CheckViewList()
 				tbb::concurrent_hash_map<int, int>::accessor acc;
 				users[id].GetViewList().insert(acc, myId);
 				acc->second = myId;
-				GET_INSTANCE(Core)->SendAddObjectPacket(id, myId);
+				GET_INSTANCE(Core)->SendAddPlayerPacket(id, myId, mAvatarTexIds);
 			}
 			else
 			{
@@ -629,11 +630,6 @@ void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 		// 나에게 다른애들 정보를 보냄
 		{
 			newViewList.emplace(id, id);
-			//tbb::concurrent_hash_map<int, int>::accessor acc;
-			//mViewList.insert(acc, id);
-			//acc->second = id;
-			//acc.release();
-			//GET_INSTANCE(Core)->SendAddObjectPacket(myId, id);
 		}
 
 		// 다른애들에게 나의 정보를 보냄
@@ -642,7 +638,7 @@ void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 			users[id].GetViewList().insert(acc, myId);
 			acc->second = myId;
 			acc.release();
-			GET_INSTANCE(Core)->SendAddObjectPacket(id, myId);
+			GET_INSTANCE(Core)->SendAddPlayerPacket(id, myId, mAvatarTexIds);
 		}
 	}
 
@@ -659,13 +655,7 @@ void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 
 		// 보이는 NPC를 깨운다.
 		newMonsters[index].WakeUp();
-
 		newViewList.emplace(i, index);
-		//tbb::concurrent_hash_map<int, int>::accessor acc;
-		//mViewList.insert(acc, i);
-		//acc->second = index;
-		//acc.release();
-		//GET_INSTANCE(Core)->SendAddMonsterPacket(myId, i, newMonsters[index].GetX(), newMonsters[index].GetY());
 	}
 
 	mViewListMtx.lock();
@@ -683,7 +673,7 @@ void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 
 		if (id < MONSTER_START_ID)
 		{
-			GET_INSTANCE(Core)->SendAddObjectPacket(id, myId);
+			GET_INSTANCE(Core)->SendAddPlayerPacket(myId, id, users[id].GetAvatarTexIds());
 		}
 		else
 		{
@@ -783,9 +773,10 @@ void Player::ProcessAttack()
 
 }
 
-void Player::ProcessChangeAvatar(int texId)
+void Player::ProcessChangeAvatar(int slot, int texId)
 {
-	mTexId = texId;
+	mAvatarTexIds[slot] = texId;
+
 	int myId = mOver->myId;
 	Player* users = GET_INSTANCE(Core)->GetUsers();
 
@@ -857,13 +848,8 @@ bool Monster::Inititalize(int id)
 	mOver->eventType = SERVER_EVENT::DEFAULT;
 	mOver->myId = id;
 
-	std::random_device rd;
-	std::default_random_engine dre(rd());
-	std::uniform_int_distribution<int> uidX(0, WIDTH - 1);
-	std::uniform_int_distribution<int> uidY(0, HEIGHT - 1);
-
-	mX = uidX(dre);
-	mY = uidY(dre);
+	mX = GetRandomNumber(0, WIDTH - 1);
+	mY = GetRandomNumber(0, HEIGHT - 1);
 
 	mChannelIndex = -1;
 	mChannel = -1;
@@ -991,11 +977,7 @@ void Monster::MoveEvent()
 
 char Monster::RandomDirection() const
 {
-	std::random_device rd;
-	std::default_random_engine dre(rd());
-	std::uniform_int_distribution<int> uidDir(DIRECTION_TYPE::UP, DIRECTION_TYPE::RIGHT);
-
-	return static_cast<char>(uidDir(dre));
+	return GetRandomNumber(DIRECTION_TYPE::UP, DIRECTION_TYPE::RIGHT);
 }
 
 void Monster::ProcessMoveViewList()

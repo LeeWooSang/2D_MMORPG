@@ -278,6 +278,23 @@ void EquipUI::OpenEquipUI()
 	}
 }
 
+void EquipUI::AddEquipItem(int slot, int texId)
+{
+	TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureDataIcon(texId);
+	InventoryItem* item = new InventoryItem;
+	// 아이템 추가
+	item->SetTexId(data.texId);
+	item->SetItemName(data.name);
+	item->SetItemType(data.equipSlotType);
+
+	// 텍스쳐 추가
+	item->SetTexture(data.name);
+	item->Visible();
+
+	EquipSlotUI* slotUI = static_cast<EquipSlotUI*>(FindChildUIs("Slot")[slot]);
+	slotUI->AddItem(item);
+}
+
 InventoryItem* EquipUI::AddEquipItem(InventoryItem* item)
 {
 	EquipSlotUI* slotUI = static_cast<EquipSlotUI*>(FindChildUIs("Slot")[item->GetItemType()]);

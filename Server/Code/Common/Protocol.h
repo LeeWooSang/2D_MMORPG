@@ -35,6 +35,8 @@ constexpr int MAX_OBJECT = MAX_USER + (SECTOR_WIDTH_SIZE * SECTOR_HEIGHT_SIZE * 
 
 constexpr int VIEW_DISTANCE = 7;
 
+constexpr int MAX_AVATAR_SLOT_SIZE = 21;
+
 enum class SERVER_EVENT
 {
 	RECV = 0,
@@ -111,7 +113,9 @@ enum SC_PACKET_TYPE
 	SC_LOGIN_OK = 0,
 	SC_LOGIN_FAIL,
 	SC_POSITION,
+	SC_ADD_PLAYER,
 	SC_ADD_OBJECT,
+
 	SC_REMOVE_OBJECT,
 	SC_REMOVE_ALL_OBJECT,
 	SC_CHANGE_CHANNEL,
@@ -230,6 +234,15 @@ struct SCPositionPacket
 	int id;
 	int x;
 	int y;
+};
+struct SCAddPlayerPacket
+{
+	char size;
+	char type;
+	int id;
+	int x;
+	int y;
+	int texIds[MAX_AVATAR_SLOT_SIZE];
 };
 struct SCAddObjectPacket
 {

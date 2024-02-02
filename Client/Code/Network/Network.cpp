@@ -218,7 +218,6 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_LOGIN_OK:
 		{		
 			SCLoginOkPacket* packet = reinterpret_cast<SCLoginOkPacket*>(mPacketBuffer);
-
 			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
 			p->packetType = packet->type;
 			p->id = packet->id;
@@ -236,7 +235,6 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_POSITION:
 		{
 			SCPositionPacket* packet = reinterpret_cast<SCPositionPacket*>(mPacketBuffer);
-
 			std::shared_ptr<PositionPacket> p = std::make_shared<PositionPacket>();
 			p->packetType = packet->type;
 			p->id = packet->id;
@@ -246,10 +244,22 @@ void Network::processPacket()
 			break;
 		}
 
+		case SC_PACKET_TYPE::SC_ADD_PLAYER:
+		{
+			SCAddPlayerPacket* packet = reinterpret_cast<SCAddPlayerPacket*>(mPacketBuffer);
+			std::shared_ptr<AddPlayerPacket> p = std::make_shared<AddPlayerPacket>();
+			p->packetType = packet->type;
+			p->id = packet->id;
+			p->x = packet->x;
+			p->y = packet->y;
+			memcpy(p->texIds, packet->texIds, sizeof(p->texIds));
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
+			break;
+		}
+
 		case SC_PACKET_TYPE::SC_ADD_OBJECT:
 		{
 			SCAddObjectPacket* packet = reinterpret_cast<SCAddObjectPacket*>(mPacketBuffer);
-
 			std::shared_ptr<AddPacket> p = std::make_shared<AddPacket>();
 			p->packetType = packet->type;
 			p->id = packet->id;
@@ -263,7 +273,6 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_REMOVE_OBJECT:
 		{
 			SCRemoveObjectPacket* packet = reinterpret_cast<SCRemoveObjectPacket*>(mPacketBuffer);
-
 			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
 			p->packetType = packet->type;
 			p->id = packet->id;
@@ -274,7 +283,6 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_REMOVE_ALL_OBJECT:
 		{
 			SCRemoveAllObjectPacket* packet = reinterpret_cast<SCRemoveAllObjectPacket*>(mPacketBuffer);
-
 			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
 			p->packetType = packet->type;
 			GET_INSTANCE(EventManager)->AddPacketEvent(p);
@@ -310,7 +318,6 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_CHANGE_AVATAR:
 		{
 			SCChangeAvatarPacket* packet = reinterpret_cast<SCChangeAvatarPacket*>(mPacketBuffer);
-
 			std::shared_ptr<AvatarPacket> p = std::make_shared<AvatarPacket>();
 			p->packetType = packet->type;
 			p->id = packet->id;
@@ -322,7 +329,6 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_REQUEST_TRADE:
 		{
 			SCRequestTradePacket* packet = reinterpret_cast<SCRequestTradePacket*>(mPacketBuffer);
-
 			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
 			p->packetType = packet->type;
 			p->id = packet->id;
@@ -334,7 +340,6 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_ADD_TRADE_ITEM:
 		{
 			SCAddTradeItemPacket* packet = reinterpret_cast<SCAddTradeItemPacket*>(mPacketBuffer);
-
 			std::shared_ptr<AddTradeItemPacket> p = std::make_shared<AddTradeItemPacket>();
 			p->packetType = packet->type;
 			p->texId = packet->texId;
@@ -346,7 +351,6 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_ADD_TRADE_MESO:
 		{
 			SCAddTradeMesoPacket* packet = reinterpret_cast<SCAddTradeMesoPacket*>(mPacketBuffer);
-
 			std::shared_ptr<AddTradeMesoPacket> p = std::make_shared<AddTradeMesoPacket>();
 			p->packetType = packet->type;
 			p->meso = packet->meso;
@@ -369,7 +373,6 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_TRADE_CANCEL:
 		{
 			SCTradeCancelPacket* packet = reinterpret_cast<SCTradeCancelPacket*>(mPacketBuffer);
-
 			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
 			p->packetType = packet->type;
 			p->id = myId;

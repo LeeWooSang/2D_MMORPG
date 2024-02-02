@@ -15,6 +15,8 @@
 #include "../../Scene/Scene.h"
 #include "../../Animation/Animation.h"
 
+#include "../../Common/Utility.h"
+
 Character::Character()
     : GameObject()
 {
@@ -852,11 +854,7 @@ void Player::AddItem()
 {
 	std::string itemName = "";
 	int texId = 10000;
-
-	std::random_device rd;
-	std::default_random_engine dre(rd());
-	std::uniform_int_distribution<int> uid(0, 4);
-	switch (uid(dre))
+	switch (GetRandomNumber(0, 4))
 	{
 		case 0:
 		{

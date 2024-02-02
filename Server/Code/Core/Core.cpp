@@ -2,6 +2,7 @@
 #include "../GameTimer/GameTimer.h"
 #include "../Database/Database.h"
 #include "../Trade/Trade.h"
+#include "../../../Client/Code/Common/Utility.h"
 
 INIT_INSTACNE(Core)
 Core::Core()
@@ -155,6 +156,22 @@ void Core::SendPositionPacket(int to, int obj)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
+void Core::SendAddPlayerPacket(int to, int obj, int* texIds)
+{
+	int x = mUsers[obj].GetX();
+	int y = mUsers[obj].GetY();
+
+	SCAddPlayerPacket packet;
+	packet.size = sizeof(SCAddPlayerPacket);
+	packet.type = SC_PACKET_TYPE::SC_ADD_PLAYER;
+	packet.id = obj;
+	packet.x = x;
+	packet.y = y;
+	memcpy(packet.texIds, texIds, sizeof(packet.texIds));
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
 void Core::SendAddObjectPacket(int to, int obj)
 {
 	int x = mUsers[obj].GetX();
@@ -166,7 +183,8 @@ void Core::SendAddObjectPacket(int to, int obj)
 	packet.id = obj;
 	packet.x = x;
 	packet.y = y;
-	packet.texId = mUsers[obj].GetTexId();
+	packet.texId = 0;
+	//packet.texId = mUsers[obj].GetTexId();
 
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
@@ -566,8 +584,6 @@ void Core::processPacket(int id, char* buf)
 			mUsers[id].SetChannel(channel);
 			SendLoginOkPacket(id);
 
-			//mUsers[id].SetPosition(0, 0);
-
 			int x = mUsers[id].GetX();
 			int y = mUsers[id].GetY();
 
@@ -665,7 +681,7 @@ void Core::processPacket(int id, char* buf)
 		{
 			CSChangeAvatarPacket* packet = reinterpret_cast<CSChangeAvatarPacket*>(buf);
 			// 주변 다른 유저들에게 아바타 바꼈다고 전송
-			mUsers[id].ProcessChangeAvatar(packet->texId);
+			mUsers[id].ProcessChangeAvatar(packet->slotType, packet->texId);
 			break;
 		}
 
@@ -761,14 +777,9 @@ void Core::processEvent(Over* over)
 
 int Core::FindChannel()
 {
-	std::random_device rd;
-	std::default_random_engine dre(rd());
-	std::uniform_int_distribution<int> uid(0, MAX_CHANNEL - 1);
-
-	int randomChannel = uid(dre);
 	while (true)
 	{
-		int randomChannel = uid(dre);
+		int randomChannel = GetRandomNumber(0, MAX_CHANNEL - 1);
 		if (mChannels[randomChannel].IsFull() == false)
 		{
 			return randomChannel;

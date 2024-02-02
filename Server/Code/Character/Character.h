@@ -66,6 +66,32 @@ public:
 		DEFAULT
 	};
 
+	// 아바타 슬롯 타입
+	enum class EQUIP_SLOT_TYPE
+	{
+		RING,
+		POCKET,
+		PENDANT,
+		WEAPON,
+		BELT,
+		CAP,
+		FACE_ACC,
+		EYE_ACC,
+		TOP_BODY,
+		BOTTOM_BODY,
+		SHOES,
+		EAR_ACC,
+		SHOULDER,
+		GLOVES,
+		ANDROID,
+		EMBLEM,
+		BADGE,
+		MEDAL,
+		SUB_WEAPON,
+		CAPE,
+		HEART
+	};
+
 public:
 	Player();
 	~Player();
@@ -93,9 +119,9 @@ public:
 	void ProcessWhisperingChat(int id, wchar_t* chat);
 
 	void ProcessAttack();
-	void ProcessChangeAvatar(int texId);
+	void ProcessChangeAvatar(int slot, int texId);
 
-	int GetTexId()	const { return mTexId; }
+	int* GetAvatarTexIds()	{ return mAvatarTexIds; }
 	
 	BEHAVIOR_STATE GetState() const { return mState; }
 	void SetState(BEHAVIOR_STATE state) { mState = state; }
@@ -110,7 +136,7 @@ private:
 	int	 mSendBytes;
 	bool mConnect;
 
-	int mTexId;
+	int mAvatarTexIds[MAX_AVATAR_SLOT_SIZE];
 	BEHAVIOR_STATE mState;
 	int mTradeId;
 };

@@ -14,11 +14,12 @@
 #include "../../GameObject/Skill/Skill.h"
 
 #include "../../GameObject/UI/TradeUI/TradeUI.h"
+#include "../../GameObject/UI/GameMenuUI/GameMenuUI.h"
 
 #include "../../../../Server/Code/Common/Protocol.h"
 #include "../../Resource/ResourceManager.h"
 #include "../../Resource/Texture/Texture.h"
-#include <random>
+#include "../../Common/Utility.h"
 
 InGameScene::InGameScene()
 	: Scene()
@@ -87,10 +88,6 @@ bool InGameScene::Initialize()
 	mTileMinPos = std::make_pair(mPlayer->GetPosition().first - VIEW_DISTANCE, mPlayer->GetPosition().second - VIEW_DISTANCE);
 	mTileMaxPos = std::make_pair(mPlayer->GetPosition().first + VIEW_DISTANCE, mPlayer->GetPosition().second + VIEW_DISTANCE);
 
-	std::random_device rd;
-	std::default_random_engine dre(rd());
-	std::uniform_int_distribution<int> uid(0, WIDTH - 1);
-
 	// 나를 제외한 나머지 유저 수
 	for (int i = 0; i < MAX_CHANNEL * MAX_CHANNEL_USER; ++i)
 	{
@@ -103,8 +100,8 @@ bool InGameScene::Initialize()
 #ifdef SERVER_CONNECT
 		otherPlayer->NotVisible();
 #else
-		otherPlayer->Visible();
-		otherPlayer->SetPosition(uid(dre), uid(dre));
+		//otherPlayer->Visible();
+		otherPlayer->SetPosition(GetRandomNumber(0, WIDTH -1), GetRandomNumber(0, HEIGHT - 1));
 #endif
 		mOtherPlayers.emplace(i, otherPlayer);
 	}
@@ -122,7 +119,7 @@ bool InGameScene::Initialize()
 		monster->NotVisible();
 #else
 		//monster->Visible();
-		monster->SetPosition(uid(dre), uid(dre));
+		monster->SetPosition(GetRandomNumber(0, WIDTH - 1), GetRandomNumber(0, HEIGHT - 1));
 #endif
 		mMonsters.emplace(i, monster);
 	}
@@ -160,6 +157,13 @@ bool InGameScene::Initialize()
 	trade->Initialize(0, 0);
 	AddSceneUI("TradeUI", trade);
 
+	InGameMenuUI* gameMenuUI = new InGameMenuUI;
+	if (gameMenuUI->Initialize(0, 0) == false)
+	{
+		return false;
+	}
+	AddSceneUI("GameMenuUI", gameMenuUI);
+
 	//{
 	//	Map* tile = new Map;
 	//	if (tile->Initialize(0, 0) == false)
@@ -173,14 +177,13 @@ bool InGameScene::Initialize()
 	//	mNewTiles.emplace_back(tile);
 	//}
 
-
 	mIsReady = true;
 
 	return true;
 }
 
 void InGameScene::Update()
-{	
+{
 	processKeyboardMessage();
 
 	if (mIsReady == false)
@@ -211,7 +214,7 @@ void InGameScene::Update()
 	for (auto& monster : mVisibleMonsters)
 	{
 		monster.second->Update();
-}
+	}
 
 	for (auto& otherPlayer : mVisibleOtherPlayers)
 	{
@@ -221,12 +224,28 @@ void InGameScene::Update()
 #else
 	for (auto& monster : mMonsters)
 	{
-		monster.second->Update();
+		if (mPlayer->CheckDistance(monster.second->GetPosition().first, monster.second->GetPosition().second) == true)
+		{
+			monster.second->Visible();
+			monster.second->Update();
+		}
+		else
+		{
+			monster.second->NotVisible();
+		}
 	}
 
 	for (auto& otherPlayer : mOtherPlayers)
 	{
-		otherPlayer.second->Update();
+		if (mPlayer->CheckDistance(otherPlayer.second->GetPosition().first, otherPlayer.second->GetPosition().second) == true)
+		{
+			otherPlayer.second->Visible();
+			otherPlayer.second->Update();
+		}
+		else
+		{
+			otherPlayer.second->NotVisible();
+		}
 	}
 #endif
 
@@ -361,26 +380,26 @@ void InGameScene::Render()
 	//	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
 	//}
 
-	{
-		ID2D1GeometrySink* sink = GET_INSTANCE(GraphicEngine)->GetSink();
+	//{
+	//	ID2D1GeometrySink* sink = GET_INSTANCE(GraphicEngine)->GetSink();
 
-		sink->SetFillMode(D2D1_FILL_MODE_WINDING);
-		sink->BeginFigure(D2D1::Point2F(50, 0), D2D1_FIGURE_BEGIN_FILLED);
+	//	sink->SetFillMode(D2D1_FILL_MODE_WINDING);
+	//	sink->BeginFigure(D2D1::Point2F(50, 0), D2D1_FIGURE_BEGIN_FILLED);
 
-		D2D1_POINT_2F points[] =
-		{
-		   D2D1::Point2F(50, 0),
-		   D2D1::Point2F(100, 50),
-		   D2D1::Point2F(100, 100),
-		   D2D1::Point2F(50, 150),
-		};
+	//	D2D1_POINT_2F points[] =
+	//	{
+	//	   D2D1::Point2F(50, 0),
+	//	   D2D1::Point2F(100, 50),
+	//	   D2D1::Point2F(100, 100),
+	//	   D2D1::Point2F(50, 150),
+	//	};
 
-		sink->AddLines(points, ARRAYSIZE(points));
-		sink->EndFigure(D2D1_FIGURE_END_CLOSED);
-		sink->Close();
+	//	sink->AddLines(points, ARRAYSIZE(points));
+	//	sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+	//	sink->Close();
 
-		GET_INSTANCE(GraphicEngine)->RenderGeometry();
-	}
+	//	GET_INSTANCE(GraphicEngine)->RenderGeometry();
+	//}
 }
 
 void InGameScene::processKeyboardMessage()
@@ -399,8 +418,14 @@ void InGameScene::processKeyboardMessage()
 	{
 		// 채팅상태가 아닐 때
 		if (static_cast<ChattingInputUI*>(chattingBoxUI->FindChildUIs("ChattingInputUI").front())->IsVisible() == false)
-		{			
-			if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true)
+		{
+			if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ESC_KEY) == true)
+			{
+				InGameMenuUI* gameMenuUI = static_cast<InGameMenuUI*>(FindUI("GameMenuUI"));
+				gameMenuUI->OpenGameMenuUI();
+				GET_INSTANCE(UIManager)->SetFocusUI(gameMenuUI);
+			}
+			else if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::I_KEY) == true)
 			{
 				Inventory* inventory = static_cast<Inventory*>(FindUI("Inventory"));
 				inventory->OpenInventory();
@@ -444,33 +469,48 @@ void InGameScene::InitializeObject(int myId)
 	mOtherPlayers.erase(myId);
 }
 
-void InGameScene::AddObject(int id, int x, int y)
+void InGameScene::AddPlayer(int id, int x, int y, int* texIds)
 {
 	int myId = mPlayer->GetId();
 	if (myId == id)
 	{
+		for (int i = 0; i < MAX_AVATAR_SLOT_SIZE; ++i)
+		{
+			if (texIds[i] == 0)
+			{
+				continue;
+			}
+			static_cast<EquipUI*>(FindUI("EquipUI"))->AddEquipItem(i, texIds[i]);
+			mPlayer->SetAvatarId(texIds[i]);
+		}
+
 		GET_INSTANCE(Camera)->SetPosition(x, y);
 		mPlayer->SetPosition(x, y);
 	}
 	else if (id < MAX_USER)
 	{
-		//mOtherPlayers[id]->SetAvatar()
-		//mOtherPlayers[id]->Visible();
-		//mOtherPlayers[id]->SetPosition(x, y);
 		std::shared_ptr<AnimationCharacter> otherPlayer = mOtherPlayers[id];
 		otherPlayer->Visible();
 		otherPlayer->SetPosition(x, y);
-		mVisibleOtherPlayers.emplace(id, otherPlayer);
+		for (int i = 0; i < MAX_AVATAR_SLOT_SIZE; ++i)
+		{
+			if (texIds[i] == 0)
+			{
+				continue;
+			}
+			otherPlayer->SetAvatarId(texIds[i]);
+		}
+
+		mVisibleOtherPlayers.emplace(id, otherPlayer);		
 	}
-	else
-	{
-		//mMonsters[id]->Visible();
-		//mMonsters[id]->SetPosition(x, y);
-		std::shared_ptr<Monster> monster = mMonsters[id];
-		monster->Visible();
-		monster->SetPosition(x, y);
-		mVisibleMonsters.emplace(id, monster);
-	}
+}
+
+void InGameScene::AddObject(int id, int x, int y)
+{
+	std::shared_ptr<Monster> monster = mMonsters[id];
+	monster->Visible();
+	monster->SetPosition(x, y);
+	mVisibleMonsters.emplace(id, monster);
 }
 
 void InGameScene::UpdateObjectPosition(int id, int x, int y)
@@ -487,7 +527,6 @@ void InGameScene::UpdateObjectPosition(int id, int x, int y)
 		{
 			mVisibleOtherPlayers[id]->SetPosition(x, y);
 		}
-		//mOtherPlayers[id]->SetPosition(x, y);
 	}
 	else
 	{
@@ -495,7 +534,6 @@ void InGameScene::UpdateObjectPosition(int id, int x, int y)
 		{
 			mVisibleMonsters[id]->SetPosition(x, y);
 		}
-		//mMonsters[id]->SetPosition(x, y);
 	}
 }
 
@@ -509,7 +547,6 @@ void InGameScene::RemoveObject(int id)
 			mVisibleOtherPlayers[id]->NotVisible();
 			mVisibleOtherPlayers.erase(id);
 		}
-		//mOtherPlayers[id]->NotVisible();
 	}
 	else
 	{
@@ -518,7 +555,6 @@ void InGameScene::RemoveObject(int id)
 			mVisibleMonsters[id]->NotVisible();
 			mVisibleMonsters.erase(id);
 		}
-		//mMonsters[id]->NotVisible();
 	}
 }
 
