@@ -617,7 +617,12 @@ void Core::processPacket(int id, char* buf)
 				SendChangeChannelPacket(id, result);
 				break;
 			}
-
+			if (newChannel >= MAX_CHANNEL)
+			{
+				std::cout << id << " client change channel fail : 최대 채널 초과" << std::endl;
+				SendChangeChannelPacket(id, result);
+				break;
+			}
 			if (mChannels[newChannel].IsFull() == false)
 			{
 				int x = mUsers[id].GetX();

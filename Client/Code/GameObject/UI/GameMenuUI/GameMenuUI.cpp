@@ -1,15 +1,25 @@
 #include "GameMenuUI.h"
 #include "../../../Input/Input.h"
+#include "../../../Resource/ResourceManager.h"
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../ButtonUI/ButtonUI.h"
+#include "../../../Manager/SceneMangaer/SceneManager.h"
 #include "../../../Scene/Scene.h"
+#include "../ChannelUI/ChannelUI.h"
 
-void ChannelChangeClick(const std::string& name)
+void ChannelChangeMenuClick(const std::string& name)
 {
-	std::cout << "채널 변경" << std::endl;
+	{
+		ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("ChannelUI"));
+		ui->OpenChannelUI();
+	}
+	{
+		InGameMenuUI* ui = static_cast<InGameMenuUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("InGameMenuUI"));
+		ui->OpenGameMenuUI();
+	}
 }
 
-void GameSettingClick(const std::string& name)
+void GameOptionMenuClick(const std::string& name)
 {
 }
 
@@ -85,40 +95,46 @@ bool InGameMenuUI::Initialize(int x, int y)
 	GameMenuUI::Initialize(x, y);
 
 	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ChannelChange");
 		ButtonUI* ui = new ButtonUI;
-		if (ui->Initialize(10, 10) == false)
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		ui->SetRect(230, 100);
+		ui->SetTexture(data.name);
+		ui->SetRect(data.size.first, data.size.second);
 		ui->Visible();
-		ui->SetLButtonClickCallback(ChannelChangeClick, "ChannelChange");
+		ui->SetLButtonClickCallback(ChannelChangeMenuClick, "ChannelChangeMenu");
 		AddChildUI("ChannelChangeButton", ui);
 	}
 	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("Option");
 		ButtonUI* ui = new ButtonUI;
-		if (ui->Initialize(10, 120) == false)
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		ui->SetRect(230, 100);
+		ui->SetTexture(data.name);
+		ui->SetRect(data.size.first, data.size.second);
 		ui->Visible();
-		ui->SetLButtonClickCallback(GameSettingClick, "Setting");
-		AddChildUI("SettingButton", ui);
+		ui->SetLButtonClickCallback(GameOptionMenuClick, "GameOptionMenu");
+		AddChildUI("GameOptionButton", ui);
 	}
 	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("Quit");
 		ButtonUI* ui = new ButtonUI;
-		if (ui->Initialize(10, 230) == false)
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		ui->SetRect(230, 100);
+		ui->SetTexture(data.name);
+		ui->SetRect(data.size.first, data.size.second);
 		ui->Visible();
 		ui->SetLButtonClickCallback(GameQuitClick, "Quit");
 		AddChildUI("QuitButton", ui);
 	}
 
-	SetRect(250, 340);
+	SetRect(275, 340);
 	SetPosition(275, 200);
 
 	return true;

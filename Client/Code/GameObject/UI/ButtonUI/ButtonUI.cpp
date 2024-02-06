@@ -99,7 +99,6 @@ void ButtonUI::MouseLButtonUp()
 
 void ButtonUI::MouseLButtonClick()
 {
-	std::cout << "버튼 유아이 클릭" << std::endl;
 	if (mFunc != nullptr)
 	{
 		mFunc(mName);

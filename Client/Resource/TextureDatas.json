@@ -2078,6 +2078,29 @@
     "Height": 33,
     "OriginX": 120,
     "OriginY": 60
+  },
+  {
+    "Path": "../Resource/Textures/GameMenuUI/ChannelChange.png",
+    "Name": "ChannelChange",
+    "Width": 255,
+    "Height": 100,
+    "OriginX": 10,
+    "OriginY": 10
+  },
+  {
+    "Path": "../Resource/Textures/GameMenuUI/Option.png",
+    "Name": "Option",
+    "Width": 255,
+    "Height": 100,
+    "OriginX": 10,
+    "OriginY": 120
+  },
+  {
+    "Path": "../Resource/Textures/GameMenuUI/Quit.png",
+    "Name": "Quit",
+    "Width": 255,
+    "Height": 100,
+    "OriginX": 10,
+    "OriginY": 230
   }
-
 ]

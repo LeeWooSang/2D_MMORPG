@@ -31,5 +31,5 @@ public:
 	virtual void Render();
 };
 
-void ChannelChangeClick(const std::string& name);
-void GameSettingClick(const std::string& name);
+void ChannelChangeMenuClick(const std::string& name);
+void GameOptionMenuClick(const std::string& name);

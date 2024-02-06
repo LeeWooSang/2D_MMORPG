@@ -15,6 +15,7 @@
 
 #include "../../GameObject/UI/TradeUI/TradeUI.h"
 #include "../../GameObject/UI/GameMenuUI/GameMenuUI.h"
+#include "../../GameObject/UI/ChannelUI/ChannelUI.h"
 
 #include "../../../../Server/Code/Common/Protocol.h"
 #include "../../Resource/ResourceManager.h"
@@ -162,8 +163,14 @@ bool InGameScene::Initialize()
 	{
 		return false;
 	}
-	AddSceneUI("GameMenuUI", gameMenuUI);
+	AddSceneUI("InGameMenuUI", gameMenuUI);
 
+	ChannelUI* channelUI = new ChannelUI;
+	if (channelUI->Initialize(0, 0) == false)
+	{
+		return false;
+	}
+	AddSceneUI("ChannelUI", channelUI);
 	//{
 	//	Map* tile = new Map;
 	//	if (tile->Initialize(0, 0) == false)
@@ -421,7 +428,7 @@ void InGameScene::processKeyboardMessage()
 		{
 			if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ESC_KEY) == true)
 			{
-				InGameMenuUI* gameMenuUI = static_cast<InGameMenuUI*>(FindUI("GameMenuUI"));
+				InGameMenuUI* gameMenuUI = static_cast<InGameMenuUI*>(FindUI("InGameMenuUI"));
 				gameMenuUI->OpenGameMenuUI();
 				GET_INSTANCE(UIManager)->SetFocusUI(gameMenuUI);
 			}

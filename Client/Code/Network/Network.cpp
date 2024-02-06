@@ -102,7 +102,7 @@ void Network::SendMovePacket(char dir)
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 
-void Network::SendChangeChannelPacket(char channel)
+void Network::SendChangeChannelPacket(int channel)
 {
 	CSChangeChannelPacket packet;
 	packet.size = sizeof(CSChangeChannelPacket);
