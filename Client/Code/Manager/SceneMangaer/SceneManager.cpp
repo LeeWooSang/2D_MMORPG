@@ -3,7 +3,9 @@
 
 #include "../../Scene/Scene.h"
 #include "../../Scene/LoginScene/LoginScene.h"
+#include "../../Scene/ServerScene/ServerScene.h"
 #include "../../Scene/InGameScene/InGameScene.h"
+
 #include "../UIManager/UIManager.h"
 #include "../../GameObject/UI/Inventory/Inventory.h"
 
@@ -36,18 +38,34 @@ void SceneManager::Render()
 
 void SceneManager::AddScene(SCENE_TYPE type)
 {
-	if (type == SCENE_TYPE::LOGIN_SCENE)
+	Scene* scene = nullptr;
+
+	switch (type)
 	{
-		LoginScene* scene = new LoginScene;
-		mScenes.emplace(type, scene);
-		scene->Initialize();
+		case SCENE_TYPE::LOGIN_SCENE:
+		{
+			scene = new LoginScene;
+			break;
+		}
+
+		case SCENE_TYPE::SERVER_SCENE:
+		{
+			scene = new ServerScene;
+			break;
+		}
+
+		case SCENE_TYPE::INGAME_SCENE:
+		{
+			scene = new InGameScene;
+			break;
+		}
+
+		default:
+			break;
 	}
-	else if (type == SCENE_TYPE::INGAME_SCENE)
-	{
-		InGameScene* scene = new InGameScene;
-		mScenes.emplace(type, scene);
-		scene->Initialize();
-	}
+
+	mScenes.emplace(type, scene);
+	scene->Initialize();
 }
 
 Scene* SceneManager::GetCurScene()

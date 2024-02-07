@@ -503,6 +503,7 @@ void Core::threadPool()
 			case SERVER_EVENT::SEND:
 			{
 				delete over;
+				over = nullptr;
 				break;
 			}
 
@@ -768,7 +769,8 @@ void Core::processEvent(Over* over)
 			monster.ProcessMove(dir);
 			monster.ProcessMoveViewList();
 
-			delete over;
+			//delete over;
+			//over = nullptr;
 			break;
 		}
 
@@ -777,7 +779,7 @@ void Core::processEvent(Over* over)
 			break;
 		}
 	}
-	//popLeafWork();
+	popLeafWork();
 }
 
 int Core::FindChannel()
@@ -814,12 +816,16 @@ int Core::createPlayerId() const
 
 bool Core::popLeafWork()
 {
-	Over* over;
+	Over* over = nullptr;
 	if (mLeafWorks.try_pop(over) == false)
 	{
 		return false;
 	}
 
-	delete over;
+	if (over != nullptr)
+	{
+		delete over;
+	}
+
 	return true;
 }

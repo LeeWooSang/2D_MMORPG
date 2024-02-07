@@ -119,6 +119,9 @@
     <Filter Include="Code\GameObject\UI\ChannelUI">
       <UniqueIdentifier>{7bd09953-2f9e-4823-9605-29ccfb5cad5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Scene\ServerScene">
+      <UniqueIdentifier>{7e41ef9d-9731-4a9c-b1ba-d7e43672ab70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Code\GameObject\GameObject.cpp">
@@ -231,6 +234,9 @@
     </ClCompile>
     <ClCompile Include="..\Code\GameObject\UI\ChannelUI\ChannelUI.cpp">
       <Filter>Code\GameObject\UI\ChannelUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Scene\ServerScene\ServerScene.cpp">
+      <Filter>Code\Scene\ServerScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -353,6 +359,9 @@
     </ClInclude>
     <ClInclude Include="..\Code\GameObject\UI\ChannelUI\ChannelUI.h">
       <Filter>Code\GameObject\UI\ChannelUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Scene\ServerScene\ServerScene.h">
+      <Filter>Code\Scene\ServerScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

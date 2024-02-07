@@ -5,6 +5,7 @@
 enum class SCENE_TYPE
 {
 	LOGIN_SCENE,
+	SERVER_SCENE,
 	INGAME_SCENE
 };
 

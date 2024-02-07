@@ -33,8 +33,20 @@ bool ChannelUI::Initialize(int x, int y)
 	UI::Initialize(x, y);
 
 	{
+		ButtonUI* ui = new ButtonUI;
+		if (ui->Initialize(195, 10) == false)
+		{
+			return false;
+		}
+		ui->SetRect(200, 60);
+		ui->Visible();
+		//ui->SetLButtonClickCallback(ChannelClick, std::to_string(channel++));
+		AddChildUI("SelectButton", ui);
+	}
+
+	{
 		int originX = 0;
-		int originY = 0;
+		int originY = 75;
 		int gap = 5;
 
 		int channel = 0;
@@ -59,7 +71,7 @@ bool ChannelUI::Initialize(int x, int y)
 		}
 	}
 
-	SetRect(400, 215);
+	SetRect(400, 290);
 	SetPosition(200, 200);
 
 	return true;
@@ -108,6 +120,8 @@ void ChannelUI::Render()
 	{
 		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
 	}
+
+	GET_INSTANCE(GraphicEngine)->RenderText(L"스카니아", mPos.first + 20, mPos.second + 25, "메이플", "검은색");
 
 	for (auto& child : mChildUIs)
 	{
