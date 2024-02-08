@@ -83,6 +83,15 @@ struct OverEx : public Over
 	char			messageBuffer[MAX_BUFFER];
 };
 
+enum GAME_SERVER_TYPE
+{
+	SCANIA,
+	LUNA,
+	ELYSIUM,
+	CROA,
+	BURNING
+};
+
 enum DIRECTION_TYPE
 {
 	UP = 0,

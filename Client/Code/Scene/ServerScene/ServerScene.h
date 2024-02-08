@@ -13,5 +13,10 @@ public:
 
 	virtual void processKeyboardMessage();
 
+	int GetServer(const std::string& key) { return mServerList[key]; }
+
 private:
+	std::unordered_map<std::string, int> mServerList;
 };
+
+void ServerSelectClick(const std::string& name);
