@@ -15,7 +15,7 @@ Core::Core()
 {
 #ifdef _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(784275);
+	//_CrtSetBreakAlloc(975833);
 #endif
 	mHandle = nullptr;
 }
@@ -66,6 +66,7 @@ bool Core::Initialize(HWND handle, int width, int height)
 		GET_INSTANCE(SceneManager)->AddScene(SCENE_TYPE::INGAME_SCENE);
 	}
 
+	//GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::LOGIN_SCENE);
 	GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::SERVER_SCENE);
 
 	GET_INSTANCE(GameTimer)->Reset();

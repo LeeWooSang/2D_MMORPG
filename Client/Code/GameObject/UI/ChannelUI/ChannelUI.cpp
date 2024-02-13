@@ -2,6 +2,8 @@
 #include "../../../Network/Network.h"
 #include "../ButtonUI/ButtonUI.h"
 #include "../../../Input/Input.h"
+#include "../../../Resource/ResourceManager.h"
+
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../../../Manager/SceneMangaer/SceneManager.h"
 #include "../../../Scene/InGameScene/InGameScene.h"
@@ -30,48 +32,119 @@ ChannelUI::~ChannelUI()
 
 bool ChannelUI::Initialize(int x, int y)
 {
-	UI::Initialize(x, y);
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ChannelUIBackground0");
+		UI::Initialize(x, y);		
+		SetTexture(data.name);
+		//SetRect(data.size.first, data.size.second);
+	}
+
+	for(int i = 1; i < 3; ++i)
+	{
+		std::string name = "ChannelUIBackground" + std::to_string(i);
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(name);
+		UI* ui = new UI;
+		ui->Initialize(data.origin.first, data.origin.second);
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI("Background", ui);
+	}
 
 	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ChannelUILogo0");
+		UI* ui = new UI;
+		ui->Initialize(data.origin.first, data.origin.second);
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI("Logo", ui);
+	}
+
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ChannelUIButton0");
 		ButtonUI* ui = new ButtonUI;
-		if (ui->Initialize(195, 10) == false)
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;
 		}
-		ui->SetRect(200, 60);
+		ui->SetTexture(data.name);
 		ui->Visible();
-		//ui->SetLButtonClickCallback(ChannelClick, std::to_string(channel++));
 		AddChildUI("SelectButton", ui);
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ChannelUIButton1");
+		ButtonUI* ui = new ButtonUI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI("CancelButton", ui);
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ChannelUISelect0");
+		ButtonUI* ui = new ButtonUI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI("SelectedChannel", ui);
+	}
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ChannelUISelect1");
+		ButtonUI* ui = new ButtonUI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI("CurrentChannel0", ui);
 	}
 
 	{
-		int originX = 0;
-		int originY = 75;
-		int gap = 5;
-
-		int channel = 0;
-		for (int i = 0; i < 6; ++i)
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ChannelUICh0");
+		ButtonUI* ui = new ButtonUI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
-			for (int j = 0; j < 5; ++j)
-			{
-				ButtonUI* ui = new ButtonUI;
-				if (ui->Initialize(originX + gap, originY + gap) == false)
-				{
-					return false;
-				}
-				ui->SetRect(74, 30);
-				ui->Visible();
-				ui->SetLButtonClickCallback(ChannelClick, std::to_string(channel++));
-				AddChildUI("Channel", ui);
-
-				originX += (74 + gap);
-			}
-			originX = 0;
-			originY += (30 + gap);
+			return false;
 		}
+		ui->SetTexture(data.name);
+		//ui->SetRect(74, 30);
+		ui->Visible();
+		ui->SetLButtonClickCallback(ChannelClick, "0");
+		AddChildUI("Channel", ui);
 	}
 
-	SetRect(400, 290);
+	//{
+	//	int originX = 0;
+	//	int originY = 75;
+	//	int gap = 5;
+
+	//	int channel = 0;
+	//	for (int i = 0; i < 6; ++i)
+	//	{
+	//		for (int j = 0; j < 5; ++j)
+	//		{
+	//			ButtonUI* ui = new ButtonUI;
+	//			if (ui->Initialize(originX + gap, originY + gap) == false)
+	//			{
+	//				return false;
+	//			}
+	//			ui->SetRect(74, 30);
+	//			ui->Visible();
+	//			ui->SetLButtonClickCallback(ChannelClick, std::to_string(channel++));
+	//			AddChildUI("Channel", ui);
+
+	//			originX += (74 + gap);
+	//		}
+	//		originX = 0;
+	//		originY += (30 + gap);
+	//	}
+	//}
+
 	SetPosition(200, 200);
 
 	return true;
@@ -110,7 +183,8 @@ void ChannelUI::Render()
 	pos.right = pos.left + mRect.first;
 	pos.bottom = pos.top + mRect.second;
 
-	GET_INSTANCE(GraphicEngine)->RenderFillRectangle(pos, "ÇÏ´Ã»ö");
+	//GET_INSTANCE(GraphicEngine)->RenderFillRectangle(pos, "ÇÏ´Ã»ö");
+	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 	if (mMouseLButtonDown)
 	{

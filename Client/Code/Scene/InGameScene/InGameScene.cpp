@@ -171,6 +171,7 @@ bool InGameScene::Initialize()
 		return false;
 	}
 	AddSceneUI("ChannelUI", channelUI);
+
 	//{
 	//	Map* tile = new Map;
 	//	if (tile->Initialize(0, 0) == false)
