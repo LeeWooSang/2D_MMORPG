@@ -116,11 +116,11 @@
     <Filter Include="Code\GameObject\UI\GameMenuUI">
       <UniqueIdentifier>{123ed521-b06c-4dc5-b7ee-e089c4a2fd0f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\GameObject\UI\ChannelUI">
-      <UniqueIdentifier>{7bd09953-2f9e-4823-9605-29ccfb5cad5e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\Scene\ServerScene">
       <UniqueIdentifier>{7e41ef9d-9731-4a9c-b1ba-d7e43672ab70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GameObject\UI\ChannelUI">
+      <UniqueIdentifier>{7bd09953-2f9e-4823-9605-29ccfb5cad5e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@
 #include "../../Resource/Texture/Texture.h"
 #include "../../GraphicEngine/GraphicEngine.h"
 #include "../../Manager/UIManager/UIManager.h"
+#include "../../GameObject/UI/ChannelUI/ChannelUI.h"
 #include "../../GameObject/UI/ButtonUI/ButtonUI.h"
 
 #include "../../Manager/SceneMangaer/SceneManager.h"
@@ -13,6 +14,9 @@ void ServerSelectClick(const std::string& name)
 	ServerScene* scene = static_cast<ServerScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE));
 	int type = scene->GetServer(name);
 	std::cout << "¼­¹ö : " << name << ", " << type << std::endl;
+
+	ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE)->FindUI("LoginChannelUI"));
+	ui->OpenChannelUI();
 }
 
 ServerScene::ServerScene()
@@ -77,6 +81,14 @@ bool ServerScene::Initialize()
 	}
 
 	serverUI->SetPosition(660, 0);
+
+	{
+		LoginChannelUI* ui = new LoginChannelUI;
+		ui->Initialize(0, 0);
+		//ui->Visible();
+		ui->SetPosition(200, 200);
+		AddSceneUI("LoginChannelUI", ui);
+	}
 
 	return true;
 }

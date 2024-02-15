@@ -1,8 +1,8 @@
 #pragma once
 #include "../GameObject.h"
 #include <vector>
-#include <string>
 #include <unordered_map>
+#include <string>
 
 class UI : public GameObject
 {
@@ -46,8 +46,9 @@ public:
 
 protected:
 	UI* mParentUI;
-	//std::vector<UI*> mChildUIs;
 	std::unordered_map<std::string, std::vector<UI*>> mChildUIs;
+	std::vector<std::vector<UI*>> mRenderChildUIs;
+	int mRenderIndex;
 
 	int mOriginX;
 	int mOriginY;

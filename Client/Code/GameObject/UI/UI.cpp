@@ -8,6 +8,9 @@ UI::UI()
 {
 	mParentUI = nullptr;
 	mChildUIs.clear();
+	mRenderChildUIs.clear();
+	mRenderIndex = -1;
+
 	mOriginX = 0;
 	mOriginY = 0;
 
@@ -31,6 +34,7 @@ UI::~UI()
 	}
 
 	mChildUIs.clear();
+	mRenderChildUIs.clear();
 }
 
 bool UI::Initialize(int x, int y)
@@ -225,10 +229,14 @@ void UI::AddChildUI(std::string key, UI* ui)
 		std::vector<UI*> v;
 		v.emplace_back(ui);
 		mChildUIs.emplace(key, v);
+
+		mRenderChildUIs.emplace_back(v);
+		mRenderIndex = mRenderChildUIs.size() - 1;
 	}
 	else
 	{
-		mChildUIs[key].emplace_back(ui);
+		mChildUIs[key].emplace_back(ui);		
+		mRenderChildUIs[mRenderIndex].emplace_back(ui);
 	}
 	ui->mParentUI = this;
 }
@@ -236,7 +244,6 @@ void UI::AddChildUI(std::string key, UI* ui)
 std::unordered_map<std::string, std::vector<UI*>>& UI::GetChildUIs()
 {
 	return mChildUIs; 
-	// TODO: 여기에 return 문을 삽입합니다.
 }
 
 bool UI::GetMouseOver()	const

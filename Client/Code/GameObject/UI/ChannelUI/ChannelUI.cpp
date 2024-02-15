@@ -10,20 +10,40 @@
 
 void ChannelClick(const std::string& channel)
 {
-	std::cout << channel << "채널 버튼" << std::endl;
+	std::cout << "현재 선택한 채널 : " << channel << std::endl;
+	ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("ChannelUI"));
+	ui->SetSelectChannel(std::stoi(channel));
+}
+
+void ChannelChangeClick(const std::string& name)
+{
+	ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("ChannelUI"));
+	ui->OpenChannelUI();
+
+	int newChannel = ui->GetSelectChannel();
 #ifdef SERVER_CONNECT
-	GET_INSTANCE(Network)->SendChangeChannelPacket(std::stoi(channel));
+	//GET_INSTANCE(Network)->SendChangeChannelPacket(newChannel);
+#else
+	ui->ResetSelectChannel();
+	ui->SetCurrentChannel(newChannel);
+
 #endif // SERVER_CONNECT
-	{
-		ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("ChannelUI"));
-		ui->OpenChannelUI();
-	}
+	std::cout << "선택된 새로운 채널 : " << newChannel << std::endl;
+}
+
+void ChannelCancelClick(const std::string& name)
+{
+	ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("ChannelUI"));
+	ui->OpenChannelUI();
+	ui->ResetSelectChannel();
 }
 
 ChannelUI::ChannelUI()
 	: UI()
 {
 	mOpen = false;
+	mCurrentChannel = 0;
+	mSelectChannel = -1;
 }
 
 ChannelUI::~ChannelUI()
@@ -68,6 +88,7 @@ bool ChannelUI::Initialize(int x, int y)
 		}
 		ui->SetTexture(data.name);
 		ui->Visible();
+		ui->SetLButtonClickCallback(ChannelChangeClick, "dd");
 		AddChildUI("SelectButton", ui);
 	}
 	{
@@ -79,71 +100,30 @@ bool ChannelUI::Initialize(int x, int y)
 		}
 		ui->SetTexture(data.name);
 		ui->Visible();
+		ui->SetLButtonClickCallback(ChannelCancelClick, "dd");
 		AddChildUI("CancelButton", ui);
 	}
+
+	TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ChannelUISelect");
+	int originX = data.origin.first;
+	int originY = data.origin.second;
+
+	for (int i = 0; i < MAX_CHANNEL; ++i)
 	{
-		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ChannelUISelect0");
-		ButtonUI* ui = new ButtonUI;
-		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		ChannelUISlot* slot = new ChannelUISlot;
+		if (slot->Initialize(originX, originY) == false)
 		{
 			return false;
 		}
-		ui->SetTexture(data.name);
-		ui->Visible();
-		AddChildUI("SelectedChannel", ui);
-	}
-	{
-		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ChannelUISelect1");
-		ButtonUI* ui = new ButtonUI;
-		if (ui->Initialize(data.origin.first, data.origin.second) == false)
-		{
-			return false;
-		}
-		ui->SetTexture(data.name);
-		ui->Visible();
-		AddChildUI("CurrentChannel0", ui);
+		slot->SetChannel(i);
+		slot->SetRect(data.size.first, data.size.second);
+		slot->SetSlotName("ChannelUICh" + std::to_string(i));
+		AddChildUI("Slot", slot);
+
+		originX += 70;
 	}
 
-	{
-		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ChannelUICh0");
-		ButtonUI* ui = new ButtonUI;
-		if (ui->Initialize(data.origin.first, data.origin.second) == false)
-		{
-			return false;
-		}
-		ui->SetTexture(data.name);
-		//ui->SetRect(74, 30);
-		ui->Visible();
-		ui->SetLButtonClickCallback(ChannelClick, "0");
-		AddChildUI("Channel", ui);
-	}
-
-	//{
-	//	int originX = 0;
-	//	int originY = 75;
-	//	int gap = 5;
-
-	//	int channel = 0;
-	//	for (int i = 0; i < 6; ++i)
-	//	{
-	//		for (int j = 0; j < 5; ++j)
-	//		{
-	//			ButtonUI* ui = new ButtonUI;
-	//			if (ui->Initialize(originX + gap, originY + gap) == false)
-	//			{
-	//				return false;
-	//			}
-	//			ui->SetRect(74, 30);
-	//			ui->Visible();
-	//			ui->SetLButtonClickCallback(ChannelClick, std::to_string(channel++));
-	//			AddChildUI("Channel", ui);
-
-	//			originX += (74 + gap);
-	//		}
-	//		originX = 0;
-	//		originY += (30 + gap);
-	//	}
-	//}
+	SetCurrentChannel(2);
 
 	SetPosition(200, 200);
 
@@ -183,7 +163,6 @@ void ChannelUI::Render()
 	pos.right = pos.left + mRect.first;
 	pos.bottom = pos.top + mRect.second;
 
-	//GET_INSTANCE(GraphicEngine)->RenderFillRectangle(pos, "하늘색");
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
 
 	if (mMouseLButtonDown)
@@ -195,15 +174,22 @@ void ChannelUI::Render()
 		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
 	}
 
-	GET_INSTANCE(GraphicEngine)->RenderText(L"스카니아", mPos.first + 20, mPos.second + 25, "메이플", "검은색");
+	//GET_INSTANCE(GraphicEngine)->RenderText(L"스카니아", mPos.first + 20, mPos.second + 25, "메이플", "검은색");
 
-	for (auto& child : mChildUIs)
+	for (auto& child : mRenderChildUIs)
 	{
-		for (int i = 0; i < child.second.size(); ++i)
+		for (int i = 0; i < child.size(); ++i)
 		{
-			child.second[i]->Render();
+			child[i]->Render();
 		}
 	}
+	//for (auto& child : mChildUIs)
+	//{
+	//	for (int i = 0; i < child.second.size(); ++i)
+	//	{
+	//		child.second[i]->Render();
+	//	}
+	//}
 }
 
 void ChannelUI::OpenChannelUI()
@@ -222,19 +208,211 @@ void ChannelUI::OpenChannelUI()
 	}
 }
 
-void ChannelUI::MouseOver()
+void ChannelUI::SetCurrentChannel(int channel)
 {
-	UI::MouseOver();
+	std::vector<UI*> slots = FindChildUIs("Slot");
+
+	// 이전의 현재 채널은 기본상태로 변경
+	ChannelUISlot* oldSlot = static_cast<ChannelUISlot*>(slots[mCurrentChannel]);
+	oldSlot->SetChannelType(CHANNEL_TYPE::NONE);
+
+	ChannelUISlot* newSlot = static_cast<ChannelUISlot*>(slots[channel]);
+	newSlot->SetChannelType(CHANNEL_TYPE::CURRENT_CHANNEL);
+
+	mCurrentChannel = channel;
 }
 
-void ChannelUI::MouseLButtonDown()
+void ChannelUI::SetSelectChannel(int channel)
+{
+	if (channel == mCurrentChannel)
+	{
+		return;
+	}
+
+	std::vector<UI*> slots = FindChildUIs("Slot");
+
+	if (mSelectChannel != -1)
+	{
+		// 이전의 현재 채널은 기본상태로 변경
+		ChannelUISlot* oldSlot = static_cast<ChannelUISlot*>(slots[mSelectChannel]);
+		oldSlot->SetChannelType(CHANNEL_TYPE::NONE);
+	}
+
+	ChannelUISlot* newSlot = static_cast<ChannelUISlot*>(slots[channel]);
+	newSlot->SetChannelType(CHANNEL_TYPE::SELECT_CHANNEL);
+
+	mSelectChannel = channel;
+}
+
+void ChannelUI::ResetSelectChannel()
+{
+	if (mSelectChannel == -1)
+	{
+		return;
+	}
+
+	std::vector<UI*> slots = FindChildUIs("Slot");
+	// 이전의 현재 채널은 기본상태로 변경
+	ChannelUISlot* oldSlot = static_cast<ChannelUISlot*>(slots[mSelectChannel]);
+	oldSlot->SetChannelType(CHANNEL_TYPE::NONE);
+
+	mSelectChannel = -1;
+}
+
+LoginChannelUI::LoginChannelUI()
+	: ChannelUI()
 {
 }
 
-void ChannelUI::MouseLButtonUp()
+LoginChannelUI::~LoginChannelUI()
 {
 }
 
-void ChannelUI::MouseLButtonClick()
+bool LoginChannelUI::Initialize(int x, int y)
 {
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginChBackground");
+		UI::Initialize(x, y);
+		SetTexture(data.name);
+	}
+
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginChLogo0");
+		ButtonUI* ui = new ButtonUI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		AddChildUI("LoginChLogo", ui);
+	}
+
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginChButton");
+		ButtonUI* ui = new ButtonUI;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		ui->SetLButtonClickCallback(ChannelChangeClick, "dd");
+		AddChildUI("LoginChButton", ui);
+	}
+
+
+	int originX = 0;
+	int originY = 0;
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginChGauge");
+		originX = data.origin.first;
+		originY = data.origin.second;
+	}
+
+	for(int i = 0; i < MAX_CHANNEL; ++i)
+	{
+		{
+			UI* ui = new UI;
+			if (ui->Initialize(originX, originY) == false)
+			{
+				return false;
+			}
+			ui->SetTexture("LoginChGauge");
+			ui->Visible();
+			AddChildUI("ChannelGauge", ui);
+
+			originX += 71;
+		}
+		{
+			std::string name = "LoginCh" + std::to_string(i);
+			TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(name);
+			ButtonUI* ui = new ButtonUI;
+			if (ui->Initialize(data.origin.first, data.origin.second) == false)
+			{
+				return false;
+			}
+			ui->SetTexture(data.name);
+			ui->Visible();
+			//ui->SetLButtonClickCallback(ChannelClick, std::to_string(i));
+			AddChildUI("Channel", ui);
+		}
+	}
+
+
+	return true;
+}
+
+ChannelUISlot::ChannelUISlot()
+	: UI()
+{
+	mChannel = 0;
+	mSlotName.clear();
+	mChannelType = CHANNEL_TYPE::NONE;
+}
+
+ChannelUISlot::~ChannelUISlot()
+{
+}
+
+bool ChannelUISlot::Initialize(int x, int y)
+{
+	UI::Initialize(x, y);
+	Visible();
+
+	return true;
+}
+
+void ChannelUISlot::Update()
+{
+	UI::Update();
+}
+
+void ChannelUISlot::Render()
+{
+	// 보이는 것만 렌더
+	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
+	{
+		return;
+	}
+
+	D2D1_RECT_F pos;
+	pos.left = mPos.first;
+	pos.top = mPos.second;
+	pos.right = pos.left + mRect.first;
+	pos.bottom = pos.top + mRect.second;
+
+	if (mChannelType == CHANNEL_TYPE::CURRENT_CHANNEL)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderTexture(GET_INSTANCE(ResourceManager)->FindTexture("ChannelUICurrent"), pos);
+	}
+	else if (mChannelType == CHANNEL_TYPE::SELECT_CHANNEL)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderTexture(GET_INSTANCE(ResourceManager)->FindTexture("ChannelUISelect"), pos);
+	}
+
+	if (mMouseLButtonDown)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "파란색");
+	}
+	else if (mMouseOver)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+	}
+
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(mSlotName);
+		D2D1_RECT_F numRect;
+		numRect.left = mPos.first + data.origin.first;
+		numRect.top = mPos.second + data.origin.second;
+		numRect.right = numRect.left + data.size.first;
+		numRect.bottom = numRect.top + data.size.second;
+		GET_INSTANCE(GraphicEngine)->RenderTexture(GET_INSTANCE(ResourceManager)->FindTexture(mSlotName), numRect);
+	}
+}
+
+void ChannelUISlot::MouseLButtonClick()
+{
+	ChannelUI* parent = static_cast<ChannelUI*>(mParentUI);
+	parent->SetSelectChannel(mChannel);
 }

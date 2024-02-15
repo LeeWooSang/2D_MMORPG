@@ -2184,19 +2184,19 @@
     "OriginY": 222
   },
   {
-    "Path": "../Resource/Textures/ChannelUI/ChannelUISelect0.png",
-    "Name": "ChannelUISelect0",
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICurrent.png",
+    "Name": "ChannelUICurrent",
     "Width": 68,
     "Height": 19,
     "OriginX": 12,
     "OriginY": 56
   },
   {
-    "Path": "../Resource/Textures/ChannelUI/ChannelUISelect1.png",
-    "Name": "ChannelUISelect1",
+    "Path": "../Resource/Textures/ChannelUI/ChannelUISelect.png",
+    "Name": "ChannelUISelect",
     "Width": 68,
     "Height": 19,
-    "OriginX": 81,
+    "OriginX": 12,
     "OriginY": 56
   },
 
@@ -2205,17 +2205,42 @@
     "Name": "ChannelUICh0",
     "Width": 20,
     "Height": 8,
-    "OriginX": 20,
-    "OriginY": 61
+    "OriginX": 9,
+    "OriginY": 6
   },
   {
     "Path": "../Resource/Textures/ChannelUI/ChannelUICh1.png",
     "Name": "ChannelUICh1",
     "Width": 54,
     "Height": 10,
-    "OriginX": 10,
-    "OriginY": 10
+    "OriginX": 9,
+    "OriginY": 5
   },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh2.png",
+    "Name": "ChannelUICh2",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh3.png",
+    "Name": "ChannelUICh3",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh4.png",
+    "Name": "ChannelUICh4",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+
   {
     "Path": "../Resource/Textures/ServerScene/ServerUIBackground0.jpg",
     "Name": "ServerUIBackground0",
@@ -2271,8 +2296,117 @@
     "Height": 32,
     "OriginX": 21,
     "OriginY": 153
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChBackground.png",
+    "Name": "LoginChBackground",
+    "Width": 396,
+    "Height": 335,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChLogo0.png",
+    "Name": "LoginChLogo0",
+    "Width": 132,
+    "Height": 44,
+    "OriginX": 20,
+    "OriginY": 22
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChLogo1.png",
+    "Name": "LoginChLogo1",
+    "Width": 91,
+    "Height": 46,
+    "OriginX": 20,
+    "OriginY": 22
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChLogo2.png",
+    "Name": "LoginChLogo2",
+    "Width": 133,
+    "Height": 45,
+    "OriginX": 20,
+    "OriginY": 22
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChLogo3.png",
+    "Name": "LoginChLogo3",
+    "Width": 113,
+    "Height": 40,
+    "OriginX": 20,
+    "OriginY": 22
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChLogo4.png",
+    "Name": "LoginChLogo4",
+    "Width": 99,
+    "Height": 44,
+    "OriginX": 20,
+    "OriginY": 22
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChButton.png",
+    "Name": "LoginChButton",
+    "Width": 131,
+    "Height": 31,
+    "OriginX": 245,
+    "OriginY": 31
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChGauge.png",
+    "Name": "LoginChGauge",
+    "Width": 56,
+    "Height": 5,
+    "OriginX": 28,
+    "OriginY": 92
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh0.png",
+    "Name": "LoginCh0",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 22,
+    "OriginY": 76
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh1.png",
+    "Name": "LoginCh1",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 93,
+    "OriginY": 76
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh2.png",
+    "Name": "LoginCh2",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 164,
+    "OriginY": 76
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh3.png",
+    "Name": "LoginCh3",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 235,
+    "OriginY": 76
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh4.png",
+    "Name": "LoginCh4",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 306,
+    "OriginY": 76
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh5.png",
+    "Name": "LoginCh5",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 22,
+    "OriginY": 106
   }
-
-
-
 ]

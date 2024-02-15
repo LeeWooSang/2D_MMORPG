@@ -66,8 +66,8 @@ bool Core::Initialize(HWND handle, int width, int height)
 		GET_INSTANCE(SceneManager)->AddScene(SCENE_TYPE::INGAME_SCENE);
 	}
 
-	//GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::LOGIN_SCENE);
-	GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::SERVER_SCENE);
+	GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::LOGIN_SCENE);
+	//GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::SERVER_SCENE);
 
 	GET_INSTANCE(GameTimer)->Reset();
 
