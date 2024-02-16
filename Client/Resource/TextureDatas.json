@@ -2358,8 +2358,8 @@
     "Name": "LoginChGauge",
     "Width": 56,
     "Height": 5,
-    "OriginX": 28,
-    "OriginY": 92
+    "OriginX": 6,
+    "OriginY": 16
   },
   {
     "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh0.png",

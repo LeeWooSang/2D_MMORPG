@@ -1,5 +1,7 @@
 #include "LoginScene.h"
 
+#include "../../Core/Core.h"
+
 #include "../../Manager/UIManager/UIManager.h"
 #include "../../GameObject/UI/UI.h"
 #include "../../GameObject/UI/InputUI/InputUI.h"
@@ -8,7 +10,13 @@
 #include "../../Resource/Texture/Texture.h"
 #include "../../Input/Input.h"
 #include "../../GraphicEngine/GraphicEngine.h"
+
 #include "../../Manager/SceneMangaer/SceneManager.h"
+
+void LoginClick(const std::string& name)
+{
+	GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::SERVER_SCENE);
+}
 
 LoginScene::LoginScene()
 	: Scene()
@@ -137,6 +145,7 @@ bool LoginScene::Initialize()
 		}
 		ui->SetTexture(data.name);
 		ui->Visible();
+		ui->SetLButtonClickCallback(LoginClick, "Login");
 		loginUI->AddChildUI(data.name, ui);
 	}
 	{
@@ -147,8 +156,8 @@ bool LoginScene::Initialize()
 			return false;
 		}
 		ui->SetTexture(data.name);
-		ui->SetLButtonClickCallback(GameQuitClick, "Quit");
 		ui->Visible();
+		ui->SetLButtonClickCallback(GameQuitClick, "Quit");
 		loginUI->AddChildUI(data.name, ui);
 	}
 
@@ -186,6 +195,6 @@ void LoginScene::processKeyboardMessage()
 {
 	if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ENTER_KEY) == true)
 	{
-		GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::INGAME_SCENE);
+		GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::SERVER_SCENE);
 	}
 }

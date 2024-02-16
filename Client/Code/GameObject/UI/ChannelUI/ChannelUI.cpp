@@ -17,18 +17,19 @@ void ChannelClick(const std::string& channel)
 
 void ChannelChangeClick(const std::string& name)
 {
-	ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("ChannelUI"));
+	ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->GetCurScene()->FindUI("ChannelUI"));
 	ui->OpenChannelUI();
 
 	int newChannel = ui->GetSelectChannel();
+	std::cout << "선택된 새로운 채널 : " << newChannel << std::endl;
 #ifdef SERVER_CONNECT
-	//GET_INSTANCE(Network)->SendChangeChannelPacket(newChannel);
+	GET_INSTANCE(Network)->SendChangeChannelPacket(newChannel);
 #else
-	ui->ResetSelectChannel();
-	ui->SetCurrentChannel(newChannel);
 
 #endif // SERVER_CONNECT
-	std::cout << "선택된 새로운 채널 : " << newChannel << std::endl;
+
+	ui->ResetSelectChannel();
+	ui->SetCurrentChannel(newChannel);
 }
 
 void ChannelCancelClick(const std::string& name)
@@ -36,6 +37,24 @@ void ChannelCancelClick(const std::string& name)
 	ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("ChannelUI"));
 	ui->OpenChannelUI();
 	ui->ResetSelectChannel();
+}
+
+void ChannelLoginClick(const std::string& name)
+{
+	ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->GetCurScene()->FindUI("ChannelUI"));
+	ui->OpenChannelUI();
+
+	int newChannel = ui->GetSelectChannel();
+	std::cout << "선택된 새로운 채널 : " << newChannel << std::endl;
+
+#ifdef SERVER_CONNECT
+	//GET_INSTANCE(Network)->SendChangeChannelPacket(newChannel);
+#else
+
+#endif // SERVER_CONNECT
+	ui->ResetSelectChannel();
+	ui->SetCurrentChannel(newChannel);
+	GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::INGAME_SCENE);
 }
 
 ChannelUI::ChannelUI()
@@ -297,46 +316,22 @@ bool LoginChannelUI::Initialize(int x, int y)
 		}
 		ui->SetTexture(data.name);
 		ui->Visible();
-		ui->SetLButtonClickCallback(ChannelChangeClick, "dd");
+		ui->SetLButtonClickCallback(ChannelLoginClick, "dd");
 		AddChildUI("LoginChButton", ui);
-	}
-
-
-	int originX = 0;
-	int originY = 0;
-	{
-		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginChGauge");
-		originX = data.origin.first;
-		originY = data.origin.second;
 	}
 
 	for(int i = 0; i < MAX_CHANNEL; ++i)
 	{
+		std::string name = "LoginCh" + std::to_string(i);
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(name);
+		LoginChannelUISlot* ui = new LoginChannelUISlot;
+		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
-			UI* ui = new UI;
-			if (ui->Initialize(originX, originY) == false)
-			{
-				return false;
-			}
-			ui->SetTexture("LoginChGauge");
-			ui->Visible();
-			AddChildUI("ChannelGauge", ui);
-
-			originX += 71;
+			return false;
 		}
-		{
-			std::string name = "LoginCh" + std::to_string(i);
-			TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(name);
-			ButtonUI* ui = new ButtonUI;
-			if (ui->Initialize(data.origin.first, data.origin.second) == false)
-			{
-				return false;
-			}
-			ui->SetTexture(data.name);
-			ui->Visible();
-			//ui->SetLButtonClickCallback(ChannelClick, std::to_string(i));
-			AddChildUI("Channel", ui);
-		}
+		ui->SetChannel(i);
+		ui->SetTexture(data.name);
+		AddChildUI("Slot", ui);
 	}
 
 
@@ -414,5 +409,67 @@ void ChannelUISlot::Render()
 void ChannelUISlot::MouseLButtonClick()
 {
 	ChannelUI* parent = static_cast<ChannelUI*>(mParentUI);
+	parent->SetSelectChannel(mChannel);
+}
+
+LoginChannelUISlot::LoginChannelUISlot()
+	: ChannelUISlot()
+{
+	mGaugeRate = 0.f;
+}
+
+LoginChannelUISlot::~LoginChannelUISlot()
+{
+}
+
+bool LoginChannelUISlot::Initialize(int x, int y)
+{
+	ChannelUISlot::Initialize(x, y);
+
+	mGaugeRate = 0.5;
+
+	return true;
+}
+
+void LoginChannelUISlot::Render()
+{
+	// 보이는 것만 렌더
+	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
+	{
+		return;
+	}
+
+	D2D1_RECT_F pos;
+	pos.left = mPos.first;
+	pos.top = mPos.second;
+	pos.right = pos.left + mRect.first;
+	pos.bottom = pos.top + mRect.second;
+
+	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
+
+	if (mMouseLButtonDown)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "파란색");
+	}
+	else if (mMouseOver)
+	{
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
+	}
+
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginChGauge");
+		D2D1_RECT_F gaugeRect;
+		gaugeRect.left = mPos.first + data.origin.first;
+		gaugeRect.top = mPos.second + data.origin.second;
+		gaugeRect.right = gaugeRect.left + data.size.first * mGaugeRate;
+		gaugeRect.bottom = gaugeRect.top + data.size.second;
+
+		GET_INSTANCE(GraphicEngine)->RenderTexture(GET_INSTANCE(ResourceManager)->FindTexture("LoginChGauge"), gaugeRect);
+	}
+}
+
+void LoginChannelUISlot::MouseLButtonClick()
+{
+	LoginChannelUI* parent = static_cast<LoginChannelUI*>(mParentUI);
 	parent->SetSelectChannel(mChannel);
 }

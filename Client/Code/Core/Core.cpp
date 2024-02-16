@@ -10,12 +10,11 @@
 #define	 WM_SOCKET WM_USER + 1
 
 INIT_INSTACNE(Core)
-bool Collision(const D2D1_RECT_F& rect1, const D2D1_RECT_F& rect2);
 Core::Core()
 {
 #ifdef _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(975833);
+	//_CrtSetBreakAlloc(6616);
 #endif
 	mHandle = nullptr;
 }
@@ -116,6 +115,7 @@ void Core::WindowProc(HWND handle, unsigned int msg, unsigned long long wparam, 
 	}
 }
 
+bool Collision(const D2D1_RECT_F& rect1, const D2D1_RECT_F& rect2);
 bool Collision(const D2D1_RECT_F& rect1, const D2D1_RECT_F& rect2)
 {
 	if (rect1.left <= rect2.right && rect1.right >= rect2.left && rect1.bottom >= rect2.top && rect1.top <= rect2.bottom)

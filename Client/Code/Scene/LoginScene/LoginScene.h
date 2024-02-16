@@ -17,3 +17,5 @@ public:
 private:
 	UI* mInputUI;
 };
+
+void LoginClick(const std::string& name);

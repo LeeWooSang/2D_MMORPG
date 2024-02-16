@@ -15,7 +15,7 @@ void ServerSelectClick(const std::string& name)
 	int type = scene->GetServer(name);
 	std::cout << "¼­¹ö : " << name << ", " << type << std::endl;
 
-	ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE)->FindUI("LoginChannelUI"));
+	ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE)->FindUI("ChannelUI"));
 	ui->OpenChannelUI();
 }
 
@@ -60,10 +60,6 @@ bool ServerScene::Initialize()
 		AddSceneUI("ServerUI", serverUI);
 	}
 
-	int x = 590;
-	int y = 0;
-	int gap = 30;
-
 	int i = 0;
 	for(auto& server : mServerList)
 	{
@@ -79,17 +75,28 @@ bool ServerScene::Initialize()
 		ui->SetLButtonClickCallback(ServerSelectClick, server.first);
 		serverUI->AddChildUI(server.first, ui);
 	}
-
 	serverUI->SetPosition(660, 0);
 
 	{
 		LoginChannelUI* ui = new LoginChannelUI;
 		ui->Initialize(0, 0);
-		//ui->Visible();
 		ui->SetPosition(200, 200);
-		AddSceneUI("LoginChannelUI", ui);
+		AddSceneUI("ChannelUI", ui);
 	}
 
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("Quit");
+		ButtonUI* ui = new ButtonUI;
+		if (ui->Initialize(0, 0) == false)
+		{
+			return false;
+		}
+		ui->SetTexture(data.name);
+		ui->Visible();
+		ui->SetPosition(10, 600);
+		ui->SetLButtonClickCallback(GameQuitClick, "Quit");
+		AddSceneUI("QuitButton", ui);
+	}
 	return true;
 }
 
