@@ -42,12 +42,13 @@ ServerScene::~ServerScene()
 
 bool ServerScene::Initialize()
 {
+	std::list<std::string>serverList{ "스카니아", "루나", "엘리시움", "크로아", "버닝" };
 	mServerList.emplace("스카니아", GAME_SERVER_TYPE::SCANIA);
 	mServerList.emplace("루나", GAME_SERVER_TYPE::LUNA);
 	mServerList.emplace("엘리시움", GAME_SERVER_TYPE::ELYSIUM);
 	mServerList.emplace("크로아", GAME_SERVER_TYPE::CROA);
 	mServerList.emplace("버닝", GAME_SERVER_TYPE::BURNING);
-
+	
 	UI* serverUI = new UI;
 	{
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ServerUIBackground1");
@@ -61,7 +62,7 @@ bool ServerScene::Initialize()
 	}
 
 	int i = 0;
-	for(auto& server : mServerList)
+	for(auto& server : serverList)
 	{
 		std::string name = "ServerUIButton" + std::to_string(i++);
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(name);
@@ -72,8 +73,8 @@ bool ServerScene::Initialize()
 		}
 		ui->SetTexture(data.name);
 		ui->Visible();
-		ui->SetLButtonClickCallback(ServerSelectClick, server.first);
-		serverUI->AddChildUI(server.first, ui);
+		ui->SetLButtonClickCallback(ServerSelectClick, server);
+		serverUI->AddChildUI(server, ui);
 	}
 	serverUI->SetPosition(660, 0);
 

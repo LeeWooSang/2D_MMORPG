@@ -193,8 +193,6 @@ void ChannelUI::Render()
 		GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
 	}
 
-	//GET_INSTANCE(GraphicEngine)->RenderText(L"스카니아", mPos.first + 20, mPos.second + 25, "메이플", "검은색");
-
 	for (auto& child : mRenderChildUIs)
 	{
 		for (int i = 0; i < child.size(); ++i)
@@ -202,13 +200,6 @@ void ChannelUI::Render()
 			child[i]->Render();
 		}
 	}
-	//for (auto& child : mChildUIs)
-	//{
-	//	for (int i = 0; i < child.second.size(); ++i)
-	//	{
-	//		child.second[i]->Render();
-	//	}
-	//}
 }
 
 void ChannelUI::OpenChannelUI()
@@ -297,7 +288,7 @@ bool LoginChannelUI::Initialize(int x, int y)
 
 	{
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginChLogo0");
-		ButtonUI* ui = new ButtonUI;
+		UI* ui = new UI;
 		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
 			return false;

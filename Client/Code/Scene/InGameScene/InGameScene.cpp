@@ -429,6 +429,13 @@ void InGameScene::processKeyboardMessage()
 		{
 			if (GET_INSTANCE(Input)->KeyOnceCheck(KEY_TYPE::ESC_KEY) == true)
 			{
+				ChannelUI* channelUI = static_cast<ChannelUI*>(FindUI("ChannelUI"));
+				if (channelUI->IsVisible() == true)
+				{
+					ChannelCancelClick("");
+					return;
+				}
+
 				InGameMenuUI* gameMenuUI = static_cast<InGameMenuUI*>(FindUI("InGameMenuUI"));
 				gameMenuUI->OpenGameMenuUI();
 				GET_INSTANCE(UIManager)->SetFocusUI(gameMenuUI);
