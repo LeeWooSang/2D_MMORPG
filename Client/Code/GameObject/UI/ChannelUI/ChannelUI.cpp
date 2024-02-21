@@ -287,7 +287,8 @@ bool LoginChannelUI::Initialize(int x, int y)
 	}
 
 	{
-		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginChLogo0");
+		mLogoName = "LoginChLogo0";
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(mLogoName);
 		UI* ui = new UI;
 		if (ui->Initialize(data.origin.first, data.origin.second) == false)
 		{
@@ -327,6 +328,20 @@ bool LoginChannelUI::Initialize(int x, int y)
 
 
 	return true;
+}
+
+void LoginChannelUI::ChangeLogo(int type)
+{
+	switch (type)
+	{
+	case GAME_SERVER_TYPE::SCANIA:		mLogoName = "LoginChLogo0";	break;
+	case GAME_SERVER_TYPE::LUNA:			mLogoName = "LoginChLogo1";	break;
+	case GAME_SERVER_TYPE::ELYSIUM:	mLogoName = "LoginChLogo2";	break;
+	case GAME_SERVER_TYPE::CROA:		mLogoName = "LoginChLogo3";	break;
+	default:													mLogoName = "LoginChLogo4";	break;
+	}
+	std::vector<UI*>& v = FindChildUIs("LoginChLogo");
+	v.front()->SetTexture(mLogoName);
 }
 
 ChannelUISlot::ChannelUISlot()

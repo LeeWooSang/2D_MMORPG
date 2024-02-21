@@ -13,9 +13,9 @@ void ServerSelectClick(const std::string& name)
 {
 	ServerScene* scene = static_cast<ServerScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE));
 	int type = scene->GetServer(name);
-	std::cout << "¼­¹ö : " << name << ", " << type << std::endl;
 
-	ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE)->FindUI("ChannelUI"));
+	LoginChannelUI* ui = static_cast<LoginChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE)->FindUI("ChannelUI"));
+	ui->ChangeLogo(type);
 	ui->OpenChannelUI();
 }
 

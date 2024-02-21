@@ -37,6 +37,10 @@ public:
 	LoginChannelUI();
 	virtual ~LoginChannelUI();
 	virtual bool Initialize(int x, int y);
+	void ChangeLogo(int type);
+
+private:
+	std::string mLogoName;
 };
 
 class ChannelUISlot : public UI
