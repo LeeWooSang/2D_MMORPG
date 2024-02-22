@@ -151,7 +151,6 @@ bool InGameScene::Initialize()
 	{
 		return false;
 	}
-
 	AddSceneUI("SkillUI", skillUI);
 
 	TradeUI* trade = new TradeUI;
@@ -201,6 +200,11 @@ void InGameScene::Update()
 
 	// update
 	mPlayer->Update();
+
+	for (auto& skill : mSkills)
+	{
+		skill->Update();
+	}
 
 	// 플레이어가 볼수 있는 타일만 업데이트	
 	mTileMinPos = std::make_pair(mPlayer->GetPosition().first - VIEW_DISTANCE, mPlayer->GetPosition().second - VIEW_DISTANCE);
@@ -300,6 +304,11 @@ void InGameScene::Render()
 		player.second->Render();
 	}
 #endif // SERVER_CONNECT
+
+	for (auto& skill : mSkills)
+	{
+		skill->Render();
+	}
 
 	mPlayer->Render();
 
@@ -649,6 +658,11 @@ AnimationCharacter* InGameScene::GetOtherPlayer(int id)
 Monster* InGameScene::GetMonster(int id)
 {
 	return mMonsters[id].get();
+}
+
+void InGameScene::AddSkill(Skill* skill)
+{
+	mSkills.emplace_back(skill);
 }
 
 void InGameScene::SetAvatarPose0(int x, int y)

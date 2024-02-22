@@ -133,10 +133,12 @@ bool SkillUI::Initialize(int x, int y)
 	AddSkillSlot("스탠스", 123131);
 	AddSkillSlot("어드밴스드 파이널 어택", 123132);
 
-
 	SetPosition(400, 150);
 
 	mSkillPoint = 100;
+	
+	static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE))
+		->AddSkill(FindSkill("레이징 블로우"));
 
 	return true;
 }
@@ -281,10 +283,10 @@ void SkillSlotUI::Update()
 {
 	UI::Update();
 
-	if (mSkill != nullptr)
-	{
-		mSkill->Update();
-	}
+	//if (mSkill != nullptr)
+	//{
+	//	mSkill->Update();
+	//}
 }
 
 void SkillSlotUI::Render()
@@ -307,10 +309,10 @@ void SkillSlotUI::Render()
 		GET_INSTANCE(GraphicEngine)->RenderText(std::to_wstring(mSkill->GetSkillLevel()), mPos.first + 40, mPos.second + 18);
 	}
 
-	if (mSkill != nullptr)
-	{
-		mSkill->Render();
-	}
+	//if (mSkill != nullptr)
+	//{
+	//	mSkill->Render();
+	//}
 }
 
 void SkillSlotUI::MouseOver()

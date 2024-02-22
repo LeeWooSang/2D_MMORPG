@@ -8,6 +8,7 @@ class Map;
 class AnimationCharacter;
 class Player;
 class Monster;
+class Skill;
 class InGameScene : public Scene
 {
 public:
@@ -38,6 +39,8 @@ public:
 	AnimationCharacter* GetOtherPlayer(int id);
 	Monster* GetMonster(int id);
 
+	void AddSkill(Skill* skill);
+
 	void SetAvatarPose0(int x, int y);
 	void SetAvatarPose1(int x, int y);
 	void SetAvatarPose2(int x, int y);
@@ -66,4 +69,6 @@ private:
 	std::unordered_map<int, std::shared_ptr<Monster>> mVisibleMonsters;
 
 	Player* mPlayer;
+
+	std::list<Skill*> mSkills;
 };

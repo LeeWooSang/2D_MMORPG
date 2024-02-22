@@ -25,7 +25,7 @@ public:
 	void SetSelectChannel(int channel);
 	void ResetSelectChannel();
 
-private:
+protected:
 	bool mOpen;
 	int mCurrentChannel;
 	int mSelectChannel;
