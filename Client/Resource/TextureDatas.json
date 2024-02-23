@@ -1,5 +1,21 @@
 [
   {
+    "Path": "../Resource/Textures/Tile/BlackTile.png",
+    "Name": "BlackTile",
+    "Width": 65,
+    "Height": 65,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/Tile/WhiteTile.png",
+    "Name": "WhiteTile",
+    "Width": 65,
+    "Height": 65,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
     "Path": "../Resource/Textures/Character/Hair/Hair0.png",
     "Name": "Hair0",
     "Width": 49,

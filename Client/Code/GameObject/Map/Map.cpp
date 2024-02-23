@@ -31,12 +31,6 @@ void Map::Render()
 		return;
 	}
 
-	RECT src;
-	src.left = mTexture->GetPos().first;
-	src.top = mTexture->GetPos().second;
-	src.right = mTexture->GetPos().first + mTexture->GetSize().first;
-	src.bottom = mTexture->GetPos().second + mTexture->GetSize().second;
-
 	std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
 	
 	// 이미지 크기
@@ -55,4 +49,5 @@ void Map::Render()
 
 	//GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos, rect);
+	GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "검은색");
 }

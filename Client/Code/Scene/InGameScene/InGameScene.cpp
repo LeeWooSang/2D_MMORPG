@@ -68,7 +68,7 @@ bool InGameScene::Initialize()
 			{
 				return false;
 			}
-			if (tile->SetTexture("Tile") == false)
+			if (tile->SetTexture("WhiteTile") == false)
 			{
 				return false;
 			}
