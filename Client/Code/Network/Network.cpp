@@ -7,6 +7,7 @@
 #include "../Scene/InGameScene/InGameScene.h"
 
 #include "../Manager/UIManager/UIManager.h"
+#include "../GameObject/UI/ChannelUI/ChannelUI.h"
 #include "../GameObject/UI/ChattingBox/ChattingBox.h"
 
 #define	WM_SOCKET	WM_USER + 1
@@ -89,6 +90,15 @@ void Network::SendLoginPacket(const std::string& loginId, const std::string& log
 	packet.type = CS_PACKET_TYPE::CS_LOGIN;
 	//strncpy(packet.loginId, loginId, sizeof(loginId));
 	//strncpy(packet.loginPassword, loginPassword, sizeof(loginPassword));
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
+void Network::SendChannelLoginPacket(int channel)
+{
+	CSChannelLoginPacket packet;
+	packet.size = sizeof(CSChannelLoginPacket);
+	packet.type = CS_PACKET_TYPE::CS_CHANNEL_LOGIN;
+	packet.channel = channel;
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 
@@ -218,10 +228,6 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_LOGIN_OK:
 		{		
 			SCLoginOkPacket* packet = reinterpret_cast<SCLoginOkPacket*>(mPacketBuffer);
-			std::shared_ptr<PacketBase> p = std::make_shared<PacketBase>();
-			p->packetType = packet->type;
-			p->id = packet->id;
-			GET_INSTANCE(EventManager)->AddPacketEvent(p);
 			break;
 		}
 
@@ -229,6 +235,21 @@ void Network::processPacket()
 		{
 			SCLoginFailPacket* packet = reinterpret_cast<SCLoginFailPacket*>(mPacketBuffer);
 			std::cout << "로그인 실패" << std::endl;
+			break;
+		}
+
+		case SC_PACKET_TYPE::SC_CHANNEL_LOGIN:
+		{
+			SCChannelLoginPacket* packet = reinterpret_cast<SCChannelLoginPacket*>(mPacketBuffer);
+			int channel = packet->channel;
+			if (channel != -1)
+			{
+				std::shared_ptr<ChannelLoginPacket> p = std::make_shared<ChannelLoginPacket>();
+				p->packetType = packet->type;
+				p->id = packet->id;
+				p->channel = channel;
+				GET_INSTANCE(EventManager)->AddPacketEvent(p);
+			}
 			break;
 		}
 

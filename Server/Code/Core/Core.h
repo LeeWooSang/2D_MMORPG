@@ -24,6 +24,9 @@ public:
 public:
 	void SendLoginOkPacket(int to);
 	void SendLoginFailPacket(int to);
+
+	void SendChannelLoginPacket(int to, int channel);
+
 	void SendPositionPacket(int to, int obj);
 	void SendAddPlayerPacket(int to, int obj, int* texIds);
 	void SendAddObjectPacket(int to, int obj);

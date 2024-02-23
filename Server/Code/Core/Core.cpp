@@ -141,6 +141,17 @@ void Core::SendLoginFailPacket(int to)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
+void Core::SendChannelLoginPacket(int to, int channel)
+{
+	SCChannelLoginPacket packet;
+	packet.size = sizeof(SCChannelLoginPacket);
+	packet.type = SC_PACKET_TYPE::SC_CHANNEL_LOGIN;
+	packet.channel = channel;
+	packet.id = to;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
 void Core::SendPositionPacket(int to, int obj)
 {
 	int x = mUsers[obj].GetX();
@@ -578,20 +589,35 @@ void Core::processPacket(int id, char* buf)
 			CSLoginPacket* packet = reinterpret_cast<CSLoginPacket*>(buf);
 			// 아이디, 비번 비교
 
+			break;
+		}
+
+		case CS_PACKET_TYPE::CS_CHANNEL_LOGIN:
+		{
+			CSChannelLoginPacket* packet = reinterpret_cast<CSChannelLoginPacket*>(buf);
 			// 채널 먼저 접속
-			int channel = FindChannel();
-			int channelIndex = mChannels[channel].PushUser(id);
-			mUsers[id].SetChannelIndex(channelIndex);
-			mUsers[id].SetChannel(channel);
-			SendLoginOkPacket(id);
+			int channel = packet->channel;
+			if (mChannels[channel].IsFull() == false)
+			{
+				int channelIndex = mChannels[channel].PushUser(id);
+				mUsers[id].SetChannelIndex(channelIndex);
+				mUsers[id].SetChannel(channel);
 
-			int x = mUsers[id].GetX();
-			int y = mUsers[id].GetY();
+				SendChannelLoginPacket(id, channel);
+				std::cout << id << " client is " << channel << " channel login ok" << std::endl;
 
-			// 섹터 찾아서 넣기
-			mChannels[channel].PushSectorObject(x, y, id);
-			mUsers[id].ProcessLoginViewList();
-			std::cout << id << " client is " << channel  << " channel login" << std::endl;
+				int x = mUsers[id].GetX();
+				int y = mUsers[id].GetY();
+
+				// 섹터 찾아서 넣기
+				mChannels[channel].PushSectorObject(x, y, id);
+				mUsers[id].ProcessLoginViewList();
+			}
+			else
+			{
+				std::cout << id << " client is " << channel << " channel login fail" << std::endl;
+				SendChannelLoginPacket(id, -1);
+			}
 			break;
 		}
 

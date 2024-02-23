@@ -13,6 +13,8 @@ public:
 
 	virtual void processKeyboardMessage();
 
+	void ProcessChannelLogin(int channel);
+
 	int GetServer(const std::string& key) { return mServerList[key]; }
 
 private:

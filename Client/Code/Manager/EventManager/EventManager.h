@@ -10,6 +10,10 @@ struct PacketBase
 	char packetType;
 	int id;
 };
+struct ChannelLoginPacket : public PacketBase
+{
+	int channel;
+};
 struct PositionPacket : public PacketBase
 {
 	int x;

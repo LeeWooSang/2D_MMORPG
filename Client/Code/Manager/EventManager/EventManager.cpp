@@ -1,5 +1,6 @@
 #include "EventManager.h"
 #include "../SceneMangaer/SceneManager.h"
+#include "../../Scene/ServerScene/ServerScene.h"
 #include "../../Scene/InGameScene/InGameScene.h"
 
 INIT_INSTACNE(EventManager)
@@ -25,8 +26,11 @@ void EventManager::processPacketEvent()
 		PacketBase* ev = mEventQueue.front().get();
 		switch (ev->packetType)
 		{
-			case SC_LOGIN_OK:
+			case SC_CHANNEL_LOGIN:
 			{
+				ChannelLoginPacket* e = static_cast<ChannelLoginPacket*>(ev);
+				ServerScene* serverScene = static_cast<ServerScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE));
+				serverScene->ProcessChannelLogin(e->channel);
 				scene->InitializeObject(ev->id);
 				break;
 			}

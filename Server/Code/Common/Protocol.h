@@ -103,6 +103,8 @@ enum DIRECTION_TYPE
 enum CS_PACKET_TYPE
 {
 	CS_LOGIN = 0,
+	CS_CHANNEL_LOGIN,
+
 	CS_MOVE,
 	CS_CHANGE_CHANNEL,
 	CS_BROADCASTING_CHAT,
@@ -121,6 +123,8 @@ enum SC_PACKET_TYPE
 {
 	SC_LOGIN_OK = 0,
 	SC_LOGIN_FAIL,
+	SC_CHANNEL_LOGIN,
+
 	SC_POSITION,
 	SC_ADD_PLAYER,
 	SC_ADD_OBJECT,
@@ -149,6 +153,12 @@ struct CSLoginPacket
 	char type;
 	char loginId[MAX_LOGIN_ID_LENGTH];
 	char loginPassword[MAX_LOGIN_PASSWORD_LENGTH];
+};
+struct CSChannelLoginPacket
+{
+	char size;
+	char type;
+	char channel;
 };
 struct CSMovePacket
 {
@@ -235,6 +245,13 @@ struct SCLoginFailPacket
 {
 	char size;
 	char type;
+};
+struct SCChannelLoginPacket
+{
+	char size;
+	char type;
+	char channel;
+	int id;
 };
 struct SCPositionPacket
 {

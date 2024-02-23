@@ -126,3 +126,15 @@ void ServerScene::Render()
 void ServerScene::processKeyboardMessage()
 {
 }
+
+void ServerScene::ProcessChannelLogin(int channel)
+{
+	LoginChannelUI* ui = static_cast<LoginChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE)->FindUI("ChannelUI"));
+
+	ui->ResetSelectChannel();
+	ui->SetCurrentChannel(channel);
+
+	GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::INGAME_SCENE);
+	ChannelUI* channelUI = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("ChannelUI"));
+	channelUI->SetCurrentChannel(channel);
+}

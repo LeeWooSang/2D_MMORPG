@@ -44,19 +44,19 @@ void ChannelLoginClick(const std::string& name)
 	LoginChannelUI* ui = static_cast<LoginChannelUI*>(GET_INSTANCE(SceneManager)->GetCurScene()->FindUI("ChannelUI"));
 	ui->OpenChannelUI();
 
-	int newChannel = ui->GetSelectChannel();
+	int selectChannel = ui->GetSelectChannel();
 #ifdef SERVER_CONNECT
-	//GET_INSTANCE(Network)->SendChangeChannelPacket(newChannel);
+	GET_INSTANCE(Network)->SendChannelLoginPacket(selectChannel);
 #else
-
-#endif // SERVER_CONNECT
 	ui->ResetSelectChannel();
-	ui->SetCurrentChannel(newChannel);
+	ui->SetCurrentChannel(selectChannel);
 	GET_INSTANCE(SceneManager)->ChangeScene(SCENE_TYPE::INGAME_SCENE);
 	{
 		ChannelUI* channelUI = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("ChannelUI"));
-		channelUI->SetCurrentChannel(newChannel);
+		channelUI->SetCurrentChannel(selectChannel);
 	}
+#endif // SERVER_CONNECT
+
 }
 
 ChannelUI::ChannelUI()
