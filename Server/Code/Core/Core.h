@@ -24,6 +24,7 @@ public:
 public:
 	void SendLoginOkPacket(int to);
 	void SendLoginFailPacket(int to);
+	void SendDummyLoginPacket(int to, int channel);
 
 	void SendChannelLoginPacket(int to, int channel);
 
@@ -34,7 +35,7 @@ public:
 	void SendMonsterPositionPacket(int to, int obj, int x, int y);
 	void SendRemoveObjectPacket(int to, int obj);
 	void SendRemoveAllObjectPacket(int to);
-	void SendChangeChannelPacket(int to, bool result);
+	void SendChangeChannelPacket(int to, bool result, int channel);
 	void SendChatPacket(int to, int obj, wchar_t* chat);
 	void SendChangeAvatarPacket(int to, int obj, int texId);
 

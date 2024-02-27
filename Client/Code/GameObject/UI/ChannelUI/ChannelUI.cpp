@@ -25,11 +25,9 @@ void ChannelChangeClick(const std::string& name)
 #ifdef SERVER_CONNECT
 	GET_INSTANCE(Network)->SendChangeChannelPacket(newChannel);
 #else
-
-#endif // SERVER_CONNECT
-
-	ui->ResetSelectChannel();
 	ui->SetCurrentChannel(newChannel);
+#endif // SERVER_CONNECT
+	ui->ResetSelectChannel();
 }
 
 void ChannelCancelClick(const std::string& name)

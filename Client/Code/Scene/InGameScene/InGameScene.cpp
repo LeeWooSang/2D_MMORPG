@@ -68,10 +68,6 @@ bool InGameScene::Initialize()
 			{
 				return false;
 			}
-			if (tile->SetTexture("WhiteTile") == false)
-			{
-				return false;
-			}
 			v.emplace_back(tile);
 		}
 		mTiles.emplace_back(v);

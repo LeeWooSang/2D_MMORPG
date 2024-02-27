@@ -969,10 +969,11 @@ void Monster::MoveEvent()
 	// 타이머에 1초뒤에 move 전달
 	std::chrono::seconds sec{ 1 };
 
+	int channel = mChannel;
 	int sectorX = mSectorXId;
 	int sectorY = mSectorYId;
 
-	GET_INSTANCE(GameTimer)->AddTimer(std::chrono::high_resolution_clock::now() + 1s, SERVER_EVENT::MONSTER_MOVE, myId, mChannel, sectorX, sectorY);
+	GET_INSTANCE(GameTimer)->AddTimer(std::chrono::high_resolution_clock::now() + 1s, SERVER_EVENT::MONSTER_MOVE, myId, channel, sectorX, sectorY);
 }
 
 char Monster::RandomDirection() const

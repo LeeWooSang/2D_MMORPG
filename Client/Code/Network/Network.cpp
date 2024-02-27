@@ -316,6 +316,8 @@ void Network::processPacket()
 			SCChangeChannelPacket* packet = reinterpret_cast<SCChangeChannelPacket*>(mPacketBuffer);
 			if (packet->result == true)
 			{
+				ChannelUI* ui = static_cast<ChannelUI*>(GET_INSTANCE(SceneManager)->GetCurScene()->FindUI("ChannelUI"));
+				ui->SetCurrentChannel(packet->channel);
 				std::cout << "채널 변경 성공" << std::endl;
 			}
 			else

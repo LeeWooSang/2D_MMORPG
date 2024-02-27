@@ -15,7 +15,7 @@ constexpr int HEIGHT = 500;
 
 // 채널 개수
 constexpr int MAX_CHANNEL = 5;
-constexpr int MAX_CHANNEL_USER = 150;
+constexpr int MAX_CHANNEL_USER = 300;
 
 // 섹터 크기
 constexpr int SECTOR_WIDTH = WIDTH / 10;
@@ -103,6 +103,7 @@ enum DIRECTION_TYPE
 enum CS_PACKET_TYPE
 {
 	CS_LOGIN = 0,
+	CS_DUMMY_LOGIN,
 	CS_CHANNEL_LOGIN,
 
 	CS_MOVE,
@@ -123,6 +124,7 @@ enum SC_PACKET_TYPE
 {
 	SC_LOGIN_OK = 0,
 	SC_LOGIN_FAIL,
+	SC_DUMMY_LOGIN,
 	SC_CHANNEL_LOGIN,
 
 	SC_POSITION,
@@ -153,6 +155,11 @@ struct CSLoginPacket
 	char type;
 	char loginId[MAX_LOGIN_ID_LENGTH];
 	char loginPassword[MAX_LOGIN_PASSWORD_LENGTH];
+};
+struct CSDummyLoginPacket
+{
+	char size;
+	char type;
 };
 struct CSChannelLoginPacket
 {
@@ -239,12 +246,19 @@ struct SCLoginOkPacket
 	char size;
 	char type;
 	int id;
-	int channel;
+	char channel;
 };
 struct SCLoginFailPacket
 {
 	char size;
 	char type;
+};
+struct SCDummyLoginPacket 
+{
+	char size;
+	char type;
+	int id;
+	char channel;
 };
 struct SCChannelLoginPacket
 {
@@ -295,6 +309,7 @@ struct SCChangeChannelPacket
 	char size;
 	char type;
 	bool result;
+	char channel;
 };
 struct SCChatPacket
 {

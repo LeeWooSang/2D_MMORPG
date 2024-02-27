@@ -141,14 +141,23 @@ void Core::SendLoginFailPacket(int to)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
+void Core::SendDummyLoginPacket(int to, int channel)
+{
+	SCDummyLoginPacket packet;
+	packet.size = sizeof(SCDummyLoginPacket);
+	packet.type = SC_PACKET_TYPE::SC_DUMMY_LOGIN;
+	packet.id = to;
+	packet.channel = channel;
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
 void Core::SendChannelLoginPacket(int to, int channel)
 {
 	SCChannelLoginPacket packet;
 	packet.size = sizeof(SCChannelLoginPacket);
 	packet.type = SC_PACKET_TYPE::SC_CHANNEL_LOGIN;
-	packet.channel = channel;
 	packet.id = to;
-
+	packet.channel = channel;
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
@@ -243,12 +252,13 @@ void Core::SendRemoveAllObjectPacket(int to)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
-void Core::SendChangeChannelPacket(int to, bool result)
+void Core::SendChangeChannelPacket(int to, bool result, int channel)
 {
 	SCChangeChannelPacket packet;
 	packet.size = sizeof(SCChangeChannelPacket);
 	packet.type = SC_PACKET_TYPE::SC_CHANGE_CHANNEL;
 	packet.result = result;
+	packet.channel = channel;
 
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
@@ -588,7 +598,26 @@ void Core::processPacket(int id, char* buf)
 		{
 			CSLoginPacket* packet = reinterpret_cast<CSLoginPacket*>(buf);
 			// 아이디, 비번 비교
+			SendLoginOkPacket(id);
+			break;
+		}
 
+		case CS_PACKET_TYPE::CS_DUMMY_LOGIN:
+		{
+			int channel = FindChannel();
+			int channelIndex = mChannels[channel].PushUser(id);
+			mUsers[id].SetChannelIndex(channelIndex);
+			mUsers[id].SetChannel(channel);
+
+			int x = mUsers[id].GetX();
+			int y = mUsers[id].GetY();
+
+			// 섹터 찾아서 넣기
+			mChannels[channel].PushSectorObject(x, y, id);
+			mUsers[id].ProcessLoginViewList();
+
+			SendDummyLoginPacket(id, channel);
+			std::cout << id << " dummy client is " << channel << " channel login ok" << std::endl;
 			break;
 		}
 
@@ -641,15 +670,16 @@ void Core::processPacket(int id, char* buf)
 			if (oldChannel == newChannel)
 			{
 				std::cout << id << " client change channel fail : " << oldChannel << " --> " << newChannel << std::endl;
-				SendChangeChannelPacket(id, result);
+				SendChangeChannelPacket(id, result, oldChannel);
 				break;
 			}
 			if (newChannel >= MAX_CHANNEL)
 			{
 				std::cout << id << " client change channel fail : 최대 채널 초과" << std::endl;
-				SendChangeChannelPacket(id, result);
+				SendChangeChannelPacket(id, result, oldChannel);
 				break;
 			}
+
 			if (mChannels[newChannel].IsFull() == false)
 			{
 				int x = mUsers[id].GetX();
@@ -672,14 +702,14 @@ void Core::processPacket(int id, char* buf)
 
 				result = true;
 				std::cout << id << " client change channel ok: " << oldChannel << " --> " << newChannel << std::endl;
+				SendChangeChannelPacket(id, result, newChannel);
 			}
 			else
 			{
 				std::cout << id << " client change channel fail : " << oldChannel << " --> " << newChannel << std::endl;
 				std::cout << newChannel << " channel is full" << std::endl;
+				SendChangeChannelPacket(id, result, oldChannel);
 			}
-
-			SendChangeChannelPacket(id, result);
 			break;
 		}
 
@@ -795,7 +825,7 @@ void Core::processEvent(Over* over)
 			monster.ProcessMove(dir);
 			monster.ProcessMoveViewList();
 
-			//delete over;
+			delete over;
 			//over = nullptr;
 			break;
 		}
@@ -805,7 +835,7 @@ void Core::processEvent(Over* over)
 			break;
 		}
 	}
-	popLeafWork();
+	//popLeafWork();
 }
 
 int Core::FindChannel()

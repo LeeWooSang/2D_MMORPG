@@ -15,7 +15,8 @@ Map::~Map()
 bool Map::Initialize(int x, int y)
 {
 	GameObject::Initialize(x, y);
-	
+	SetTexture("Tile");
+
 	return true;
 }
 
@@ -49,5 +50,5 @@ void Map::Render()
 
 	//GET_INSTANCE(GraphicEngine)->RenderRectangle(pos);
 	GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos, rect);
-	GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "검은색");
+	//GET_INSTANCE(GraphicEngine)->RenderRectangle(pos, "검은색");
 }

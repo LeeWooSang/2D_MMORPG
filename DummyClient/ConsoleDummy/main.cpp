@@ -7,6 +7,7 @@
 #include <mutex>
 #include <random>
 #include "../../Server/Code/Common/Protocol.h"
+#include "../../Client/Code/Common/Utility.h"
 
 using namespace std;
 
@@ -16,6 +17,8 @@ struct Client
 	{
 		overEx = nullptr;
 		isConnect = false;
+		channel = -1;
+
 		x = 0;
 		y = 0;
 		socket = 0;
@@ -41,6 +44,8 @@ struct Client
 
 	OverEx* overEx;
 	bool isConnect;
+	int channel;
+
 	int x;
 	int y;
 	SOCKET socket;
@@ -73,7 +78,7 @@ void SendPacket(int id, char* packet);
 void ProcessPacket(int id, char* buf);
 void Disconnect(int id);
 
-void SendLoginPacket(int id);
+void SendDummyLoginPacket(int id);
 void SendMovePacket(int id, char dir);
 
 int main()
@@ -233,15 +238,11 @@ void DoConnect()
 
 void DoAI()
 {
-	std::random_device rd;
-	std::default_random_engine dre(rd());
-	std::uniform_int_distribution<int> uid(0, 3);
-
 	while (true)
 	{
-		std::this_thread::sleep_for(100ms);
+		//std::this_thread::sleep_for(1000ms);
 		// move ai
-		for (int i = 1; i < MAX_DUMMY_CLINET; ++i)
+		for (int i = 0; i < MAX_DUMMY_CLINET; ++i)
 		{
 			if (gClients[i].isConnect == false)
 			{
@@ -249,8 +250,13 @@ void DoAI()
 			}
 
 			// 패킷전송
-			char dir = uid(dre);
+			int dir = GetRandomNumber(0, 4);
+			if (dir == 4)
+			{
+				continue;
+			}
 			SendMovePacket(i, dir);
+			std::this_thread::sleep_for(100ms);
 		}
 	}
 }
@@ -319,8 +325,8 @@ bool ConnectServer(int id)
 	CreateIoCompletionPort(reinterpret_cast<HANDLE>(gClients[id].socket), gIOCP, id, 0);
 	RecvPacket(id);
 	
-	SendLoginPacket(id);
-		
+	SendDummyLoginPacket(id);
+	
 	return true;
 }
 
@@ -368,10 +374,12 @@ void ProcessPacket(int id, char* buf)
 {
 	switch (buf[1])
 	{
-		case SC_PACKET_TYPE::SC_LOGIN_OK:
+		case SC_PACKET_TYPE::SC_DUMMY_LOGIN:
 		{
-			SCLoginOkPacket* packet = reinterpret_cast<SCLoginOkPacket*>(buf);
-			gClients[packet->id].isConnect = true;
+			SCDummyLoginPacket* packet = reinterpret_cast<SCDummyLoginPacket*>(buf);
+			int id = packet->id;
+			gClients[id].isConnect = true;
+			gClients[id].channel = packet->channel;
 			break;
 		}
 
@@ -413,11 +421,11 @@ void Disconnect(int id)
 	std::cout << id << "번 클라이언트 연결 끊어짐" << std::endl;
 }
 
-void SendLoginPacket(int id)
+void SendDummyLoginPacket(int id)
 {
-	CSLoginPacket packet;
-	packet.size = sizeof(CSLoginPacket);
-	packet.type = CS_PACKET_TYPE::CS_LOGIN;
+	CSDummyLoginPacket packet;
+	packet.size = sizeof(CSDummyLoginPacket);
+	packet.type = CS_PACKET_TYPE::CS_DUMMY_LOGIN;
 	SendPacket(id, reinterpret_cast<char*>(&packet));
 }
 
