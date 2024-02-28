@@ -139,7 +139,15 @@ bool ChannelUI::Initialize(int x, int y)
 		slot->SetSlotName("ChannelUICh" + std::to_string(i));
 		AddChildUI("Slot", slot);
 
-		originX += 70;
+		if ((i + 1) % 5 == 0)
+		{
+			originX = data.origin.first;
+			originY += 20;
+		}
+		else
+		{
+			originX += 70;
+		}
 	}
 
 	SetPosition(200, 200);

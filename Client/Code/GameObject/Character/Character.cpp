@@ -879,6 +879,41 @@ void Player::AddItem()
 	static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"))->AddItem(texId);
 }
 
+OtherPlayer::OtherPlayer()
+	: AnimationCharacter()
+{
+}
+
+OtherPlayer::~OtherPlayer()
+{
+}
+
+bool OtherPlayer::Initialize(int x, int y)
+{
+	AnimationCharacter::Initialize(x, y);
+
+	return true;
+}
+
+void OtherPlayer::Update()
+{
+	AnimationCharacter::Update();
+}
+
+void OtherPlayer::Render()
+{
+	AnimationCharacter::Render();
+
+	std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
+	// 이미지 위치
+	D2D1_RECT_F pos;
+	pos.left = (mPos.first - cameraPos.first) * 65.0 + 8.0;
+	pos.top = (mPos.second - cameraPos.second) * 65.0 + 8.0;
+
+	std::wstring text = L"Id (" + std::to_wstring(mId) + L")";
+	GET_INSTANCE(GraphicEngine)->RenderText(text.c_str(), static_cast<int>(pos.left), static_cast<int>(pos.top + 60), "메이플", "검은색");
+}
+
 Monster::Monster()
 	: AnimationCharacter()
 {
@@ -982,7 +1017,6 @@ void Monster::Render()
 	else
 	{
 		std::pair<int, int> cameraPos = GET_INSTANCE(Camera)->GetPosition();
-
 		// 이미지 위치
 		D2D1_RECT_F pos;
 		pos.left = (mPos.first - cameraPos.first) * 65.0 + 8.0;

@@ -24,7 +24,6 @@ public:
 
 	int GetId()	const { return mId; }
 	void SetId(int id) { mId = id; }
-	void SetAnimationInfo(int frameSize);
 	
 protected:
 	int mId;
@@ -106,6 +105,19 @@ public:
 private:
 	float mElapsedTime;
 	bool mFlag;
+};
+
+class OtherPlayer : public AnimationCharacter
+{
+public:
+	OtherPlayer();
+	virtual ~OtherPlayer();
+
+	virtual bool Initialize(int x, int y);
+	virtual void Update();
+	virtual void Render();
+
+private:
 };
 
 class Monster : public AnimationCharacter

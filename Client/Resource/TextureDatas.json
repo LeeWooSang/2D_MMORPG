@@ -2256,7 +2256,46 @@
     "OriginX": 9,
     "OriginY": 6
   },
-
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh5.png",
+    "Name": "ChannelUICh5",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh6.png",
+    "Name": "ChannelUICh6",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh7.png",
+    "Name": "ChannelUICh7",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh8.png",
+    "Name": "ChannelUICh8",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh9.png",
+    "Name": "ChannelUICh9",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
   {
     "Path": "../Resource/Textures/ServerScene/ServerUIBackground0.jpg",
     "Name": "ServerUIBackground0",
@@ -2423,6 +2462,38 @@
     "Width": 68,
     "Height": 27,
     "OriginX": 22,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh6.png",
+    "Name": "LoginCh6",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 93,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh7.png",
+    "Name": "LoginCh7",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 164,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh8.png",
+    "Name": "LoginCh8",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 235,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh9.png",
+    "Name": "LoginCh9",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 306,
     "OriginY": 106
   }
 ]

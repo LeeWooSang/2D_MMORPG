@@ -88,7 +88,7 @@ bool InGameScene::Initialize()
 	// 나를 제외한 나머지 유저 수
 	for (int i = 0; i < MAX_CHANNEL * MAX_CHANNEL_USER; ++i)
 	{
-		std::shared_ptr<AnimationCharacter> otherPlayer = std::make_shared<AnimationCharacter>();
+		std::shared_ptr<OtherPlayer> otherPlayer = std::make_shared<OtherPlayer>();
 		if (otherPlayer->Initialize(0, 0) == false)
 		{
 			return false;
@@ -509,7 +509,7 @@ void InGameScene::AddPlayer(int id, int x, int y, int* texIds)
 	}
 	else if (id < MAX_USER)
 	{
-		std::shared_ptr<AnimationCharacter> otherPlayer = mOtherPlayers[id];
+		std::shared_ptr<OtherPlayer> otherPlayer = mOtherPlayers[id];
 		otherPlayer->Visible();
 		otherPlayer->SetPosition(x, y);
 		for (int i = 0; i < MAX_AVATAR_SLOT_SIZE; ++i)
@@ -646,7 +646,7 @@ Player* InGameScene::GetPlayer()
 	return mPlayer;
 }
 
-AnimationCharacter* InGameScene::GetOtherPlayer(int id)
+OtherPlayer* InGameScene::GetOtherPlayer(int id)
 {
 	return mOtherPlayers[id].get();
 }

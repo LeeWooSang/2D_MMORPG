@@ -5,7 +5,7 @@
 #include <memory>
 
 class Map;
-class AnimationCharacter;
+class OtherPlayer;
 class Player;
 class Monster;
 class Skill;
@@ -36,7 +36,7 @@ public:
 	void TradeCancel();
 
 	Player* GetPlayer();
-	AnimationCharacter* GetOtherPlayer(int id);
+	OtherPlayer* GetOtherPlayer(int id);
 	Monster* GetMonster(int id);
 
 	void AddSkill(Skill* skill);
@@ -62,8 +62,8 @@ private:
 
 	std::vector<Map*> mNewTiles;
 
-	std::unordered_map<int, std::shared_ptr<AnimationCharacter>> mOtherPlayers;
-	std::unordered_map<int, std::shared_ptr<AnimationCharacter>> mVisibleOtherPlayers;
+	std::unordered_map<int, std::shared_ptr<OtherPlayer>> mOtherPlayers;
+	std::unordered_map<int, std::shared_ptr<OtherPlayer>> mVisibleOtherPlayers;
 
 	std::unordered_map<int, std::shared_ptr<Monster>> mMonsters;
 	std::unordered_map<int, std::shared_ptr<Monster>> mVisibleMonsters;

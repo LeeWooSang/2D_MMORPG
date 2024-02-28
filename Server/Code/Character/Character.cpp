@@ -296,39 +296,42 @@ bool Player::Inititalize(int id)
 
 void Player::PlayerDisconnect()
 {
-	Sector& sector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(mX, mY);
-
-	int myId = mOver->myId;
-	Player* users = GET_INSTANCE(Core)->GetUsers();
-
-	std::vector<int> channelUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetUserIds();	
-	// 뷰리스트 정리
-	for (int i = 0; i < channelUserIds.size(); ++i)
+	if (mChannel != -1)
 	{
-		int id = channelUserIds[i];
-		if (id == myId)
+		Sector& sector = GET_INSTANCE(Core)->GetChannel(mChannel).FindSector(mX, mY);
+
+		int myId = mOver->myId;
+		Player* users = GET_INSTANCE(Core)->GetUsers();
+
+		std::vector<int> channelUserIds = GET_INSTANCE(Core)->GetChannel(mChannel).GetUserIds();
+		// 뷰리스트 정리
+		for (int i = 0; i < channelUserIds.size(); ++i)
 		{
-			continue;
+			int id = channelUserIds[i];
+			if (id == myId)
+			{
+				continue;
+			}
+
+			// 상대방의 뷰리스트에서 나를 제거
+			if (users[id].GetViewList().count(myId) == true)
+			{
+				users[id].GetViewList().erase(myId);
+				GET_INSTANCE(Core)->SendRemoveObjectPacket(id, myId);
+			}
 		}
 
-		// 상대방의 뷰리스트에서 나를 제거
-		if (users[id].GetViewList().count(myId) == true)
+		Monster* monsters = sector.GetMonsters();
+		int index = 0;
+		for (int i = sector.GetStartId(); i < sector.GetEndId(); ++i, ++index)
 		{
-			users[id].GetViewList().erase(myId);
-			GET_INSTANCE(Core)->SendRemoveObjectPacket(id, myId);
-		}
-	}
-
-	Monster* monsters = sector.GetMonsters();
-	int index = 0;
-	for (int i = sector.GetStartId(); i < sector.GetEndId(); ++i, ++index)
-	{
-		//int index = sector.GetObjectIndex(i);
-		//int index = GET_INSTANCE(Core)->GetChannel(mChannel).FindSectorObjectIndex(mX, mY, i);
-		// 상대방의 뷰리스트에서 나를 제거
-		if (monsters[index].GetViewList().count(myId) == true)
-		{
-			monsters[index].GetViewList().erase(myId);
+			//int index = sector.GetObjectIndex(i);
+			//int index = GET_INSTANCE(Core)->GetChannel(mChannel).FindSectorObjectIndex(mX, mY, i);
+			// 상대방의 뷰리스트에서 나를 제거
+			if (monsters[index].GetViewList().count(myId) == true)
+			{
+				monsters[index].GetViewList().erase(myId);
+			}
 		}
 	}
 
