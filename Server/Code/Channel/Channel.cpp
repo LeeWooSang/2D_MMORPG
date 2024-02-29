@@ -68,6 +68,15 @@ bool Channel::Initialize(int channel)
 	return true;
 }
 
+int Channel::GetChannelUserSize()
+{
+	mChannelMtx.lock_shared();
+	int size = mUserIdList.size();
+	mChannelMtx.unlock_shared();
+
+	return size;
+}
+
 bool Channel::IsFull()
 {
 	mChannelMtx.lock_shared();

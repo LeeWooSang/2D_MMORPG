@@ -102,7 +102,8 @@ enum DIRECTION_TYPE
 
 enum CS_PACKET_TYPE
 {
-	CS_LOGIN = 0,
+	CS_SERVER_SELECT = 0,
+	CS_LOGIN,
 	CS_DUMMY_LOGIN,
 	CS_CHANNEL_LOGIN,
 
@@ -122,7 +123,9 @@ enum CS_PACKET_TYPE
 
 enum SC_PACKET_TYPE
 {
-	SC_LOGIN_OK = 0,
+	SC_SERVER_SELECT = 0,
+
+	SC_LOGIN_OK,
 	SC_LOGIN_FAIL,
 	SC_DUMMY_LOGIN,
 	SC_CHANNEL_LOGIN,
@@ -149,6 +152,12 @@ enum SC_PACKET_TYPE
 constexpr int MAX_LOGIN_ID_LENGTH = 20;
 constexpr int MAX_LOGIN_PASSWORD_LENGTH = 30;
 constexpr int MAX_CHAT_LENGTH = 50;
+struct CSServerSelectPacket
+{
+	char size;
+	char type;
+	char serverType;
+};
 struct CSLoginPacket
 {
 	char size;
@@ -241,6 +250,12 @@ struct CSTradeCancelPacket
 	int id;
 };
 ///////////////////////////////////////////////////
+struct SCServerSelectPacket
+{
+	char size;
+	char type;
+	short channelUserSize[MAX_CHANNEL];
+};
 struct SCLoginOkPacket
 {
 	char size;

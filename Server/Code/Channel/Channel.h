@@ -12,6 +12,7 @@ public:
 	~Channel();
 	bool Initialize(int channel);
 
+	int GetChannelUserSize();
 	bool IsFull();
 	int PushUser(int id);
 	void PopUser(int index) { mUserIdList.erase(index); }

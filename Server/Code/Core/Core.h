@@ -22,6 +22,7 @@ public:
 	Channel& GetChannel(int channel) { return mChannels[channel]; }
 
 public:
+	void SendServerSelectPacket(int to, short* size);
 	void SendLoginOkPacket(int to);
 	void SendLoginFailPacket(int to);
 	void SendDummyLoginPacket(int to, int channel);

@@ -10,6 +10,10 @@ struct PacketBase
 	char packetType;
 	int id;
 };
+struct ServerSelectPacket : public PacketBase
+{
+	short channelUserSize[MAX_CHANNEL];
+};
 struct ChannelLoginPacket : public PacketBase
 {
 	int channel;

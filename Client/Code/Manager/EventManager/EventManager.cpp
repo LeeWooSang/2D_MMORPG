@@ -26,6 +26,14 @@ void EventManager::processPacketEvent()
 		PacketBase* ev = mEventQueue.front().get();
 		switch (ev->packetType)
 		{
+			case SC_SERVER_SELECT:
+			{
+				ServerSelectPacket* e = static_cast<ServerSelectPacket*>(ev);
+				ServerScene* serverScene = static_cast<ServerScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE));
+				serverScene->ProcessServerSelect(e->channelUserSize);
+				break;
+			}
+
 			case SC_CHANNEL_LOGIN:
 			{
 				ChannelLoginPacket* e = static_cast<ChannelLoginPacket*>(ev);

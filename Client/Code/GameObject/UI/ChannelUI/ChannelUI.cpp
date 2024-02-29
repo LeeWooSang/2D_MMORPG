@@ -431,7 +431,7 @@ void ChannelUISlot::MouseLButtonClick()
 LoginChannelUISlot::LoginChannelUISlot()
 	: ChannelUISlot()
 {
-	mGaugeRate = 0.f;
+	mChannelUserSize = 0;
 }
 
 LoginChannelUISlot::~LoginChannelUISlot()
@@ -441,8 +441,7 @@ LoginChannelUISlot::~LoginChannelUISlot()
 bool LoginChannelUISlot::Initialize(int x, int y)
 {
 	ChannelUISlot::Initialize(x, y);
-
-	mGaugeRate = 0.5;
+	mChannelUserSize = 0;
 
 	return true;
 }
@@ -481,11 +480,13 @@ void LoginChannelUISlot::Render()
 	}
 	
 	{
+		float rate = static_cast<float>(mChannelUserSize) / MAX_CHANNEL_USER;
+
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("LoginChGauge");
 		D2D1_RECT_F gaugeRect;
 		gaugeRect.left = mPos.first + data.origin.first;
 		gaugeRect.top = mPos.second + data.origin.second;
-		gaugeRect.right = gaugeRect.left + data.size.first * mGaugeRate;
+		gaugeRect.right = gaugeRect.left + data.size.first * rate;
 		gaugeRect.bottom = gaugeRect.top + data.size.second;
 
 		GET_INSTANCE(GraphicEngine)->RenderTexture(GET_INSTANCE(ResourceManager)->FindTexture("LoginChGauge"), gaugeRect);

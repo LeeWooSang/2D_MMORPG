@@ -72,10 +72,10 @@ public:
 	virtual void Render();
 	virtual void MouseLButtonClick();
 
-	void SetGagueRate(float rate) { mGaugeRate = rate; }
+	void SetChannelUserSize(short size) { mChannelUserSize = size; }
 
 private:
-	float mGaugeRate;
+	short mChannelUserSize;
 };
 
 void ChannelClick(const std::string& channel);

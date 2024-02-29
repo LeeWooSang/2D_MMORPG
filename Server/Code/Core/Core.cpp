@@ -122,13 +122,21 @@ void Core::ServerQuit()
 	Release();
 }
 
+void Core::SendServerSelectPacket(int to, short* size)
+{
+	SCServerSelectPacket packet;
+	packet.size = sizeof(SCServerSelectPacket);
+	packet.type = SC_PACKET_TYPE::SC_SERVER_SELECT;
+	memcpy(packet.channelUserSize, size, sizeof(short) * MAX_CHANNEL);
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
 void Core::SendLoginOkPacket(int to)
 {
 	SCLoginOkPacket packet;
 	packet.size = sizeof(SCLoginOkPacket);
 	packet.type = SC_PACKET_TYPE::SC_LOGIN_OK;
 	packet.id = to;
-
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
@@ -594,6 +602,19 @@ void Core::processPacket(int id, char* buf)
 	//auto start = std::chrono::high_resolution_clock::now();
 	switch (buf[1])
 	{
+		case CS_PACKET_TYPE::CS_SERVER_SELECT:
+		{
+			CSServerSelectPacket* packet = reinterpret_cast<CSServerSelectPacket*>(buf);
+			packet->type;			
+			short channelUserSize[MAX_CHANNEL] = { 0. };
+			for (int i = 0; i < MAX_CHANNEL; ++i)
+			{
+				channelUserSize[i] = mChannels[i].GetChannelUserSize();
+			}
+			SendServerSelectPacket(id, channelUserSize);
+			break;
+		}
+
 		case CS_PACKET_TYPE::CS_LOGIN:
 		{
 			CSLoginPacket* packet = reinterpret_cast<CSLoginPacket*>(buf);

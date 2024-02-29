@@ -16,7 +16,12 @@ void ServerSelectClick(const std::string& name)
 
 	LoginChannelUI* ui = static_cast<LoginChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE)->FindUI("ChannelUI"));
 	ui->ChangeLogo(type);
+
+#ifdef SERVER_CONNECT
+	GET_INSTANCE(Network)->SendServerSelect(static_cast<GAME_SERVER_TYPE>(type));
+#else
 	ui->OpenChannelUI();
+#endif // SERVER_CONNECT
 }
 
 ServerScene::ServerScene()
@@ -125,6 +130,19 @@ void ServerScene::Render()
 
 void ServerScene::processKeyboardMessage()
 {
+}
+
+void ServerScene::ProcessServerSelect(short* channelUserSize)
+{
+	LoginChannelUI* ui = static_cast<LoginChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE)->FindUI("ChannelUI"));
+	std::vector<UI*>& v = ui->FindChildUIs("Slot");
+	for (int i = 0; i < v.size(); ++i)
+	{
+		LoginChannelUISlot* slot = static_cast<LoginChannelUISlot*>(v[i]);
+		slot->SetChannelUserSize(channelUserSize[i]);
+	}
+
+	ui->OpenChannelUI();
 }
 
 void ServerScene::ProcessChannelLogin(int channel)

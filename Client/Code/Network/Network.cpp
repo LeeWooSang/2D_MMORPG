@@ -83,6 +83,15 @@ void Network::PreocessNetwork(unsigned long long wparam, long long lparam)
 	}
 }
 
+void Network::SendServerSelect(GAME_SERVER_TYPE type)
+{
+	CSServerSelectPacket packet;
+	packet.size = sizeof(CSServerSelectPacket);
+	packet.type = CS_PACKET_TYPE::CS_SERVER_SELECT;
+	packet.serverType = type;
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
 void Network::SendLoginPacket(const std::string& loginId, const std::string& loginPassword)
 {
 	CSLoginPacket packet;
@@ -225,6 +234,16 @@ void Network::processPacket()
 {
 	switch (mPacketBuffer[1])
 	{
+		case SC_PACKET_TYPE::SC_SERVER_SELECT:
+		{
+			SCServerSelectPacket* packet = reinterpret_cast<SCServerSelectPacket*>(mPacketBuffer);
+			std::shared_ptr<ServerSelectPacket> p = std::make_shared<ServerSelectPacket>();
+			p->packetType = packet->type;
+			memcpy(p->channelUserSize, packet->channelUserSize, sizeof(short) * MAX_CHANNEL);
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
+			break;
+		}
+
 		case SC_PACKET_TYPE::SC_LOGIN_OK:
 		{		
 			SCLoginOkPacket* packet = reinterpret_cast<SCLoginOkPacket*>(mPacketBuffer);

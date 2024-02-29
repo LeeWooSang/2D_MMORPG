@@ -13,6 +13,7 @@ public:
 
 	virtual void processKeyboardMessage();
 
+	void ProcessServerSelect(short* channelUserSize);
 	void ProcessChannelLogin(int channel);
 
 	int GetServer(const std::string& key) { return mServerList[key]; }

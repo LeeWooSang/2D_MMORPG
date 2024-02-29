@@ -33,6 +33,8 @@ public:
 	void PreocessNetwork(unsigned long long wparam, long long lparam);
 
 public:
+	void SendServerSelect(GAME_SERVER_TYPE type);
+
 	void SendLoginPacket(const std::string& loginId, const std::string& loginPassword);
 	void SendChannelLoginPacket(int channel);
 
