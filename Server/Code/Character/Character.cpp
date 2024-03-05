@@ -7,8 +7,10 @@
 #include "../../../Client/Code/Common/Utility.h"
 
 Character::Character()
-	: mOver(nullptr), mX(0), mY(0)
+	: mOver(nullptr), mX(0), mY(0), mDirection(1)
 {
+	mAnimationType = ANIMATION_MOTION_TYPE::IDLE;
+
 	mChannelIndex = -1;
 	mChannel = -1;
 }
@@ -24,6 +26,8 @@ void Character::Reset()
 	memset(&mOver->overlapped, 0, sizeof(WSAOVERLAPPED));
 	mOver->eventType = SERVER_EVENT::DEFAULT;
 	
+	mDirection = 1;
+
 	mChannelIndex = -1;
 	mChannel = -1;
 
@@ -44,6 +48,7 @@ bool Character::Inititalize(int id)
 
 void Character::ProcessMove(char dir)
 {
+	char direction = mDirection;
 	int oldX = mX;
 	int oldY = mY;
 	int newX = mX;
@@ -63,11 +68,13 @@ void Character::ProcessMove(char dir)
 		}
 		case DIRECTION_TYPE::LEFT:
 		{
+			direction = 1;
 			--newX;
 			break;
 		}
 		case DIRECTION_TYPE::RIGHT:
 		{
+			direction = -1;
 			++newX;
 			break;
 		}
@@ -86,6 +93,7 @@ void Character::ProcessMove(char dir)
 
 	mX = newX;
 	mY = newY;
+	mDirection = direction;
 }
 
 bool Character::CheckRange(int x, int y)
@@ -243,6 +251,8 @@ void Player::Reset()
 	// ÁÂÇ¥ ¸®¼Â
 	mX = GetRandomNumber(0, WIDTH - 1);
 	mY = GetRandomNumber(0, HEIGHT - 1);
+	mDirection = 1;
+	mAnimationType = ANIMATION_MOTION_TYPE::IDLE;
 
 	mChannelIndex = -1;
 	mChannel = -1;
@@ -277,8 +287,11 @@ bool Player::Inititalize(int id)
 	mConnect = false;
 	mSocket = 0;
 
-	mX = GetRandomNumber(0, WIDTH - 1);
-	mY = GetRandomNumber(0, HEIGHT - 1);
+	//mX = GetRandomNumber(0, WIDTH - 1);
+	//mY = GetRandomNumber(0, HEIGHT - 1);
+	mX = 0;
+	mY = 0;
+	mAnimationType = static_cast<ANIMATION_MOTION_TYPE>(GetRandomNumber(0, 2));
 
 	mChannelIndex = -1;
 	mChannel = -1;

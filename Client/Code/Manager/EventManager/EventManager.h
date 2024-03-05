@@ -22,11 +22,14 @@ struct PositionPacket : public PacketBase
 {
 	int x;
 	int y;
+	char dir;
 };
 struct AddPlayerPacket : public PacketBase
 {
 	int x;
 	int y;
+	char dir;
+	int animationType;
 	int texIds[21];
 };
 struct AddPacket : public PacketBase

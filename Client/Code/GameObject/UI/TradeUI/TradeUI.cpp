@@ -441,7 +441,7 @@ void TradeUI::SetAvatar()
 			mMyAvatar->SetAvatarId(avatarIds[i]);
 		}
 
-		mMyAvatar->SetAnimationMotion(ANIMATION_MONTION_TYPE::IDLE);
+		mMyAvatar->SetAnimationMotion(ANIMATION_MOTION_TYPE::IDLE);
 		mMyAvatar->Visible();
 		mMyAvatar->SetPosition(1, -1);
 	}
@@ -461,7 +461,7 @@ void TradeUI::SetAvatar()
 			mTradeUserAvatar->SetAvatarId(avatarIds[i]);
 		}
 
-		mTradeUserAvatar->SetAnimationMotion(ANIMATION_MONTION_TYPE::IDLE);
+		mTradeUserAvatar->SetAnimationMotion(ANIMATION_MOTION_TYPE::IDLE);
 		mTradeUserAvatar->Visible();
 		mTradeUserAvatar->SetDirection(-1);
 		mTradeUserAvatar->SetPosition(-2, -1);

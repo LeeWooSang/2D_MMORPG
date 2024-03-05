@@ -46,7 +46,7 @@ void EventManager::processPacketEvent()
 			case SC_POSITION:
 			{
 				PositionPacket* e = static_cast<PositionPacket*>(ev);
-				scene->UpdateObjectPosition(e->id, e->x, e->y);
+				scene->UpdateObjectPosition(e->id, e->x, e->y, e->dir);
 				break;
 			}
 

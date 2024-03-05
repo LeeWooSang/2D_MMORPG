@@ -31,7 +31,7 @@ protected:
 	CHARACTER_STATE_TYPE mState;
 };
 
-enum class ANIMATION_MONTION_TYPE
+enum class ANIMATION_MOTION_TYPE
 {
 	IDLE,
 	WALK,
@@ -60,11 +60,11 @@ public:
 	void AddChild(const std::string& name, AnimationCharacter* obj);
 	AnimationCharacter* FindChildObject(const std::string& name);
 
-	void AddAnimation(ANIMATION_MONTION_TYPE motion, Animation* animation)		{ mAnimations.emplace(motion, animation); }
-	std::unordered_map<ANIMATION_MONTION_TYPE, Animation*>& GetAnimations() { return mAnimations; }
+	void AddAnimation(ANIMATION_MOTION_TYPE motion, Animation* animation)		{ mAnimations.emplace(motion, animation); }
+	std::unordered_map<ANIMATION_MOTION_TYPE, Animation*>& GetAnimations() { return mAnimations; }
 	
-	void SetAnimationMotion(ANIMATION_MONTION_TYPE motion);
-	void SetAvatar(const std::string& parts, ANIMATION_MONTION_TYPE motion, const std::string& objName, int count);
+	void SetAnimationMotion(ANIMATION_MOTION_TYPE motion);
+	void SetAvatar(const std::string& parts, ANIMATION_MOTION_TYPE motion, const std::string& objName, int count);
 
 	std::vector<int>& GetAvatarIds() { return mAvatarIds; }
 	void SetAvatarId(int texId);
@@ -80,8 +80,8 @@ protected:
 
 	AnimationCharacter* mParent;
 
-	ANIMATION_MONTION_TYPE mMotion;
-	std::unordered_map<ANIMATION_MONTION_TYPE, Animation*> mAnimations;
+	ANIMATION_MOTION_TYPE mMotion;
+	std::unordered_map<ANIMATION_MOTION_TYPE, Animation*> mAnimations;
 
 	std::vector<int> mAvatarIds;
 };

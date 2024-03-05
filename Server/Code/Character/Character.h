@@ -4,6 +4,13 @@
 #include <mutex>
 #include <shared_mutex>
 
+enum class ANIMATION_MOTION_TYPE
+{
+	IDLE,
+	WALK,
+	JUMP
+};
+
 class Character
 {
 public:
@@ -13,9 +20,16 @@ public:
 	virtual bool Inititalize(int id);
 
 	Over* GetOver() { return mOver; }
+	
+	char GetDirection()	const { return mDirection; }
+	void SetDirection(char dir) { mDirection = dir; }
+
 	int	 GetX()	const { return mX; }
 	int	 GetY()	const { return mY; }
 	void SetPosition(int x, int y) { mX = x; mY = y; }
+
+	ANIMATION_MOTION_TYPE GetAnimationType()	const { return mAnimationType; }
+	void SetAnimationType(int type) { mAnimationType = static_cast<ANIMATION_MOTION_TYPE>(type); }
 
 	std::mutex& GetPosMtx() { return mPosMtx; }
 	std::mutex& GetViewListMtx() { return mViewListMtx; }
@@ -37,9 +51,11 @@ public:
 
 protected:
 	Over* mOver;
+	char mDirection;
 	int mX;
 	int mY;
 	std::mutex mPosMtx;
+	ANIMATION_MOTION_TYPE mAnimationType;
 
 	tbb::concurrent_hash_map<int, int> mViewList;
 	std::unordered_set<int> mSTLViewList;

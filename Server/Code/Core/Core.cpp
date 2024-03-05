@@ -173,6 +173,7 @@ void Core::SendPositionPacket(int to, int obj)
 {
 	int x = mUsers[obj].GetX();
 	int y = mUsers[obj].GetY();
+	char dir = mUsers[obj].GetDirection();
 
 	SCPositionPacket packet;
 	packet.size = sizeof(SCPositionPacket);
@@ -180,6 +181,7 @@ void Core::SendPositionPacket(int to, int obj)
 	packet.id = obj;
 	packet.x = x;
 	packet.y = y;
+	packet.dir = dir;
 
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
@@ -188,6 +190,8 @@ void Core::SendAddPlayerPacket(int to, int obj, int* texIds)
 {
 	int x = mUsers[obj].GetX();
 	int y = mUsers[obj].GetY();
+	char dir = mUsers[obj].GetDirection();
+	char animationType = static_cast<char>(mUsers[obj].GetAnimationType());
 
 	SCAddPlayerPacket packet;
 	packet.size = sizeof(SCAddPlayerPacket);
@@ -195,6 +199,8 @@ void Core::SendAddPlayerPacket(int to, int obj, int* texIds)
 	packet.id = obj;
 	packet.x = x;
 	packet.y = y;
+	packet.dir = dir;
+	packet.animationType = animationType;
 	memcpy(packet.texIds, texIds, sizeof(packet.texIds));
 
 	sendPacket(to, reinterpret_cast<char*>(&packet));
@@ -658,6 +664,10 @@ void Core::processPacket(int id, char* buf)
 
 				int x = mUsers[id].GetX();
 				int y = mUsers[id].GetY();
+
+				x = 0;
+				y = 0;
+				mUsers[id].SetPosition(x, y);
 
 				// 섹터 찾아서 넣기
 				mChannels[channel].PushSectorObject(x, y, id);

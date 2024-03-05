@@ -22,8 +22,10 @@ public:
 
 	void InitializeObject(int myId);
 	void AddPlayer(int id, int x, int y, int* texIds);
+	void AddPlayer(struct AddPlayerPacket* packet);
+
 	void AddObject(int id, int x, int y);
-	void UpdateObjectPosition(int id, int x, int y);
+	void UpdateObjectPosition(int id, int x, int y, char dir);
 	void RemoveObject(int id);
 	void RemoveAllObject();
 

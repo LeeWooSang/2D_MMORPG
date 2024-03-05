@@ -22,6 +22,8 @@
 #include "../../Resource/Texture/Texture.h"
 #include "../../Common/Utility.h"
 
+#include "../../Manager/EventManager/EventManager.h"
+
 InGameScene::InGameScene()
 	: Scene()
 {
@@ -525,6 +527,45 @@ void InGameScene::AddPlayer(int id, int x, int y, int* texIds)
 	}
 }
 
+void InGameScene::AddPlayer(AddPlayerPacket* packet)
+{
+	int myId = mPlayer->GetId();
+	if (myId == packet->id)
+	{
+		for (int i = 0; i < MAX_AVATAR_SLOT_SIZE; ++i)
+		{
+			if (packet->texIds[i] == 0)
+			{
+				continue;
+			}
+			static_cast<EquipUI*>(FindUI("EquipUI"))->AddEquipItem(i, packet->texIds[i]);
+			mPlayer->SetAvatarId(packet->texIds[i]);
+		}
+
+		GET_INSTANCE(Camera)->SetPosition(packet->x, packet->y);
+		mPlayer->SetPosition(packet->x, packet->y);
+	}
+	else if (packet->id < MAX_USER)
+	{
+		std::shared_ptr<OtherPlayer> otherPlayer = mOtherPlayers[packet->id];
+		otherPlayer->Visible();
+		otherPlayer->SetPosition(packet->x, packet->y);
+		otherPlayer->SetDirection(packet->dir);
+		otherPlayer->SetAnimationMotion(static_cast<ANIMATION_MOTION_TYPE>(packet->animationType));
+
+		for (int i = 0; i < MAX_AVATAR_SLOT_SIZE; ++i)
+		{
+			if (packet->texIds[i] == 0)
+			{
+				continue;
+			}
+			otherPlayer->SetAvatarId(packet->texIds[i]);
+		}
+
+		mVisibleOtherPlayers.emplace(packet->id, otherPlayer);
+	}
+}
+
 void InGameScene::AddObject(int id, int x, int y)
 {
 	std::shared_ptr<Monster> monster = mMonsters[id];
@@ -533,19 +574,20 @@ void InGameScene::AddObject(int id, int x, int y)
 	mVisibleMonsters.emplace(id, monster);
 }
 
-void InGameScene::UpdateObjectPosition(int id, int x, int y)
+void InGameScene::UpdateObjectPosition(int id, int x, int y, char dir)
 {
 	int myId = mPlayer->GetId();
 	if (myId == id)
 	{
 		GET_INSTANCE(Camera)->SetPosition(x, y);
-		mPlayer->SetPosition(x, y);
+		mPlayer->SetPosition(x, y);		
 	}
 	else if (id < MAX_USER)
 	{
 		if (mVisibleOtherPlayers.count(id) == true)
 		{
 			mVisibleOtherPlayers[id]->SetPosition(x, y);
+			mVisibleOtherPlayers[id]->SetDirection(dir);
 		}
 	}
 	else
@@ -553,6 +595,7 @@ void InGameScene::UpdateObjectPosition(int id, int x, int y)
 		if (mVisibleMonsters.count(id) == true)
 		{
 			mVisibleMonsters[id]->SetPosition(x, y);
+			//mVisibleMonsters[id]->SetDirection(dir);
 		}
 	}
 }

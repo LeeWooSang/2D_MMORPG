@@ -280,6 +280,7 @@ void Network::processPacket()
 			p->id = packet->id;
 			p->x = packet->x;
 			p->y = packet->y;
+			p->dir = packet->dir;
 			GET_INSTANCE(EventManager)->AddPacketEvent(p);
 			break;
 		}
@@ -292,6 +293,8 @@ void Network::processPacket()
 			p->id = packet->id;
 			p->x = packet->x;
 			p->y = packet->y;
+			p->dir = packet->dir;
+			p->animationType = packet->animationType;
 			memcpy(p->texIds, packet->texIds, sizeof(p->texIds));
 			GET_INSTANCE(EventManager)->AddPacketEvent(p);
 			break;

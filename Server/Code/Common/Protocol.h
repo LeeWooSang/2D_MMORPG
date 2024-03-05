@@ -289,6 +289,7 @@ struct SCPositionPacket
 	int id;
 	int x;
 	int y;
+	char dir;
 };
 struct SCAddPlayerPacket
 {
@@ -297,6 +298,8 @@ struct SCAddPlayerPacket
 	int id;
 	int x;
 	int y;
+	char dir;
+	char animationType;
 	int texIds[MAX_AVATAR_SLOT_SIZE];
 };
 struct SCAddObjectPacket
