@@ -665,9 +665,9 @@ void Core::processPacket(int id, char* buf)
 				int x = mUsers[id].GetX();
 				int y = mUsers[id].GetY();
 
-				x = 0;
-				y = 0;
-				mUsers[id].SetPosition(x, y);
+				//x = 0;
+				//y = 0;
+				//mUsers[id].SetPosition(x, y);
 
 				// 섹터 찾아서 넣기
 				mChannels[channel].PushSectorObject(x, y, id);
