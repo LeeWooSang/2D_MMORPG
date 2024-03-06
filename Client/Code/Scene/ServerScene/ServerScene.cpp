@@ -91,7 +91,7 @@ bool ServerScene::Initialize()
 	}
 
 	{
-		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("Quit");
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ServerUIQuit");
 		ButtonUI* ui = new ButtonUI;
 		if (ui->Initialize(0, 0) == false)
 		{
@@ -99,7 +99,7 @@ bool ServerScene::Initialize()
 		}
 		ui->SetTexture(data.name);
 		ui->Visible();
-		ui->SetPosition(10, 600);
+		ui->SetPosition(0, 700);
 		ui->SetLButtonClickCallback(GameQuitClick, "Quit");
 		AddSceneUI("QuitButton", ui);
 	}

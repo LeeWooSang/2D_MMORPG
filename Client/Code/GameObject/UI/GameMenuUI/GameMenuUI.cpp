@@ -94,6 +94,7 @@ bool InGameMenuUI::Initialize(int x, int y)
 {
 	GameMenuUI::Initialize(x, y);
 
+
 	{
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ChannelChange");
 		ButtonUI* ui = new ButtonUI;
@@ -134,8 +135,18 @@ bool InGameMenuUI::Initialize(int x, int y)
 		AddChildUI("QuitButton", ui);
 	}
 
-	SetRect(275, 340);
-	SetPosition(275, 200);
+	int width = 0;
+	int height = 0;
+	for (int i = 0; i < 3; ++i)
+	{
+		std::string name = "MenuUIBackground" + std::to_string(i);
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(name);
+		width = data.size.first;
+		height += data.size.second;
+	}
+
+	SetRect(width, height);
+	SetPosition(500, 500);
 
 	return true;
 }
@@ -167,14 +178,38 @@ void InGameMenuUI::Render()
 		return;
 	}
 
+	for (int i = 0; i < 3; ++i)
+	{
+		std::string name = "MenuUIBackground" + std::to_string(i);
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData(name);
+
+		D2D1_RECT_F pos;
+		pos.left = mPos.first + data.origin.first;
+		pos.top = mPos.second + data.origin.second;
+		pos.right = pos.left + data.size.first;
+		pos.bottom = pos.top + data.size.second;
+
+		GET_INSTANCE(GraphicEngine)->RenderTexture(GET_INSTANCE(ResourceManager)->FindTexture(data.name), pos);
+	}
+
+	{
+		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("MenuUITitle");
+		D2D1_RECT_F pos;
+		pos.left = mPos.first + data.origin.first;
+		pos.top = mPos.second + data.origin.second;
+		pos.right = pos.left + data.size.first;
+		pos.bottom = pos.top + data.size.second;
+
+		GET_INSTANCE(GraphicEngine)->RenderTexture(GET_INSTANCE(ResourceManager)->FindTexture(data.name), pos);
+	}
+
+	//GET_INSTANCE(GraphicEngine)->RenderFillRectangle(pos, "ÇÏ´Ã»ö");
+
 	D2D1_RECT_F pos;
 	pos.left = mPos.first;
 	pos.top = mPos.second;
 	pos.right = pos.left + mRect.first;
 	pos.bottom = pos.top + mRect.second;
-
-	//GET_INSTANCE(GraphicEngine)->RenderTexture(mTexture, pos);
-	GET_INSTANCE(GraphicEngine)->RenderFillRectangle(pos, "ÇÏ´Ã»ö");
 
 	if (mMouseLButtonDown)
 	{

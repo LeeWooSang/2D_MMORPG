@@ -2096,28 +2096,60 @@
     "OriginY": 60
   },
   {
+    "Path": "../Resource/Textures/GameMenuUI/MenuUIBackground0.png",
+    "Name": "MenuUIBackground0",
+    "Width": 121,
+    "Height": 29,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/GameMenuUI/MenuUIBackground1.png",
+    "Name": "MenuUIBackground1",
+    "Width": 121,
+    "Height": 80,
+    "OriginX": 0,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/GameMenuUI/MenuUIBackground2.png",
+    "Name": "MenuUIBackground2",
+    "Width": 121,
+    "Height": 44,
+    "OriginX": 0,
+    "OriginY": 109
+  },
+  {
+    "Path": "../Resource/Textures/GameMenuUI/MenuUITitle.png",
+    "Name": "MenuUITitle",
+    "Width": 87,
+    "Height": 16,
+    "OriginX": 15,
+    "OriginY": 10
+  },
+  {
     "Path": "../Resource/Textures/GameMenuUI/ChannelChange.png",
     "Name": "ChannelChange",
-    "Width": 255,
-    "Height": 100,
+    "Width": 109,
+    "Height": 26,
     "OriginX": 10,
-    "OriginY": 10
+    "OriginY": 40
   },
   {
     "Path": "../Resource/Textures/GameMenuUI/Option.png",
     "Name": "Option",
-    "Width": 255,
-    "Height": 100,
+    "Width": 109,
+    "Height": 26,
     "OriginX": 10,
-    "OriginY": 120
+    "OriginY": 70
   },
   {
     "Path": "../Resource/Textures/GameMenuUI/Quit.png",
     "Name": "Quit",
-    "Width": 255,
-    "Height": 100,
+    "Width": 109,
+    "Height": 26,
     "OriginX": 10,
-    "OriginY": 230
+    "OriginY": 100
   },
   {
     "Path": "../Resource/Textures/ChannelUI/ChannelUIBackground0.png",
@@ -2297,7 +2329,167 @@
     "OriginY": 6
   },
   {
-    "Path": "../Resource/Textures/ServerScene/ServerUIBackground0.jpg",
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh10.png",
+    "Name": "ChannelUICh10",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh11.png",
+    "Name": "ChannelUICh11",
+    "Width": 24,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh12.png",
+    "Name": "ChannelUICh12",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh13.png",
+    "Name": "ChannelUICh13",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh14.png",
+    "Name": "ChannelUICh14",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh15.png",
+    "Name": "ChannelUICh15",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh16.png",
+    "Name": "ChannelUICh16",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh17.png",
+    "Name": "ChannelUICh17",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh18.png",
+    "Name": "ChannelUICh18",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh19.png",
+    "Name": "ChannelUICh19",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh20.png",
+    "Name": "ChannelUICh20",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh21.png",
+    "Name": "ChannelUICh21",
+    "Width": 27,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh22.png",
+    "Name": "ChannelUICh22",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh23.png",
+    "Name": "ChannelUICh23",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh24.png",
+    "Name": "ChannelUICh24",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh25.png",
+    "Name": "ChannelUICh25",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh26.png",
+    "Name": "ChannelUICh26",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh27.png",
+    "Name": "ChannelUICh27",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh28.png",
+    "Name": "ChannelUICh28",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh29.png",
+    "Name": "ChannelUICh29",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ServerScene/ServerUIBackground0.png",
     "Name": "ServerUIBackground0",
     "Width": 800,
     "Height": 800,
@@ -2319,6 +2511,14 @@
     "Height": 32,
     "OriginX": 21,
     "OriginY": 21
+  },
+  {
+    "Path": "../Resource/Textures/ServerScene/ServerUIQuit.png",
+    "Name": "ServerUIQuit",
+    "Width": 100,
+    "Height": 50,
+    "OriginX": 0,
+    "OriginY": 0
   },
   {
     "Path": "../Resource/Textures/ServerScene/ServerUIButton1.png",
@@ -2495,5 +2695,165 @@
     "Height": 27,
     "OriginX": 306,
     "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh10.png",
+    "Name": "LoginCh10",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 22,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh11.png",
+    "Name": "LoginCh11",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 93,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh12.png",
+    "Name": "LoginCh12",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 164,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh13.png",
+    "Name": "LoginCh13",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 235,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh14.png",
+    "Name": "LoginCh14",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 306,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh15.png",
+    "Name": "LoginCh15",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 22,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh16.png",
+    "Name": "LoginCh16",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 93,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh17.png",
+    "Name": "LoginCh17",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 164,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh18.png",
+    "Name": "LoginCh18",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 235,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh19.png",
+    "Name": "LoginCh19",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 306,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh20.png",
+    "Name": "LoginCh20",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 22,
+    "OriginY": 166
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh21.png",
+    "Name": "LoginCh21",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 93,
+    "OriginY": 166
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh22.png",
+    "Name": "LoginCh22",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 164,
+    "OriginY": 166
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh23.png",
+    "Name": "LoginCh23",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 235,
+    "OriginY": 166
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh24.png",
+    "Name": "LoginCh24",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 306,
+    "OriginY": 166
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh25.png",
+    "Name": "LoginCh25",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 22,
+    "OriginY": 196
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh26.png",
+    "Name": "LoginCh26",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 93,
+    "OriginY": 196
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh27.png",
+    "Name": "LoginCh27",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 164,
+    "OriginY": 196
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh28.png",
+    "Name": "LoginCh28",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 235,
+    "OriginY": 196
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh29.png",
+    "Name": "LoginCh29",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 306,
+    "OriginY": 196
   }
 ]

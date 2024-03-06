@@ -104,6 +104,9 @@ bool Core::Initialize()
 		return false;
 	}
 
+	std::cout << "Max Channel Size : " << MAX_CHANNEL << std::endl;
+	std::cout << "MAX Monster : " << (MAX_OBJECT - MAX_USER) * MAX_CHANNEL << std::endl;
+	std::cout << "MAX User : " << MAX_USER << std::endl;
 	std::cout << "Server Initialize OK!!" << std::endl;
 
 	return true;

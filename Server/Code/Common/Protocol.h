@@ -14,8 +14,8 @@ constexpr int WIDTH = 500;
 constexpr int HEIGHT = 500;
 
 // 채널 개수
-constexpr int MAX_CHANNEL = 10;
-constexpr int MAX_CHANNEL_USER = 200;
+constexpr int MAX_CHANNEL = 30;
+constexpr int MAX_CHANNEL_USER = 270;
 
 // 섹터 크기
 constexpr int SECTOR_WIDTH = WIDTH / 10;
@@ -26,7 +26,7 @@ constexpr int SECTOR_WIDTH_SIZE = WIDTH / SECTOR_WIDTH;
 constexpr int SECTOR_HEIGHT_SIZE = HEIGHT / SECTOR_HEIGHT;
 
 constexpr int USER_START_ID = 0;
-constexpr int MAX_USER = 2000;
+constexpr int MAX_USER = MAX_CHANNEL * MAX_CHANNEL_USER;
 
 constexpr int MONSTER_START_ID = MAX_USER;
 constexpr int SECTOR_MAX_MONSTER = 30;

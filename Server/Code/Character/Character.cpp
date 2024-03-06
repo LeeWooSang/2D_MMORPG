@@ -287,10 +287,8 @@ bool Player::Inititalize(int id)
 	mConnect = false;
 	mSocket = 0;
 
-	//mX = GetRandomNumber(0, WIDTH - 1);
-	//mY = GetRandomNumber(0, HEIGHT - 1);
-	mX = 0;
-	mY = 0;
+	mX = GetRandomNumber(0, WIDTH - 1);
+	mY = GetRandomNumber(0, HEIGHT - 1);
 	mAnimationType = static_cast<ANIMATION_MOTION_TYPE>(GetRandomNumber(0, 2));
 
 	mChannelIndex = -1;
