@@ -274,12 +274,12 @@ void TradeUI::Render()
 	InGameScene* scene = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE));
 	if (mMyAvatar != nullptr)
 	{
-		mMyAvatar->Render();
+		mMyAvatar->AvatarRender(340, 200);
 		GET_INSTANCE(GraphicEngine)->RenderText(std::to_wstring(scene->GetPlayer()->GetId()), mPos.first + 215, mPos.second + 121);
 	}
 	if(mTradeUserAvatar != nullptr)
 	{
-		mTradeUserAvatar->Render();
+		mTradeUserAvatar->AvatarRender(210, 200);
 		GET_INSTANCE(GraphicEngine)->RenderText(std::to_wstring(scene->GetOtherPlayer(mTradeUserId)->GetId()), mPos.first + 52, mPos.second + 121);
 
 	}
@@ -443,7 +443,7 @@ void TradeUI::SetAvatar()
 
 		mMyAvatar->SetAnimationMotion(ANIMATION_MOTION_TYPE::IDLE);
 		mMyAvatar->Visible();
-		mMyAvatar->SetPosition(1, -1);
+		//mMyAvatar->SetPosition(1, -1);
 	}
 
 	// 상대 아바타 설정
@@ -464,7 +464,7 @@ void TradeUI::SetAvatar()
 		mTradeUserAvatar->SetAnimationMotion(ANIMATION_MOTION_TYPE::IDLE);
 		mTradeUserAvatar->Visible();
 		mTradeUserAvatar->SetDirection(-1);
-		mTradeUserAvatar->SetPosition(-2, -1);
+		//mTradeUserAvatar->SetPosition(-2, -1);
 	}
 }
 

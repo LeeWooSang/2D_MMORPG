@@ -410,6 +410,49 @@ void AnimationCharacter::Render()
 	}
 }
 
+void AnimationCharacter::AvatarRender(int x, int y)
+{
+	// 보이는 것만 렌더
+	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
+	{
+		return;
+	}
+
+	if (mParent != nullptr)
+	{
+		if (mAnimations.count(mMotion) == true)
+		{
+			if (mAnimations[mMotion]->IsVisible() == true)
+			{
+				Texture* tex = mAnimations[mMotion]->GetTexture();
+
+				D2D1_RECT_F rect;
+				rect.left = 0;
+				rect.top = 0;
+				rect.right = rect.left + tex->GetSize().first;
+				rect.bottom = rect.top + tex->GetSize().second;
+
+				D2D1_MATRIX_3X2_F mat = D2D1::Matrix3x2F::Identity();
+				mat._11 *= mDir;
+				mat._31 = x + mAnimations[mMotion]->GetPosition().first * mDir;
+				mat._32 = y + mAnimations[mMotion]->GetPosition().second;
+
+				GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
+
+				GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
+
+				mat = D2D1::Matrix3x2F::Identity();
+				GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
+			}
+		}
+	}
+
+	for (auto& obj : mRenderChildObjects)
+	{
+		obj->AvatarRender(x, y);
+	}
+}
+
 void AnimationCharacter::SetPosition(int x, int y)
 {	
 	// 최상위 부모UI 라면,

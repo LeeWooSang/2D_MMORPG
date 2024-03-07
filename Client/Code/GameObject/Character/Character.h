@@ -47,6 +47,7 @@ public:
 	virtual bool Initialize(int x, int y);
 	virtual void Update();
 	virtual void Render();
+	void AvatarRender(int x, int y);
 
 	virtual void SetPosition(int x, int y);
 	virtual void SetDirection(char dir);
