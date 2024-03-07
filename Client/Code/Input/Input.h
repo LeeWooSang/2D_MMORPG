@@ -65,15 +65,6 @@ struct KeyState
 	//// 키를 떼는 순간
 	//bool pop;
 };
-struct KeyState2
-{
-	KeyState2()
-		: keyType(0), keyState(0), isPrevPush(false) {}
-
-	int keyType;
-	int keyState;
-	bool isPrevPush;
-};
 
 class Input
 {
