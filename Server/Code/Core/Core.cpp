@@ -701,37 +701,38 @@ void Core::processPacket(int id, char* buf)
 
 			int oldChannel = mUsers[id].GetChannel();
 			int newChannel = packet->channel;
+
+			// 기존 채널과 새로운 채널이 같은지 먼저 확인
 			if (oldChannel == newChannel)
 			{
 				std::cout << id << " client change channel fail : " << oldChannel << " --> " << newChannel << std::endl;
 				SendChangeChannelPacket(id, result, oldChannel);
 				break;
 			}
+			// 새로운 채널이 범위를 벗어났는지 확인
 			if (newChannel >= MAX_CHANNEL)
 			{
 				std::cout << id << " client change channel fail : 최대 채널 초과" << std::endl;
 				SendChangeChannelPacket(id, result, oldChannel);
 				break;
 			}
-
+			// 채널의 유저가 가득 찼는지 확인
 			if (mChannels[newChannel].IsFull() == false)
 			{
 				int x = mUsers[id].GetX();
 				int y = mUsers[id].GetY();
-
 				int oldChannelIndex = mUsers[id].GetChannelIndex();
-				// 기존 채널에서 pop
-				mChannels[oldChannel].PopUser(oldChannelIndex);
-				// 기존 섹터에서 pop
-				mChannels[oldChannel].PopSectorObject(x, y, id);
 
-				// 새로운 채널로 insert
+				// 플레이어 기존 채널, 섹터에서 제거
+				mChannels[oldChannel].PopUser(oldChannelIndex);
+				mChannels[oldChannel].PopSectorObject(x, y, id);
+				// 새로운 채널, 섹터로 추가
 				int newChannelIndex = mChannels[newChannel].PushUser(id);
 				mChannels[newChannel].PushSectorObject(x, y, id);
 
 				mUsers[id].SetChannelIndex(newChannelIndex);
 				mUsers[id].SetChannel(newChannel);
-				
+				// 채널이동시 기존 채널의 오브젝트와 새로운 채널 오브젝트들의 뷰리스트들을 처리한다.
 				mUsers[id].ProcessChangeChannelViewList(oldChannel, newChannel);
 
 				result = true;

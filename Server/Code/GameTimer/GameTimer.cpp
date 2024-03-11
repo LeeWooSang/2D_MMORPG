@@ -34,12 +34,13 @@ void GameTimer::run()
 		while (true)
 		{
 			TimerEvent ev;
+			// 타이머 큐에서 이벤트가 있는지 확인
 			if (mTimerQueue.try_pop(ev) == false)
 			{
 				break;
 			}
 
-			// 타이머 큐에서 해당 이벤트를 얻어옴
+			// 타이머 큐에서 해당 이벤트가 시간이 되었는지 체크한다.
 			if (ev.startTime > chrono::high_resolution_clock::now())
 			{
 				mTimerQueue.push(TimerEvent(ev.startTime, ev.eventType, ev.myId, ev.channel, ev.sectorXId, ev.sectorYId));
@@ -52,8 +53,10 @@ void GameTimer::run()
 			//	break;
 			//}
 
+			// 이벤트가 몬스터AI인 경우
 			if (ev.eventType == SERVER_EVENT::MONSTER_MOVE)
 			{
+				// 몬스터id와 채널과 섹터id 정보를 워커스레드에게 전달
 				Over* over = new Over;
 				over->eventType = ev.eventType;
 				over->myId = ev.myId;
@@ -61,9 +64,7 @@ void GameTimer::run()
 				over->sectorXId = ev.sectorXId;
 				over->sectorYId = ev.sectorYId;
 
-				//std::cout << over->myId << ", " << over->sectorXId << ", " << over->sectorYId << std::endl;
 				GET_INSTANCE(Core)->PushLeafWork(over);
-				// 워커스레드에게 ProcessEvent를 넘겨야 됨
 				PostQueuedCompletionStatus(GET_INSTANCE(Core)->GetIOCP(), 1, ev.myId, &over->overlapped);
 			}
 		}		

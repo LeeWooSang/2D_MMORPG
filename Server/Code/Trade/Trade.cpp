@@ -86,12 +86,14 @@ void Trade::AddItem(int id, int slotNum, int itemId)
 	// 내가 아이템을 올린 경우
 	if (id == myId && checkMySlot(slotNum) == true)
 	{
+		// 교환창의 나의 슬롯칸에 아이템 아이디를 저장
 		mSlotA[slotNum] = itemId;
 		GET_INSTANCE(Core)->SendAddTradeItemPacket(tradeUserId, itemId, slotNum);
 	}
 	// 상대가 아이템을 올린 경우
 	else if(id == tradeUserId && checkUserSlot(slotNum) == true)
 	{
+		// 교환창의 상대방의 슬롯칸에 아이템 아이디를 저장
 		mSlotB[slotNum] = itemId;
 		GET_INSTANCE(Core)->SendAddTradeItemPacket(myId, itemId, slotNum);
 	}
@@ -175,7 +177,7 @@ void Trade::ProcessTrade(int id)
 			mTradeMtx.unlock();
 			return;
 		}
-
+	
 		users[myId].SetState(Player::BEHAVIOR_STATE::IDLE);
 		users[tradeUserId].SetState(Player::BEHAVIOR_STATE::IDLE);		
 		users[myId].SetTradeId(-1);

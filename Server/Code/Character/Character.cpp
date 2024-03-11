@@ -376,8 +376,6 @@ void Player::ProcessLoginViewList()
 		}
 		
 		// 내가 들어왔을 때, 보이는 애들에게만 보냄(내 뷰리스트에 나를 넣음안됨)
-		// lock, unlock을 너무 자주하면 안됨
-		// 그러나 루프 밖으로 lock, unlock을  빼면 너무 길기 때문에, lock, unlock을 처리해하는 부분만 따로 처리
 		int x = users[id].GetX();
 		int y = users[id].GetY();
 		if (CheckDistance(x, y) == false)
@@ -593,7 +591,7 @@ void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 			continue;
 		}
 
-		// 상대방에게 내가 있었다면
+		// 상대방 뷰리스트에 내가 있다면 지운다.
 		if (users[id].GetViewList().count(myId) == true)
 		{
 			users[id].GetViewList().erase(myId);

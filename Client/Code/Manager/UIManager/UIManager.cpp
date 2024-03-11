@@ -165,16 +165,15 @@ UI* UIManager::getFocusUI()
 	{
 		return focusUI;
 	}
-
+	// SceneManager에서 현재 Scene에서 렌더링 되는 순서의 UI들을 갖고온다.
 	std::list<UI*>& sceneUIs = GET_INSTANCE(SceneManager)->GetCurScene()->GetSceneUIs();
 	std::list<UI*>::iterator targetIter = sceneUIs.end();
+
 	for (auto iter = sceneUIs.begin(); iter != sceneUIs.end(); ++iter)
 	{
-		if ((*iter)->IsVisible() == false)
-		{
-			continue;
-		}
+		if ((*iter)->IsVisible() == false)	continue;
 
+		// UI들을 루프돌면서,  현재 보이면서, 마우스와 충돌중인 UI를 찾는다.
 		if ((*iter)->GetMouseOver() == true)
 		{
 			targetIter = iter;
@@ -185,7 +184,8 @@ UI* UIManager::getFocusUI()
 	{
 		return nullptr;
 	}
-
+	// 가장 마지막의 targetIter가 맨 위에 UI로 올라와야 함으로, 그것을 focusUI로 정함
+	// SceneManager의 UI집합중 targetIter를 맨 뒤로 넣는다. (맨 마지막에 그려져야 맨위에 올라오기 때문)
 	focusUI = (*targetIter);
 	sceneUIs.erase(targetIter);
 	sceneUIs.emplace_back(focusUI);

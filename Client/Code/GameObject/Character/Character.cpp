@@ -254,6 +254,9 @@ bool AnimationCharacter::Initialize(int x, int y)
 	}
 
 	{
+		// 1. 플레이어의 각 부위를 생성
+		// 2. 플레이어의 애니메이션(IDLE, 걷기, 점프)을 추가
+		// ex) 플레이어가 무기를 장착했을 때, 무기의 애니메이션 동작들을 추가한다.
 		weapon = new AnimationCharacter;
 		{
 			Animation* ani = new Animation;
