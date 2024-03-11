@@ -436,11 +436,9 @@ void AnimationCharacter::AvatarRender(int x, int y)
 				mat._11 *= mDir;
 				mat._31 = x + mAnimations[mMotion]->GetPosition().first * mDir;
 				mat._32 = y + mAnimations[mMotion]->GetPosition().second;
-
 				GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
 
 				GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
-
 				mat = D2D1::Matrix3x2F::Identity();
 				GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
 			}
