@@ -1,7 +1,10 @@
 #include "EquipUI.h"
+#include "../../../Network/Network.h"
+
 #include "../ButtonUI/ButtonUI.h"
 #include "../../../Manager/SceneMangaer/SceneManager.h"
-#include "../../../Scene/Scene.h"
+//#include "../../../Scene/Scene.h"
+#include "../../../Scene/InGameScene/InGameScene.h"
 
 #include "../../../Resource/ResourceManager.h"
 #include "../../../Resource/Texture/Texture.h"
@@ -9,6 +12,7 @@
 #include "../../../Input/Input.h"
 #include "../../../GraphicEngine/GraphicEngine.h"
 #include "../Inventory/Inventory.h"
+#include "../../Character/Character.h"
 #include <vector>
 
 EquipUI::EquipUI()
@@ -406,9 +410,16 @@ void EquipSlotUI::MouseLButtonClick()
 		return;
 	}
 
-	Inventory* inventory = static_cast<Inventory*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE)->FindUI("Inventory"));
+	InGameScene* scene = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE));
+	Inventory* inventory = static_cast<Inventory*>(scene->FindUI("Inventory"));
 	inventory->AddItem(mItem);
 	mItem = nullptr;
+	
+	// 아바타 변경
+	//scene->GetPlayer()->SetAvatar();
+#ifdef SERVER_CONNECT
+	//GET_INSTANCE(Network)->SendTakeOffEquipItem(static_cast<char>(mType));	
+#endif // SERVER_CONNECT
 }
 
 void EquipSlotUI::SetPosition(int x, int y)

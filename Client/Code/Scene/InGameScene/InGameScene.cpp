@@ -232,31 +232,31 @@ void InGameScene::Update()
 	}
 
 #else
-	for (auto& monster : mMonsters)
-	{
-		if (mPlayer->CheckDistance(monster.second->GetPosition().first, monster.second->GetPosition().second) == true)
-		{
-			monster.second->Visible();
-			monster.second->Update();
-		}
-		else
-		{
-			monster.second->NotVisible();
-		}
-	}
+	//for (auto& monster : mMonsters)
+	//{
+	//	if (mPlayer->CheckDistance(monster.second->GetPosition().first, monster.second->GetPosition().second) == true)
+	//	{
+	//		monster.second->Visible();
+	//		monster.second->Update();
+	//	}
+	//	else
+	//	{
+	//		monster.second->NotVisible();
+	//	}
+	//}
 
-	for (auto& otherPlayer : mOtherPlayers)
-	{
-		if (mPlayer->CheckDistance(otherPlayer.second->GetPosition().first, otherPlayer.second->GetPosition().second) == true)
-		{
-			otherPlayer.second->Visible();
-			otherPlayer.second->Update();
-		}
-		else
-		{
-			otherPlayer.second->NotVisible();
-		}
-	}
+	//for (auto& otherPlayer : mOtherPlayers)
+	//{
+	//	if (mPlayer->CheckDistance(otherPlayer.second->GetPosition().first, otherPlayer.second->GetPosition().second) == true)
+	//	{
+	//		otherPlayer.second->Visible();
+	//		otherPlayer.second->Update();
+	//	}
+	//	else
+	//	{
+	//		otherPlayer.second->NotVisible();
+	//	}
+	//}
 #endif
 
 	GET_INSTANCE(UIManager)->Update();
@@ -292,15 +292,15 @@ void InGameScene::Render()
 		player.second->Render();
 	}
 #else
-	for (auto& monster : mMonsters)
-	{
-		monster.second->Render();
-	}
+	//for (auto& monster : mMonsters)
+	//{
+	//	monster.second->Render();
+	//}
 
-	for (auto& player : mOtherPlayers)
-	{
-		player.second->Render();
-	}
+	//for (auto& player : mOtherPlayers)
+	//{
+	//	player.second->Render();
+	//}
 #endif // SERVER_CONNECT
 
 	for (auto& skill : mSkills)

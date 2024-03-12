@@ -181,7 +181,6 @@ void InventorySlot::MouseLButtonDoubleClick()
 
 	// 아바타에 아이템 장착
 	Player* player = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE))->GetPlayer();
-	//player->SetAvatar(mItem->GetTexId());
 	player->SetAvatarId(mItem->GetTexId());
 
 	// 서버에 아바타 바꿨다는 패킷 전송

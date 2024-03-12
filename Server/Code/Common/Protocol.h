@@ -113,6 +113,7 @@ enum CS_PACKET_TYPE
 	CS_WHISPERING_CHAT,
 	CS_ATTACK,
 	CS_CHANGE_AVATAR,
+	CS_TAKE_OFF_EQUIP_ITEM,
 
 	CS_REQUEST_TRADE,
 	CS_ADD_TRADE_ITEM,
@@ -207,6 +208,14 @@ struct CSAttackPacket
 	char type;
 };
 struct CSChangeAvatarPacket
+{
+	char size;
+	char type;
+	// ½½·Ô¹øÈ£
+	char slotType;
+	int texId;
+};
+struct CSTakeOffEquipItemPacket
 {
 	char size;
 	char type;

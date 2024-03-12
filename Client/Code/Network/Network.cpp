@@ -175,6 +175,17 @@ void Network::SendChangeAvatarPacket(char slotType, int texId)
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 
+void Network::SendTakeOffEquipItem(char slotType)
+{
+	CSTakeOffEquipItemPacket packet;
+	packet.size = sizeof(CSTakeOffEquipItemPacket);
+	packet.type = CS_PACKET_TYPE::CS_TAKE_OFF_EQUIP_ITEM;
+	// 아이템 타입
+	packet.slotType = slotType;
+
+	sendPacket(reinterpret_cast<char*>(&packet));
+}
+
 void Network::SendRequestTradePacket(int id)
 {
 	CSRequestTradePacket packet;

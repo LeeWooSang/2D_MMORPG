@@ -45,6 +45,7 @@ public:
 
 	void SendAttackPacket();
 	void SendChangeAvatarPacket(char slotType, int texId);
+	void SendTakeOffEquipItem(char slotType);
 
 	void SendRequestTradePacket(int id);
 	void SendAddTradeItem(int id, int texId, int slotNum);
