@@ -137,7 +137,14 @@ void InventorySlot::MouseLButtonClick()
 		std::cout << "더블 클릭" << std::endl;
 
 		mMouseLButtonClick = false;
-		mItem->SetItemDrag(false);
+
+		// 인벤토리에서 선택된 아이템이 있을 때 처리
+		Inventory* inven = static_cast<Inventory*>(mParentUI);
+		if (inven->GetPickingItem() != nullptr)
+		{
+			inven->GetPickingItem()->SetItemDrag(false);
+			inven->ResetPicking();
+		}
 
 		MouseLButtonDoubleClick();
 		mMouseLButtonDoubleClick = false;
@@ -644,7 +651,6 @@ void Inventory::ProcessMouseDoubleClickEvent()
 			InventorySlot* slot = static_cast<InventorySlot*>(slots[i]);
 			// 더블클릭 이벤트가 발생했다고 설정
 			slot->SetMouseLButtonDoubleClick(true);
-			//slot->MouseLButtonDoubleClick();
 			break;
 		}
 	}	
