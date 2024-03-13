@@ -550,10 +550,25 @@ void AnimationCharacter::SetAvatarId(int texId)
 	SetAvatar(texId);
 }
 
+void AnimationCharacter::RemoveAvatarId(int texId)
+{
+	// 텍스id 삭제
+	for (auto iter = mAvatarIds.begin(); iter != mAvatarIds.end(); )
+	{
+		if ((*iter) == texId)
+		{
+			iter = mAvatarIds.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+}
+
 void AnimationCharacter::SetAvatar(int texId)
 {
 	std::vector<TextureData>& v = GET_INSTANCE(ResourceManager)->GetTextureDatas(texId);
-
 	std::unordered_set<std::string> partsList;
 	for (int i = 0; i < v.size(); ++i)
 	{
@@ -576,11 +591,9 @@ void AnimationCharacter::SetAvatar(int texId)
 			continue;
 		}
 
-		std::string p = v[i].parts;
+		std::string partsName = v[i].parts;
 		ANIMATION_MOTION_TYPE motion = static_cast<ANIMATION_MOTION_TYPE>(v[i].motion);
-
-		mChildObjects[p]->mAnimations[motion]->SetTexture(v[i].name);
-		//mChildObjects[parts]->mAnimations[motion]->SetTexture(v[i].name);
+		mChildObjects[partsName]->mAnimations[motion]->SetTexture(v[i].name);
 	}
 
 	// 모든 부위의 애니메이션 번호를 초기화
@@ -593,73 +606,27 @@ void AnimationCharacter::SetAvatar(int texId)
 	}
 }
 
-void AnimationCharacter::SetWeaponAvatar(const std::string& itemName)
+void AnimationCharacter::TakeOffAvatar(int texId)
 {
-	std::string parts = "Weapon";
-	if (mChildObjects.count(parts) == false)
-	{
-		return;
-	}
-
-	{
-		std::string partsName = "Idle" + parts + itemName;
-		mChildObjects[parts]->mAnimations[ANIMATION_MOTION_TYPE::IDLE]->SetTexture(partsName, 3);
-	}
-	{
-		std::string partsName = "Walk" + parts + itemName;
-		mChildObjects[parts]->mAnimations[ANIMATION_MOTION_TYPE::WALK]->SetTexture(partsName, 4);
-	}
-	{
-		std::string partsName = "Jump" + parts + itemName;
-		mChildObjects[parts]->mAnimations[ANIMATION_MOTION_TYPE::JUMP]->SetTexture(partsName, 1);
-	}
-
-	// 모든 부위의 애니메이션 번호를 초기화
-	for (auto& obj : mRenderChildObjects)
-	{
-		for (auto& ani : obj->mAnimations)
-		{
-			ani.second->ResetCurrentNum();
-		}
-	}
-}
-
-void AnimationCharacter::SetWeaponAvatar(int texId)
-{
-	std::string parts = "Weapon";
-	if (mChildObjects.count(parts) == false)
-	{
-		return;
-	}
-
-	// 해당 파트의 모든 모션을 리셋
-	for (auto& motion : mChildObjects[parts]->mAnimations)
-	{
-		motion.second->Reset();
-	}
-
+	// 저장된 아바타 아이디 삭제
+	RemoveAvatarId(texId);
+	
 	std::vector<TextureData>& v = GET_INSTANCE(ResourceManager)->GetTextureDatas(texId);
+	std::unordered_set<std::string> partsList;
 	for (int i = 0; i < v.size(); ++i)
 	{
-		if (v[i].icon == true)
-		{
-			continue;
-		}
-
-		std::string p = v[i].parts;
-		ANIMATION_MOTION_TYPE motion = static_cast<ANIMATION_MOTION_TYPE>(v[i].motion);
-
-		mChildObjects[p]->mAnimations[motion]->SetTexture(v[i].name);
+		partsList.emplace(v[i].parts);
 	}
 
-	// 모든 부위의 애니메이션 번호를 초기화
-	for (auto& obj : mRenderChildObjects)
+	for (auto parts : partsList)
 	{
-		for (auto& ani : obj->mAnimations)
+		// 해당 파트의 모든 모션을 리셋
+		for (auto& motion : mChildObjects[parts]->mAnimations)
 		{
-			ani.second->ResetCurrentNum();
+			motion.second->Reset();
 		}
 	}
+
 }
 
 void AnimationCharacter::SetAnimationMotion(ANIMATION_MOTION_TYPE motion)

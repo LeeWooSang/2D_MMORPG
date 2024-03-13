@@ -69,10 +69,11 @@ public:
 
 	std::vector<int>& GetAvatarIds() { return mAvatarIds; }
 	void SetAvatarId(int texId);
-	
+	void RemoveAvatarId(int texId);
+
 	void SetAvatar(int texId);
-	void SetWeaponAvatar(const std::string& itemName);
-	void SetWeaponAvatar(int texId);
+
+	void TakeOffAvatar(int texId);
 
 protected:
 	int mId;

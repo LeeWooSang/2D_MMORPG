@@ -62,11 +62,6 @@ void InventorySlot::Update()
 
 	if (mItem != nullptr)
 	{
-		if (mMouseLButtonClick == true)
-		{
-			mItem->Move(mousePos.first, mousePos.second);
-		}
-
 		mItem->Update();
 	}
 }
@@ -149,26 +144,54 @@ void InventorySlot::MouseLButtonClick()
 	}
 	else
 	{
-		std::cout << "클릭" << std::endl;
+		std::cout << "원 클릭" << std::endl;
+		Inventory* inven = static_cast<Inventory*>(mParentUI);
 
-		if (mItem != nullptr)
+		// 인벤토리에서 선택한 아이템이 있을 때
+		if (inven->GetPickingItem() != nullptr)
 		{
-			if (mItem->GetItemDrag() == false)
-			{
-				mMouseLButtonClick = true;
-				std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
-				mItem->Click(mousePos.first, mousePos.second);
+			// 선택된 인벤토리 슬롯에 아이템이 없다면
+			// 아이템을 선택한 슬롯에 위치시킨다.
+			if (mItem == nullptr)
+			{				
+				mItem = inven->GetPickingItem();
+				mItem->SetPosition(mPos.first, mPos.second);
+				// 원래 슬롯은 비워준다.
 
-				mItem->SetItemDrag(true);
+				int pickingSlotNum = inven->GetPickingSlot();
+				inven->FindSlot(pickingSlotNum)->AddItem(nullptr);
 			}
 			else
-			{
-				mMouseLButtonClick = false;
+			{				
+				// 슬롯에 있는 아이템과 선택한 아이템의 슬롯 위치를 바꾼다.
+				InventoryItem* oldItem = mItem;
+				mItem = inven->GetPickingItem();
 				mItem->SetPosition(mPos.first, mPos.second);
-				mItem->SetItemDrag(false);
+
+				int pickingSlotNum = inven->GetPickingSlot();
+				inven->FindSlot(pickingSlotNum)->AddItem(oldItem);
 			}
 
+			mItem->SetItemDrag(false);
+			inven->ResetPicking();			
 		}
+
+		// 인벤토리에서 선택한 아이템이 없을 때
+		else
+		{
+			// 현재 슬롯에 아이템이 있다면
+			if (mItem != nullptr)
+			{
+				std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
+				mItem->Click(mousePos.first, mousePos.second);
+				mItem->SetItemDrag(true);
+
+				inven->AddPickingItem(mSlotNum, mItem);
+				//mItem = nullptr;
+			}
+		}
+
+		mMouseLButtonClick = false;
 	}
 }
 
@@ -253,6 +276,9 @@ Inventory::Inventory()
 
 	mOpen = false;
 	mMeso = 100000000;
+
+	mPickingItem = nullptr;
+	mPickingSlot = -1;
 }
 
 Inventory::~Inventory()
@@ -734,6 +760,13 @@ InventorySlot* Inventory::FindSlot()
 	return nullptr;
 }
 
+InventorySlot* Inventory::FindSlot(int slotNum)
+{
+	std::vector<UI*>& v = FindChildUIs("Slot");
+
+	return static_cast<InventorySlot*>(v[slotNum]);
+}
+
 void Inventory::DeductMeso(long long meso)
 {
 	mMeso -= meso;
@@ -767,7 +800,16 @@ bool InventoryItem::Initialize(int x, int y)
 
 void InventoryItem::Update()
 {
-	UI::Update();
+	if (!(mAttr & ATTR_STATE_TYPE::VISIBLE))
+	{
+		return;
+	}
+
+	if (mItemDrag == true)
+	{
+		std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
+		Move(mousePos.first, mousePos.second);
+	}
 }
 
 void InventoryItem::Render()

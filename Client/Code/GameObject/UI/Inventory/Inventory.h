@@ -73,11 +73,17 @@ public:
 	void SetDragStartPos(std::pair<int, int> pos) { mDragStartPos = pos; }
 
 	InventorySlot* FindSlot();
+	InventorySlot* FindSlot(int slotNum);
 
 	long long GetMeso()	const { return mMeso; }
 	void SetMeso(long long meso) { mMeso = meso; }
 	void AddMeso(long long meso) { mMeso += meso; }
 	void DeductMeso(long long meso);
+
+	void AddPickingItem(int slot, InventoryItem* item) { mPickingSlot = slot; mPickingItem = item; }
+	InventoryItem* GetPickingItem() { return mPickingItem; }
+	int GetPickingSlot()	const { return mPickingSlot; }
+	void ResetPicking() { mPickingItem = nullptr; mPickingSlot = -1; }
 
 private:
 	// 슬롯 간의 간격
@@ -87,6 +93,9 @@ private:
 
 	bool mOpen;
 	long long mMeso;
+
+	InventoryItem* mPickingItem;
+	int mPickingSlot;
 };
 
 class InventoryItem : public UI

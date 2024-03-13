@@ -285,11 +285,12 @@ void EquipUI::OpenEquipUI()
 void EquipUI::AddEquipItem(int slot, int texId)
 {
 	TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureDataIcon(texId);
+
 	InventoryItem* item = new InventoryItem;
 	// 아이템 추가
 	item->SetTexId(data.texId);
 	item->SetItemName(data.name);
-	item->SetItemType(data.equipSlotType);
+	item->SetItemType(slot);
 
 	// 텍스쳐 추가
 	item->SetTexture(data.name);
@@ -413,10 +414,11 @@ void EquipSlotUI::MouseLButtonClick()
 	InGameScene* scene = static_cast<InGameScene*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::INGAME_SCENE));
 	Inventory* inventory = static_cast<Inventory*>(scene->FindUI("Inventory"));
 	inventory->AddItem(mItem);
-	mItem = nullptr;
 	
 	// 아바타 변경
-	//scene->GetPlayer()->SetAvatar();
+	scene->GetPlayer()->TakeOffAvatar(mItem->GetTexId());
+	mItem = nullptr;
+
 #ifdef SERVER_CONNECT
 	//GET_INSTANCE(Network)->SendTakeOffEquipItem(static_cast<char>(mType));	
 #endif // SERVER_CONNECT
