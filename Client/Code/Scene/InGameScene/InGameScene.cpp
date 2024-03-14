@@ -532,6 +532,10 @@ void InGameScene::AddPlayer(AddPlayerPacket* packet)
 	int myId = mPlayer->GetId();
 	if (myId == packet->id)
 	{
+		GET_INSTANCE(Camera)->SetPosition(packet->x, packet->y);
+		mPlayer->SetPosition(packet->x, packet->y);
+		mPlayer->SetDirection(packet->dir);
+
 		for (int i = 0; i < MAX_AVATAR_SLOT_SIZE; ++i)
 		{
 			if (packet->texIds[i] == 0)
@@ -541,9 +545,6 @@ void InGameScene::AddPlayer(AddPlayerPacket* packet)
 			static_cast<EquipUI*>(FindUI("EquipUI"))->AddEquipItem(i, packet->texIds[i]);
 			mPlayer->SetAvatarId(i, packet->texIds[i]);
 		}
-
-		GET_INSTANCE(Camera)->SetPosition(packet->x, packet->y);
-		mPlayer->SetPosition(packet->x, packet->y);
 	}
 	else if (packet->id < MAX_USER)
 	{

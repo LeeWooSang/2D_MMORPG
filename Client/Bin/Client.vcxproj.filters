@@ -56,14 +56,8 @@
     <Filter Include="Code\GameObject\UI\Inventory">
       <UniqueIdentifier>{35b2c8e4-af15-46c4-a865-e12a7201a0d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Code\GameObject\UI\InputUI">
-      <UniqueIdentifier>{ed466f72-4b40-4fb3-bcda-612a2a10baa4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Code\GameObject\UI\ButtonUI">
       <UniqueIdentifier>{803e96ed-ead3-4f7c-97a6-3929fbf7b7c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Code\GameObject\UI\InputUI\ChattingInputUI">
-      <UniqueIdentifier>{7b0c8d00-7060-4340-afb1-ddb5d00ede02}</UniqueIdentifier>
     </Filter>
     <Filter Include="Code\Animation">
       <UniqueIdentifier>{f8beb07d-01ae-40b8-9cbb-634486b1c50e}</UniqueIdentifier>
@@ -121,6 +115,12 @@
     </Filter>
     <Filter Include="Code\GameObject\UI\ChannelUI">
       <UniqueIdentifier>{7bd09953-2f9e-4823-9605-29ccfb5cad5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GameObject\UI\InputUI">
+      <UniqueIdentifier>{ed466f72-4b40-4fb3-bcda-612a2a10baa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GameObject\UI\InputUI\ChattingInputUI">
+      <UniqueIdentifier>{7b0c8d00-7060-4340-afb1-ddb5d00ede02}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

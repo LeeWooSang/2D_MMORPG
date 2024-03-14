@@ -573,6 +573,7 @@ void Player::CheckViewList()
 void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 {
 	int myId = mOver->myId;
+	mDirection = 1;
 
 	Player* users = GET_INSTANCE(Core)->GetUsers();
 	
@@ -692,6 +693,9 @@ void Player::ProcessChangeChannelViewList(int oldChannel, int newChannel)
 			GET_INSTANCE(Core)->SendAddMonsterPacket(myId, id, newMonsters[index].GetX(), newMonsters[index].GetY());
 		}
 	}
+
+	// 나에게 나를 보냄
+	GET_INSTANCE(Core)->SendAddPlayerPacket(myId, myId, mAvatarTexIds);
 }
 
 void Player::ProcessBroadcastingChat(wchar_t* chat)

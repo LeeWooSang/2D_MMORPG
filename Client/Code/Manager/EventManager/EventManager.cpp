@@ -53,7 +53,8 @@ void EventManager::processPacketEvent()
 			case SC_ADD_PLAYER:
 			{
 				AddPlayerPacket* e = static_cast<AddPlayerPacket*>(ev);
-				scene->AddPlayer(e->id, e->x, e->y, e->texIds);
+				//scene->AddPlayer(e->id, e->x, e->y, e->texIds);
+				scene->AddPlayer(e);
 				break;
 			}
 
