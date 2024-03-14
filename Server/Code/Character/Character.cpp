@@ -785,10 +785,8 @@ void Player::ProcessAttack()
 
 }
 
-void Player::ProcessChangeAvatar(int slot, int texId)
+void Player::ProcessChangeAvatar(int slot, int texId, bool isEquip)
 {
-	mAvatarTexIds[slot] = texId;
-
 	int myId = mOver->myId;
 	Player* users = GET_INSTANCE(Core)->GetUsers();
 
@@ -820,10 +818,23 @@ void Player::ProcessChangeAvatar(int slot, int texId)
 		newViewList.emplace(id);
 	}
 
-	for (auto& id : newViewList)
+	if (isEquip == true)
 	{
-		GET_INSTANCE(Core)->SendChangeAvatarPacket(id, myId, texId);
+		mAvatarTexIds[slot] = texId;
+		for (auto& id : newViewList)
+		{
+			GET_INSTANCE(Core)->SendChangeAvatarPacket(id, myId, slot, texId);
+		}
 	}
+	else
+	{
+		mAvatarTexIds[slot] = 0;
+		for (auto& id : newViewList)
+		{
+			GET_INSTANCE(Core)->SendTakeOffEquipItemPacket(id, myId, slot);
+		}
+	}
+
 }
 
 Monster::Monster()

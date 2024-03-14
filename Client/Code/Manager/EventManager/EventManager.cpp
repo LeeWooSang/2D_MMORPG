@@ -78,7 +78,14 @@ void EventManager::processPacketEvent()
 			case SC_CHANGE_AVATAR:
 			{
 				AvatarPacket* e = static_cast<AvatarPacket*>(ev);
-				scene->UpdateObjectAvatar(e->id, e->texId);
+				scene->UpdateObjectAvatar(e->id, e->slotType, e->texId, true);
+				break;
+			}
+
+			case SC_TAKE_OFF_EQUIP_ITEM:
+			{
+				TakeOffEquipItemPacket* e = static_cast<TakeOffEquipItemPacket*>(ev);
+				scene->UpdateObjectAvatar(e->id, e->slotType, 0, false);
 				break;
 			}
 

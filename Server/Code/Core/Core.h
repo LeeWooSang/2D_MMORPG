@@ -38,7 +38,9 @@ public:
 	void SendRemoveAllObjectPacket(int to);
 	void SendChangeChannelPacket(int to, bool result, int channel);
 	void SendChatPacket(int to, int obj, wchar_t* chat);
-	void SendChangeAvatarPacket(int to, int obj, int texId);
+
+	void SendChangeAvatarPacket(int to, int obj, int slot, int texId);
+	void SendTakeOffEquipItemPacket(int to, int obj, int slot);
 
 	void SendRequestTradePacket(int to, int obj);
 	void SendAddTradeItemPacket(int to, int texId, int slotNum);

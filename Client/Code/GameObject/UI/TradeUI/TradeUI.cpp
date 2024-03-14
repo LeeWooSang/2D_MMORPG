@@ -438,7 +438,7 @@ void TradeUI::SetAvatar()
 		std::vector<int>& avatarIds = scene->GetPlayer()->GetAvatarIds();
 		for (int i = 0; i < avatarIds.size(); ++i)
 		{
-			mMyAvatar->SetAvatarId(avatarIds[i]);
+			mMyAvatar->SetAvatarId(i, avatarIds[i]);
 		}
 
 		mMyAvatar->SetAnimationMotion(ANIMATION_MOTION_TYPE::IDLE);
@@ -458,7 +458,7 @@ void TradeUI::SetAvatar()
 		std::vector<int>& avatarIds = scene->GetOtherPlayer(mTradeUserId)->GetAvatarIds();
 		for (int i = 0; i < avatarIds.size(); ++i)
 		{
-			mTradeUserAvatar->SetAvatarId(avatarIds[i]);
+			mTradeUserAvatar->SetAvatarId(i, avatarIds[i]);
 		}
 
 		mTradeUserAvatar->SetAnimationMotion(ANIMATION_MOTION_TYPE::IDLE);

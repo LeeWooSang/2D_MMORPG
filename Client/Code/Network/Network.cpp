@@ -377,7 +377,19 @@ void Network::processPacket()
 			std::shared_ptr<AvatarPacket> p = std::make_shared<AvatarPacket>();
 			p->packetType = packet->type;
 			p->id = packet->id;
+			p->slotType = packet->slotType;
 			p->texId = packet->texId;
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);
+			break;
+		}
+
+		case SC_PACKET_TYPE::SC_TAKE_OFF_EQUIP_ITEM:
+		{
+			SCTakeOffEquipItemPacket* packet = reinterpret_cast<SCTakeOffEquipItemPacket*>(mPacketBuffer);
+			std::shared_ptr<TakeOffEquipItemPacket> p = std::make_shared<TakeOffEquipItemPacket>();
+			p->packetType = packet->type;
+			p->id = packet->id;
+			p->slotType = packet->slotType;
 			GET_INSTANCE(EventManager)->AddPacketEvent(p);
 			break;
 		}

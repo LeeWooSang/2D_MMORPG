@@ -503,7 +503,7 @@ void InGameScene::AddPlayer(int id, int x, int y, int* texIds)
 				continue;
 			}
 			static_cast<EquipUI*>(FindUI("EquipUI"))->AddEquipItem(i, texIds[i]);
-			mPlayer->SetAvatarId(texIds[i]);
+			mPlayer->SetAvatarId(i, texIds[i]);
 		}
 
 		GET_INSTANCE(Camera)->SetPosition(x, y);
@@ -520,7 +520,7 @@ void InGameScene::AddPlayer(int id, int x, int y, int* texIds)
 			{
 				continue;
 			}
-			otherPlayer->SetAvatarId(texIds[i]);
+			otherPlayer->SetAvatarId(i, texIds[i]);
 		}
 
 		mVisibleOtherPlayers.emplace(id, otherPlayer);		
@@ -539,7 +539,7 @@ void InGameScene::AddPlayer(AddPlayerPacket* packet)
 				continue;
 			}
 			static_cast<EquipUI*>(FindUI("EquipUI"))->AddEquipItem(i, packet->texIds[i]);
-			mPlayer->SetAvatarId(packet->texIds[i]);
+			mPlayer->SetAvatarId(i, packet->texIds[i]);
 		}
 
 		GET_INSTANCE(Camera)->SetPosition(packet->x, packet->y);
@@ -559,7 +559,7 @@ void InGameScene::AddPlayer(AddPlayerPacket* packet)
 			{
 				continue;
 			}
-			otherPlayer->SetAvatarId(packet->texIds[i]);
+			otherPlayer->SetAvatarId(i, packet->texIds[i]);
 		}
 
 		mVisibleOtherPlayers.emplace(packet->id, otherPlayer);
@@ -635,10 +635,17 @@ void InGameScene::RemoveAllObject()
 	mVisibleMonsters.clear();
 }
 
-void InGameScene::UpdateObjectAvatar(int id, int texId)
+void InGameScene::UpdateObjectAvatar(int id, int slotType, int texId, bool isEquip)
 {
-	// texId를 이용하여 아이템 이름 구분
-	mOtherPlayers[id]->SetAvatarId(texId);
+	if (isEquip == true)
+	{
+		// texId를 이용하여 아이템 이름 구분
+		mVisibleOtherPlayers[id]->SetAvatarId(slotType, texId);
+	}
+	else
+	{
+		mVisibleOtherPlayers[id]->TakeOffAvatar(slotType);
+	}
 }
 
 void InGameScene::RequestTrade(int id)

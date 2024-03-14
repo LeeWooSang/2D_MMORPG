@@ -78,6 +78,7 @@ AnimationCharacter::AnimationCharacter()
 	mMotion = ANIMATION_MOTION_TYPE::IDLE;
 	mAnimations.clear();
 	mAvatarIds.clear();
+	mAvatarIds.resize(MAX_AVATAR_SLOT_SIZE);
 }
 
 AnimationCharacter::~AnimationCharacter()
@@ -544,26 +545,19 @@ void AnimationCharacter::SetAvatar(const std::string& parts, ANIMATION_MOTION_TY
 	}
 }
 
-void AnimationCharacter::SetAvatarId(int texId)
+void AnimationCharacter::SetAvatarId(int slotType, int texId)
 {
-	mAvatarIds.emplace_back(texId);
+	mAvatarIds[slotType] = texId;
 	SetAvatar(texId);
 }
 
-void AnimationCharacter::RemoveAvatarId(int texId)
+int AnimationCharacter::RemoveAvatarId(int slotType)
 {
+	int oldAvatarId = mAvatarIds[slotType];
 	// 텍스id 삭제
-	for (auto iter = mAvatarIds.begin(); iter != mAvatarIds.end(); )
-	{
-		if ((*iter) == texId)
-		{
-			iter = mAvatarIds.erase(iter);
-		}
-		else
-		{
-			++iter;
-		}
-	}
+	mAvatarIds[slotType] = 0;
+
+	return oldAvatarId;
 }
 
 void AnimationCharacter::SetAvatar(int texId)
@@ -606,12 +600,12 @@ void AnimationCharacter::SetAvatar(int texId)
 	}
 }
 
-void AnimationCharacter::TakeOffAvatar(int texId)
+void AnimationCharacter::TakeOffAvatar(int slotType)
 {
 	// 저장된 아바타 아이디 삭제
-	RemoveAvatarId(texId);
+	int oldTexId = RemoveAvatarId(slotType);
 	
-	std::vector<TextureData>& v = GET_INSTANCE(ResourceManager)->GetTextureDatas(texId);
+	std::vector<TextureData>& v = GET_INSTANCE(ResourceManager)->GetTextureDatas(oldTexId);
 	std::unordered_set<std::string> partsList;
 	for (int i = 0; i < v.size(); ++i)
 	{

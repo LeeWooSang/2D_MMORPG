@@ -29,7 +29,7 @@ public:
 	void RemoveObject(int id);
 	void RemoveAllObject();
 
-	void UpdateObjectAvatar(int id, int texId);
+	void UpdateObjectAvatar(int id, int slotType, int texId, bool isEquip);
 
 	void RequestTrade(int id);
 	void AddTradeItem(int texId, int slotNum);

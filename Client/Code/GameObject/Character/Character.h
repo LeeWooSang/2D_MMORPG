@@ -68,12 +68,12 @@ public:
 	void SetAvatar(const std::string& parts, ANIMATION_MOTION_TYPE motion, const std::string& objName, int count);
 
 	std::vector<int>& GetAvatarIds() { return mAvatarIds; }
-	void SetAvatarId(int texId);
-	void RemoveAvatarId(int texId);
+	void SetAvatarId(int slotType, int texId);
+	int RemoveAvatarId(int texId);
 
 	void SetAvatar(int texId);
 
-	void TakeOffAvatar(int texId);
+	void TakeOffAvatar(int slotType);
 
 protected:
 	int mId;

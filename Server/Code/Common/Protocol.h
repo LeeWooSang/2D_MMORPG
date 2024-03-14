@@ -138,8 +138,12 @@ enum SC_PACKET_TYPE
 	SC_REMOVE_OBJECT,
 	SC_REMOVE_ALL_OBJECT,
 	SC_CHANGE_CHANNEL,
+
 	SC_CHAT,
+
 	SC_CHANGE_AVATAR,
+	SC_TAKE_OFF_EQUIP_ITEM,
+
 	SC_REQUEST_TRADE,
 	SC_ADD_TRADE_ITEM,
 	SC_ADD_TRADE_MESO,
@@ -221,7 +225,6 @@ struct CSTakeOffEquipItemPacket
 	char type;
 	// ½½·Ô¹øÈ£
 	char slotType;
-	int texId;
 };
 struct CSRequestTradePacket
 {
@@ -350,7 +353,15 @@ struct SCChangeAvatarPacket
 	char size;
 	char type;
 	int id;
+	char slotType;
 	int texId;
+};
+struct SCTakeOffEquipItemPacket
+{
+	char size;
+	char type;
+	int id;
+	char slotType;
 };
 struct SCRequestTradePacket
 {

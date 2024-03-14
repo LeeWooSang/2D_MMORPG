@@ -3,7 +3,6 @@
 
 #include "../ButtonUI/ButtonUI.h"
 #include "../../../Manager/SceneMangaer/SceneManager.h"
-//#include "../../../Scene/Scene.h"
 #include "../../../Scene/InGameScene/InGameScene.h"
 
 #include "../../../Resource/ResourceManager.h"
@@ -416,11 +415,11 @@ void EquipSlotUI::MouseLButtonClick()
 	inventory->AddItem(mItem);
 	
 	// 아바타 변경
-	scene->GetPlayer()->TakeOffAvatar(mItem->GetTexId());
+	scene->GetPlayer()->TakeOffAvatar(static_cast<int>(mType));
 	mItem = nullptr;
 
 #ifdef SERVER_CONNECT
-	//GET_INSTANCE(Network)->SendTakeOffEquipItem(static_cast<char>(mType));	
+	GET_INSTANCE(Network)->SendTakeOffEquipItem(static_cast<char>(mType));	
 #endif // SERVER_CONNECT
 }
 

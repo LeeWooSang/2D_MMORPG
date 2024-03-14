@@ -135,7 +135,7 @@ public:
 	void ProcessWhisperingChat(int id, wchar_t* chat);
 
 	void ProcessAttack();
-	void ProcessChangeAvatar(int slot, int texId);
+	void ProcessChangeAvatar(int slot, int texId, bool isEquip);
 
 	int* GetAvatarTexIds()	{ return mAvatarTexIds; }
 	

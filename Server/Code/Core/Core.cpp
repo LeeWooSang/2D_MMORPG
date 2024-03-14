@@ -291,13 +291,25 @@ void Core::SendChatPacket(int to, int obj, wchar_t* chat)
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
 
-void Core::SendChangeAvatarPacket(int to, int obj, int texId)
+void Core::SendChangeAvatarPacket(int to, int obj, int slot, int texId)
 {
 	SCChangeAvatarPacket packet;
 	packet.size = sizeof(SCChangeAvatarPacket);
 	packet.type = SC_PACKET_TYPE::SC_CHANGE_AVATAR;
 	packet.id = obj;
+	packet.slotType = slot;
 	packet.texId = texId;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendTakeOffEquipItemPacket(int to, int obj, int slot)
+{
+	SCTakeOffEquipItemPacket packet;
+	packet.size = sizeof(SCTakeOffEquipItemPacket);
+	packet.type = SC_PACKET_TYPE::SC_TAKE_OFF_EQUIP_ITEM;
+	packet.id = obj;
+	packet.slotType = slot;
 
 	sendPacket(to, reinterpret_cast<char*>(&packet));
 }
@@ -668,9 +680,9 @@ void Core::processPacket(int id, char* buf)
 				int x = mUsers[id].GetX();
 				int y = mUsers[id].GetY();
 
-				//x = 0;
-				//y = 0;
-				//mUsers[id].SetPosition(x, y);
+				x = 0;
+				y = 0;
+				mUsers[id].SetPosition(x, y);
 
 				// 섹터 찾아서 넣기
 				mChannels[channel].PushSectorObject(x, y, id);
@@ -778,7 +790,15 @@ void Core::processPacket(int id, char* buf)
 		{
 			CSChangeAvatarPacket* packet = reinterpret_cast<CSChangeAvatarPacket*>(buf);
 			// 주변 다른 유저들에게 아바타 바꼈다고 전송
-			mUsers[id].ProcessChangeAvatar(packet->slotType, packet->texId);
+			mUsers[id].ProcessChangeAvatar(packet->slotType, packet->texId, true);
+			break;
+		}
+		
+		case CS_PACKET_TYPE::CS_TAKE_OFF_EQUIP_ITEM:
+		{
+			CSTakeOffEquipItemPacket* packet = reinterpret_cast<CSTakeOffEquipItemPacket*>(buf);
+			// 주변 다른 유저들에게 아바타 바꼈다고 전송
+			mUsers[id].ProcessChangeAvatar(packet->slotType, 0, false);
 			break;
 		}
 

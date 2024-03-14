@@ -40,7 +40,12 @@ struct AddPacket : public PacketBase
 };
 struct AvatarPacket : public PacketBase
 {
+	int slotType;
 	int texId;
+};
+struct TakeOffEquipItemPacket : public PacketBase
+{
+	int slotType;
 };
 struct AddTradeItemPacket : public PacketBase
 {
