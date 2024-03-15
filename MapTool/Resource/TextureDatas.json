@@ -1,0 +1,2859 @@
+[
+  {
+    "Path": "../Resource/Textures/Tile/BlackTile.png",
+    "Name": "BlackTile",
+    "Width": 65,
+    "Height": 65,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/Tile/WhiteTile.png",
+    "Name": "WhiteTile",
+    "Width": 65,
+    "Height": 65,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/Character/Hair/Hair0.png",
+    "Name": "Hair0",
+    "Width": 49,
+    "Height": 37,
+    "OriginX": -6,
+    "OriginY": -11
+  },
+  {
+    "Path": "../Resource/Textures/Character/Head/FrontHead0.png",
+    "Name": "FrontHead0",
+    "Width": 39,
+    "Height": 35,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/Character/Face/Face0.png",
+    "Name": "Face0",
+    "Width": 29,
+    "Height": 15,
+    "OriginX": 2,
+    "OriginY": 17
+  },
+  {
+    "Path": "../Resource/Textures/Character/Face/Face1.png",
+    "Name": "Face1",
+    "Width": 23,
+    "Height": 17,
+    "OriginX": 4,
+    "OriginY": 16
+  },
+  {
+    "Path": "../Resource/Textures/Character/Face/Face2.png",
+    "Name": "Face2",
+    "Width": 23,
+    "Height": 17,
+    "OriginX": 4,
+    "OriginY": 16
+  },
+  {
+    "Path": "../Resource/Textures/Character/Body/Idle/IdleBody0.png",
+    "Name": "IdleBody0",
+    "Width": 21,
+    "Height": 31,
+    "OriginX": 5,
+    "OriginY": 34
+  },
+  {
+    "Path": "../Resource/Textures/Character/Body/Idle/IdleBody1.png",
+    "Name": "IdleBody1",
+    "Width": 22,
+    "Height": 31,
+    "OriginX": 4,
+    "OriginY": 34
+  },
+  {
+    "Path": "../Resource/Textures/Character/Body/Idle/IdleBody2.png",
+    "Name": "IdleBody2",
+    "Width": 23,
+    "Height": 31,
+    "OriginX": 3,
+    "OriginY": 34
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Idle/IdleArm0.png",
+    "Name": "IdleArm0",
+    "Width": 10,
+    "Height": 19,
+    "OriginX": 21,
+    "OriginY": 35
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Idle/IdleArm1.png",
+    "Name": "IdleArm1",
+    "Width": 10,
+    "Height": 19,
+    "OriginX": 21,
+    "OriginY": 35
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Idle/IdleArm2.png",
+    "Name": "IdleArm2",
+    "Width": 11,
+    "Height": 19,
+    "OriginX": 21,
+    "OriginY": 35
+  },
+  {
+    "Path": "../Resource/Textures/Character/Body/Walk/WalkBody0.png",
+    "Name": "WalkBody0",
+    "Width": 27,
+    "Height": 32,
+    "OriginX": 2,
+    "OriginY": 33
+  },
+  {
+    "Path": "../Resource/Textures/Character/Body/Walk/WalkBody1.png",
+    "Name": "WalkBody1",
+    "Width": 26,
+    "Height": 32,
+    "OriginX": 5,
+    "OriginY": 32
+  },
+  {
+    "Path": "../Resource/Textures/Character/Body/Walk/WalkBody2.png",
+    "Name": "WalkBody2",
+    "Width": 24,
+    "Height": 32,
+    "OriginX": 2,
+    "OriginY": 33
+  },
+  {
+    "Path": "../Resource/Textures/Character/Body/Walk/WalkBody3.png",
+    "Name": "WalkBody3",
+    "Width": 29,
+    "Height": 31,
+    "OriginX": 1,
+    "OriginY": 33
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Walk/WalkArm0.png",
+    "Name": "WalkArm0",
+    "Width": 12,
+    "Height": 17,
+    "OriginX": 22,
+    "OriginY": 35
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Walk/WalkArm1.png",
+    "Name": "WalkArm1",
+    "Width": 13,
+    "Height": 17,
+    "OriginX": 15,
+    "OriginY": 36
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Walk/WalkArm2.png",
+    "Name": "WalkArm2",
+    "Width": 12,
+    "Height": 17,
+    "OriginX": 22,
+    "OriginY": 35
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Walk/WalkArm3.png",
+    "Name": "WalkArm3",
+    "Width": 14,
+    "Height": 15,
+    "OriginX": 22,
+    "OriginY": 35
+  },
+  {
+    "Path": "../Resource/Textures/DreamOfDoll.png",
+    "Name": "DreamOfDoll",
+    "Width": 30,
+    "Height": 30,
+    "OriginX": 0,
+    "OriginY": 0,
+    "TextureId": 9999,
+    "Icon": true,
+    "Motion": -1,
+    "Parts": "Longcoat",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Longcoat/Idle/DreamOfDoll0.png",
+    "Name": "EquipBodyIdleDreamOfDoll0",
+    "Width": 24,
+    "Height": 22,
+    "OriginX": 5,
+    "OriginY": 35,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Longcoat",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Longcoat/Idle/DreamOfDoll1.png",
+    "Name": "EquipBodyIdleDreamOfDoll1",
+    "Width": 25,
+    "Height": 23,
+    "OriginX": 3,
+    "OriginY": 36,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Longcoat",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Longcoat/Idle/DreamOfDoll2.png",
+    "Name": "EquipBodyIdleDreamOfDoll2",
+    "Width": 25,
+    "Height": 23,
+    "OriginX": 3,
+    "OriginY": 36,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Longcoat",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Longcoat/Walk/DreamOfDoll0.png",
+    "Name": "EquipBodyWalkDreamOfDoll0",
+    "Width": 28,
+    "Height": 23,
+    "OriginX": 3,
+    "OriginY": 35,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Longcoat",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Longcoat/Walk/DreamOfDoll1.png",
+    "Name": "EquipBodyWalkDreamOfDoll1",
+    "Width": 23,
+    "Height": 24,
+    "OriginX": 8,
+    "OriginY": 35,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Longcoat",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Longcoat/Walk/DreamOfDoll2.png",
+    "Name": "EquipBodyWalkDreamOfDoll2",
+    "Width": 28,
+    "Height": 24,
+    "OriginX": 3,
+    "OriginY": 35,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Longcoat",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Longcoat/Walk/DreamOfDoll3.png",
+    "Name": "EquipBodyWalkDreamOfDoll3",
+    "Width": 30,
+    "Height": 24,
+    "OriginX": 2,
+    "OriginY": 35,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Longcoat",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Longcoat/Jump/DreamOfDoll0.png",
+    "Name": "EquipBodyJumpDreamOfDoll0",
+    "Width": 22,
+    "Height": 23,
+    "OriginX": 7,
+    "OriginY": 35,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 2,
+    "Parts": "Longcoat",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Idle/Equip/DreamOfDoll0.png",
+    "Name": "EquipArmIdleDreamOfDoll0",
+    "Width": 11,
+    "Height": 20,
+    "OriginX": 21,
+    "OriginY": 37,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "EquipArm",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Idle/Equip/DreamOfDoll1.png",
+    "Name": "EquipArmIdleDreamOfDoll1",
+    "Width": 11,
+    "Height": 20,
+    "OriginX": 21,
+    "OriginY": 37,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "EquipArm",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Idle/Equip/DreamOfDoll2.png",
+    "Name": "EquipArmIdleDreamOfDoll2",
+    "Width": 12,
+    "Height": 20,
+    "OriginX": 21,
+    "OriginY": 37,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "EquipArm",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Walk/Equip/DreamOfDoll0.png",
+    "Name": "EquipArmWalkDreamOfDoll0",
+    "Width": 14,
+    "Height": 13,
+    "OriginX": 21,
+    "OriginY": 36,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "EquipArm",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Walk/Equip/DreamOfDoll0.png",
+    "Name": "EquipArmWalkDreamOfDoll1",
+    "Width": 10,
+    "Height": 18,
+    "OriginX": 18,
+    "OriginY": 37,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "EquipArm",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Walk/Equip/DreamOfDoll0.png",
+    "Name": "EquipArmWalkDreamOfDoll2",
+    "Width": 13,
+    "Height": 13,
+    "OriginX": 22,
+    "OriginY": 36,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "EquipArm",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Walk/Equip/DreamOfDoll0.png",
+    "Name": "EquipArmWalkDreamOfDoll3",
+    "Width": 16,
+    "Height": 12,
+    "OriginX": 22,
+    "OriginY": 35,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "EquipArm",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Jump/Equip/DreamOfDoll0.png",
+    "Name": "EquipArmJumpDreamOfDoll0",
+    "Width": 9,
+    "Height": 11,
+    "OriginX": 19,
+    "OriginY": 36,
+    "TextureId": 9999,
+    "Icon": false,
+    "Motion": 2,
+    "Parts": "EquipArm",
+    "EquipSlotType": 8
+  },
+  {
+    "Path": "../Resource/Textures/Sword.png",
+    "Name": "Sword",
+    "Width": 30,
+    "Height": 30,
+    "OriginX": 0,
+    "OriginY": 0,
+    "TextureId": 10000,
+    "Icon": true,
+    "Motion": -1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponSword0.png",
+    "Name": "IdleWeaponSword0",
+    "Width": 41,
+    "Height": 13,
+    "OriginX": -7,
+    "OriginY": 47,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponSword0.png",
+    "Name": "IdleWeaponSword1",
+    "Width": 41,
+    "Height": 13,
+    "OriginX": -7,
+    "OriginY": 47,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponSword0.png",
+    "Name": "IdleWeaponSword2",
+    "Width": 41,
+    "Height": 13,
+    "OriginX": -6,
+    "OriginY": 47,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponSword0.png",
+    "Name": "WalkWeaponSword0",
+    "Width": 43,
+    "Height": 8,
+    "OriginX": -6,
+    "OriginY": 45,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponSword1.png",
+    "Name": "WalkWeaponSword1",
+    "Width": 41,
+    "Height": 14,
+    "OriginX": -14,
+    "OriginY": 39,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponSword2.png",
+    "Name": "WalkWeaponSword2",
+    "Width": 43,
+    "Height": 8,
+    "OriginX": -6,
+    "OriginY": 45,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponSword3.png",
+    "Name": "WalkWeaponSword3",
+    "Width": 41,
+    "Height": 13,
+    "OriginX": -2,
+    "OriginY": 43,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Jump/JumpWeaponSword0.png",
+    "Name": "JumpWeaponSword0",
+    "Width": 32,
+    "Height": 30,
+    "OriginX": 13,
+    "OriginY": 16,
+    "TextureId": 10000,
+    "Icon": false,
+    "Motion": 2,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Club.png",
+    "Name": "Club",
+    "Width": 30,
+    "Height": 30,
+    "OriginX": 0,
+    "OriginY": 0,
+    "TextureId": 10001,
+    "Icon": true,
+    "Motion": -1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponClub0.png",
+    "Name": "IdleWeaponClub0",
+    "Width": 39,
+    "Height": 15,
+    "OriginX": -7,
+    "OriginY": 47,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponClub0.png",
+    "Name": "IdleWeaponClub1",
+    "Width": 39,
+    "Height": 15,
+    "OriginX": -7,
+    "OriginY": 47,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponClub0.png",
+    "Name": "IdleWeaponClub2",
+    "Width": 39,
+    "Height": 15,
+    "OriginX": -6,
+    "OriginY": 47,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponClub0.png",
+    "Name": "WalkWeaponClub0",
+    "Width": 40,
+    "Height": 9,
+    "OriginX": -6,
+    "OriginY": 45,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponClub1.png",
+    "Name": "WalkWeaponClub1",
+    "Width": 41,
+    "Height": 16,
+    "OriginX": -14,
+    "OriginY": 38,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponClub2.png",
+    "Name": "WalkWeaponClub2",
+    "Width": 40,
+    "Height": 9,
+    "OriginX": -6,
+    "OriginY": 44,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponClub3.png",
+    "Name": "WalkWeaponClub3",
+    "Width": 39,
+    "Height": 15,
+    "OriginX": -2,
+    "OriginY": 43,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Jump/JumpWeaponClub0.png",
+    "Name": "JumpWeaponClub0",
+    "Width": 16,
+    "Height": 40,
+    "OriginX": 16,
+    "OriginY": 7,
+    "TextureId": 10001,
+    "Icon": false,
+    "Motion": 2,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Ax.png",
+    "Name": "Ax",
+    "Width": 30,
+    "Height": 30,
+    "OriginX": 0,
+    "OriginY": 0,
+    "TextureId": 10002,
+    "Icon": true,
+    "Motion": -1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponAx0.png",
+    "Name": "IdleWeaponAx0",
+    "Width": 42,
+    "Height": 25,
+    "OriginX": -7,
+    "OriginY": 47,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponAx0.png",
+    "Name": "IdleWeaponAx1",
+    "Width": 42,
+    "Height": 25,
+    "OriginX": -7,
+    "OriginY": 47,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponAx0.png",
+    "Name": "IdleWeaponAx2",
+    "Width": 42,
+    "Height": 25,
+    "OriginX": -6,
+    "OriginY": 47,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponAx0.png",
+    "Name": "WalkWeaponAx0",
+    "Width": 44,
+    "Height": 17,
+    "OriginX": -6,
+    "OriginY": 45,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponAx1.png",
+    "Name": "WalkWeaponAx1",
+    "Width": 44,
+    "Height": 18,
+    "OriginX": -12,
+    "OriginY": 40,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponAx2.png",
+    "Name": "WalkWeaponAx2",
+    "Width": 44,
+    "Height": 17,
+    "OriginX": -6,
+    "OriginY": 45,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponAx3.png",
+    "Name": "WalkWeaponAx3",
+    "Width": 42,
+    "Height": 25,
+    "OriginX": -4,
+    "OriginY": 45,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Jump/JumpWeaponAx0.png",
+    "Name": "JumpWeaponAx0",
+    "Width": 18,
+    "Height": 44,
+    "OriginX": 12,
+    "OriginY": 4,
+    "TextureId": 10002,
+    "Icon": false,
+    "Motion": 2,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Dagger.png",
+    "Name": "Dagger",
+    "Width": 30,
+    "Height": 30,
+    "OriginX": 0,
+    "OriginY": 0,
+    "TextureId": 10003,
+    "Icon": true,
+    "Motion": -1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponDagger0.png",
+    "Name": "IdleWeaponDagger0",
+    "Width": 31,
+    "Height": 13,
+    "OriginX": 3,
+    "OriginY": 47,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponDagger0.png",
+    "Name": "IdleWeaponDagger1",
+    "Width": 31,
+    "Height": 13,
+    "OriginX": 3,
+    "OriginY": 47,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Idle/IdleWeaponDagger0.png",
+    "Name": "IdleWeaponDagger2",
+    "Width": 31,
+    "Height": 13,
+    "OriginX": 4,
+    "OriginY": 47,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 0,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponDagger0.png",
+    "Name": "WalkWeaponDagger0",
+    "Width": 31,
+    "Height": 6,
+    "OriginX": 5,
+    "OriginY": 45,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponDagger1.png",
+    "Name": "WalkWeaponDagger1",
+    "Width": 31,
+    "Height": 13,
+    "OriginX": -4,
+    "OriginY": 40,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponDagger2.png",
+    "Name": "WalkWeaponDagger2",
+    "Width": 31,
+    "Height": 6,
+    "OriginX": 5,
+    "OriginY": 45,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Walk/WalkWeaponDagger3.png",
+    "Name": "WalkWeaponDagger3",
+    "Width": 31,
+    "Height": 13,
+    "OriginX": 7,
+    "OriginY": 42,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 1,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Weapon/Jump/JumpWeaponDagger0.png",
+    "Name": "JumpWeaponDagger0",
+    "Width": 13,
+    "Height": 31,
+    "OriginX": 17,
+    "OriginY": 17,
+    "TextureId": 10003,
+    "Icon": false,
+    "Motion": 2,
+    "Parts": "Weapon",
+    "EquipSlotType": 3
+  },
+  {
+    "Path": "../Resource/Textures/Character/Body/Jump/JumpBody0.png",
+    "Name": "JumpBody0",
+    "Width": 35,
+    "Height": 30,
+    "OriginX": -2,
+    "OriginY": 34
+  },
+  {
+    "Path": "../Resource/Textures/Character/Arm/Jump/JumpArm0.png",
+    "Name": "JumpArm0",
+    "Width": 13,
+    "Height": 11,
+    "OriginX": 15,
+    "OriginY": 35
+  },
+  {
+    "Path": "../Resource/Textures/Character/Hand/Jump/JumpLeftHand0.png",
+    "Name": "JumpLeftHand0",
+    "Width": 8,
+    "Height": 9,
+    "OriginX": 4,
+    "OriginY": 43
+  },
+  {
+    "Path": "../Resource/Textures/Character/Hand/Jump/JumpRightHand0.png",
+    "Name": "JumpRightHand0",
+    "Width": 9,
+    "Height": 9,
+    "OriginX": 0,
+    "OriginY": 47
+  },
+  {
+    "Path": "../Resource/Textures/Monster/OrangeMushroom/Idle/IdleOrangeMushroom0.png",
+    "Name": "IdleOrangeMushroom0",
+    "Width": 63,
+    "Height": 58,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/Monster/OrangeMushroom/Idle/IdleOrangeMushroom1.png",
+    "Name": "IdleOrangeMushroom1",
+    "Width": 63,
+    "Height": 55,
+    "OriginX": 0,
+    "OriginY": 2
+  },
+  {
+    "Path": "../Resource/Textures/Monster/OrangeMushroom/Jump/JumpOrangeMushroom0.png",
+    "Name": "JumpOrangeMushroom0",
+    "Width": 62,
+    "Height": 64,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/Monster/OrangeMushroom/Jump/JumpOrangeMushroom1.png",
+    "Name": "JumpOrangeMushroom1",
+    "Width": 63,
+    "Height": 55,
+    "OriginX": 0,
+    "OriginY": 2
+  },
+  {
+    "Path": "../Resource/Textures/Login/LoginBackground.png",
+    "Name": "LoginBackground",
+    "Width": 800,
+    "Height": 800,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/Login/LoginGameGuide.png",
+    "Name": "LoginGameGuide",
+    "Width": 65,
+    "Height": 75,
+    "OriginX": 485,
+    "OriginY": -259
+  },
+  {
+    "Path": "../Resource/Textures/Login/LoginInputBackground.png",
+    "Name": "LoginInputBackground",
+    "Width": 332,
+    "Height": 282,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/Login/LoginTab0.png",
+    "Name": "LoginTab0",
+    "Width": 139,
+    "Height": 32,
+    "OriginX": 27,
+    "OriginY": 37
+  },
+  {
+    "Path": "../Resource/Textures/Login/LoginTab1.png",
+    "Name": "LoginTab1",
+    "Width": 139,
+    "Height": 32,
+    "OriginX": 166,
+    "OriginY": 37
+  },
+  {
+    "Path": "../Resource/Textures/Login/IdInput0.png",
+    "Name": "IdInput0",
+    "Width": 201,
+    "Height": 45,
+    "OriginX": 27,
+    "OriginY": 69
+  },
+  {
+    "Path": "../Resource/Textures/Login/IdInput1.png",
+    "Name": "IdInput1",
+    "Width": 55,
+    "Height": 45,
+    "OriginX": 250,
+    "OriginY": 69
+  },
+  {
+    "Path": "../Resource/Textures/Login/IdRadioButton0.png",
+    "Name": "IdRadioButton0",
+    "Width": 22,
+    "Height": 45,
+    "OriginX": 228,
+    "OriginY": 69
+  },
+  {
+    "Path": "../Resource/Textures/Login/IdRadioButton1.png",
+    "Name": "IdRadioButton1",
+    "Width": 22,
+    "Height": 45,
+    "OriginX": 228,
+    "OriginY": 69
+  },
+  {
+    "Path": "../Resource/Textures/Login/PWInput.png",
+    "Name": "PWInput",
+    "Width": 278,
+    "Height": 44,
+    "OriginX": 27,
+    "OriginY": 115
+  },
+  {
+    "Path": "../Resource/Textures/Login/LoginButton.png",
+    "Name": "LoginButton",
+    "Width": 278,
+    "Height": 53,
+    "OriginX": 27,
+    "OriginY": 171
+  },
+  {
+    "Path": "../Resource/Textures/Login/LoginQuitButton.png",
+    "Name": "LoginQuitButton",
+    "Width": 44,
+    "Height": 21,
+    "OriginX": 266,
+    "OriginY": 231
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIBackground0.png",
+    "Name": "EquipUIBackground0",
+    "Width": 232,
+    "Height": 354,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIBackground1.png",
+    "Name": "EquipUIBackground1",
+    "Width": 214,
+    "Height": 256,
+    "OriginX": 9,
+    "OriginY": 44
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIBackground2.png",
+    "Name": "EquipUIBackground2",
+    "Width": 127,
+    "Height": 209,
+    "OriginX": 56,
+    "OriginY": 68
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIBackground3.png",
+    "Name": "EquipUIBackground3",
+    "Width": 218,
+    "Height": 4,
+    "OriginX": 7,
+    "OriginY": 41
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIBackground4.png",
+    "Name": "EquipUIBackground4",
+    "Width": 212,
+    "Height": 18,
+    "OriginX": 10,
+    "OriginY": 326
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUITab00.png",
+    "Name": "EquipUITab00",
+    "Width": 42,
+    "Height": 22,
+    "OriginX": 9,
+    "OriginY": 21
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUITab11.png",
+    "Name": "EquipUITab11",
+    "Width": 42,
+    "Height": 20,
+    "OriginX": 52,
+    "OriginY": 23
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIButton0.png",
+    "Name": "EquipUIButton0",
+    "Width": 55,
+    "Height": 13,
+    "OriginX": 118,
+    "OriginY": 309
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUIButton1.png",
+    "Name": "EquipUIButton1",
+    "Width": 47,
+    "Height": 13,
+    "OriginX": 175,
+    "OriginY": 309
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot0.png",
+    "Name": "EquipUISlot0",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 14,
+    "OriginY": 49
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot1.png",
+    "Name": "EquipUISlot1",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 14,
+    "OriginY": 213
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot2.png",
+    "Name": "EquipUISlot2",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 55,
+    "OriginY": 90
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot3.png",
+    "Name": "EquipUISlot3",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 55,
+    "OriginY": 172
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot4.png",
+    "Name": "EquipUISlot4",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 55,
+    "OriginY": 213
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot5.png",
+    "Name": "EquipUISlot5",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 96,
+    "OriginY": 49
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot6.png",
+    "Name": "EquipUISlot6",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 96,
+    "OriginY": 90
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot7.png",
+    "Name": "EquipUISlot7",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 96,
+    "OriginY": 131
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot8.png",
+    "Name": "EquipUISlot8",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 96,
+    "OriginY": 172
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot9.png",
+    "Name": "EquipUISlot9",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 96,
+    "OriginY": 213
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot10.png",
+    "Name": "EquipUISlot10",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 96,
+    "OriginY": 254
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot11.png",
+    "Name": "EquipUISlot11",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 137,
+    "OriginY": 131
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot12.png",
+    "Name": "EquipUISlot12",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 137,
+    "OriginY": 172
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot13.png",
+    "Name": "EquipUISlot13",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 137,
+    "OriginY": 213
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot14.png",
+    "Name": "EquipUISlot14",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 137,
+    "OriginY": 254
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot15.png",
+    "Name": "EquipUISlot15",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 178,
+    "OriginY": 49
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot16.png",
+    "Name": "EquipUISlot16",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 178,
+    "OriginY": 90
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot17.png",
+    "Name": "EquipUISlot17",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 178,
+    "OriginY": 131
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot18.png",
+    "Name": "EquipUISlot18",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 178,
+    "OriginY": 172
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot19.png",
+    "Name": "EquipUISlot19",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 178,
+    "OriginY": 213
+  },
+  {
+    "Path": "../Resource/Textures/EquipUI/EquipUISlot20.png",
+    "Name": "EquipUISlot20",
+    "Width": 40,
+    "Height": 39,
+    "OriginX": 178,
+    "OriginY": 254
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIBackground0.png",
+    "Name": "InvenUIBackground0",
+    "Width": 197,
+    "Height": 380,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIBackground1.png",
+    "Name": "InvenUIBackground1",
+    "Width": 185,
+    "Height": 351,
+    "OriginX": 6,
+    "OriginY": 23
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIBackground2.png",
+    "Name": "InvenUIBackground2",
+    "Width": 183,
+    "Height": 296,
+    "OriginX": 7,
+    "OriginY": 45
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUITab00.png",
+    "Name": "InvenUITab00",
+    "Width": 29,
+    "Height": 19,
+    "OriginX": 9,
+    "OriginY": 26
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUITab11.png",
+    "Name": "InvenUITab11",
+    "Width": 29,
+    "Height": 17,
+    "OriginX": 39,
+    "OriginY": 28
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton0.png",
+    "Name": "InvenUIButton0",
+    "Width": 40,
+    "Height": 16,
+    "OriginX": 9,
+    "OriginY": 307
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton1.png",
+    "Name": "InvenUIButton1",
+    "Width": 82,
+    "Height": 16,
+    "OriginX": 9,
+    "OriginY": 325
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton2.png",
+    "Name": "InvenUIButton2",
+    "Width": 28,
+    "Height": 28,
+    "OriginX": 9,
+    "OriginY": 343
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton3.png",
+    "Name": "InvenUIButton3",
+    "Width": 28,
+    "Height": 28,
+    "OriginX": 39,
+    "OriginY": 343
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton4.png",
+    "Name": "InvenUIButton4",
+    "Width": 28,
+    "Height": 28,
+    "OriginX": 69,
+    "OriginY": 343
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton5.png",
+    "Name": "InvenUIButton5",
+    "Width": 28,
+    "Height": 28,
+    "OriginX": 99,
+    "OriginY": 343
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton6.png",
+    "Name": "InvenUIButton6",
+    "Width": 28,
+    "Height": 28,
+    "OriginX": 129,
+    "OriginY": 343
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton7.png",
+    "Name": "InvenUIButton7",
+    "Width": 29,
+    "Height": 28,
+    "OriginX": 159,
+    "OriginY": 343
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton8.png",
+    "Name": "InvenUIButton8",
+    "Width": 16,
+    "Height": 16,
+    "OriginX": 154,
+    "OriginY": 307
+  },
+  {
+    "Path": "../Resource/Textures/InventoryUI/InvenUIButton9.png",
+    "Name": "InvenUIButton9",
+    "Width": 16,
+    "Height": 16,
+    "OriginX": 172,
+    "OriginY": 307
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIBackground0.png",
+    "Name": "SkillUIBackground0",
+    "Width": 318,
+    "Height": 350,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIBackground1.png",
+    "Name": "SkillUIBackground1",
+    "Width": 306,
+    "Height": 322,
+    "OriginX": 6,
+    "OriginY": 22
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIBackground2.png",
+    "Name": "SkillUIBackground2",
+    "Width": 304,
+    "Height": 43,
+    "OriginX": 8,
+    "OriginY": 47
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIBackground3.png",
+    "Name": "SkillUIBackground3",
+    "Width": 95,
+    "Height": 16,
+    "OriginX": 213,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIBackground4.png",
+    "Name": "SkillUIBackground4",
+    "Width": 26,
+    "Height": 30,
+    "OriginX": 16,
+    "OriginY": 54
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab02.png",
+    "Name": "SkillUITab02",
+    "Width": 25,
+    "Height": 18,
+    "OriginX": 11,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab12.png",
+    "Name": "SkillUITab12",
+    "Width": 25,
+    "Height": 18,
+    "OriginX": 37,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab22.png",
+    "Name": "SkillUITab22",
+    "Width": 25,
+    "Height": 18,
+    "OriginX": 63,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab32.png",
+    "Name": "SkillUITab32",
+    "Width": 25,
+    "Height": 18,
+    "OriginX": 89,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab40.png",
+    "Name": "SkillUITab40",
+    "Width": 25,
+    "Height": 20,
+    "OriginX": 115,
+    "OriginY": 27
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab52.png",
+    "Name": "SkillUITab52",
+    "Width": 25,
+    "Height": 18,
+    "OriginX": 141,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUITab62.png",
+    "Name": "SkillUITab62",
+    "Width": 25,
+    "Height": 18,
+    "OriginX": 167,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIButton0.png",
+    "Name": "SkillUIButton0",
+    "Width": 50,
+    "Height": 16,
+    "OriginX": 11,
+    "OriginY": 324
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIButton1.png",
+    "Name": "SkillUIButton1",
+    "Width": 50,
+    "Height": 16,
+    "OriginX": 63,
+    "OriginY": 324
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIButton2.png",
+    "Name": "SkillUIButton2",
+    "Width": 50,
+    "Height": 16,
+    "OriginX": 115,
+    "OriginY": 324
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIButton3.png",
+    "Name": "SkillUIButton3",
+    "Width": 50,
+    "Height": 16,
+    "OriginX": 206,
+    "OriginY": 324
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIButton4.png",
+    "Name": "SkillUIButton4",
+    "Width": 50,
+    "Height": 16,
+    "OriginX": 258,
+    "OriginY": 324
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUIButton50.png",
+    "Name": "SkillUIButton50",
+    "Width": 14,
+    "Height": 12,
+    "OriginX": 136,
+    "OriginY": 113
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUISlot00.png",
+    "Name": "SkillUISlot00",
+    "Width": 140,
+    "Height": 35,
+    "OriginX": 11,
+    "OriginY": 93
+  },
+  {
+    "Path": "../Resource/Textures/SkillUI/SkillUISlot1.png",
+    "Name": "SkillUISlot1",
+    "Width": 140,
+    "Height": 35,
+    "OriginX": 11,
+    "OriginY": 283
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/Icon/Icon0.png",
+    "Name": "Icon0",
+    "Width": 32,
+    "Height": 32,
+    "OriginX": 13,
+    "OriginY": 95,
+    "TextureId": 123123,
+    "Icon": true,
+    "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect0.png",
+    "Name": "Effect0_0",
+    "Width": 396,
+    "Height": 360,
+    "OriginX": 0,
+    "OriginY": 0,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect1.png",
+    "Name": "Effect0_1",
+    "Width": 376,
+    "Height": 296,
+    "OriginX": 30,
+    "OriginY": 28,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect2.png",
+    "Name": "Effect0_2",
+    "Width": 920,
+    "Height": 492,
+    "OriginX": -510,
+    "OriginY": -30,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect3.png",
+    "Name": "Effect0_3",
+    "Width": 884,
+    "Height": 520,
+    "OriginX": -460,
+    "OriginY": -7,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect4.png",
+    "Name": "Effect0_4",
+    "Width": 892,
+    "Height": 516,
+    "OriginX": -475,
+    "OriginY": -7,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect5.png",
+    "Name": "Effect0_5",
+    "Width": 888,
+    "Height": 616,
+    "OriginX": -465,
+    "OriginY": -107,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect6.png",
+    "Name": "Effect0_6",
+    "Width": 932,
+    "Height": 600,
+    "OriginX": -500,
+    "OriginY": -105,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect7.png",
+    "Name": "Effect0_7",
+    "Width": 904,
+    "Height": 560,
+    "OriginX": -480,
+    "OriginY": -90,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect8.png",
+    "Name": "Effect0_8",
+    "Width": 916,
+    "Height": 536,
+    "OriginX": -510,
+    "OriginY": -95
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect9.png",
+    "Name": "Effect0_9",
+    "Width": 900,
+    "Height": 552,
+    "OriginX": -470,
+    "OriginY": -95,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect10.png",
+    "Name": "Effect0_10",
+    "Width": 832,
+    "Height": 592,
+    "OriginX": -395,
+    "OriginY": -148,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect11.png",
+    "Name": "Effect0_11",
+    "Width": 828,
+    "Height": 592,
+    "OriginX": -410,
+    "OriginY": -148,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect12.png",
+    "Name": "Effect0_12",
+    "Width": 30,
+    "Height": 30,
+    "OriginX": -422,
+    "OriginY": -155,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect13.png",
+    "Name": "Effect0_13",
+    "Width": 844,
+    "Height": 600,
+    "OriginX": -422,
+    "OriginY": -156,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect0/Effect14.png",
+    "Name": "Effect0_14",
+    "Width": 696,
+    "Height": 536,
+    "OriginX": -420,
+    "OriginY": -150,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 0
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect0.png",
+    "Name": "Effect1_0",
+    "Width": 396,
+    "Height": 360,
+    "OriginX": 0,
+    "OriginY": 0,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect1.png",
+    "Name": "Effect1_1",
+    "Width": 400,
+    "Height": 308,
+    "OriginX": 10,
+    "OriginY": 25,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect2.png",
+    "Name": "Effect1_2",
+    "Width": 376,
+    "Height": 304,
+    "OriginX": 24,
+    "OriginY": 20,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect3.png",
+    "Name": "Effect1_3",
+    "Width": 892,
+    "Height": 496,
+    "OriginX": -460,
+    "OriginY": -100,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect4.png",
+    "Name": "Effect1_4",
+    "Width": 836,
+    "Height": 524,
+    "OriginX": -380,
+    "OriginY": -155,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect5.png",
+    "Name": "Effect1_5",
+    "Width": 844,
+    "Height": 556,
+    "OriginX": -390,
+    "OriginY": -150,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect6.png",
+    "Name": "Effect1_6",
+    "Width": 844,
+    "Height": 592,
+    "OriginX": -433,
+    "OriginY": -138,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect7.png",
+    "Name": "Effect1_7",
+    "Width": 896,
+    "Height": 620,
+    "OriginX": -470,
+    "OriginY": -165,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect8.png",
+    "Name": "Effect1_8",
+    "Width": 852,
+    "Height": 620,
+    "OriginX": -438,
+    "OriginY": -152,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect9.png",
+    "Name": "Effect1_9",
+    "Width": 864,
+    "Height": 636,
+    "OriginX": -460,
+    "OriginY": -158,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect10.png",
+    "Name": "Effect1_10",
+    "Width": 960,
+    "Height": 576,
+    "OriginX": -455,
+    "OriginY": -158,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect11.png",
+    "Name": "Effect1_11",
+    "Width": 956,
+    "Height": 560,
+    "OriginX": -455,
+    "OriginY": -157,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect12.png",
+    "Name": "Effect1_12",
+    "Width": 960,
+    "Height": 556,
+    "OriginX": -465,
+    "OriginY": -155,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect13.png",
+    "Name": "Effect1_13",
+    "Width": 948,
+    "Height": 552,
+    "OriginX": -461,
+    "OriginY": -153,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect14.png",
+    "Name": "Effect1_14",
+    "Width": 940,
+    "Height": 480,
+    "OriginX": -450,
+    "OriginY": -96,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect15.png",
+    "Name": "Effect1_15",
+    "Width": 892,
+    "Height": 452,
+    "OriginX": -435,
+    "OriginY": -90,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect16.png",
+    "Name": "Effect1_16",
+    "Width": 600,
+    "Height": 412,
+    "OriginX": -355,
+    "OriginY": -87,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/RagingBlow/Effect1/Effect17.png",
+    "Name": "Effect1_17",
+    "Width": 416,
+    "Height": 292,
+    "OriginX": -180,
+    "OriginY": -90,
+    "TextureId": 123123,
+    "Icon": false,
+    "Motion": 1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/Icon/Icon1.png",
+    "Name": "Icon1",
+    "Width": 32,
+    "Height": 32,
+    "OriginX": 156,
+    "OriginY": 95,
+    "TextureId": 123124,
+    "Icon": true,
+    "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/Icon/Icon2.png",
+    "Name": "Icon2",
+    "Width": 32,
+    "Height": 32,
+    "OriginX": 13,
+    "OriginY": 133,
+    "TextureId": 123125,
+    "Icon": true,
+    "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/Icon/Icon3.png",
+    "Name": "Icon3",
+    "Width": 32,
+    "Height": 32,
+    "OriginX": 156,
+    "OriginY": 133,
+    "TextureId": 123126,
+    "Icon": true,
+    "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/Icon/Icon4.png",
+    "Name": "Icon4",
+    "Width": 32,
+    "Height": 32,
+    "OriginX": 13,
+    "OriginY": 171,
+    "TextureId": 123127,
+    "Icon": true,
+    "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/Icon/Icon5.png",
+    "Name": "Icon5",
+    "Width": 32,
+    "Height": 32,
+    "OriginX": 156,
+    "OriginY": 171,
+    "TextureId": 123128,
+    "Icon": true,
+    "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/Icon/Icon6.png",
+    "Name": "Icon6",
+    "Width": 32,
+    "Height": 32,
+    "OriginX": 13,
+    "OriginY": 209,
+    "TextureId": 123129,
+    "Icon": true,
+    "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/Icon/Icon7.png",
+    "Name": "Icon7",
+    "Width": 32,
+    "Height": 32,
+    "OriginX": 156,
+    "OriginY": 209,
+    "TextureId": 123130,
+    "Icon": true,
+    "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/Icon/Icon8.png",
+    "Name": "Icon8",
+    "Width": 32,
+    "Height": 32,
+    "OriginX": 13,
+    "OriginY": 247,
+    "TextureId": 123131,
+    "Icon": true,
+    "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Skill/Hero/Icon/Icon9.png",
+    "Name": "Icon9",
+    "Width": 32,
+    "Height": 32,
+    "OriginX": 156,
+    "OriginY": 247,
+    "TextureId": 123132,
+    "Icon": true,
+    "Motion": -1
+  },
+  {
+    "Path": "../Resource/Textures/Slot.png",
+    "Name": "KeySlot",
+    "Width": 32,
+    "Height": 32,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+
+  {
+    "Path": "../Resource/Textures/TradeUI/TradeUIBackground0.png",
+    "Name": "TradeUIBackground0",
+    "Width": 526,
+    "Height": 479,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/TradeUI/TradeUIBackground1.png",
+    "Name": "TradeUIBackground1",
+    "Width": 514,
+    "Height": 465,
+    "OriginX": 6,
+    "OriginY": 7
+  },
+  {
+    "Path": "../Resource/Textures/TradeUI/TradeUIBackground2.png",
+    "Name": "TradeUIBackground2",
+    "Width": 506,
+    "Height": 348,
+    "OriginX": 10,
+    "OriginY": 120
+  },
+  {
+    "Path": "../Resource/Textures/TradeUI/TradeUIButton0.png",
+    "Name": "TradeUIButton0",
+    "Width": 64,
+    "Height": 16,
+    "OriginX": 104,
+    "OriginY": 86
+  },
+  {
+    "Path": "../Resource/Textures/TradeUI/TradeUIButton1.png",
+    "Name": "TradeUIButton1",
+    "Width": 64,
+    "Height": 16,
+    "OriginX": 104,
+    "OriginY": 64
+  },
+  {
+    "Path": "../Resource/Textures/TradeUI/TradeUIButton2.png",
+    "Name": "TradeUIButton2",
+    "Width": 18,
+    "Height": 16,
+    "OriginX": 149,
+    "OriginY": 262
+  },
+  {
+    "Path": "../Resource/Textures/TradeUI/TradeUIButton3.png",
+    "Name": "TradeUIButton3",
+    "Width": 18,
+    "Height": 17,
+    "OriginX": 499,
+    "OriginY": 276
+  },
+  {
+    "Path": "../Resource/Textures/DialogUI/DialogUIBackground0.png",
+    "Name": "DialogUIBackground0",
+    "Width": 230,
+    "Height": 102,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/DialogUI/DialogUIButton0.png",
+    "Name": "DialogUIButton0",
+    "Width": 50,
+    "Height": 33,
+    "OriginX": 60,
+    "OriginY": 60
+  },
+  {
+    "Path": "../Resource/Textures/DialogUI/DialogUIButton1.png",
+    "Name": "DialogUIButton1",
+    "Width": 50,
+    "Height": 33,
+    "OriginX": 120,
+    "OriginY": 60
+  },
+  {
+    "Path": "../Resource/Textures/GameMenuUI/MenuUIBackground0.png",
+    "Name": "MenuUIBackground0",
+    "Width": 121,
+    "Height": 29,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/GameMenuUI/MenuUIBackground1.png",
+    "Name": "MenuUIBackground1",
+    "Width": 121,
+    "Height": 80,
+    "OriginX": 0,
+    "OriginY": 29
+  },
+  {
+    "Path": "../Resource/Textures/GameMenuUI/MenuUIBackground2.png",
+    "Name": "MenuUIBackground2",
+    "Width": 121,
+    "Height": 44,
+    "OriginX": 0,
+    "OriginY": 109
+  },
+  {
+    "Path": "../Resource/Textures/GameMenuUI/MenuUITitle.png",
+    "Name": "MenuUITitle",
+    "Width": 87,
+    "Height": 16,
+    "OriginX": 15,
+    "OriginY": 10
+  },
+  {
+    "Path": "../Resource/Textures/GameMenuUI/ChannelChange.png",
+    "Name": "ChannelChange",
+    "Width": 109,
+    "Height": 26,
+    "OriginX": 10,
+    "OriginY": 40
+  },
+  {
+    "Path": "../Resource/Textures/GameMenuUI/Option.png",
+    "Name": "Option",
+    "Width": 109,
+    "Height": 26,
+    "OriginX": 10,
+    "OriginY": 70
+  },
+  {
+    "Path": "../Resource/Textures/GameMenuUI/Quit.png",
+    "Name": "Quit",
+    "Width": 109,
+    "Height": 26,
+    "OriginX": 10,
+    "OriginY": 100
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUIBackground0.png",
+    "Name": "ChannelUIBackground0",
+    "Width": 371,
+    "Height": 248,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUIBackground1.png",
+    "Name": "ChannelUIBackground1",
+    "Width": 359,
+    "Height": 219,
+    "OriginX": 6,
+    "OriginY": 23
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUIBackground2.png",
+    "Name": "ChannelUIBackground2",
+    "Width": 350,
+    "Height": 187,
+    "OriginX": 10,
+    "OriginY": 28
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUILogo0.png",
+    "Name": "ChannelUILogo0",
+    "Width": 136,
+    "Height": 20,
+    "OriginX": 15,
+    "OriginY": 31
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUILogo1.png",
+    "Name": "ChannelUILogo1",
+    "Width": 103,
+    "Height": 20,
+    "OriginX": 15,
+    "OriginY": 31
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUILogo2.png",
+    "Name": "ChannelUILogo2",
+    "Width": 115,
+    "Height": 18,
+    "OriginX": 15,
+    "OriginY": 31
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUILogo3.png",
+    "Name": "ChannelUILogo3",
+    "Width": 140,
+    "Height": 22,
+    "OriginX": 15,
+    "OriginY": 31
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUILogo4.png",
+    "Name": "ChannelUILogo4",
+    "Width": 117,
+    "Height": 21,
+    "OriginX": 15,
+    "OriginY": 31
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUIButton0.png",
+    "Name": "ChannelUIButton0",
+    "Width": 53,
+    "Height": 16,
+    "OriginX": 263,
+    "OriginY": 222
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUIButton1.png",
+    "Name": "ChannelUIButton1",
+    "Width": 40,
+    "Height": 16,
+    "OriginX": 319,
+    "OriginY": 222
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICurrent.png",
+    "Name": "ChannelUICurrent",
+    "Width": 68,
+    "Height": 19,
+    "OriginX": 12,
+    "OriginY": 56
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUISelect.png",
+    "Name": "ChannelUISelect",
+    "Width": 68,
+    "Height": 19,
+    "OriginX": 12,
+    "OriginY": 56
+  },
+
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh0.png",
+    "Name": "ChannelUICh0",
+    "Width": 20,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh1.png",
+    "Name": "ChannelUICh1",
+    "Width": 54,
+    "Height": 10,
+    "OriginX": 9,
+    "OriginY": 5
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh2.png",
+    "Name": "ChannelUICh2",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh3.png",
+    "Name": "ChannelUICh3",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh4.png",
+    "Name": "ChannelUICh4",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh5.png",
+    "Name": "ChannelUICh5",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh6.png",
+    "Name": "ChannelUICh6",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh7.png",
+    "Name": "ChannelUICh7",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh8.png",
+    "Name": "ChannelUICh8",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh9.png",
+    "Name": "ChannelUICh9",
+    "Width": 22,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh10.png",
+    "Name": "ChannelUICh10",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh11.png",
+    "Name": "ChannelUICh11",
+    "Width": 24,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh12.png",
+    "Name": "ChannelUICh12",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh13.png",
+    "Name": "ChannelUICh13",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh14.png",
+    "Name": "ChannelUICh14",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh15.png",
+    "Name": "ChannelUICh15",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh16.png",
+    "Name": "ChannelUICh16",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh17.png",
+    "Name": "ChannelUICh17",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh18.png",
+    "Name": "ChannelUICh18",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh19.png",
+    "Name": "ChannelUICh19",
+    "Width": 26,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh20.png",
+    "Name": "ChannelUICh20",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh21.png",
+    "Name": "ChannelUICh21",
+    "Width": 27,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh22.png",
+    "Name": "ChannelUICh22",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh23.png",
+    "Name": "ChannelUICh23",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh24.png",
+    "Name": "ChannelUICh24",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh25.png",
+    "Name": "ChannelUICh25",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh26.png",
+    "Name": "ChannelUICh26",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh27.png",
+    "Name": "ChannelUICh27",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh28.png",
+    "Name": "ChannelUICh28",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/ChannelUICh29.png",
+    "Name": "ChannelUICh29",
+    "Width": 30,
+    "Height": 8,
+    "OriginX": 9,
+    "OriginY": 6
+  },
+  {
+    "Path": "../Resource/Textures/ServerScene/ServerUIBackground0.png",
+    "Name": "ServerUIBackground0",
+    "Width": 800,
+    "Height": 800,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/ServerScene/ServerUIBackground1.png",
+    "Name": "ServerUIBackground1",
+    "Width": 138,
+    "Height": 503,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/ServerScene/ServerUIButton0.png",
+    "Name": "ServerUIButton0",
+    "Width": 96,
+    "Height": 32,
+    "OriginX": 21,
+    "OriginY": 21
+  },
+  {
+    "Path": "../Resource/Textures/ServerScene/ServerUIQuit.png",
+    "Name": "ServerUIQuit",
+    "Width": 100,
+    "Height": 50,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/ServerScene/ServerUIButton1.png",
+    "Name": "ServerUIButton1",
+    "Width": 96,
+    "Height": 32,
+    "OriginX": 21,
+    "OriginY": 54
+  },
+  {
+    "Path": "../Resource/Textures/ServerScene/ServerUIButton2.png",
+    "Name": "ServerUIButton2",
+    "Width": 96,
+    "Height": 32,
+    "OriginX": 21,
+    "OriginY": 87
+  },
+  {
+    "Path": "../Resource/Textures/ServerScene/ServerUIButton3.png",
+    "Name": "ServerUIButton3",
+    "Width": 96,
+    "Height": 32,
+    "OriginX": 21,
+    "OriginY": 120
+  },
+  {
+    "Path": "../Resource/Textures/ServerScene/ServerUIButton4.png",
+    "Name": "ServerUIButton4",
+    "Width": 96,
+    "Height": 32,
+    "OriginX": 21,
+    "OriginY": 153
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChBackground.png",
+    "Name": "LoginChBackground",
+    "Width": 396,
+    "Height": 335,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChLogo0.png",
+    "Name": "LoginChLogo0",
+    "Width": 132,
+    "Height": 44,
+    "OriginX": 20,
+    "OriginY": 22
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChLogo1.png",
+    "Name": "LoginChLogo1",
+    "Width": 91,
+    "Height": 46,
+    "OriginX": 20,
+    "OriginY": 22
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChLogo2.png",
+    "Name": "LoginChLogo2",
+    "Width": 133,
+    "Height": 45,
+    "OriginX": 20,
+    "OriginY": 22
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChLogo3.png",
+    "Name": "LoginChLogo3",
+    "Width": 113,
+    "Height": 40,
+    "OriginX": 20,
+    "OriginY": 22
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChLogo4.png",
+    "Name": "LoginChLogo4",
+    "Width": 99,
+    "Height": 44,
+    "OriginX": 20,
+    "OriginY": 22
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChButton.png",
+    "Name": "LoginChButton",
+    "Width": 131,
+    "Height": 31,
+    "OriginX": 245,
+    "OriginY": 31
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginChGauge.png",
+    "Name": "LoginChGauge",
+    "Width": 56,
+    "Height": 5,
+    "OriginX": 6,
+    "OriginY": 16
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh0.png",
+    "Name": "LoginCh0",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 22,
+    "OriginY": 76
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh1.png",
+    "Name": "LoginCh1",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 93,
+    "OriginY": 76
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh2.png",
+    "Name": "LoginCh2",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 164,
+    "OriginY": 76
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh3.png",
+    "Name": "LoginCh3",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 235,
+    "OriginY": 76
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh4.png",
+    "Name": "LoginCh4",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 306,
+    "OriginY": 76
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh5.png",
+    "Name": "LoginCh5",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 22,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh6.png",
+    "Name": "LoginCh6",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 93,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh7.png",
+    "Name": "LoginCh7",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 164,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh8.png",
+    "Name": "LoginCh8",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 235,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh9.png",
+    "Name": "LoginCh9",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 306,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh10.png",
+    "Name": "LoginCh10",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 22,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh11.png",
+    "Name": "LoginCh11",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 93,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh12.png",
+    "Name": "LoginCh12",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 164,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh13.png",
+    "Name": "LoginCh13",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 235,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh14.png",
+    "Name": "LoginCh14",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 306,
+    "OriginY": 106
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh15.png",
+    "Name": "LoginCh15",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 22,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh16.png",
+    "Name": "LoginCh16",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 93,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh17.png",
+    "Name": "LoginCh17",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 164,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh18.png",
+    "Name": "LoginCh18",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 235,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh19.png",
+    "Name": "LoginCh19",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 306,
+    "OriginY": 136
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh20.png",
+    "Name": "LoginCh20",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 22,
+    "OriginY": 166
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh21.png",
+    "Name": "LoginCh21",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 93,
+    "OriginY": 166
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh22.png",
+    "Name": "LoginCh22",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 164,
+    "OriginY": 166
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh23.png",
+    "Name": "LoginCh23",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 235,
+    "OriginY": 166
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh24.png",
+    "Name": "LoginCh24",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 306,
+    "OriginY": 166
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh25.png",
+    "Name": "LoginCh25",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 22,
+    "OriginY": 196
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh26.png",
+    "Name": "LoginCh26",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 93,
+    "OriginY": 196
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh27.png",
+    "Name": "LoginCh27",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 164,
+    "OriginY": 196
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh28.png",
+    "Name": "LoginCh28",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 235,
+    "OriginY": 196
+  },
+  {
+    "Path": "../Resource/Textures/ChannelUI/LoginChannelUI/LoginCh29.png",
+    "Name": "LoginCh29",
+    "Width": 68,
+    "Height": 27,
+    "OriginX": 306,
+    "OriginY": 196
+  }
+]

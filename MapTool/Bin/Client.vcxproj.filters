@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Code">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Code\Resource">
+      <UniqueIdentifier>{71416a36-c598-4d90-8ee1-6c505bf3d29d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GameObject">
+      <UniqueIdentifier>{2169ed50-1cf6-4926-b6af-a4f648e5b1c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Core">
+      <UniqueIdentifier>{599aac6e-521d-453a-b2be-568dabced1bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Common">
+      <UniqueIdentifier>{62a55156-d607-4613-a118-528e2264e08b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GameObject\Character">
+      <UniqueIdentifier>{13ef0bbc-3636-45c6-9df4-30b55a0e9f2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GameObject\Map">
+      <UniqueIdentifier>{90e7a386-fe98-4b1d-a30c-714c06aed3c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Resource\Texture">
+      <UniqueIdentifier>{81b08dbc-f1ef-47fa-b9ec-a83fa2265c88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GraphicEngine">
+      <UniqueIdentifier>{681ec392-881a-46e5-9f1c-5286740a985e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Input">
+      <UniqueIdentifier>{f6599b5c-4967-4c10-9bde-3d7c958242f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\GameTimer">
+      <UniqueIdentifier>{4baade2e-27d0-40cc-b09d-da5e7077fd40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Scene">
+      <UniqueIdentifier>{04b3905a-7f6c-45b3-b81a-7becd3929545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Animation">
+      <UniqueIdentifier>{f8beb07d-01ae-40b8-9cbb-634486b1c50e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Manager">
+      <UniqueIdentifier>{1cf77542-20d9-4e01-8f19-cd67d7904551}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Manager\SceneManager">
+      <UniqueIdentifier>{d393da9a-6b7f-4ebf-a0bf-8942ea037c69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{79cc316a-24ff-4a32-ba22-60091a1b80ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Scene\InGameScene">
+      <UniqueIdentifier>{9edaddd4-cda0-4d6d-958e-11e28e0c34a7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Code\GameObject\GameObject.cpp">
+      <Filter>Code\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Core\Core.cpp">
+      <Filter>Code\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\Character\Character.cpp">
+      <Filter>Code\GameObject\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameObject\Map\Map.cpp">
+      <Filter>Code\GameObject\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GraphicEngine\GraphicEngine.cpp">
+      <Filter>Code\GraphicEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Resource\Texture\Texture.cpp">
+      <Filter>Code\Resource\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Resource\ResourceManager.cpp">
+      <Filter>Code\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Main.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Input\Input.cpp">
+      <Filter>Code\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\GameTimer\GameTimer.cpp">
+      <Filter>Code\GameTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Common\JsonFormat.cpp">
+      <Filter>Code\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Scene\Scene.cpp">
+      <Filter>Code\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Scene\InGameScene\InGameScene.cpp">
+      <Filter>Code\Scene\InGameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Animation\Animation.cpp">
+      <Filter>Code\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Manager\SceneMangaer\SceneManager.cpp">
+      <Filter>Code\Manager\SceneManager</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Code\GameObject\GameObject.h">
+      <Filter>Code\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Core\Core.h">
+      <Filter>Code\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Common\Macro.h">
+      <Filter>Code\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Common\Defines.h">
+      <Filter>Code\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\Character\Character.h">
+      <Filter>Code\GameObject\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameObject\Map\Map.h">
+      <Filter>Code\GameObject\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GraphicEngine\GraphicEngine.h">
+      <Filter>Code\GraphicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Resource\Texture\Texture.h">
+      <Filter>Code\Resource\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Resource\ResourceManager.h">
+      <Filter>Code\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Input\Input.h">
+      <Filter>Code\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\GameTimer\GameTimer.h">
+      <Filter>Code\GameTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Common\JsonFormat.h">
+      <Filter>Code\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Scene\Scene.h">
+      <Filter>Code\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Scene\InGameScene\InGameScene.h">
+      <Filter>Code\Scene\InGameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Animation\Animation.h">
+      <Filter>Code\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Manager\SceneMangaer\SceneManager.h">
+      <Filter>Code\Manager\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Common\Utility.h">
+      <Filter>Code\Common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="..\Resource\TextureDatas.json">
+      <Filter>Resource</Filter>
+    </None>
+  </ItemGroup>
+</Project>
