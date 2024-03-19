@@ -221,7 +221,7 @@ void SkillEffect::Render()
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);
 
 	GET_INSTANCE(GraphicEngine)->RenderTexture(tex, rect);
-	//GET_INSTANCE(GraphicEngine)->RenderRectangle(rect);
+	GET_INSTANCE(GraphicEngine)->RenderRectangle(rect);
 
 	mat = D2D1::Matrix3x2F::Identity();
 	GET_INSTANCE(GraphicEngine)->GetRenderTarget()->SetTransform(mat);

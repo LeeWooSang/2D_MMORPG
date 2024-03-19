@@ -64,7 +64,7 @@ void GameTimer::run()
 				over->sectorXId = ev.sectorXId;
 				over->sectorYId = ev.sectorYId;
 
-				GET_INSTANCE(Core)->PushLeafWork(over);
+				//GET_INSTANCE(Core)->PushLeafWork(over);
 				PostQueuedCompletionStatus(GET_INSTANCE(Core)->GetIOCP(), 1, ev.myId, &over->overlapped);
 			}
 		}		

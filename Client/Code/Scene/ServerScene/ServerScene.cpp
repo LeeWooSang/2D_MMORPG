@@ -188,6 +188,7 @@ void ServerScene::ProcessChannelLogin(int channel)
 
 	LoginChannelUI* ui = static_cast<LoginChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE)->FindUI("ChannelUI"));
 
+	ui->OpenChannelUI();
 	ui->ResetSelectChannel();
 	ui->SetCurrentChannel(channel);
 
