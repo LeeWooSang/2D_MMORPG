@@ -2855,5 +2855,29 @@
     "Height": 27,
     "OriginX": 306,
     "OriginY": 196
+  },
+  {
+    "Path": "../Resource/Textures/Login/Notice/NoticeUIBackground.png",
+    "Name": "NoticeUIBackground",
+    "Width": 249,
+    "Height": 142,
+    "OriginX": 0,
+    "OriginY": 0
+  },
+  {
+    "Path": "../Resource/Textures/Login/Notice/NoticeUIButton0.png",
+    "Name": "NoticeUIButton0",
+    "Width": 50,
+    "Height": 23,
+    "OriginX": 100,
+    "OriginY": 105
+  },
+  {
+    "Path": "../Resource/Textures/Login/Notice/NoticeUIText0.png",
+    "Name": "NoticeUIText0",
+    "Width": 215,
+    "Height": 86,
+    "OriginX": 17,
+    "OriginY": 13
   }
 ]

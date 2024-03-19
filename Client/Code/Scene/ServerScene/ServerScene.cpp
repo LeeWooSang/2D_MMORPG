@@ -24,6 +24,12 @@ void ServerSelectClick(const std::string& name)
 #endif // SERVER_CONNECT
 }
 
+void NoticeYesClick(const std::string& name)
+{
+	UI* ui = GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE)->FindUI("NoticeUI");
+	ui->NotVisible();
+}
+
 ServerScene::ServerScene()
 	: Scene()
 {
@@ -89,6 +95,33 @@ bool ServerScene::Initialize()
 		ui->SetPosition(200, 200);
 		AddSceneUI("ChannelUI", ui);
 	}
+	{
+		UI* noticeUI = new UI;
+		{
+			TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("NoticeUIBackground");
+			noticeUI->Initialize(data.origin.first, data.origin.second);
+			noticeUI->SetTexture(data.name);
+		}
+		{
+			TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("NoticeUIText0");
+			UI* ui = new UI;
+			ui->Initialize(data.origin.first, data.origin.second);
+			ui->SetTexture(data.name);
+			ui->Visible();
+			noticeUI->AddChildUI("Text", ui);
+		}
+		{
+			TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("NoticeUIButton0");
+			ButtonUI* ui = new ButtonUI;
+			ui->Initialize(data.origin.first, data.origin.second);
+			ui->SetTexture(data.name);
+			ui->SetLButtonClickCallback(NoticeYesClick, "");
+			ui->Visible();
+			noticeUI->AddChildUI("Text", ui);
+		}
+		noticeUI->SetPosition(275, 300);
+		AddSceneUI("NoticeUI", noticeUI);
+	}
 
 	{
 		TextureData& data = GET_INSTANCE(ResourceManager)->GetTextureData("ServerUIQuit");
@@ -147,6 +180,12 @@ void ServerScene::ProcessServerSelect(short* channelUserSize)
 
 void ServerScene::ProcessChannelLogin(int channel)
 {
+	if (channel == -1)
+	{
+		GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE)->FindUI("NoticeUI")->Visible();
+		return;
+	}
+
 	LoginChannelUI* ui = static_cast<LoginChannelUI*>(GET_INSTANCE(SceneManager)->FindScene(SCENE_TYPE::SERVER_SCENE)->FindUI("ChannelUI"));
 
 	ui->ResetSelectChannel();

@@ -75,9 +75,12 @@ private:
 	std::thread mTimerThread;
 
 	volatile bool mIsRun;
-	
+
 	Player* mUsers;
 	class Trade* mTrades;
+
+	std::unordered_map<int, std::list<std::shared_ptr<OverEx>>> mOverDatas;
+	//tbb::concurrent_hash_map<long long, std::unique_ptr<OverEx>> mOverDatas;
 
 	tbb::concurrent_queue<Over*> mLeafWorks;
 

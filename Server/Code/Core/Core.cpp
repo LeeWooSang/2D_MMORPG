@@ -49,322 +49,6 @@ Core::~Core()
 	WSACleanup();
 }
 
-bool Core::Initialize()
-{
-	mIsRun = true;
-
-	std::cout << "Core 초기화" << std::endl;
-
-	// IOCP 객체 생성
-	mIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
-	if (mIOCP == nullptr)
-	{
-		return false;
-	}
-
-	for (int i = 0; i < mChannels.size(); ++i)
-	{
-		if (mChannels[i].Initialize(i) == false)
-		{
-			return false;
-		}
-	}
-
-	//int objectId = 0;
-	mUsers = new Player[MAX_USER];
-	mTrades = new Trade[MAX_USER];
-	for (int i = 0; i < MAX_USER; ++i)
-	{
-		if (mUsers[i].Inititalize(i) == false)
-		{
-			return false;
-		}
-		mTrades[i].Initialize(i);
-	}
-
-	int workerThreadCount = 6;
-	// 워커 스레드 생성
-	for (int i = 0; i < workerThreadCount; ++i)
-	{
-		mWorkerThreads.emplace_back(std::thread{ &Core::threadPool, this });
-	}
-
-	// accept 스레드 생성
-	mAcceptThread = std::thread{ &Core::acceptClient, this };
-
-	if (GET_INSTANCE(GameTimer)->Initialize() == false)
-	{
-		std::cout << "GameTimer Initialize Fail!!" << std::endl;
-		return false;
-	}
-
-	if (GET_INSTANCE(Database)->Initialize() == false)
-	{
-		std::cout << "Database Initialize Fail!!" << std::endl;
-		return false;
-	}
-
-	std::cout << "Max Channel Size : " << MAX_CHANNEL << std::endl;
-	std::cout << "MAX Monster : " << (MAX_OBJECT - MAX_USER) * MAX_CHANNEL << std::endl;
-	std::cout << "MAX User : " << MAX_USER << std::endl;
-	std::cout << "Server Initialize OK!!" << std::endl;
-
-	return true;
-}
-
-void Core::ServerQuit()
-{
-	mIsRun = false;
-
-	CloseHandle(mIOCP);
-
-	PostQueuedCompletionStatus(mIOCP, 1, NULL, nullptr);
-
-	closesocket(mListenSocket);
-
-	Release();
-}
-
-void Core::SendServerSelectPacket(int to, short* size)
-{
-	SCServerSelectPacket packet;
-	packet.size = sizeof(SCServerSelectPacket);
-	packet.type = SC_PACKET_TYPE::SC_SERVER_SELECT;
-	memcpy(packet.channelUserSize, size, sizeof(short) * MAX_CHANNEL);
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendLoginOkPacket(int to)
-{
-	SCLoginOkPacket packet;
-	packet.size = sizeof(SCLoginOkPacket);
-	packet.type = SC_PACKET_TYPE::SC_LOGIN_OK;
-	packet.id = to;
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendLoginFailPacket(int to)
-{
-	SCLoginFailPacket packet;
-	packet.size = sizeof(SCLoginFailPacket);
-	packet.type = SC_PACKET_TYPE::SC_LOGIN_FAIL;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendDummyLoginPacket(int to, int channel)
-{
-	SCDummyLoginPacket packet;
-	packet.size = sizeof(SCDummyLoginPacket);
-	packet.type = SC_PACKET_TYPE::SC_DUMMY_LOGIN;
-	packet.id = to;
-	packet.channel = channel;
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendChannelLoginPacket(int to, int channel)
-{
-	SCChannelLoginPacket packet;
-	packet.size = sizeof(SCChannelLoginPacket);
-	packet.type = SC_PACKET_TYPE::SC_CHANNEL_LOGIN;
-	packet.id = to;
-	packet.channel = channel;
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendPositionPacket(int to, int obj)
-{
-	int x = mUsers[obj].GetX();
-	int y = mUsers[obj].GetY();
-	char dir = mUsers[obj].GetDirection();
-
-	SCPositionPacket packet;
-	packet.size = sizeof(SCPositionPacket);
-	packet.type = SC_PACKET_TYPE::SC_POSITION;
-	packet.id = obj;
-	packet.x = x;
-	packet.y = y;
-	packet.dir = dir;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendAddPlayerPacket(int to, int obj, int* texIds)
-{
-	int x = mUsers[obj].GetX();
-	int y = mUsers[obj].GetY();
-	char dir = mUsers[obj].GetDirection();
-	char animationType = static_cast<char>(mUsers[obj].GetAnimationType());
-
-	SCAddPlayerPacket packet;
-	packet.size = sizeof(SCAddPlayerPacket);
-	packet.type = SC_PACKET_TYPE::SC_ADD_PLAYER;
-	packet.id = obj;
-	packet.x = x;
-	packet.y = y;
-	packet.dir = dir;
-	packet.animationType = animationType;
-	memcpy(packet.texIds, texIds, sizeof(packet.texIds));
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendAddObjectPacket(int to, int obj)
-{
-	int x = mUsers[obj].GetX();
-	int y = mUsers[obj].GetY();
-
-	SCAddObjectPacket packet;
-	packet.size = sizeof(SCAddObjectPacket);
-	packet.type = SC_PACKET_TYPE::SC_ADD_OBJECT;
-	packet.id = obj;
-	packet.x = x;
-	packet.y = y;
-	packet.texId = 0;
-	//packet.texId = mUsers[obj].GetTexId();
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendAddMonsterPacket(int to, int obj, int x, int y)
-{
-	SCAddObjectPacket packet;
-	packet.size = sizeof(SCAddObjectPacket);
-	packet.type = SC_PACKET_TYPE::SC_ADD_OBJECT;
-	packet.id = obj;
-	packet.x = x;
-	packet.y = y;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendMonsterPositionPacket(int to, int obj, int x, int y)
-{
-	SCPositionPacket packet;
-	packet.size = sizeof(SCPositionPacket);
-	packet.type = SC_PACKET_TYPE::SC_POSITION;
-	packet.id = obj;
-	packet.x = x;
-	packet.y = y;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendRemoveObjectPacket(int to, int obj)
-{
-	SCRemoveObjectPacket packet;
-	packet.size = sizeof(SCRemoveObjectPacket);
-	packet.type = SC_PACKET_TYPE::SC_REMOVE_OBJECT;
-	packet.id = obj;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendRemoveAllObjectPacket(int to)
-{
-	SCRemoveAllObjectPacket packet;
-	packet.size = sizeof(SCRemoveAllObjectPacket);
-	packet.type = SC_PACKET_TYPE::SC_REMOVE_ALL_OBJECT;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendChangeChannelPacket(int to, bool result, int channel)
-{
-	SCChangeChannelPacket packet;
-	packet.size = sizeof(SCChangeChannelPacket);
-	packet.type = SC_PACKET_TYPE::SC_CHANGE_CHANNEL;
-	packet.result = result;
-	packet.channel = channel;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendChatPacket(int to, int obj, wchar_t* chat)
-{
-	SCChatPacket packet;
-	packet.size = sizeof(SCChatPacket);
-	packet.type = SC_PACKET_TYPE::SC_CHAT;
-	packet.id = obj;
-	wcsncpy_s(packet.chat, chat, MAX_CHAT_LENGTH);
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendChangeAvatarPacket(int to, int obj, int slot, int texId)
-{
-	SCChangeAvatarPacket packet;
-	packet.size = sizeof(SCChangeAvatarPacket);
-	packet.type = SC_PACKET_TYPE::SC_CHANGE_AVATAR;
-	packet.id = obj;
-	packet.slotType = slot;
-	packet.texId = texId;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendTakeOffEquipItemPacket(int to, int obj, int slot)
-{
-	SCTakeOffEquipItemPacket packet;
-	packet.size = sizeof(SCTakeOffEquipItemPacket);
-	packet.type = SC_PACKET_TYPE::SC_TAKE_OFF_EQUIP_ITEM;
-	packet.id = obj;
-	packet.slotType = slot;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendRequestTradePacket(int to, int obj)
-{
-	SCRequestTradePacket packet;
-	packet.size = sizeof(SCRequestTradePacket);
-	packet.type = SC_PACKET_TYPE::SC_REQUEST_TRADE;
-	packet.id = obj;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendAddTradeItemPacket(int to, int texId, int slotNum)
-{
-	SCAddTradeItemPacket packet;
-	packet.size = sizeof(SCAddTradeItemPacket);
-	packet.type = SC_PACKET_TYPE::SC_ADD_TRADE_ITEM;
-	packet.texId = texId;
-	packet.slotNum = slotNum;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendAddTradeMesoPacket(int to, long long meso)
-{
-	SCAddTradeMesoPacket packet;
-	packet.size = sizeof(SCAddTradeMesoPacket);
-	packet.type = SC_PACKET_TYPE::SC_ADD_TRADE_MESO;
-	packet.meso = meso;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendTradePacket(int to, int* items, long long meso)
-{
-	SCTradePacket packet;
-	packet.size = sizeof(SCTradePacket);
-	packet.type = SC_PACKET_TYPE::SC_TRADE;
-	memcpy(packet.items, items, sizeof(packet.items));
-	packet.meso = meso;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
-void Core::SendTradeCancelPacket(int to)
-{
-	SCTradeCancelPacket packet;
-	packet.size = sizeof(SCTradeCancelPacket);
-	packet.type = SC_PACKET_TYPE::SC_TRADE_CANCEL;
-
-	sendPacket(to, reinterpret_cast<char*>(&packet));
-}
-
 void Core::errorDisplay(const char* msg, int error)
 {
 	WCHAR* lpMsgBuf;
@@ -600,6 +284,22 @@ void Core::sendPacket(int id, char* packet)
 {
 	SOCKET socket = mUsers[id].GetSocket();
 	OverEx* over = new OverEx;
+
+	//std::shared_ptr<OverEx> over = std::make_shared<OverEx>();
+	//std::mutex mtx;
+	//mtx.lock();
+	//{		
+	//	if (mOverDatas.count(id) == false)
+	//	{
+	//		std::list<std::shared_ptr<OverEx>> overs;
+	//		overs.emplace_back(over);
+	//		mOverDatas.emplace(socket, overs);
+	//	}
+	//	{
+	//		mOverDatas[id].emplace_back(over);
+	//	}
+	//}
+	//mtx.unlock();
 
 	over->dataBuffer.buf = over->messageBuffer;
 	over->dataBuffer.len = packet[0];
@@ -893,20 +593,6 @@ void Core::processEvent(Over* over)
 	//popLeafWork();
 }
 
-int Core::FindChannel()
-{
-	while (true)
-	{
-		int randomChannel = GetRandomNumber(0, MAX_CHANNEL - 1);
-		if (mChannels[randomChannel].IsFull() == false)
-		{
-			return randomChannel;
-		}
-	}
-
-	return -1;
-}
-
 int Core::createPlayerId() const
 {
 	// 아이디가 있을 때까지, 루프돌면서 기다리게함
@@ -939,4 +625,334 @@ bool Core::popLeafWork()
 	}
 
 	return true;
+}
+
+bool Core::Initialize()
+{
+	mIsRun = true;
+
+	std::cout << "Core 초기화" << std::endl;
+
+	// IOCP 객체 생성
+	mIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
+	if (mIOCP == nullptr)
+	{
+		return false;
+	}
+
+	for (int i = 0; i < mChannels.size(); ++i)
+	{
+		if (mChannels[i].Initialize(i) == false)
+		{
+			return false;
+		}
+	}
+
+	//int objectId = 0;
+	mUsers = new Player[MAX_USER];
+	mTrades = new Trade[MAX_USER];
+	for (int i = 0; i < MAX_USER; ++i)
+	{
+		if (mUsers[i].Inititalize(i) == false)
+		{
+			return false;
+		}
+		mTrades[i].Initialize(i);
+	}
+
+	int workerThreadCount = 6;
+	// 워커 스레드 생성
+	for (int i = 0; i < workerThreadCount; ++i)
+	{
+		mWorkerThreads.emplace_back(std::thread{ &Core::threadPool, this });
+	}
+
+	// accept 스레드 생성
+	mAcceptThread = std::thread{ &Core::acceptClient, this };
+
+	if (GET_INSTANCE(GameTimer)->Initialize() == false)
+	{
+		std::cout << "GameTimer Initialize Fail!!" << std::endl;
+		return false;
+	}
+
+	if (GET_INSTANCE(Database)->Initialize() == false)
+	{
+		std::cout << "Database Initialize Fail!!" << std::endl;
+		return false;
+	}
+
+	std::cout << "Max Channel Size : " << MAX_CHANNEL << std::endl;
+	std::cout << "MAX Monster : " << (MAX_OBJECT - MAX_USER) * MAX_CHANNEL << std::endl;
+	std::cout << "MAX User : " << MAX_USER << std::endl;
+	std::cout << "Server Initialize OK!!" << std::endl;
+
+	return true;
+}
+
+void Core::ServerQuit()
+{
+	mIsRun = false;
+
+	CloseHandle(mIOCP);
+
+	PostQueuedCompletionStatus(mIOCP, 1, NULL, nullptr);
+
+	closesocket(mListenSocket);
+
+	Release();
+}
+
+int Core::FindChannel()
+{
+	while (true)
+	{
+		int randomChannel = GetRandomNumber(0, MAX_CHANNEL - 1);
+		if (mChannels[randomChannel].IsFull() == false)
+		{
+			return randomChannel;
+		}
+	}
+
+	return -1;
+}
+
+void Core::SendServerSelectPacket(int to, short* size)
+{
+	SCServerSelectPacket packet;
+	packet.size = sizeof(SCServerSelectPacket);
+	packet.type = SC_PACKET_TYPE::SC_SERVER_SELECT;
+	memcpy(packet.channelUserSize, size, sizeof(short) * MAX_CHANNEL);
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendLoginOkPacket(int to)
+{
+	SCLoginOkPacket packet;
+	packet.size = sizeof(SCLoginOkPacket);
+	packet.type = SC_PACKET_TYPE::SC_LOGIN_OK;
+	packet.id = to;
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendLoginFailPacket(int to)
+{
+	SCLoginFailPacket packet;
+	packet.size = sizeof(SCLoginFailPacket);
+	packet.type = SC_PACKET_TYPE::SC_LOGIN_FAIL;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendDummyLoginPacket(int to, int channel)
+{
+	SCDummyLoginPacket packet;
+	packet.size = sizeof(SCDummyLoginPacket);
+	packet.type = SC_PACKET_TYPE::SC_DUMMY_LOGIN;
+	packet.id = to;
+	packet.channel = channel;
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendChannelLoginPacket(int to, int channel)
+{
+	SCChannelLoginPacket packet;
+	packet.size = sizeof(SCChannelLoginPacket);
+	packet.type = SC_PACKET_TYPE::SC_CHANNEL_LOGIN;
+	packet.id = to;
+	packet.channel = channel;
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendPositionPacket(int to, int obj)
+{
+	int x = mUsers[obj].GetX();
+	int y = mUsers[obj].GetY();
+	char dir = mUsers[obj].GetDirection();
+
+	SCPositionPacket packet;
+	packet.size = sizeof(SCPositionPacket);
+	packet.type = SC_PACKET_TYPE::SC_POSITION;
+	packet.id = obj;
+	packet.x = x;
+	packet.y = y;
+	packet.dir = dir;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendAddPlayerPacket(int to, int obj, int* texIds)
+{
+	int x = mUsers[obj].GetX();
+	int y = mUsers[obj].GetY();
+	char dir = mUsers[obj].GetDirection();
+	char animationType = static_cast<char>(mUsers[obj].GetAnimationType());
+
+	SCAddPlayerPacket packet;
+	packet.size = sizeof(SCAddPlayerPacket);
+	packet.type = SC_PACKET_TYPE::SC_ADD_PLAYER;
+	packet.id = obj;
+	packet.x = x;
+	packet.y = y;
+	packet.dir = dir;
+	packet.animationType = animationType;
+	memcpy(packet.texIds, texIds, sizeof(packet.texIds));
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendAddObjectPacket(int to, int obj)
+{
+	int x = mUsers[obj].GetX();
+	int y = mUsers[obj].GetY();
+
+	SCAddObjectPacket packet;
+	packet.size = sizeof(SCAddObjectPacket);
+	packet.type = SC_PACKET_TYPE::SC_ADD_OBJECT;
+	packet.id = obj;
+	packet.x = x;
+	packet.y = y;
+	packet.texId = 0;
+	//packet.texId = mUsers[obj].GetTexId();
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendAddMonsterPacket(int to, int obj, int x, int y)
+{
+	SCAddObjectPacket packet;
+	packet.size = sizeof(SCAddObjectPacket);
+	packet.type = SC_PACKET_TYPE::SC_ADD_OBJECT;
+	packet.id = obj;
+	packet.x = x;
+	packet.y = y;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendMonsterPositionPacket(int to, int obj, int x, int y)
+{
+	SCPositionPacket packet;
+	packet.size = sizeof(SCPositionPacket);
+	packet.type = SC_PACKET_TYPE::SC_POSITION;
+	packet.id = obj;
+	packet.x = x;
+	packet.y = y;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendRemoveObjectPacket(int to, int obj)
+{
+	SCRemoveObjectPacket packet;
+	packet.size = sizeof(SCRemoveObjectPacket);
+	packet.type = SC_PACKET_TYPE::SC_REMOVE_OBJECT;
+	packet.id = obj;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendRemoveAllObjectPacket(int to)
+{
+	SCRemoveAllObjectPacket packet;
+	packet.size = sizeof(SCRemoveAllObjectPacket);
+	packet.type = SC_PACKET_TYPE::SC_REMOVE_ALL_OBJECT;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendChangeChannelPacket(int to, bool result, int channel)
+{
+	SCChangeChannelPacket packet;
+	packet.size = sizeof(SCChangeChannelPacket);
+	packet.type = SC_PACKET_TYPE::SC_CHANGE_CHANNEL;
+	packet.result = result;
+	packet.channel = channel;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendChatPacket(int to, int obj, wchar_t* chat)
+{
+	SCChatPacket packet;
+	packet.size = sizeof(SCChatPacket);
+	packet.type = SC_PACKET_TYPE::SC_CHAT;
+	packet.id = obj;
+	wcsncpy_s(packet.chat, chat, MAX_CHAT_LENGTH);
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendChangeAvatarPacket(int to, int obj, int slot, int texId)
+{
+	SCChangeAvatarPacket packet;
+	packet.size = sizeof(SCChangeAvatarPacket);
+	packet.type = SC_PACKET_TYPE::SC_CHANGE_AVATAR;
+	packet.id = obj;
+	packet.slotType = slot;
+	packet.texId = texId;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendTakeOffEquipItemPacket(int to, int obj, int slot)
+{
+	SCTakeOffEquipItemPacket packet;
+	packet.size = sizeof(SCTakeOffEquipItemPacket);
+	packet.type = SC_PACKET_TYPE::SC_TAKE_OFF_EQUIP_ITEM;
+	packet.id = obj;
+	packet.slotType = slot;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendRequestTradePacket(int to, int obj)
+{
+	SCRequestTradePacket packet;
+	packet.size = sizeof(SCRequestTradePacket);
+	packet.type = SC_PACKET_TYPE::SC_REQUEST_TRADE;
+	packet.id = obj;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendAddTradeItemPacket(int to, int texId, int slotNum)
+{
+	SCAddTradeItemPacket packet;
+	packet.size = sizeof(SCAddTradeItemPacket);
+	packet.type = SC_PACKET_TYPE::SC_ADD_TRADE_ITEM;
+	packet.texId = texId;
+	packet.slotNum = slotNum;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendAddTradeMesoPacket(int to, long long meso)
+{
+	SCAddTradeMesoPacket packet;
+	packet.size = sizeof(SCAddTradeMesoPacket);
+	packet.type = SC_PACKET_TYPE::SC_ADD_TRADE_MESO;
+	packet.meso = meso;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendTradePacket(int to, int* items, long long meso)
+{
+	SCTradePacket packet;
+	packet.size = sizeof(SCTradePacket);
+	packet.type = SC_PACKET_TYPE::SC_TRADE;
+	memcpy(packet.items, items, sizeof(packet.items));
+	packet.meso = meso;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
+}
+
+void Core::SendTradeCancelPacket(int to)
+{
+	SCTradeCancelPacket packet;
+	packet.size = sizeof(SCTradeCancelPacket);
+	packet.type = SC_PACKET_TYPE::SC_TRADE_CANCEL;
+
+	sendPacket(to, reinterpret_cast<char*>(&packet));
 }

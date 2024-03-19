@@ -271,15 +271,11 @@ void Network::processPacket()
 		case SC_PACKET_TYPE::SC_CHANNEL_LOGIN:
 		{
 			SCChannelLoginPacket* packet = reinterpret_cast<SCChannelLoginPacket*>(mPacketBuffer);
-			int channel = packet->channel;
-			if (channel != -1)
-			{
-				std::shared_ptr<ChannelLoginPacket> p = std::make_shared<ChannelLoginPacket>();
-				p->packetType = packet->type;
-				p->id = packet->id;
-				p->channel = channel;
-				GET_INSTANCE(EventManager)->AddPacketEvent(p);
-			}
+			std::shared_ptr<ChannelLoginPacket> p = std::make_shared<ChannelLoginPacket>();
+			p->packetType = packet->type;
+			p->id = packet->id;
+			p->channel = packet->channel;
+			GET_INSTANCE(EventManager)->AddPacketEvent(p);			
 			break;
 		}
 

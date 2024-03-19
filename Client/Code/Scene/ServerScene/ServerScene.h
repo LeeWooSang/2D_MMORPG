@@ -23,3 +23,4 @@ private:
 };
 
 void ServerSelectClick(const std::string& name);
+void NoticeYesClick(const std::string& name);
