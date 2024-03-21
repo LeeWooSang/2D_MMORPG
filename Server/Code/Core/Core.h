@@ -13,9 +13,9 @@ class Core
 public:
 	bool Initialize();
 	void ServerQuit();
+
 	void* GetIOCP()	const { return mIOCP; }
 	volatile bool GetIsRun()	const { return mIsRun; }
-	void PushLeafWork(Over* over) { mLeafWorks.push(over); }
 	
 	Player* GetUsers() { return mUsers; }
 	Player& GetUser(int index) { return mUsers[index]; }
@@ -64,7 +64,8 @@ private:
 	int FindChannel();
 	int createPlayerId()	const;
 
-	bool popLeafWork();
+	void popSendData(Over* over);
+	void popEventData(Over* over);
 
 private:
 	HANDLE mIOCP;
@@ -79,11 +80,14 @@ private:
 	Player* mUsers;
 	class Trade* mTrades;
 
-	std::unordered_map<int, std::list<std::shared_ptr<OverEx>>> mOverDatas;
-	//tbb::concurrent_hash_map<long long, std::unique_ptr<OverEx>> mOverDatas;
-
-	tbb::concurrent_queue<Over*> mLeafWorks;
-
 	std::array<Channel, MAX_CHANNEL> mChannels;
+
+	tbb::concurrent_hash_map<void*, std::shared_ptr<OverEx>> mSendDatas;
+	//std::unordered_map<void*, std::shared_ptr<OverEx>> mSendDatas;
+
+public:
+	//tbb::concurrent_hash_map<void*, std::shared_ptr<Over>> mEventDatas;
+	//tbb::concurrent_hash_map<void*, atomic<std::shared_ptr<Over>>> mEventDatas;
+	tbb::concurrent_hash_map<void*, Over*> mEventDatas;
 };
 

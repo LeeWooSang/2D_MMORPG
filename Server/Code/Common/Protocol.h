@@ -59,6 +59,7 @@ struct Over
 		channel = 0;
 		sectorXId = 0;
 		sectorYId = 0;
+		key = nullptr;
 	}
 
 	WSAOVERLAPPED	overlapped;
@@ -67,6 +68,8 @@ struct Over
 	int					channel;
 	int					sectorXId;
 	int					sectorYId;
+
+	void* key;
 };
 
 struct OverEx : public Over

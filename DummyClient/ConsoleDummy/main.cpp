@@ -241,7 +241,7 @@ void DoConnect()
 
 void DoAI()
 {
-	while (gReady == false);
+	//while (gReady == false);
 
 	while (true)
 	{

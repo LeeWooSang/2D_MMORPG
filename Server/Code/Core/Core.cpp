@@ -40,8 +40,12 @@ Core::~Core()
 		}
 	}
 
-	// 못한 작업의 자원을 해제
-	while (popLeafWork() == true);
+	for (auto& data : mEventDatas)
+	{
+		delete data.second;
+	}
+	mEventDatas.clear();
+	mSendDatas.clear();
 
 	delete[] mUsers;
 	delete[] mTrades;
@@ -187,11 +191,16 @@ void Core::threadPool()
 		{
 			case SERVER_EVENT::RECV:
 			{
+				if (id >= MONSTER_START_ID)
+				{
+					break;
+				}
+
 				OverEx* overEx = static_cast<OverEx*>(over);
 				// 남은 패킷 크기(들어온 패킷 크기)
 				int restSize = ioByte;
 				char* p = overEx->messageBuffer;
-				char packetSize = 0;
+				int packetSize = 0;
 
 				if (mUsers[id].GetPrevSize() > 0)
 				{
@@ -209,7 +218,7 @@ void Core::threadPool()
 					// 패킷을 만들기 위한 크기?
 					int required = packetSize - mUsers[id].GetPrevSize();
 					// 패킷을 만들 수 있다면, (현재 들어온 패킷의 크기가 required 보다 크면)
-					if (restSize >= required)
+					if (required >= 0 && restSize >= required)
 					{
 						mUsers[id].SetPacketBuf(p, required);
 						// 패킷 처리
@@ -236,8 +245,10 @@ void Core::threadPool()
 
 			case SERVER_EVENT::SEND:
 			{
-				delete over;
-				over = nullptr;
+				//delete over;
+				//over = nullptr;
+				//popSendData(over);
+				mSendDatas.erase(over->key);
 				break;
 			}
 
@@ -283,23 +294,8 @@ void Core::recvPacket(int id)
 void Core::sendPacket(int id, char* packet)
 {
 	SOCKET socket = mUsers[id].GetSocket();
-	OverEx* over = new OverEx;
-
-	//std::shared_ptr<OverEx> over = std::make_shared<OverEx>();
-	//std::mutex mtx;
-	//mtx.lock();
-	//{		
-	//	if (mOverDatas.count(id) == false)
-	//	{
-	//		std::list<std::shared_ptr<OverEx>> overs;
-	//		overs.emplace_back(over);
-	//		mOverDatas.emplace(socket, overs);
-	//	}
-	//	{
-	//		mOverDatas[id].emplace_back(over);
-	//	}
-	//}
-	//mtx.unlock();
+	//OverEx* over = new OverEx;
+	std::shared_ptr<OverEx> over = std::make_shared<OverEx>();
 
 	over->dataBuffer.buf = over->messageBuffer;
 	over->dataBuffer.len = packet[0];
@@ -308,6 +304,15 @@ void Core::sendPacket(int id, char* packet)
 	memcpy(over->messageBuffer, packet, packet[0]);
 	ZeroMemory(&(over->overlapped), sizeof(WSAOVERLAPPED));
 	over->eventType = SERVER_EVENT::SEND;
+
+	void* key = &over;
+	over->key = key;
+	{
+		tbb::concurrent_hash_map<void*, std::shared_ptr<OverEx>>::accessor acc;
+		mSendDatas.insert(acc, key);
+		acc->second = over;
+		acc.release();
+	}
 
 	if (WSASend(socket, &over->dataBuffer, 1, nullptr, 0, &(over->overlapped), nullptr) == SOCKET_ERROR)
 	{
@@ -567,7 +572,6 @@ void Core::processPacket(int id, char* buf)
 
 void Core::processEvent(Over* over)
 {
-	//std::cout << "오브젝트 id : " << id << " 이벤트 발생" << std::endl;
 	switch (over->eventType)
 	{
 		case SERVER_EVENT::MONSTER_MOVE:
@@ -580,8 +584,8 @@ void Core::processEvent(Over* over)
 			monster.ProcessMove(dir);
 			monster.ProcessMoveViewList();
 
+			mEventDatas.erase(over->key);
 			delete over;
-			//over = nullptr;
 			break;
 		}
 
@@ -590,7 +594,8 @@ void Core::processEvent(Over* over)
 			break;
 		}
 	}
-	//popLeafWork();
+
+	//popEventData(over);
 }
 
 int Core::createPlayerId() const
@@ -611,20 +616,19 @@ int Core::createPlayerId() const
 	return -1;
 }
 
-bool Core::popLeafWork()
+void Core::popSendData(Over* over)
 {
-	Over* over = nullptr;
-	if (mLeafWorks.try_pop(over) == false)
-	{
-		return false;
-	}
+	//void* key = over->key;
 
-	if (over != nullptr)
-	{
-		delete over;
-	}
+	//mSendMtx.lock();
+	//mSendDatas[key].reset();
+	//mSendDatas.erase(key);
+	//mSendMtx.unlock();
+}
 
-	return true;
+void Core::popEventData(Over* over)
+{
+
 }
 
 bool Core::Initialize()
