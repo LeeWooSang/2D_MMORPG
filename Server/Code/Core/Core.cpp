@@ -245,10 +245,9 @@ void Core::threadPool()
 
 			case SERVER_EVENT::SEND:
 			{
-				//delete over;
-				//over = nullptr;
-				//popSendData(over);
-				mSendDatas.erase(over->key);
+				//mSendDatas.erase(over->key);
+				delete over;
+				over = nullptr;
 				break;
 			}
 
@@ -294,8 +293,8 @@ void Core::recvPacket(int id)
 void Core::sendPacket(int id, char* packet)
 {
 	SOCKET socket = mUsers[id].GetSocket();
-	//OverEx* over = new OverEx;
-	std::shared_ptr<OverEx> over = std::make_shared<OverEx>();
+	OverEx* over = new OverEx;
+	//std::shared_ptr<OverEx> over = std::make_shared<OverEx>();
 
 	over->dataBuffer.buf = over->messageBuffer;
 	over->dataBuffer.len = packet[0];
@@ -305,14 +304,14 @@ void Core::sendPacket(int id, char* packet)
 	ZeroMemory(&(over->overlapped), sizeof(WSAOVERLAPPED));
 	over->eventType = SERVER_EVENT::SEND;
 
-	void* key = &over;
-	over->key = key;
-	{
-		tbb::concurrent_hash_map<void*, std::shared_ptr<OverEx>>::accessor acc;
-		mSendDatas.insert(acc, key);
-		acc->second = over;
-		acc.release();
-	}
+	//void* key = &over;
+	//over->key = key;
+	//{
+	//	tbb::concurrent_hash_map<void*, std::shared_ptr<OverEx>>::accessor acc;
+	//	mSendDatas.insert(acc, key);
+	//	acc->second = over;
+	//	acc.release();
+	//}
 
 	if (WSASend(socket, &over->dataBuffer, 1, nullptr, 0, &(over->overlapped), nullptr) == SOCKET_ERROR)
 	{
@@ -584,7 +583,7 @@ void Core::processEvent(Over* over)
 			monster.ProcessMove(dir);
 			monster.ProcessMoveViewList();
 
-			mEventDatas.erase(over->key);
+			//mEventDatas.erase(over->key);
 			delete over;
 			break;
 		}

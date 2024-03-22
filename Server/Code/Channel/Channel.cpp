@@ -70,19 +70,17 @@ bool Channel::Initialize(int channel)
 
 int Channel::GetChannelUserSize()
 {
-	mChannelMtx.lock_shared();
+	//mChannelMtx.lock_read();
+	mChannelMtx.lock();
 	int size = mUserIdList.size();
-	mChannelMtx.unlock_shared();
+	mChannelMtx.unlock();
 
 	return size;
 }
 
 bool Channel::IsFull()
 {
-	mChannelMtx.lock_shared();
-	int size = mUserIdList.size();
-	mChannelMtx.unlock_shared();
-
+	int size = GetChannelUserSize();
 	if (size >= MAX_CHANNEL_USER)
 	{
 		return true;

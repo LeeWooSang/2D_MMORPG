@@ -39,7 +39,7 @@ public:
 
 private:
 	std::shared_mutex mChannelMtx;
-
+	//tbb::spin_rw_mutex_v3 mChannelMtx;
 	// 인덱스, 유저 id
 	tbb::concurrent_hash_map<int, int> mUserIdList;
 
