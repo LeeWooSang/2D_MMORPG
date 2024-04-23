@@ -9,6 +9,7 @@ InputUI::InputUI()
 	mText.clear();
 	mCarrotIndex = 0;
 	mCarrotPos = std::make_pair(0.0, 0.0);
+	mTextSize = std::make_pair(0.0, 0.0);
 	mElapsedTime = 0.0;
 }
 
@@ -76,7 +77,22 @@ void InputUI::Render()
 	
 	if (mText.length() > 0)
 	{
-		GET_INSTANCE(GraphicEngine)->RenderText(mText, mPos.first, mCarrotPos.second, "메이플", "흰색");
+		D2D1_RECT_F rect;
+		rect.left = mPos.first;
+		rect.top = mPos.second;
+		rect.right = rect.left + mTextSize.first;
+		rect.bottom = rect.top + mTextSize.second;
+
+		GET_INSTANCE(GraphicEngine)->RenderRectangle(rect, "검은색");
+
+		if (checkTextCollision() == true)
+		{
+			GET_INSTANCE(GraphicEngine)->RenderText(mText, mPos.first, mCarrotPos.second, "메이플", "주황색");
+		}
+		else
+		{
+			GET_INSTANCE(GraphicEngine)->RenderText(mText, mPos.first, mCarrotPos.second, "메이플", "흰색");
+		}
 	}
 
 	for (auto& child : mChildUIs)
@@ -201,6 +217,23 @@ void InputUI::processInput()
 	}
 }
 
+bool InputUI::checkTextCollision()
+{
+	D2D1_RECT_F rect;
+	rect.left = mPos.first;
+	rect.top = mPos.second;
+	rect.right = rect.left + mTextSize.first;
+	rect.bottom = rect.top + mTextSize.second;
+
+	std::pair<int, int> mousePos = GET_INSTANCE(Input)->GetMousePos();
+	if (mousePos.first >= rect.left && mousePos.first <= rect.right && mousePos.second >= rect.top && mousePos.second <= rect.bottom)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void InputUI::SetCarrotPos()
 {
 	std::wstring text = L"";
@@ -220,6 +253,8 @@ void InputUI::SetCarrotPos()
 
 	mCarrotPos.first = mPos.first;
 	mCarrotPos.second = mPos.second;
+
+	mTextSize = std::make_pair(0.0, 0.0);
 	for (int i = 0; i < text.length(); ++i)
 	{
 		float x = 0.0;
@@ -228,6 +263,8 @@ void InputUI::SetCarrotPos()
 		result =layout->HitTestTextPosition(i, false, &x, &y, &metrics);
 		mCarrotPos.first += metrics.width;
 		//mCarrotPos.second = mPos.second + metrics.height;
+		mTextSize.first += metrics.width;
+		mTextSize.second = metrics.height;
 	}
 
 	layout->Release();
