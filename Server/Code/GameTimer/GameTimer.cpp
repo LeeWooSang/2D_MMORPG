@@ -66,15 +66,9 @@ void GameTimer::run()
 				over->sectorXId = ev.sectorXId;
 				over->sectorYId = ev.sectorYId;
 
-				void* key = over;
-				over->key = key;
-				
-				{
-					tbb::concurrent_hash_map<void*, Over*>::accessor acc;
-					GET_INSTANCE(Core)->mEventDatas.insert(acc, key);
-					acc->second = over;
-					acc.release();
-				}
+				//void* key = &over;
+				//over->key = key;
+				//GET_INSTANCE(Core)->AddEventData(key, over);
 
 				PostQueuedCompletionStatus(GET_INSTANCE(Core)->GetIOCP(), 1, ev.myId, &over->overlapped);
 			}

@@ -234,6 +234,8 @@ void DoConnect()
 			return;
 		}
 		num++;
+
+		std::this_thread::sleep_for(100ms);
 	}
 
 	gReady = true;

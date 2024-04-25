@@ -22,10 +22,12 @@ public:
 
 protected:
 	virtual void processInput();
+	bool checkTextCollision();
 
 protected:
 	std::wstring mText;
 	float mElapsedTime;
 	int mCarrotIndex;
 	std::pair<float, float> mCarrotPos;
+	std::pair<float, float> mTextSize;
 };

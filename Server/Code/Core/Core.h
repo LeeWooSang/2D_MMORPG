@@ -20,6 +20,13 @@ public:
 	Player* GetUsers() { return mUsers; }
 	Player& GetUser(int index) { return mUsers[index]; }
 	Channel& GetChannel(int channel) { return mChannels[channel]; }
+	void AddEventData(void* key, Over* over)
+	{
+		tbb::concurrent_hash_map<void*, Over*>::accessor acc;
+		mEventDatas.insert(acc, key);
+		acc->second = over;
+		acc.release();
+	}
 
 public:
 	void SendServerSelectPacket(int to, short* size);
