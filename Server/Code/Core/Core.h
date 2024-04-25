@@ -83,11 +83,8 @@ private:
 	std::array<Channel, MAX_CHANNEL> mChannels;
 
 	tbb::concurrent_hash_map<void*, std::shared_ptr<OverEx>> mSendDatas;
-	//std::unordered_map<void*, std::shared_ptr<OverEx>> mSendDatas;
 
 public:
-	//tbb::concurrent_hash_map<void*, std::shared_ptr<Over>> mEventDatas;
-	//tbb::concurrent_hash_map<void*, atomic<std::shared_ptr<Over>>> mEventDatas;
 	tbb::concurrent_hash_map<void*, Over*> mEventDatas;
 };
 
