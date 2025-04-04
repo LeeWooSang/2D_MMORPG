@@ -131,6 +131,5 @@
     <ClInclude Include="..\Code\Trade\Trade.h">
       <Filter>Code\Trade</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h" />
   </ItemGroup>
 </Project>
