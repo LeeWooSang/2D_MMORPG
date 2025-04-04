@@ -40,11 +40,6 @@ Core::~Core()
 		}
 	}
 
-	for (auto& data : mEventDatas)
-	{
-		delete data.second;
-	}
-	mEventDatas.clear();
 	mSendDatas.clear();
 
 	delete[] mUsers;
@@ -158,7 +153,6 @@ void Core::threadPool()
 		Over* over;
 		// lpover에 recv인지 send인지 정보를 넣어야 됨.
 		BOOL result = GetQueuedCompletionStatus(mIOCP, &ioByte, &id, reinterpret_cast<LPWSAOVERLAPPED*>(&over), INFINITE);
-
 		//  GetQueuedCompletionStatus( )가 에러인지 아닌지 확인한다
 		if (result == false)
 		{
@@ -168,21 +162,21 @@ void Core::threadPool()
 				disconnect(static_cast<int>(id));
 				continue;
 			}
-
-			else if (errorNum == 735)
-			{
-				break;
-			}
-
 			else
 			{
 				errorDisplay(" GetQueuedCompletionStatus()", errorNum);
 			}
 		}
 
-		// 클라와 끊어졌다면 (클라가 나갔을 때)
 		if (ioByte == 0)
 		{
+			// 워커 스레드 작업 종료
+			if (id == INT_MAX)
+			{
+				break;
+			}
+
+			// 클라와 끊어졌다면 (클라가 나갔을 때)
 			disconnect(static_cast<int>(id));
 			continue;
 		}
@@ -201,7 +195,6 @@ void Core::threadPool()
 				int restSize = ioByte;
 				char* p = overEx->messageBuffer;
 				int packetSize = 0;
-
 				if (mUsers[id].GetPrevSize() > 0)
 				{
 					packetSize = mUsers[id].GetPacketBuf()[0];
@@ -245,9 +238,9 @@ void Core::threadPool()
 
 			case SERVER_EVENT::SEND:
 			{
-				//mSendDatas.erase(over->key);
-				delete over;
-				over = nullptr;
+				//delete over;
+				//over = nullptr;
+				mOverExPool.ReturnOverEx(reinterpret_cast<OverEx*>(over));
 				break;
 			}
 
@@ -292,9 +285,8 @@ void Core::recvPacket(int id)
 
 void Core::sendPacket(int id, char* packet)
 {
-	SOCKET socket = mUsers[id].GetSocket();
-	OverEx* over = new OverEx;
-	//std::shared_ptr<OverEx> over = std::make_shared<OverEx>();
+	SOCKET socket = mUsers[id].GetSocket();	
+	OverEx* over = mOverExPool.GetOverEx();
 
 	over->dataBuffer.buf = over->messageBuffer;
 	over->dataBuffer.len = packet[0];
@@ -304,20 +296,12 @@ void Core::sendPacket(int id, char* packet)
 	ZeroMemory(&(over->overlapped), sizeof(WSAOVERLAPPED));
 	over->eventType = SERVER_EVENT::SEND;
 
-	//void* key = &over;
-	//over->key = key;
-	//{
-	//	tbb::concurrent_hash_map<void*, std::shared_ptr<OverEx>>::accessor acc;
-	//	mSendDatas.insert(acc, key);
-	//	acc->second = over;
-	//	acc.release();
-	//}
-
 	if (WSASend(socket, &over->dataBuffer, 1, nullptr, 0, &(over->overlapped), nullptr) == SOCKET_ERROR)
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
 			std::cout << "Error - Fail WSASend(error_code : " << WSAGetLastError() << std::endl;
+			mOverExPool.ReturnOverEx(over);
 		}
 	}
 }
@@ -582,9 +566,6 @@ void Core::processEvent(Over* over)
 			char dir = monster.RandomDirection();
 			monster.ProcessMove(dir);
 			monster.ProcessMoveViewList();
-
-			//mEventDatas.erase(over->key);
-			delete over;
 			break;
 		}
 
@@ -594,7 +575,7 @@ void Core::processEvent(Over* over)
 		}
 	}
 
-	//popEventData(over);
+	mOverExPool.ReturnOverEx(reinterpret_cast<OverEx*>(over));
 }
 
 int Core::createPlayerId() const
@@ -613,21 +594,6 @@ int Core::createPlayerId() const
 	}
 
 	return -1;
-}
-
-void Core::popSendData(Over* over)
-{
-	//void* key = over->key;
-
-	//mSendMtx.lock();
-	//mSendDatas[key].reset();
-	//mSendDatas.erase(key);
-	//mSendMtx.unlock();
-}
-
-void Core::popEventData(Over* over)
-{
-
 }
 
 bool Core::Initialize()
@@ -650,6 +616,8 @@ bool Core::Initialize()
 			return false;
 		}
 	}
+
+	mOverExPool.Initialize(MAX_OBJECT * MAX_CHANNEL);
 
 	//int objectId = 0;
 	mUsers = new Player[MAX_USER];
@@ -696,13 +664,13 @@ bool Core::Initialize()
 void Core::ServerQuit()
 {
 	mIsRun = false;
+	for (int i = 0; i < mWorkerThreads.size(); ++i)
+	{
+		PostQueuedCompletionStatus(mIOCP, 0, INT_MAX, nullptr);
+	}
 
 	CloseHandle(mIOCP);
-
-	PostQueuedCompletionStatus(mIOCP, 1, NULL, nullptr);
-
 	closesocket(mListenSocket);
-
 	Release();
 }
 

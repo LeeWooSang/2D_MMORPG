@@ -17,12 +17,9 @@
 #ifdef _DEBUG
 // 메모리 릭이 있는지 알려준다.
 #include <crtdbg.h>
-
 #pragma comment(lib, "tbb_debug.lib")
-
 #else
 #pragma comment(lib, "tbb.lib")
-
 #endif
 
 // 디버그 모드면 콘솔창 띄우기

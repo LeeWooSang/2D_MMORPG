@@ -365,9 +365,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="..\Resource\TextureDatas.json">
       <Filter>Resource</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

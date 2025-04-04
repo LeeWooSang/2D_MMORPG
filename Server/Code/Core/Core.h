@@ -6,6 +6,45 @@
 #include "../Channel/Channel.h"
 #include "../Sector/Sector.h"
 
+class SendOverExPool
+{
+public:
+	SendOverExPool() {}
+	void Initialize(int size)
+	{
+		for (int i = 0; i < size; ++i)
+		{
+			OverEx* over = new OverEx();
+			over->eventType = SERVER_EVENT::SEND;
+			mPool.push(over);
+		}
+	}
+	~SendOverExPool()
+	{
+		OverEx* over = nullptr;
+		while (mPool.try_pop(over))
+		{
+			delete over;
+		}
+	}
+
+	OverEx* GetOverEx()
+	{
+		OverEx* over = nullptr;
+		if (mPool.try_pop(over))
+		{
+			return over;
+		}
+		over = new OverEx();
+		return over;
+	}
+
+	void ReturnOverEx(OverEx* over) { mPool.push(over); }
+
+private:
+	tbb::concurrent_queue<OverEx*> mPool;
+};
+
 class Core
 {
 	SINGLE_TONE(Core)
@@ -17,16 +56,12 @@ public:
 	void* GetIOCP()	const { return mIOCP; }
 	volatile bool GetIsRun()	const { return mIsRun; }
 	
+	OverEx* GetOverEx() { return mOverExPool.GetOverEx(); }
+	void ReturnOverEx(OverEx* over) { mOverExPool.ReturnOverEx(over); }
+
 	Player* GetUsers() { return mUsers; }
 	Player& GetUser(int index) { return mUsers[index]; }
 	Channel& GetChannel(int channel) { return mChannels[channel]; }
-	void AddEventData(void* key, Over* over)
-	{
-		tbb::concurrent_hash_map<void*, Over*>::accessor acc;
-		mEventDatas.insert(acc, key);
-		acc->second = over;
-		acc.release();
-	}
 
 public:
 	void SendServerSelectPacket(int to, short* size);
@@ -71,9 +106,6 @@ private:
 	int FindChannel();
 	int createPlayerId()	const;
 
-	void popSendData(Over* over);
-	void popEventData(Over* over);
-
 private:
 	HANDLE mIOCP;
 	SOCKET mListenSocket;
@@ -91,7 +123,5 @@ private:
 
 	tbb::concurrent_hash_map<void*, std::shared_ptr<OverEx>> mSendDatas;
 
-public:
-	tbb::concurrent_hash_map<void*, Over*> mEventDatas;
+	SendOverExPool mOverExPool;
 };
-

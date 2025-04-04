@@ -1,5 +1,4 @@
-﻿// GameServerDlg.cpp: 구현 파일
-#include "Default/framework.h"
+﻿#include "Default/framework.h"
 #include "GameServer.h"
 #include "GameServerDlg.h"
 #include "afxdialogex.h"

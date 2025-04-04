@@ -1,7 +1,5 @@
-﻿// GameServerDlg.h: 헤더 파일
-#pragma once
+﻿#pragma once
 
-// CGameServerDlg 대화 상자
 class CGameServerDlg : public CDialogEx
 {
 // 생성입니다.
@@ -14,7 +12,7 @@ public:
 	enum { IDD = IDD_GAMESERVER_DIALOG };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
 
 // 구현입니다.

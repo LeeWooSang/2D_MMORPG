@@ -59,16 +59,13 @@ void GameTimer::run()
 			{
 				// 몬스터id와 채널과 섹터id 정보를 워커스레드에게 전달
 
-				Over* over = new Over;
+				//Over* over = new Over;
+				Over* over = GET_INSTANCE(Core)->GetOverEx();
 				over->eventType = SERVER_EVENT::MONSTER_MOVE;
 				over->myId = ev.myId;
 				over->channel = ev.channel;
 				over->sectorXId = ev.sectorXId;
 				over->sectorYId = ev.sectorYId;
-
-				//void* key = &over;
-				//over->key = key;
-				//GET_INSTANCE(Core)->AddEventData(key, over);
 
 				PostQueuedCompletionStatus(GET_INSTANCE(Core)->GetIOCP(), 1, ev.myId, &over->overlapped);
 			}
