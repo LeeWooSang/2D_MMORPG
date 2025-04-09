@@ -162,25 +162,25 @@ constexpr int MAX_LOGIN_PASSWORD_LENGTH = 30;
 constexpr int MAX_CHAT_LENGTH = 50;
 struct CSServerSelectPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	char serverType;
 };
 struct CSLoginPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	char loginId[MAX_LOGIN_ID_LENGTH];
 	char loginPassword[MAX_LOGIN_PASSWORD_LENGTH];
 };
 struct CSDummyLoginPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 };
 struct CSChannelLoginPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	char channel;
 };
@@ -198,25 +198,25 @@ struct CSChangeChannelPacket
 };
 struct CSBroadcastingChatPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	wchar_t chat[MAX_CHAT_LENGTH];
 };
 struct CSWhisperingChatPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 	wchar_t chat[MAX_CHAT_LENGTH];
 };
 struct CSAttackPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 };
 struct CSChangeAvatarPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	// ½½·Ô¹øÈ£
 	char slotType;
@@ -224,20 +224,20 @@ struct CSChangeAvatarPacket
 };
 struct CSTakeOffEquipItemPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	// ½½·Ô¹øÈ£
 	char slotType;
 };
 struct CSRequestTradePacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 };
 struct CSAddTradeItemPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 	int texId;
@@ -245,14 +245,14 @@ struct CSAddTradeItemPacket
 };
 struct CSAddTradeMesoPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 	long long meso;
 };
 struct CSTradePacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 	int items[9];
@@ -260,46 +260,46 @@ struct CSTradePacket
 };
 struct CSTradeCancelPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 };
 ///////////////////////////////////////////////////
 struct SCServerSelectPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	short channelUserSize[MAX_CHANNEL];
 };
 struct SCLoginOkPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 	char channel;
 };
 struct SCLoginFailPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 };
 struct SCDummyLoginPacket 
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 	char channel;
 };
 struct SCChannelLoginPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	char channel;
 	int id;
 };
 struct SCPositionPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 	int x;
@@ -308,7 +308,7 @@ struct SCPositionPacket
 };
 struct SCAddPlayerPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 	int x;
@@ -319,7 +319,7 @@ struct SCAddPlayerPacket
 };
 struct SCAddObjectPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 	int x;
@@ -328,32 +328,32 @@ struct SCAddObjectPacket
 };
 struct SCRemoveObjectPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 };
 struct SCRemoveAllObjectPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 };
 struct SCChangeChannelPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	bool result;
 	char channel;
 };
 struct SCChatPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 	wchar_t chat[MAX_CHAT_LENGTH];
 };
 struct SCChangeAvatarPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 	char slotType;
@@ -361,39 +361,39 @@ struct SCChangeAvatarPacket
 };
 struct SCTakeOffEquipItemPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 	char slotType;
 };
 struct SCRequestTradePacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int id;
 };
 struct SCAddTradeItemPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int texId;
 	int slotNum;
 };
 struct SCAddTradeMesoPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	long long meso;
 };
 struct SCTradePacket
 {
-	char size;
+	unsigned char size;
 	char type;
 	int items[9];
 	long long meso;
 };
 struct SCTradeCancelPacket
 {
-	char size;
+	unsigned char size;
 	char type;
 };

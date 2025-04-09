@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 #include <array>
 #include <vector>
 #include <unordered_set>
@@ -9,7 +10,9 @@
 #include <memory>
 #include <random>
 
+#include <ws2tcpip.h>
 #include <winsock2.h>
+
 //#pragma comment(lib, "Ws2_32.lib")
 #include <atomic>
 #include <tbb/tbb.h>

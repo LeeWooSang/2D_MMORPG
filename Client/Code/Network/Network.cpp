@@ -97,8 +97,8 @@ void Network::SendLoginPacket(const std::string& loginId, const std::string& log
 	CSLoginPacket packet;
 	packet.size = sizeof(CSLoginPacket);
 	packet.type = CS_PACKET_TYPE::CS_LOGIN;
-	//strncpy(packet.loginId, loginId, sizeof(loginId));
-	//strncpy(packet.loginPassword, loginPassword, sizeof(loginPassword));
+	strncpy_s(packet.loginId, loginId.c_str(), loginId.length());
+	strncpy_s(packet.loginPassword, loginPassword.c_str(), loginPassword.length());
 	sendPacket(reinterpret_cast<char*>(&packet));
 }
 

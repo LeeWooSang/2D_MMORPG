@@ -25,4 +25,16 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+
+	afx_msg void OnDestroy();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+
+private:
+	void initializeUI();
+	void updateUI();
+
+private:
+	CFont mFont;
+	CStatic mLabel;
+	CListCtrl mListCtrl;	
 };

@@ -73,12 +73,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>../Excutable</OutDir>
     <IntDir>../Excutable/x64Debug</IntDir>
-    <TargetName>x64DebugClient</TargetName>
+    <TargetName>x64Debug_Client</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>../Excutable</OutDir>
     <IntDir>../Excutable/x64Release</IntDir>
-    <TargetName>x64ReleaseClient</TargetName>
+    <TargetName>x64Release_Client</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -243,8 +243,6 @@ void DoConnect()
 
 void DoAI()
 {
-	//while (gReady == false);
-
 	while (true)
 	{
 		// move ai
@@ -254,16 +252,10 @@ void DoAI()
 			{
 				continue;
 			}
-
 			// 패킷전송
-			int dir = GetRandomNumber(0, 4);
-			if (dir == 4)
-			{
-				continue;
-			}
-			SendMovePacket(i, dir);
+			SendMovePacket(i, GetRandomNumber(DIRECTION_TYPE::UP, DIRECTION_TYPE::RIGHT));
 		}
-		std::this_thread::sleep_for(500ms);
+		std::this_thread::sleep_for(100ms);
 	}
 }
 void Release()

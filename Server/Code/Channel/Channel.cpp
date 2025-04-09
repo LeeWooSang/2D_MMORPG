@@ -28,12 +28,14 @@ Channel::Channel()
 
 Channel::~Channel()
 {
-	for (int i = 0; i < SECTOR_WIDTH_SIZE; ++i)
+	if (mSectors != nullptr)
 	{
-		delete[] mSectors[i];
+		for (int i = 0; i < SECTOR_WIDTH_SIZE; ++i)
+		{
+			delete[] mSectors[i];
+		}
+		delete[] mSectors;
 	}
-
-	delete[] mSectors;
 }
 
 bool Channel::Initialize(int channel)

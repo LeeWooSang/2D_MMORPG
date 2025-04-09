@@ -76,8 +76,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>../Excutable/x64Debug/</OutDir>
+    <OutDir>../Excutable/</OutDir>
     <IntDir>../Excutable/x64Debug/</IntDir>
+    <TargetName>x64Debug_GameServer</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -87,8 +88,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>../Excutable/x64Release/</OutDir>
+    <OutDir>../Excutable/</OutDir>
     <IntDir>../Excutable/x64Release/</IntDir>
+    <TargetName>x64Release_GameServer</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -98,6 +100,7 @@
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -173,6 +176,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>../Code/pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -195,6 +199,7 @@
     <ResourceCompile Include="GameServer.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Resource\Test.lua" />
     <None Include="packages.config" />
     <None Include="res\GameServer.rc2" />
   </ItemGroup>
@@ -209,6 +214,8 @@
     <ClCompile Include="..\Code\GameServer.cpp" />
     <ClCompile Include="..\Code\GameServerDlg.cpp" />
     <ClCompile Include="..\Code\GameTimer\GameTimer.cpp" />
+    <ClCompile Include="..\Code\Log\Log.cpp" />
+    <ClCompile Include="..\Code\Script\Script.cpp" />
     <ClCompile Include="..\Code\Sector\Sector.cpp" />
     <ClCompile Include="..\Code\Trade\Trade.cpp" />
   </ItemGroup>
@@ -220,14 +227,16 @@
     <ClInclude Include="..\Code\Common\Protocol.h" />
     <ClInclude Include="..\Code\Core\Core.h" />
     <ClInclude Include="..\Code\Database\Database.h" />
-    <ClInclude Include="..\Code\Default\framework.h" />
-    <ClInclude Include="..\Code\Default\Resource.h" />
-    <ClInclude Include="..\Code\Default\targetver.h" />
     <ClInclude Include="..\Code\GameServer.h" />
     <ClInclude Include="..\Code\GameServerDlg.h" />
     <ClInclude Include="..\Code\GameTimer\GameTimer.h" />
+    <ClInclude Include="..\Code\Log\Log.h" />
+    <ClInclude Include="..\Code\Script\Script.h" />
     <ClInclude Include="..\Code\Sector\Sector.h" />
     <ClInclude Include="..\Code\Trade\Trade.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="targetver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

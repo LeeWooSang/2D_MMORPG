@@ -39,6 +39,15 @@
     <Filter Include="Code\Trade">
       <UniqueIdentifier>{9172f58e-a70d-4fb7-aa97-4d7e08a403e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Code\Script">
+      <UniqueIdentifier>{f7ef1752-71f0-4c67-91cc-fdd711af3ccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{6909f399-c255-496a-80c0-ddf48a2209b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Code\Log">
+      <UniqueIdentifier>{d9d1d44f-9b57-4353-8937-f84487aa1797}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GameServer.rc">
@@ -50,6 +59,9 @@
       <Filter>리소스 파일</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="..\Resource\Test.lua">
+      <Filter>Resource</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\GameServer.ico">
@@ -84,6 +96,12 @@
     <ClCompile Include="..\Code\Trade\Trade.cpp">
       <Filter>Code\Trade</Filter>
     </ClCompile>
+    <ClCompile Include="..\Code\Script\Script.cpp">
+      <Filter>Code\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Code\Log\Log.cpp">
+      <Filter>Code\Log</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Code\Core\Core.h">
@@ -104,15 +122,6 @@
     <ClInclude Include="..\Code\Common\Defines.h">
       <Filter>Code\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\Code\Default\framework.h">
-      <Filter>Code\Default</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\Default\Resource.h">
-      <Filter>Code\Default</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Code\Default\targetver.h">
-      <Filter>Code\Default</Filter>
-    </ClInclude>
     <ClInclude Include="..\Code\GameServer.h">
       <Filter>Code\Main</Filter>
     </ClInclude>
@@ -130,6 +139,21 @@
     </ClInclude>
     <ClInclude Include="..\Code\Trade\Trade.h">
       <Filter>Code\Trade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Script\Script.h">
+      <Filter>Code\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Code\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Code\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Code\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Code\Log\Log.h">
+      <Filter>Code\Log</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

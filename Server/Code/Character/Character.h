@@ -3,6 +3,7 @@
 #include "../Common/Protocol.h"
 #include <mutex>
 #include <shared_mutex>
+#include "../Script/Script.h"
 
 enum class ANIMATION_MOTION_TYPE
 {
@@ -199,6 +200,7 @@ protected:
 	MONSTER_STATE mState;
 
 	int mTargetId;
+	Script mScript;
 };
 
 class FollowingMonster : public Monster

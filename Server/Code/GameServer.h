@@ -5,7 +5,7 @@
 	#error "PCH에 대해 이 파일을 포함하기 전에 'pch.h'를 포함합니다."
 #endif
 
-#include "Default/Resource.h"		// 주 기호입니다.
+#include "../Bin/resource.h"		// 주 기호입니다.
 
 // CGameServerApp:
 // 이 클래스의 구현에 대해서는 GameServer.cpp을(를) 참조하세요.

@@ -344,6 +344,10 @@ void Player::PlayerDisconnect()
 				monsters[index].GetViewList().erase(myId);
 			}
 		}
+
+		// 플레이어 기존 채널, 섹터에서 제거
+		GET_INSTANCE(Core)->GetChannel(mChannel).PopUser(mChannelIndex);
+		GET_INSTANCE(Core)->GetChannel(mChannel).PopSectorObject(mX, mY, myId);
 	}
 
 	Reset();
@@ -890,81 +894,43 @@ bool Monster::Inititalize(int id)
 	mState = MONSTER_STATE::SLEEP;
 	mTargetId = -1;
 
+	if (mScript.Initialize("../Resource/Test.lua") == false)
+	{
+		return false;
+	}
+	
 	return true;
 }
 
 void Monster::ProcessMove(char dir)
 {
-	int x = mX;
-	int y = mY;
+	std::pair<int, int> pos = std::make_pair(mX, mY);
+	//int x = mX;
+	//int y = mY;
 
 	if (mTargetId != -1)
 	{
 		Player* users = GET_INSTANCE(Core)->GetUsers();
 		int targetX = users[mTargetId].GetX();
 		int targetY = users[mTargetId].GetY();
-		if (x < targetX)
-		{
-			++x;
-		}
-		else if (x > targetX)
-		{
-			--x;
-		}
-		else if (y < targetY)
-		{
-			++y;
-		}
-		else if(y > targetY)
-		{
-			--y;
-		}
 
-		if (CheckRange(x, y) == false)
+		pos = mScript.MonsterChaseTargetStupidAI(pos.first, pos.second, targetX, targetY);
+		if (CheckRange(pos.first, pos.second) == false)
 		{
 			return;
 		}
-
-		mX = x;
-		mY = y;
-		return;
 	}
-
-	switch (dir)
+	else
 	{
-		case DIRECTION_TYPE::UP:
+		pos = mScript.MonsterMoveAI(pos.first, pos.second);
+		if (CheckRange(pos.first, pos.second) == false)
 		{
-			--y;
-			break;
-		}
-		case DIRECTION_TYPE::DOWN:
-		{
-			++y;
-			break;
-		}
-		case DIRECTION_TYPE::LEFT:
-		{
-			--x;
-			break;
-		}
-		case DIRECTION_TYPE::RIGHT:
-		{
-			++x;
-			break;
-		}
-		default:
-		{
-			break;
+			return;
 		}
 	}
 
-	if (CheckRange(x, y) == false)
-	{
-		return;
-	}
-
-	mX = x;
-	mY = y;
+	mX = pos.first;
+	mY = pos.second;
 }
 
 bool Monster::CheckRange(int x, int y)

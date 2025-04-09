@@ -3,6 +3,7 @@
 #include "../Database/Database.h"
 #include "../Trade/Trade.h"
 #include "../../../Client/Code/Common/Utility.h"
+#include "../Log/Log.h"
 
 INIT_INSTACNE(Core)
 Core::Core()
@@ -46,6 +47,8 @@ Core::~Core()
 	delete[] mTrades;
 
 	WSACleanup();
+
+	GET_INSTANCE(Log)->Release();
 }
 
 void Core::errorDisplay(const char* msg, int error)
@@ -63,9 +66,6 @@ void Core::errorDisplay(const char* msg, int error)
 	);
 	std::cout << msg;
 	std::wcout << L"설명 : " << lpMsgBuf << std::endl;
-
-	// 에러발생시 무한루프로 멈추게함
-	while (true);
 
 	LocalFree(lpMsgBuf);
 }
@@ -137,10 +137,11 @@ void Core::acceptClient()
 		int id = createPlayerId();
 		mUsers[id].SetSocket(clientSocket);
 		mUsers[id].PlayerConnect();
-		//std::cout << "Accept - " << id << "번 Client" << std::endl;
+
+		GET_INSTANCE(Log)->PushLog(LogData(0, id, GetUserIP(id), "client connect"));
 
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(clientSocket), mIOCP, id, 0);
-		recvPacket(id);
+		recvPacket(id);		
 	}
 }
 
@@ -195,7 +196,8 @@ void Core::threadPool()
 				int restSize = ioByte;
 				char* p = overEx->messageBuffer;
 				int packetSize = 0;
-				if (mUsers[id].GetPrevSize() > 0)
+				int prevPacketSize = mUsers[id].GetPrevSize();
+				if (prevPacketSize > 0)
 				{
 					packetSize = mUsers[id].GetPacketBuf()[0];
 				}
@@ -209,7 +211,7 @@ void Core::threadPool()
 					}
 
 					// 패킷을 만들기 위한 크기?
-					int required = packetSize - mUsers[id].GetPrevSize();
+					int required = packetSize - prevPacketSize;
 					// 패킷을 만들 수 있다면, (현재 들어온 패킷의 크기가 required 보다 크면)
 					if (required >= 0 && restSize >= required)
 					{
@@ -255,7 +257,7 @@ void Core::threadPool()
 
 void Core::disconnect(int id)
 {
-	mUsers[id].PlayerDisconnect();
+	mUsers[id].PlayerDisconnect();	
 	mTrades[id].Reset();
 	std::cout << id << "번 클라이언트 연결 끊어짐" << std::endl;
 }
@@ -450,11 +452,11 @@ void Core::processPacket(int id, char* buf)
 
 		case CS_PACKET_TYPE::CS_BROADCASTING_CHAT:
 		{
-			CSBroadcastingChatPacket* packet = reinterpret_cast<CSBroadcastingChatPacket*>(buf);
-			SendChatPacket(id, id, packet->chat);
-			// 주변 사람들에게 채팅보냄
-			mUsers[id].ProcessBroadcastingChat(packet->chat);
-			break;
+		CSBroadcastingChatPacket* packet = reinterpret_cast<CSBroadcastingChatPacket*>(buf);
+		SendChatPacket(id, id, packet->chat);
+		// 주변 사람들에게 채팅보냄
+		mUsers[id].ProcessBroadcastingChat(packet->chat);
+		break;
 		}
 
 		case CS_PACKET_TYPE::CS_WHISPERING_CHAT:
@@ -481,7 +483,7 @@ void Core::processPacket(int id, char* buf)
 			mUsers[id].ProcessChangeAvatar(packet->slotType, packet->texId, true);
 			break;
 		}
-		
+
 		case CS_PACKET_TYPE::CS_TAKE_OFF_EQUIP_ITEM:
 		{
 			CSTakeOffEquipItemPacket* packet = reinterpret_cast<CSTakeOffEquipItemPacket*>(buf);
@@ -548,6 +550,9 @@ void Core::processPacket(int id, char* buf)
 			break;
 		}
 	}
+
+	GET_INSTANCE(Log)->PushLog(LogData(1, id, GetUserIP(id), buf, buf[0]));
+	
 	//auto end = std::chrono::high_resolution_clock::now() - start;
 	//auto time = std::chrono::duration<double>(end).count();
 	//std::cout << "패킷 처리 시간 : " << time << "초" << std::endl;
@@ -630,14 +635,7 @@ bool Core::Initialize()
 		}
 		mTrades[i].Initialize(i);
 	}
-
-	int workerThreadCount = 6;
-	// 워커 스레드 생성
-	for (int i = 0; i < workerThreadCount; ++i)
-	{
-		mWorkerThreads.emplace_back(std::thread{ &Core::threadPool, this });
-	}
-
+	
 	// accept 스레드 생성
 	mAcceptThread = std::thread{ &Core::acceptClient, this };
 
@@ -651,6 +649,14 @@ bool Core::Initialize()
 	{
 		std::cout << "Database Initialize Fail!!" << std::endl;
 		return false;
+	}
+
+	// main, accept, db, timer 스레드 갯수 제외
+	int workerThreadCount = std::thread::hardware_concurrency() - 4;
+	// 워커 스레드 생성
+	for (int i = 0; i < workerThreadCount; ++i)
+	{
+		mWorkerThreads.emplace_back(std::thread{ &Core::threadPool, this });
 	}
 
 	std::cout << "Max Channel Size : " << MAX_CHANNEL << std::endl;
@@ -686,6 +692,27 @@ int Core::FindChannel()
 	}
 
 	return -1;
+}
+
+int Core::GetConnectUserCount()
+{
+	int count = 0;
+	for (int i = 0; i < mChannels.size(); ++i)
+	{
+		count += mChannels[i].GetChannelUserSize();
+	}
+	return count;
+}
+
+std::string Core::GetUserIP(int id)
+{
+	sockaddr_in addr;
+	int addrLen = sizeof(addr);
+	getpeername(GET_INSTANCE(Core)->GetUser(id).GetSocket(), (sockaddr*)&addr, &addrLen);
+	char ip[INET_ADDRSTRLEN];
+	inet_ntop(AF_INET, &addr.sin_addr, ip, sizeof(ip));
+
+	return std::string(ip);
 }
 
 void Core::SendServerSelectPacket(int to, short* size)

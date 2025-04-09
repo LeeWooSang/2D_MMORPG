@@ -1,9 +1,11 @@
-﻿#include "Default/framework.h"
+﻿#include "../Bin/framework.h"
 #include "GameServer.h"
 #include "GameServerDlg.h"
 #include "afxdialogex.h"
 
 #include "Common/Defines.h"
+#include "../../Client/Code/Common/Utility.h"
+
 #include "Core/Core.h"
 
 #ifdef _DEBUG
@@ -60,12 +62,16 @@ CGameServerDlg::~CGameServerDlg()
 void CGameServerDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC1, mLabel);
+	DDX_Control(pDX, IDC_LIST2, mListCtrl);
 }
 
 BEGIN_MESSAGE_MAP(CGameServerDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_WM_DESTROY()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -102,6 +108,7 @@ BOOL CGameServerDlg::OnInitDialog()
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 
+	initializeUI();
 	if (GET_INSTANCE(Core)->Initialize() == false)
 	{
 		return false;
@@ -163,5 +170,85 @@ void CGameServerDlg::OnPaint()
 HCURSOR CGameServerDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
+}
+
+void CGameServerDlg::OnDestroy()
+{
+	KillTimer(1);
+	CDialogEx::OnDestroy();
+}
+
+void CGameServerDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	if (nIDEvent == 1)
+	{
+		updateUI();
+	}
+	CDialogEx::OnTimer(nIDEvent);
+}
+
+void CGameServerDlg::initializeUI()
+{
+	mFont.CreatePointFont(120, _T("Gulim"));
+	GetDlgItem(IDC_STATIC1)->SetFont(&mFont);
+
+	SetTimer(1, 1000, nullptr);
+	mLabel.SetWindowTextW(_T(""));
+	mListCtrl.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+
+	// 컬럼 추가
+	{
+		int index = 0;
+		mListCtrl.InsertColumn(index++, _T("Id"), LVCFMT_LEFT, 50);
+		mListCtrl.InsertColumn(index++, _T("State"), LVCFMT_CENTER, 70);
+		mListCtrl.InsertColumn(index++, _T("IP"), LVCFMT_CENTER, 100);
+		mListCtrl.InsertColumn(index++, _T("Channel"), LVCFMT_CENTER, 70);
+		mListCtrl.InsertColumn(index++, _T("X"), LVCFMT_RIGHT, 50);
+		mListCtrl.InsertColumn(index++, _T("Y"), LVCFMT_RIGHT, 50);
+	}
+
+	// 항목 추가
+	for (int i = 0; i < MAX_USER; ++i)
+	{
+		mListCtrl.InsertItem(i, std::to_wstring(i).c_str());
+		mListCtrl.SetItemText(i, 1, _T("false"));
+		mListCtrl.SetItemText(i, 2, _T(""));
+		mListCtrl.SetItemText(i, 3, _T(""));
+		mListCtrl.SetItemText(i, 4, _T(""));
+		mListCtrl.SetItemText(i, 5, _T(""));
+	}
+}
+
+
+void CGameServerDlg::updateUI()
+{
+	int count = GET_INSTANCE(Core)->GetConnectUserCount();
+	std::wstring text = L"현재 접속중인 클라이언트 수 : " + std::to_wstring(count);
+	mLabel.SetWindowTextW(text.c_str());
+
+	// 항목 추가
+	for (int i = 0; i < MAX_USER; ++i)
+	{
+		if (GET_INSTANCE(Core)->GetUser(i).GetIsConnect() == false)
+		{
+			mListCtrl.SetItemText(i, 1, L"false");
+			mListCtrl.SetItemText(i, 2, _T(""));
+			mListCtrl.SetItemText(i, 3, _T(""));
+			mListCtrl.SetItemText(i, 4, _T(""));
+			mListCtrl.SetItemText(i, 5, _T(""));
+			continue;
+		}
+
+		std::string ip = GET_INSTANCE(Core)->GetUserIP(i);
+		int channel = GET_INSTANCE(Core)->GetUser(i).GetChannel();
+		int x = GET_INSTANCE(Core)->GetUser(i).GetX();
+		int y = GET_INSTANCE(Core)->GetUser(i).GetY();
+
+		mListCtrl.SetItemText(i, 1, L"true");
+		mListCtrl.SetItemText(i, 2, StringToWString(ip).c_str());
+		mListCtrl.SetItemText(i, 3, std::to_wstring(channel).c_str());
+		mListCtrl.SetItemText(i, 4, std::to_wstring(x).c_str());
+		mListCtrl.SetItemText(i, 5, std::to_wstring(y).c_str());
+	}
 }
 

@@ -62,6 +62,8 @@ public:
 	Player* GetUsers() { return mUsers; }
 	Player& GetUser(int index) { return mUsers[index]; }
 	Channel& GetChannel(int channel) { return mChannels[channel]; }
+	int GetConnectUserCount();
+	std::string GetUserIP(int id);
 
 public:
 	void SendServerSelectPacket(int to, short* size);
